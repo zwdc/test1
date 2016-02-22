@@ -1,0 +1,102 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:cache="http://www.springframework.org/schema/cache" 
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	   http://www.springframework.org/schema/cache  
+	   http://www.springframework.org/schema/cache/spring-cache.xsd 
+       http://www.springframework.org/schema/aop 
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+	<!-- springMVC.XML 表现层配置文件，只应加装表现层Bean -->
+	
+	
+	<!--开启controller注解支持,把标记了@Controller注解的类转换为bean -->    
+	<!-- 使用了 context:component-scan 标签 上面的 context:annotation-config 就不需要配置了 -->
+	<!-- 注：如果base-package=com.wizsharing 则注解事务不起作用 TODO 读源码 -->
+	<!-- 因为此处只应该加载表现层组件，如果此处还加载dao层或service层的bean会将之前容器加载的替换掉 -->
+	<!-- 而且此处不会进行AOP织入，所以会造成AOP失效问题（如事务不起作用） -->
+	<context:component-scan base-package="com.wizsharing.controller">
+	    <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
+    <!-- 指定自己定义的validator -->
+    <mvc:annotation-driven/>
+    
+	<!-- 当访问主页时自动转发到/userAction/login_view控制器。 -->
+	<!-- <mvc:view-controller path="/" view-name="forward:/userAction/login_view"/> -->
+	
+	<!-- 视图处理器 -->
+	<bean id="jspViewResolver"  
+	    class="org.springframework.web.servlet.view.InternalResourceViewResolver">  
+	        <property name="prefix" value="/WEB-INF/jsp/" />  
+	        <property name="suffix" value=".jsp" />  
+	        <property name="contentType" value="text/html;charset=utf-8" />
+	        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" /> 
+	</bean>
+
+	<!-- 对静态资源文件的访问 -->  
+	<!-- 所有的页面引用到css/**的资源都从css/*里面进行查找 -->
+    <mvc:resources mapping="/js/**" location="/js/" cache-period="31556926"/>  
+    <mvc:resources mapping="/css/**" location="/css/" cache-period="31556926"/>
+	<mvc:resources mapping="/images/**" location="/images/" cache-period="31556926"/>
+	<mvc:resources mapping="/modeler/**" location="/modeler/" cache-period="31556926"/>
+	<mvc:resources mapping="/lodop/**" location="/lodop/" cache-period="31556926"/>
+	<mvc:resources mapping="/kindeditor/**" location="/kindeditor-4.1.10/" cache-period="31556926"/>
+	<!-- 全局异常配置 -->  
+    <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
+         <property name="exceptionMappings">  
+             <props>  
+                 <prop key="java.lang.Exception">error/500</prop>  
+                 <prop key="java.lang.RuntimeException">error/500</prop>  
+                 <prop key="java.lang.Throwable">error/500</prop>  
+                 <prop key="UnauthorizedException">error/noRealm</prop> 
+             </props>  
+         </property>    
+         <!-- 设置日志输出级别，不定义则默认不输出警告等错误日志信息 -->  
+         <property name="warnLogCategory" value="WARN"></property>  
+         <!-- 默认错误页面，当找不到上面mappings中指定的异常对应视图时，使用本默认配置 -->  
+         <property name="defaultErrorView" value="error/500"></property>  
+         <!-- 默认HTTP状态码 -->  
+         <property name="defaultStatusCode" value="500"></property>  
+    </bean>  
+
+	
+<!--     <mvc:interceptors>
+    	设置国际化信息的拦截器
+    	<mvc:interceptor>
+	    	<mvc:mapping path="/**" />
+	    	<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+	           <property name="paramName" value="language"/>
+	       </bean>
+    	</mvc:interceptor>
+    	
+    </mvc:interceptors> -->
+
+
+	<!-- 上传配置 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8"/>
+		<property name="maxUploadSize" value="-1"/> <!-- 一次上传所有文件大小 -1不限制 由程序控制-->
+	 	<property name="maxInMemorySize" value="52428800" /> <!-- 最大50M 单位字节-->
+		<!-- <property name="uploadTempDir" value="/tmp/"/> --> <!-- 设置上传文件时的临时目录，默认是Servlet容器的临时目录 -->
+	</bean>
+	
+	<!-- 添加 Shiro Spring AOP 权限注解的支持 -->
+    <aop:config proxy-target-class="true"></aop:config>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+    
+    <bean id="loginController" class="com.wizsharing.controller.LoginController">
+    	<property name="cacheManager" ref="cacheManager"/>
+    </bean>
+</beans>

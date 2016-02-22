@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+        version="2.0">
+    <description>functions</description>
+    <tlib-version>3.0</tlib-version>
+    <short-name>yzky</short-name>
+    <uri>http://yzky.com/yzky/tags/functions</uri>
+
+<!--   	<function>
+        <description>打印许可</description>
+        <name>printPermission</name>
+        <function-class>com.wizsharing.util.Functions</function-class>
+        指定EL页面调用名字中实际调用的方法.指定处理类的实际方法.参数和回调函数要写完整路径
+        <function-signature>java.lang.String printPermission()</function-signature>
+    </function> -->
+
+  	<function>
+        <description>获取审批状态</description>
+        <name>approvalStatus</name>
+        <function-class>com.wizsharing.util.Functions</function-class>
+        <function-signature>java.lang.String approvalStatus(java.lang.String)</function-signature>
+    </function>
+    
+    <function>
+        <description>获取审批状态(审批成功和审批中 返回true, 待审批、审批失败、需要重新审批返回false)</description>
+        <name>statusPermission</name>
+        <function-class>com.wizsharing.util.Functions</function-class>
+        <function-signature>java.lang.Boolean statusPermission(java.lang.String)</function-signature>
+    </function>
+    
+    <function>
+        <description>获取审批状态(返回class样式)</description>
+        <name>statusClass</name>
+        <function-class>com.wizsharing.util.Functions</function-class>
+        <function-signature>java.lang.String statusClass(java.lang.String)</function-signature>
+    </function>
+    
+    <function>
+        <description>获取业务表单类型</description>
+        <name>businessForm</name>
+        <function-class>com.wizsharing.util.Functions</function-class>
+        <function-signature>java.lang.String businessForm(java.lang.String)</function-signature>
+    </function>
+    
+    <function>
+        <description>获取产品配件类型</description>
+        <name>productPartType</name>
+        <function-class>com.wizsharing.util.Functions</function-class>
+        <function-signature>java.lang.String productPartType(java.lang.Integer)</function-signature>
+    </function>
+    
+    <function>
+        <description>获取招投标类型</description>
+        <name>btType</name>
+        <function-class>com.wizsharing.util.Functions</function-class>
+        <function-signature>java.lang.String btType(java.lang.Integer)</function-signature>
+    </function>
+    
+    <function>
+        <description>获取合作伙伴公司类型</description>
+        <name>partnerCType</name>
+        <function-class>com.wizsharing.util.Functions</function-class>
+        <function-signature>java.lang.String partnerCType(java.lang.Integer)</function-signature>
+    </function>
+    
+    <function>
+        <description>获取订单状态</description>
+        <name>orderStatus</name>
+        <function-class>com.wizsharing.util.Functions</function-class>
+        <function-signature>java.lang.String orderStatus(java.lang.String)</function-signature>
+    </function>
+</taglib>
