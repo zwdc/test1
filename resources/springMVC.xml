@@ -21,10 +21,10 @@
 	
 	<!--开启controller注解支持,把标记了@Controller注解的类转换为bean -->    
 	<!-- 使用了 context:component-scan 标签 上面的 context:annotation-config 就不需要配置了 -->
-	<!-- 注：如果base-package=com.wizsharing 则注解事务不起作用 TODO 读源码 -->
+	<!-- 注：如果base-package=com.hdc 则注解事务不起作用 TODO 读源码 -->
 	<!-- 因为此处只应该加载表现层组件，如果此处还加载dao层或service层的bean会将之前容器加载的替换掉 -->
 	<!-- 而且此处不会进行AOP织入，所以会造成AOP失效问题（如事务不起作用） -->
-	<context:component-scan base-package="com.wizsharing.controller">
+	<context:component-scan base-package="com.hdc.controller">
 	    <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
@@ -96,7 +96,7 @@
         <property name="securityManager" ref="securityManager"/>
     </bean>
     
-    <bean id="loginController" class="com.wizsharing.controller.LoginController">
+    <bean id="loginController" class="com.hdc.controller.LoginController">
     	<property name="cacheManager" ref="cacheManager"/>
     </bean>
 </beans>

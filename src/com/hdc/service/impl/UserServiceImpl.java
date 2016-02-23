@@ -54,9 +54,6 @@ public class UserServiceImpl implements IUserService {
     @Autowired
     private IBaseService<User> baseService;
     
-    @Autowired
-    //private IDataSetPermissionService dataSetService;
-
 	@Override
 	public User getUserByName(String user_name) throws Exception{
 		Map<String, Object> map = new HashMap<String, Object>();

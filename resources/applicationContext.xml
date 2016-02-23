@@ -16,7 +16,7 @@
           
     <!-- 在applicationContext.xml中只加载除表现层之外的所有bean，因此下面一行中不需要加载@Controller -->                       
     <!-- 扫描注解Bean 不包括@Controller(表现层) 保证@Service @Repository的属性被注入-->
-    <context:component-scan base-package="com.wizsharing">
+    <context:component-scan base-package="com.hdc">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
     
@@ -48,16 +48,16 @@
 	</bean>  
 	
 	<!-- hibernate拦截器 -->
-	<bean id="hibernateInterceptor" class="com.wizsharing.interceptor.HibernateInterceptor" />
+	<bean id="hibernateInterceptor" class="com.hdc.interceptor.HibernateInterceptor" />
 	
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"> 
         <property name="dataSource" ref="dataSource" /> 
-		<property name="packagesToScan" value="com.wizsharing.entity"/>
+		<property name="packagesToScan" value="com.hdc.entity"/>
         <property name="hibernateProperties"> 
          	<props>
 		         <prop key="hibernate.show_sql">true</prop>
 		         <prop key="hibernate.format_sql">true</prop>
-		         <prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+		         <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
 		 	 	 <prop key="hibernate.hbm2ddl.auto">update</prop>
 		 	 	 <prop key="hibernate.enable_lazy_load_no_trans">true</prop>
   			</props>
@@ -76,14 +76,8 @@
 	</bean>
 	
 	<!-- 在ApplicationContext环境外获取bean的工具类 -->
-	<bean id="applicationContextHelper" class="com.wizsharing.util.ApplicationContextHelper"/>
+	<bean id="applicationContextHelper" class="com.hdc.util.ApplicationContextHelper"/>
 	
-   	<!-- 开启AOP监听 只对当前配置文件有效 -->
-	<!-- <aop:aspectj-autoproxy expose-proxy="true"/> -->
-  	
-  	<!-- 开启注解事务 只对当前配置文件有效 -->
-  	<!-- <tx:annotation-driven transaction-manager="transactionManager"/> -->
-  
     <!-- 事务管理器 -->
 	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory"></property>
@@ -115,7 +109,7 @@
 
     <aop:config expose-proxy="true" proxy-target-class="true">
         <!-- 只对业务逻辑层实施事务 -->
-        <aop:pointcut id="txPointcut" expression="execution(* com.wizsharing..service..*.*(..))"/>
+        <aop:pointcut id="txPointcut" expression="execution(* com.hdc..service..*.*(..))"/>
         <aop:advisor id="txAdvisor" advice-ref="txAdvice" pointcut-ref="txPointcut"/>
     </aop:config>
     
