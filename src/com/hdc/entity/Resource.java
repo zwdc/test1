@@ -7,13 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * @ClassName: Resource
@@ -28,17 +25,18 @@ import org.hibernate.validator.constraints.NotEmpty;
 @DynamicUpdate(true)
 @DynamicInsert(true)
 public class Resource implements Serializable {
-
-	private static final long serialVersionUID = 53889172259830160L;
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7420427268913550324L;
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="ID_SEQ")	//GenerationType.AUTO 有程序决定生成主键
-	@SequenceGenerator(name="ID_SEQ", sequenceName="SEQ_RESOURCE_ID", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", length = 5, nullable = false, unique = true)
 	private Integer id; 							//编号
 	
 	@Column(name = "name", length = 50, nullable = false)
-	@NotEmpty(message = "{resource.name.not.empty}")
     private String name; 							//资源名称
 	
 	@Column(name = "type", length = 20, nullable = false)
@@ -48,11 +46,9 @@ public class Resource implements Serializable {
     private String url; 							//资源路径
 	
 	@Column(name = "permission", length = 100, nullable = false)
-	@NotEmpty(message = "{resource.permission.not.empty}")
     private String permission; 						//权限字符串
 	
 	@Column(name = "parentId", length = 5, nullable = false)
-	@NotNull(message = "{resource.parentId.not.empty}")
     private Integer parentId; 						//父编号
 	
 	@Column(name="sort", length = 2)				//排序编号

@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
@@ -23,15 +22,14 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate(true)
 @DynamicInsert(true)
 public class RoleAndResource implements Serializable {
-	
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -7497479604698543018L;
+	private static final long serialVersionUID = -8494475256149728305L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="ID_SEQ")	
-	@SequenceGenerator(name="ID_SEQ", sequenceName="SEQ_ROLE_RESOURCE_ID", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", length = 5, nullable = false, unique = true)
     private Integer id;
 

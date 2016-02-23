@@ -11,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -27,7 +26,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @ClassName: User
  * @Description:用户实体类
  * @author: zml
- * @date: 2015-8-6 上午11:11:48
  *
  */
 
@@ -37,11 +35,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @DynamicInsert(true)
 public class User extends BaseCommonEntity implements Serializable{
 
-	private static final long serialVersionUID = -6662232329895785824L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1884568758139444465L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="ID_SEQ")
-	@SequenceGenerator(name="ID_SEQ", sequenceName="SEQ_USER_ID", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "USER_ID", length = 5, nullable = false, unique = true)
 	private Integer id;
 	

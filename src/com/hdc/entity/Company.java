@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
@@ -32,11 +31,10 @@ public class Company extends BaseCommonEntity implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -5648218392015027877L;
-	
+	private static final long serialVersionUID = 8271941550859899067L;
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="ID_SEQ")	
-	@SequenceGenerator(name="ID_SEQ", sequenceName="SEQ_COMPANY_ID", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", length = 5, nullable = false, unique = true)
 	private Integer id;			
 	

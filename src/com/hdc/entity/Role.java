@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
@@ -32,10 +31,10 @@ public class Role extends BaseCommonEntity implements Serializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -6442701951520505529L;
+	private static final long serialVersionUID = -7052621980674018584L;
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="ID_SEQ")	
-	@SequenceGenerator(name="ID_SEQ", sequenceName="SEQ_ROLE_ID", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", length = 5, nullable = false, unique = true)
 	private Integer id;
 	

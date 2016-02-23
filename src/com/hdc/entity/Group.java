@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
@@ -32,11 +31,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @DynamicInsert(true)
 public class Group extends BaseCommonEntity implements Serializable{
 
-	private static final long serialVersionUID = -4469236450461851881L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5933624941063844429L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="ID_SEQ")	//GenerationType.AUTO 有程序决定生成主键
-	@SequenceGenerator(name="ID_SEQ", sequenceName="SEQ_GROUP_ID", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "GROUP_ID", length = 5, nullable = false, unique = true)
 	private Integer id;
 	

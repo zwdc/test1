@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,11 +28,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 @DynamicInsert(true)
 public class Comments implements Serializable {
 	
-	private static final long serialVersionUID = -1926022970938047589L;
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1831626180362549079L;
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="ID_SEQ")
-	@SequenceGenerator(name="ID_SEQ", sequenceName="SEQ_COMMENTS_ID", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", length = 5, nullable = false, unique = true)
 	private Integer id;
 	
