@@ -48,7 +48,7 @@ public class MainController {
     @ResponseBody
     public List<Resource> getMenu() throws Exception{
     	User u = UserUtil.getUserFromSession();
-    	List<Resource> menus = this.resourceService.getTree(u.getGroup().getId());
+    	List<Resource> menus = this.resourceService.getTree(u.getRole().getId());
     	return menus;
     }
     

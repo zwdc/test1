@@ -104,17 +104,6 @@ public class UserServiceImpl implements IUserService {
         //添加用户
         Serializable userId = this.baseService.add(user);
         
-        //同步用户到数据集权限表
-/*        DataSetPermission dataSet = new DataSetPermission();
-        dataSet.setUser(user);
-        dataSet.setIsDelete(0);
-        dataSet.setAllData(0);
-        dataSet.setCompanyData(0);
-        dataSet.setGroupData(0);
-        dataSet.setSelfData(0);
-        dataSet.setRoleData(0);
-        this.dataSetService.doAdd(dataSet);*/
-        
         //同步数据到Activiti Identify相关表
         if (synToActiviti) {
         	UserQuery userQuery = identityService.createUserQuery();

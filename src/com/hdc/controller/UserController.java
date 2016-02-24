@@ -88,8 +88,8 @@ public class UserController {
 			map.put("passwd", user.getPasswd());
 			map.put("registerDate", user.getRegisterDate());
 			map.put("locked", user.getIsDelete());
-			map.put("groupId", user.getGroup().getId());
-			map.put("group_name", user.getGroup().getName());
+			map.put("roleId", user.getRole().getId());
+			map.put("role_name", user.getRole().getName());
 			map.put("salt", user.getSalt());
 			map.put("isDelete", user.getIsDelete());
 			jsonList.add(map);
@@ -224,6 +224,9 @@ public class UserController {
         for(Session session : sessions){
         	Map<String, Object> map=new HashMap<String, Object>();
         	PrincipalCollection principalCollection = (PrincipalCollection) session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY);
+        	if(principalCollection == null) {
+        		continue;
+        	}
         	String userName = (String)principalCollection.getPrimaryPrincipal();
         	Boolean forceLogout = session.getAttribute(Constants.SESSION_FORCE_LOGOUT_KEY) != null;
         	map.put("id", session.getId());
@@ -368,7 +371,7 @@ public class UserController {
 			Map<String, Object> map=new HashMap<String, Object>();
 			map.put("id", user.getId());
 			map.put("name", user.getName());
-			map.put("group", user.getGroup().getName());
+			map.put("group", user.getRole().getName());
 			map.put("registerDate", user.getRegisterDate());
 			jsonList.add(map);
 		}

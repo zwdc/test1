@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
@@ -18,33 +19,34 @@ import org.hibernate.annotations.DynamicUpdate;
  *
  */
 @Entity
-@Table(name = "GROUP_RESOURCE")
+@Table(name = "ROLE_RESOURCE")
 @DynamicUpdate(true)
 @DynamicInsert(true)
-public class GroupAndResource implements Serializable {
-
+public class RoleAndResource implements Serializable {
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8494475256149728305L;
+	private static final long serialVersionUID = -7497479604698543018L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="ID_SEQ")	
+	@SequenceGenerator(name="ID_SEQ", sequenceName="SEQ_ROLE_RESOURCE_ID", allocationSize = 1)
 	@Column(name = "ID", length = 5, nullable = false, unique = true)
     private Integer id;
 
-    @Column(name = "group_id", length = 5, nullable = false)
-    private Integer groupId;
+    @Column(name = "role_id", length = 5, nullable = false)
+    private Integer roleId;
 
     @Column(name = "resource_id", length = 5, nullable = false)
     private Integer resourceId;
 
-    public GroupAndResource() {
+    public RoleAndResource() {
     	
     }
     
-    public GroupAndResource(Integer groupId, Integer resourceId) {
-    	this.groupId = groupId;
+    public RoleAndResource(Integer roleId, Integer resourceId) {
+    	this.roleId = roleId;
     	this.resourceId = resourceId;
     }
     
@@ -56,12 +58,12 @@ public class GroupAndResource implements Serializable {
 		this.id = id;
 	}
 
-	public Integer getGroupId() {
-		return groupId;
+	public Integer getRoleId() {
+		return roleId;
 	}
 
-	public void setGroupId(Integer groupId) {
-		this.groupId = groupId;
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
 	}
 
 	public Integer getResourceId() {

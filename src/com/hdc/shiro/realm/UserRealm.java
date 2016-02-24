@@ -21,10 +21,10 @@ import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hdc.entity.Resource;
-import com.hdc.entity.GroupAndResource;
+import com.hdc.entity.RoleAndResource;
 import com.hdc.entity.User;
 import com.hdc.service.IResourceService;
-import com.hdc.service.IGroupAndResourceService;
+import com.hdc.service.IRoleAndResourceService;
 import com.hdc.service.IUserService;
 import com.hdc.util.BeanUtils;
 import com.hdc.util.UserUtil;
@@ -42,7 +42,7 @@ public class UserRealm extends AuthorizingRealm{
 	private IUserService userService;
 
     @Autowired
-    private IGroupAndResourceService garService;
+    private IRoleAndResourceService rarService;
     
     @Autowired
     private IResourceService resourceService;
@@ -58,12 +58,12 @@ public class UserRealm extends AuthorizingRealm{
 		try {
 			User user = this.userService.getUserByName(username);
 	        Set<String> roles = new HashSet<String>();
-	        roles.add(user.getGroup().getType());
+	        roles.add(user.getRole().getType());
 	        
-	        List<GroupAndResource> rarList = this.garService.getResource(user.getGroup().getId());
+	        List<RoleAndResource> rarList = this.rarService.getResource(user.getRole().getId());
 	        Set<String> resources = new HashSet<String>();
-	        for(GroupAndResource gar : rarList){
-	        	Resource resource = this.resourceService.getPermissions(gar.getResourceId());
+	        for(RoleAndResource rar : rarList){
+	        	Resource resource = this.resourceService.getPermissions(rar.getResourceId());
 	        	if(!BeanUtils.isBlank(resource)){
 	        		resources.add(resource.getPermission());	//添加权限字符串
 	        	}

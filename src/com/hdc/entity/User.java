@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -35,13 +36,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @DynamicInsert(true)
 public class User extends BaseCommonEntity implements Serializable{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1884568758139444465L;
+	private static final long serialVersionUID = -6662232329895785824L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="ID_SEQ")
+	@SequenceGenerator(name="ID_SEQ", sequenceName="SEQ_USER_ID", allocationSize = 1)
 	@Column(name = "USER_ID", length = 5, nullable = false, unique = true)
 	private Integer id;
 	
@@ -58,12 +57,16 @@ public class User extends BaseCommonEntity implements Serializable{
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	@Column(name = "REG_DATE")
 	private Date registerDate;
-
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="GROUP_ID")
 	@JsonIgnore
     private Group group;			//所属部门
-
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="ROLE_ID")
+	@JsonIgnore
+	private Role role;				//所属角色（职位）
 	
 	public User(){
 		
@@ -113,15 +116,6 @@ public class User extends BaseCommonEntity implements Serializable{
 	}
 
 
-	public Group getGroup() {
-		return group;
-	}
-
-
-	public void setGroup(Group group) {
-		this.group = group;
-	}
-
 	public String getSalt() {
 		return salt;
 	}
@@ -133,5 +127,22 @@ public class User extends BaseCommonEntity implements Serializable{
 	public String getCredentialsSalt() {
         return name + salt;
     }
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public Group getGroup() {
+		return group;
+	}
+
+	public void setGroup(Group group) {
+		this.group = group;
+	}
+	
 	
 }
