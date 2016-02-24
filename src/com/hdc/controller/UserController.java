@@ -29,12 +29,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hdc.entity.Datagrid;
-import com.hdc.entity.Group;
 import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
+import com.hdc.entity.Role;
 import com.hdc.entity.User;
-import com.hdc.service.IGroupService;
+import com.hdc.service.IRoleService;
 import com.hdc.service.IUserService;
 import com.hdc.service.impl.PasswordHelper;
 import com.hdc.shiro.realm.UserRealm;
@@ -50,7 +50,7 @@ public class UserController {
 	private IUserService userService;
 	
 	@Autowired
-	private IGroupService groupService;
+    protected IRoleService roleService;
 	
     @Autowired
     private PasswordHelper passwordHelper;
@@ -302,10 +302,10 @@ public class UserController {
 	@RequestMapping(value = "/toChooseUser")
 	public ModelAndView toChooseUser(@RequestParam("multiSelect") boolean multiSelect, @RequestParam("key") String key) throws Exception{
 		ModelAndView mv = new ModelAndView("choose/user/choose_user");
-		List<Group> groupList = this.groupService.getGroupList();
+		List<Role> list = this.roleService.getRoleList();
 		mv.addObject("key", key);
 		mv.addObject("multiSelect", multiSelect);
-		mv.addObject("groupList", groupList);
+		mv.addObject("groupList", list);
 		return mv;
 	}
 	
@@ -317,7 +317,7 @@ public class UserController {
 	@RequestMapping(value = "/toChooseDelegateUser")
 	public ModelAndView toChooseDelegateUser() throws Exception{
 		ModelAndView mv = new ModelAndView("task/delegate_user");
-		List<Group> groupList = this.groupService.getGroupList();
+		List<Role> groupList = this.roleService.getRoleList();
 		mv.addObject("groupList", groupList);
 		return mv;
 	}

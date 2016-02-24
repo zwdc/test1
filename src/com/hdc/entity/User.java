@@ -59,11 +59,6 @@ public class User extends BaseCommonEntity implements Serializable{
 	private Date registerDate;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="GROUP_ID")
-	@JsonIgnore
-    private Group group;			//所属部门
-	
-	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="ROLE_ID")
 	@JsonIgnore
 	private Role role;				//所属角色（职位）
@@ -136,13 +131,4 @@ public class User extends BaseCommonEntity implements Serializable{
 		this.role = role;
 	}
 
-	public Group getGroup() {
-		return group;
-	}
-
-	public void setGroup(Group group) {
-		this.group = group;
-	}
-	
-	
 }

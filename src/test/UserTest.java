@@ -10,11 +10,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.hdc.dao.IJdbcDao;
-import com.hdc.entity.Group;
 import com.hdc.entity.User;
 import com.hdc.service.IBaseService;
-import com.hdc.service.ICompanyService;
-import com.hdc.service.IGroupService;
 import com.hdc.service.IRoleService;
 import com.hdc.service.IUserService;
 import com.hdc.service.impl.PasswordHelper;
@@ -31,12 +28,6 @@ public class UserTest {
     
     @Autowired 
 	private IUserService userService;
-    
-    @Autowired
-    private IGroupService groupService;
-    
-    @Autowired
-    private ICompanyService companyService;
     
 	@Autowired 
 	private IBaseService<User> baseService;
@@ -57,7 +48,6 @@ public class UserTest {
 		user1.setName("admin");
 		user1.setPasswd("123");
 		user1.setRegisterDate(new Date());
-		user1.setGroup(new Group(7));
 		Serializable id1 = this.userService.doAdd(user1, false);
 		
 		/*for(int i=0; i<10; i++){
