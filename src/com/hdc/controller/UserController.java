@@ -90,10 +90,6 @@ public class UserController {
 			map.put("locked", user.getIsDelete());
 			map.put("groupId", user.getGroup().getId());
 			map.put("group_name", user.getGroup().getName());
-			map.put("companyId", user.getCompany().getId());
-			map.put("company_name", user.getCompany().getName());
-			map.put("roleId", user.getRole().getId());
-			map.put("role_name", user.getRole().getName());
 			map.put("salt", user.getSalt());
 			map.put("isDelete", user.getIsDelete());
 			jsonList.add(map);

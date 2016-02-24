@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hdc.entity.Message;
 import com.hdc.entity.Resource;
-import com.hdc.entity.RoleAndResource;
+import com.hdc.entity.GroupAndResource;
 import com.hdc.entity.User;
 import com.hdc.service.IResourceService;
-import com.hdc.service.IRoleAndResourceService;
+import com.hdc.service.IGroupAndResourceService;
 import com.hdc.util.BeanUtils;
 import com.hdc.util.UserUtil;
 
@@ -35,7 +35,7 @@ public class ResourceController {
     private IResourceService resourceService;
 	
 	@Autowired
-	private IRoleAndResourceService rarService;
+	private IGroupAndResourceService rarService;
 	
 	
 	/**
@@ -156,8 +156,8 @@ public class ResourceController {
 		Message message = new Message();
 		User user = UserUtil.getUserFromSession();
 		Serializable resourceId = this.resourceService.doAdd(resource);
-		Integer roleId = user.getRole().getId();
-		this.rarService.doAdd(new RoleAndResource(roleId, (Integer) resourceId));
+		Integer groupId = user.getGroup().getId();
+		this.rarService.doAdd(new GroupAndResource(groupId, (Integer) resourceId));
 		try {
 			message.setStatus(Boolean.TRUE);
 			message.setMessage("添加成功！");

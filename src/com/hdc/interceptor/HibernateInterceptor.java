@@ -75,9 +75,6 @@ public class HibernateInterceptor extends EmptyInterceptor {
         	boolean createUserIdFlag = false;
         	boolean isDeleteFlag = false;
         	
-        	boolean companyFlag = false;
-        	boolean groupFlag = false;
-        	boolean roleFlag = false;
         	User user = UserUtil.getUserFromSession();
         	for (int i = 0, length = propertyNames.length; i < length; i++) {
         		if ( propertyNames[i].equalsIgnoreCase("createDate") && !createDateFlag ) {
@@ -107,28 +104,9 @@ public class HibernateInterceptor extends EmptyInterceptor {
 					} else if(entity instanceof BaseCommonEntity) {
 						((BaseCommonEntity) entity).setIsDelete(0);
 					}
-				} else if ( propertyNames[i].equalsIgnoreCase("companyCode") && !companyFlag ) {
-					companyFlag = true;
-					if (user != null) {
-						currentState[i] = user.getCompany().getId();
-						((BaseServiceEntity) entity).setCompanyCode(user.getCompany().getId());
-						
-					}
-				} else if ( propertyNames[i].equalsIgnoreCase("groupCode") && !groupFlag ) {
-					groupFlag = true;
-					if (user != null) {
-						currentState[i] = user.getGroup().getId();
-						((BaseServiceEntity) entity).setGroupCode(user.getGroup().getId());
-					}
-				} else if ( propertyNames[i].equalsIgnoreCase("roleCode") && !roleFlag ) {
-					roleFlag = true;
-					if(user != null) {
-						currentState[i] = user.getRole().getId();
-						((BaseServiceEntity) entity).setRoleCode(user.getRole().getId());
-					}
 				}
         		
-        		if(createDateFlag && createUserIdFlag && isDeleteFlag && companyFlag && groupFlag && roleFlag){
+        		if(createDateFlag && createUserIdFlag && isDeleteFlag){
         			return true;
         		}
         	}

@@ -18,10 +18,10 @@ import org.hibernate.annotations.DynamicUpdate;
  *
  */
 @Entity
-@Table(name = "ROLE_RESOURCE")
+@Table(name = "GROUP_RESOURCE")
 @DynamicUpdate(true)
 @DynamicInsert(true)
-public class RoleAndResource implements Serializable {
+public class GroupAndResource implements Serializable {
 
 	/**
 	 * 
@@ -33,18 +33,18 @@ public class RoleAndResource implements Serializable {
 	@Column(name = "ID", length = 5, nullable = false, unique = true)
     private Integer id;
 
-    @Column(name = "role_id", length = 5, nullable = false)
-    private Integer roleId;
+    @Column(name = "group_id", length = 5, nullable = false)
+    private Integer groupId;
 
     @Column(name = "resource_id", length = 5, nullable = false)
     private Integer resourceId;
 
-    public RoleAndResource() {
+    public GroupAndResource() {
     	
     }
     
-    public RoleAndResource(Integer roleId, Integer resourceId) {
-    	this.roleId = roleId;
+    public GroupAndResource(Integer groupId, Integer resourceId) {
+    	this.groupId = groupId;
     	this.resourceId = resourceId;
     }
     
@@ -56,12 +56,12 @@ public class RoleAndResource implements Serializable {
 		this.id = id;
 	}
 
-	public Integer getRoleId() {
-		return roleId;
+	public Integer getGroupId() {
+		return groupId;
 	}
 
-	public void setRoleId(Integer roleId) {
-		this.roleId = roleId;
+	public void setGroupId(Integer groupId) {
+		this.groupId = groupId;
 	}
 
 	public Integer getResourceId() {

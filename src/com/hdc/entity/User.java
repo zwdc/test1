@@ -58,21 +58,12 @@ public class User extends BaseCommonEntity implements Serializable{
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
 	@Column(name = "REG_DATE")
 	private Date registerDate;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="COMPANY_ID")
-	@JsonIgnore
-	private Company company;		//所属公司
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="GROUP_ID")
 	@JsonIgnore
     private Group group;			//所属部门
-    
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="ROLE_ID")
-	@JsonIgnore
-	private Role role;				//所属角色（职位）
+
 	
 	public User(){
 		
@@ -142,21 +133,5 @@ public class User extends BaseCommonEntity implements Serializable{
 	public String getCredentialsSalt() {
         return name + salt;
     }
-
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
-	public Company getCompany() {
-		return company;
-	}
-
-	public void setCompany(Company company) {
-		this.company = company;
-	}
 	
 }

@@ -10,9 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.hdc.dao.IJdbcDao;
-import com.hdc.entity.Company;
 import com.hdc.entity.Group;
-import com.hdc.entity.Role;
 import com.hdc.entity.User;
 import com.hdc.service.IBaseService;
 import com.hdc.service.ICompanyService;
@@ -60,8 +58,6 @@ public class UserTest {
 		user1.setPasswd("123");
 		user1.setRegisterDate(new Date());
 		user1.setGroup(new Group(7));
-		user1.setCompany(new Company(1));
-		user1.setRole(new Role(1));
 		Serializable id1 = this.userService.doAdd(user1, false);
 		
 		/*for(int i=0; i<10; i++){

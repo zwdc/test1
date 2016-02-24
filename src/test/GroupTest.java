@@ -23,8 +23,16 @@ public class GroupTest {
 		group.setType("SUPERVISE_DEPARTMENT");
 		
 		Group group2 = new Group();
-		group2.setName("承办单位");
-		group2.setType("UNDERTAKER_DEPARTMENT");
+		group2.setName("承办单位1");
+		group2.setType("UNDERTAKER1_DEPARTMENT");
+		
+		Group group5 = new Group();
+		group5.setName("承办单位2");
+		group5.setType("UNDERTAKER2_DEPARTMENT");
+		
+		Group group6 = new Group();
+		group6.setName("承办单位3");
+		group6.setType("UNDERTAKER3_DEPARTMENT");
 		
 		Group group3 = new Group();
 		group3.setName("督察专员");
