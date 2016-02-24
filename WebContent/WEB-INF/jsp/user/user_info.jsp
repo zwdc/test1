@@ -10,14 +10,6 @@
 	  		<td>${user.name}</td>
 	  	</tr>
 	  	<tr>
-	  		<td class="text-right">所属公司:</td>
-	  		<td>${user.company.name}</td>
-	  	</tr>
-	  	<tr>
-	  		<td class="text-right">所属部门:</td>
-	  		<td>${user.group.name}</td>
-	  	</tr>
-	  	<tr>
 	  		<td class="text-right">所属角色:</td>
 	  		<td>${user.role.name}</td>
 	  	</tr>

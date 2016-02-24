@@ -12,7 +12,7 @@ public interface IRoleAndResourceService {
 	
 	public void doDelete(RoleAndResource rar) throws Exception;
 	
-	public Integer doDelByRole(Integer roleId) throws Exception;
+	public Integer doDeleteByRole(Integer roleId) throws Exception;
 	
-	public Integer doDelByResource(Integer resourceId) throws Exception;
+	public Integer doDeleteByResource(Integer resourceId) throws Exception;
 }

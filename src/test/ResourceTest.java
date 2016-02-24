@@ -1,5 +1,7 @@
 package test;
 
+import java.io.Serializable;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,7 @@ public class ResourceTest {
 	
 	@Test
 	public void resourceTest() throws Exception{
-/*		Resource r1 = new Resource();
+		Resource r1 = new Resource();
 		r1.setName("ROOT");
 		r1.setNote("主菜单");
 		r1.setParentId(0);
@@ -64,7 +66,7 @@ public class ResourceTest {
 		r3.setType("menu");
 		r3.setUrl("");
 		r3.setIsDelete(0);
-		this.resourceService.doAdd(r3);*/
+		this.resourceService.doAdd(r3);
 		
 		Resource r5 = new Resource();
 		r5.setName("流程模型设计");

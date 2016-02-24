@@ -11,13 +11,13 @@ import java.io.File;
 public class Constants {
 	
 	/***************** system ******************/
-	public static final String DB_NAME = "oracle";
+	public static final String DB_NAME = "mysql";
 	public static final String MESSAGE = "message";
 	public static final String DEFAULT_PASSWORD = "123";
 	
 	/***************** session key *****************/
     public static final String CURRENT_USER = "user";
-    public static final String GROUP_ID = "groupId";
+    //public static final String GROUP_ID = "groupId";
     public static final String SESSION_FORCE_LOGOUT_KEY = "session.force.logout";
     
 	/***************** activiti *****************/

@@ -10,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.hdc.dao.IJdbcDao;
+import com.hdc.entity.Role;
 import com.hdc.entity.User;
 import com.hdc.service.IBaseService;
 import com.hdc.service.IRoleService;
@@ -47,6 +48,7 @@ public class UserTest {
 		User user1 = new User();
 		user1.setName("admin");
 		user1.setPasswd("123");
+		user1.setRole(new Role(6));
 		user1.setRegisterDate(new Date());
 		Serializable id1 = this.userService.doAdd(user1, false);
 		

@@ -39,17 +39,15 @@ public class RoleAndResourceServiceImpl implements IRoleAndResourceService {
 	}
 
 	@Override
-	public Integer doDelByRole(Integer roleId) throws Exception {
+	public Integer doDeleteByRole(Integer roleId) throws Exception {
 		String hql = "delete from RoleAndResource where roleId = " + roleId;
 		return this.baseService.executeHql(hql);
 	}
 
 	@Override
-	public Integer doDelByResource(Integer resourceId) throws Exception {
-		String hql = "delete from RoleAndResource where resourceId = :resourceId";
-		Map<String, Object> params = new HashMap<String, Object>();  
-		params.put("resourceId", resourceId);  
-		return this.baseService.executeHql(hql, params);
+	public Integer doDeleteByResource(Integer resourceId) throws Exception {
+		String hql = "delete from RoleAndResource where resourceId = " + resourceId;
+		return this.baseService.executeHql(hql);
 	}
 
 }

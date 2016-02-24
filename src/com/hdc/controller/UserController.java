@@ -63,7 +63,7 @@ public class UserController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/userDatagrid")
+	@RequestMapping(value = "/toList")
 	public String toList() throws Exception{
 		return "user/list_user";
 	}
@@ -75,7 +75,7 @@ public class UserController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/toList")
+	@RequestMapping("/getList")
 	@ResponseBody
 	public Datagrid<Object> userList(Parameter param) throws Exception{
 		Page<User> page = new Page<User>(param.getPage(), param.getRows());

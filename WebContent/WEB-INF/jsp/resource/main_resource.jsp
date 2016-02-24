@@ -26,17 +26,17 @@
 		  	<tr>
 		  		<td class="text-right">资源名称:</td>
 		  		<td>
-			    	<input id="name" name="name" class="easyui-textbox easyui-validatebox" required="required">
+			    	<input id="name" name="name" class="easyui-textbox" required="required">
 		  		</td>
 		  		<td class="text-right">权限字符串:</td>
 		  		<td>
-		  			<input id="url" name="permission" class="easyui-textbox easyui-validatebox" required="required">
+		  			<input id="url" name="permission" class="easyui-textbox" required="required">
 		  		</td>
 		  	</tr>
 		  	<tr>
 		  		<td class="text-right">资源路径:</td>
 		  		<td>
-					<input id="url" name="url" class="easyui-textbox easyui-validatebox">
+					<input id="url" name="url" class="easyui-textbox">
 		  		</td>
 		  		<td class="text-right">资源类型:</td>
 		  		<td>
@@ -49,7 +49,7 @@
 		  	<tr>
 		  		<td class="text-right">父编号:</td>
 		  		<td>
-		  			<input name="parentId"  class="easyui-combotree" id="parentId" type="text"/>
+		  			<input name="parentId"  class="easyui-combotree" id="parentId" type="text" required="required"/>
 		  		</td>
 		  		<td class="text-right">是否启用:</td>
 		  		<td>

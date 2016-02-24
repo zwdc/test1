@@ -25,23 +25,23 @@ public class RoleTest {
 		
 		Role role2 = new Role();
 		role2.setName("督察专员");
-		role2.setType("SUPERVISOR_DEPARTMENT");
+		role2.setType("SUPERVISOR");
 		
 		Role role3 = new Role();
 		role3.setName("承办单位1");
-		role3.setType("UNDERTAKER1_DEPARTMENT");
+		role3.setType("UNDERTAKER1");
 		
 		Role role5 = new Role();
 		role5.setName("承办单位2");
-		role5.setType("UNDERTAKER2_DEPARTMENT");
+		role5.setType("UNDERTAKER2");
 		
 		Role role6 = new Role();
 		role6.setName("承办单位3");
-		role6.setType("UNDERTAKER3_DEPARTMENT");
+		role6.setType("UNDERTAKER3");
 		
 		Role role4 = new Role();
 		role4.setName("系统管理");
-		role4.setType("ADMIN_DEPARTMENT");
+		role4.setType("ADMIN");
 		
 		this.roleService.doAdd(role1);
 		this.roleService.doAdd(role2);

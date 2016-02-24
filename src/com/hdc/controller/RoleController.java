@@ -113,7 +113,7 @@ public class RoleController {
 	@ResponseBody
 	public Message savePermission(@RequestParam("roleId") Integer roleId, @RequestParam("resourceIds[]") String[] resourceIds) throws Exception {
 		if(!BeanUtils.isBlank(roleId)){
-			this.rarService.doDelByRole(roleId);
+			this.rarService.doDeleteByRole(roleId);
 			for(String resourceId: resourceIds){
 				RoleAndResource rar = new RoleAndResource();
 				rar.setRoleId(roleId);
@@ -136,7 +136,7 @@ public class RoleController {
 	@ResponseBody
 	public Message delete(@RequestParam("id") Integer id) throws Exception{
 		if(!BeanUtils.isBlank(id)) {
-			this.rarService.doDelByRole(id);
+			this.rarService.doDeleteByRole(id);
 			this.roleService.doDelete(id.toString());
 			return new Message(Boolean.TRUE, "删除成功！");
 		}else{

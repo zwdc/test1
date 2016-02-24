@@ -3,36 +3,6 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <script type="text/javascript">
 $(function(){
-	//公司
-	$('#company').combobox({
-		width:160,
-		url:ctx+"/company/companyList",
-	    valueField: 'id',
-	    textField: 'name',
-	    onSelect:function(value){
-			$("#company_name").val(value.name);
-		},
-		required: true,
-		onLoadSuccess: function (data) {
-			var companyId = $("#companyId").val();
-            $("#company").combobox('setValue',companyId);
-        }
-	}); 
-	//部门（组）
-	$("#group").combobox({
-		width:160,
-		url:"${ctx }/group/getAllGroup",
-		valueField: 'id',
-		textField: 'name',
-		onSelect:function(value){
-			$("#group_name").val(value.name);
-		},
-		required: true,
-		onLoadSuccess: function (data) {
-			var groupId = $("#groupId").val();
-            $("#group").combobox('setValue',groupId);
-        }
-	});
 	//角色（职位）
 	$("#role").combobox({
 		width:160,
@@ -130,16 +100,6 @@ $(function(){
                    class="easyui-textbox" validType="equalTo['#passwd']"
                    invalidMessage="两次输入密码不匹配.">
             <small><abbr id="rePassword" title="不需要修改原密码时，此项留空!" ><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></abbr></small>
-        </div>
-        <div class="fitem">
-            <label>公司:</label>
-			<input id="company" name="company.id" class="easyui-textbox" required="required" />
-			<input name="company_name" id="company_name" type="hidden" />
-        </div>
-        <div class="fitem">
-            <label>部门:</label>
-			<input id="group" name="group.id" class="easyui-textbox" required="required" />
-			<input name="group_name" id="group_name" type="hidden" />
         </div>
          <div class="fitem">
             <label>角色:</label>

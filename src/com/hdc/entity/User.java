@@ -39,8 +39,7 @@ public class User extends BaseCommonEntity implements Serializable{
 	private static final long serialVersionUID = -6662232329895785824L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="ID_SEQ")
-	@SequenceGenerator(name="ID_SEQ", sequenceName="SEQ_USER_ID", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "USER_ID", length = 5, nullable = false, unique = true)
 	private Integer id;
 	

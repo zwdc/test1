@@ -261,7 +261,7 @@ public class ResourceController {
 		try {
 			Integer result_r = this.resourceService.doDelete(id);
 			if(result_r > 0){
-				this.rarService.doDelByResource(id);
+				this.rarService.doDeleteByResource(id);
 				message.setStatus(Boolean.TRUE);
 				message.setMessage("成功删除 "+result_r+" 条数据,");
 			}else{

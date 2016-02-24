@@ -9,9 +9,8 @@ var user_dialog;
 
 $(function() {
 	//数据列表
-	//alert(fixHeight(0.8));
     user_datagrid = $('#user_datagrid').datagrid({
-        url: ctx+"/user/toList",
+        url: ctx+"/user/getList",
         width : 'auto',
 		height : fixHeight(0.85),
 		pagination:true,
@@ -27,8 +26,6 @@ $(function() {
             		  return moment(value).format("YYYY-MM-DD HH:mm");
 				  }
               },
-              {field : 'company_name',title : '公司',width : fixWidth(0.1),sortable: true},
-              {field : 'group_name',title : '部门',width : fixWidth(0.1),sortable: true},
               {field : 'role_name',title : '角色',width : fixWidth(0.1),sortable: true},
               {field : 'locked',title : '状态',width : fixWidth(0.1),
             	  formatter:function(value,row){
