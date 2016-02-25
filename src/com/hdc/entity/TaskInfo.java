@@ -18,10 +18,10 @@ import org.hibernate.annotations.DynamicUpdate;
  * @author ZML
  *
  */
-@Entity
+/*@Entity
 @Table(name = "TASK_INFO")
 @DynamicUpdate(true)
-@DynamicInsert(true)
+@DynamicInsert(true)*/
 public class TaskInfo extends BaseCommonEntity implements Serializable{
 
 	/**
