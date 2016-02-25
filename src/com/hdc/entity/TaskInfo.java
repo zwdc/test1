@@ -9,19 +9,22 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 事项
  * @author ZML
  *
  */
-/*@Entity
+@Entity
 @Table(name = "TASK_INFO")
 @DynamicUpdate(true)
-@DynamicInsert(true)*/
+@DynamicInsert(true)
 public class TaskInfo extends BaseCommonEntity implements Serializable{
 
 	/**
@@ -34,29 +37,44 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 	@Column(name = "ID", length = 10, nullable = false, unique = true)
 	private Integer id;
 	
-	
+	@Column(name = "TITLE", length = 200)
 	private String title;			//标题
 	
+	@Column(name = "TASK_NO", length = 200)
 	private String taskNo;			//文号
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(name = "CREATE_TASK_DATE")
 	private Date createTaskDate;	//立项日期
 	
+	@Column(name = "FEEDBACK_CYCLE", length = 1)
 	private Integer feedback_cycle;	//反馈周期
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(name = "END_TASK_DATE")
 	private Date endTaskDate;		//办结时限
 	
+	@Column(name = "CONTACTS", length = 30)
 	private String contacts;		//联系人
 	
+	@Column(name = "CONTACTS_PHONE", length = 30)
 	private String contactsPhone;	//联系电话
 	
+	@Column(name = "HOST_UNIT", length = 100)
 	private String hostUnit;		//主办单位
 	
+	@Column(name = "ASSISTANT_UNIT", length = 100)
 	private String assistantUnit;	//协办单位
 	
+	@Column(name = "TASK_CONTENT", length = 2000)
 	private String taskContent;		//事项内容
 	
+	@Column(name = "LEAD_COMMENTS", length = 2000)
 	private String leadComments;	//领导批示
 	
+	@Column(name = "SUGGESTION", length = 2000)
 	private String suggestion;		//拟办意见
 	
 	@Column(name = "FILE_NAME", length = 500)
@@ -65,11 +83,10 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 	@Column(name = "FILE_PATH", length = 1000)
 	private String filePath;		//文件路径
 	
-	@Column(name = "FILE_SIZE", length = 15)
-	private Long fileSize;			//文件大小
-	
+	@Column(name = "SUPERVISOR", length = 5)
 	private Integer supervisor;		//督办专员 id
 	
+	@Column(name = "STATUS", length = 30)
 	private String status;			//状态(0.待签收  1.办理中  2.已办结)
 
 	public Integer getId() {
@@ -190,14 +207,6 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
-	}
-
-	public Long getFileSize() {
-		return fileSize;
-	}
-
-	public void setFileSize(Long fileSize) {
-		this.fileSize = fileSize;
 	}
 
 	public Integer getSupervisor() {

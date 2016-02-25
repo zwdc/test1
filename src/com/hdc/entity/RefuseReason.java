@@ -13,28 +13,28 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 /**
- * 缓急程度
- * @author ZML
+ * 拒绝原因
+ * @author zhao
  *
  */
 @Entity
-@Table(name = "URGENCY")
+@Table(name = "REFUSE_REASON")
 @DynamicUpdate(true)
 @DynamicInsert(true)
-public class Urgency extends BaseCommonEntity implements Serializable {
+public class RefuseReason extends BaseCommonEntity implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8043344151811550005L;
-	
+	private static final long serialVersionUID = -7887276124847651105L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", length = 5, nullable = false, unique = true)
 	private Integer id;
 	
-	@Column(name = "TITLE", length = 500)
-	private String title;
+	@Column(name = "TITLE", length = 1000)
+	private String reason;
 
 	public Integer getId() {
 		return id;
@@ -44,12 +44,12 @@ public class Urgency extends BaseCommonEntity implements Serializable {
 		this.id = id;
 	}
 
-	public String getTitle() {
-		return title;
+	public String getReason() {
+		return reason;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setReason(String reason) {
+		this.reason = reason;
 	}
-
+	
 }

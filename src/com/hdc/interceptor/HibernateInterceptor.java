@@ -8,7 +8,6 @@ import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.Type;
 
 import com.hdc.entity.BaseCommonEntity;
-import com.hdc.entity.BaseServiceEntity;
 import com.hdc.entity.User;
 import com.hdc.util.UserUtil;
 
@@ -32,7 +31,7 @@ public class HibernateInterceptor extends EmptyInterceptor {
 	public boolean onFlushDirty(Object entity,Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames,Type[] types) throws CallbackException {
 	    
         //记录更新时间、更新人
-        if (entity instanceof BaseServiceEntity || entity instanceof BaseCommonEntity) {
+        if (entity instanceof BaseCommonEntity) {
         	boolean updateDateFlag = false;
         	boolean updateUserIdFlag = false;
         	for (int i = 0, length = propertyNames.length; i < length; i++) {
@@ -40,21 +39,13 @@ public class HibernateInterceptor extends EmptyInterceptor {
         			updateDateFlag = true;
 					Date updateDate = new Date();
 					currentState[i] = updateDate;
-					if(entity instanceof BaseServiceEntity) {
-						((BaseServiceEntity) entity).setUpdateDate(updateDate);
-					} else if(entity instanceof BaseCommonEntity) {
-						((BaseCommonEntity) entity).setUpdateDate(updateDate);
-					}
+					((BaseCommonEntity) entity).setUpdateDate(updateDate);
 				} else if ( propertyNames[i].equalsIgnoreCase("updateUserId") && !updateUserIdFlag ) {
 					updateUserIdFlag = true;
 					User user = UserUtil.getUserFromSession();
 					if (user != null) {
 						currentState[i] = user.getId();
-						if(entity instanceof BaseServiceEntity) {
-							((BaseServiceEntity) entity).setUpdateUserId(user.getId());
-						} else if(entity instanceof BaseCommonEntity) {
-							((BaseCommonEntity) entity).setUpdateUserId(user.getId());
-						}
+						((BaseCommonEntity) entity).setUpdateUserId(user.getId());
 					}
 				}
         		if(updateDateFlag && updateUserIdFlag){
@@ -69,8 +60,8 @@ public class HibernateInterceptor extends EmptyInterceptor {
 	@Override
 	public boolean onSave(Object entity, Serializable id, Object[] currentState, String[] propertyNames, Type[] types) {
 		
-		//记录添加时间、添加人、isDelete、数据所属公司、部门、职位
-        if (entity instanceof BaseServiceEntity || entity instanceof BaseCommonEntity) {
+		//记录添加时间、添加人、isDelete
+        if (entity instanceof BaseCommonEntity) {
         	boolean createDateFlag = false;
         	boolean createUserIdFlag = false;
         	boolean isDeleteFlag = false;
@@ -81,29 +72,17 @@ public class HibernateInterceptor extends EmptyInterceptor {
         			createDateFlag = true;
 					Date createDate = new Date();
 					currentState[i] = createDate;
-					if(entity instanceof BaseServiceEntity) {
-						((BaseServiceEntity) entity).setCreateDate(createDate);
-					} else if(entity instanceof BaseCommonEntity) {
-						((BaseCommonEntity) entity).setCreateDate(createDate);
-					}
+					((BaseCommonEntity) entity).setCreateDate(createDate);
 				} else if ( propertyNames[i].equalsIgnoreCase("createUserId") && !createUserIdFlag ) {
 					createUserIdFlag = true;
 					if (user != null) {
 						currentState[i] = user.getId();
-						if(entity instanceof BaseServiceEntity) {
-							((BaseServiceEntity) entity).setCreateUserId(user.getId());
-						} else if(entity instanceof BaseCommonEntity) {
-							((BaseCommonEntity) entity).setCreateUserId(user.getId());
-						}
+						((BaseCommonEntity) entity).setCreateUserId(user.getId());
 					}
 				} else if ( propertyNames[i].equalsIgnoreCase("isDelete") && !isDeleteFlag ) {
 					isDeleteFlag = true;
 					currentState[i] = 0;
-					if(entity instanceof BaseServiceEntity) {
-						((BaseServiceEntity) entity).setIsDelete(0);
-					} else if(entity instanceof BaseCommonEntity) {
-						((BaseCommonEntity) entity).setIsDelete(0);
-					}
+					((BaseCommonEntity) entity).setIsDelete(0);
 				}
         		
         		if(createDateFlag && createUserIdFlag && isDeleteFlag){
