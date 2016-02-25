@@ -41,13 +41,13 @@ public class RoleTest {
 		
 		Role role4 = new Role();
 		role4.setName("系统管理");
-		role4.setType("ADMIN");
+		role4.setType("admin");
 		
+		this.roleService.doAdd(role4);
 		this.roleService.doAdd(role1);
 		this.roleService.doAdd(role2);
 		this.roleService.doAdd(role3);
 		this.roleService.doAdd(role5);
 		this.roleService.doAdd(role6);
-		this.roleService.doAdd(role4);
 	}
 }
