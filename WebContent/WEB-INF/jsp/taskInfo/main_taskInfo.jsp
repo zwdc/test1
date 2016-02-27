@@ -14,13 +14,25 @@
 			    textField: "name",
 			    data: data[0].feedback
 			});
+			
+			$('#urgency').combobox({
+				valueField: "id",
+			    textField: "name",
+			    data: data[0].urgencyType
+			});
+			
+			$('#taskType').combobox({
+				valueField: "id",
+			    textField: "name",
+			    data: data[0].taskType
+			});
 		});
 		
-		$('#urgency').combobox({
+		/* $('#urgency').combobox({
 			url:ctx+"/urgency/urgencyList",
 			valueField: "id",
 		    textField: "name"
-		}); 
+		});  */
 	});
 </script>
 <div class="easyui-layout">
@@ -42,13 +54,13 @@
 			<td class="text-right">文号:</td>
 			<td><input name="taskNo" class="easyui-textbox" data-options="prompt:'填写文号'"  value="${taskInfo.taskNo }" required="required" type="text"></td>
 			<td class="text-right">立项时间:</td>
-			<td><input name="createTaskDate" class="easyui-datebox" data-options="prompt:'选择立项时间',editable:false" value="${taskInfo.createTaskDate }" required="required"></td>
+			<td><input name="createTaskDate" class="easyui-datetimebox" data-options="prompt:'选择立项时间',editable:false" value="${taskInfo.createTaskDate }" required="required"></td>
 		</tr>
 		<tr>
 			<td class="text-right">反馈周期:</td>
 			<td><input id="feedback" name="feedbackCycle" class="easyui-combobox" data-options="prompt:'选择反馈周期'" value="${taskInfo.feedbackCycle }" required="required"></td>
 			<td class="text-right">办结时限:</td>
-			<td><input name="endTaskDate" class="easyui-datebox" data-options="prompt:'选择立项时间',editable:false" value="${taskInfo.endTaskDate }" required="required"></td>
+			<td><input name="endTaskDate" class="easyui-datetimebox" data-options="prompt:'选择立项时间',editable:false" value="${taskInfo.endTaskDate }" required="required"></td>
 		</tr>
 		<tr>
 			<td class="text-right">联系人:</td>
@@ -59,7 +71,8 @@
 		<tr>
 			<td class="text-right">急缓程度:</td>
 			<td><input id="urgency" name="urgency.id" value="${taskInfo.urgency.id }" data-options="prompt:'选择急缓程度'" class="easyui-combobox" required="required"></td>
-			<td colspan="2"></td>
+			<td class="text-right">文件类型:</td>
+			<td><input id="taskType" name="taskType" value="${taskInfo.taskType }" data-options="prompt:'选择文件类型'" class="easyui-combobox" required="required"></td>
 		</tr>
 		<tr>
 			<td class="text-right">主办单位:</td>

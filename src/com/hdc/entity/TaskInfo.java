@@ -115,6 +115,9 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 	@Column(name = "SUPERVISOR", length = 5)
 	private Integer supervisor;		//督办专员 id
 	
+	@Column(name = "TASK_TYPE", length = 1)
+	private Integer taskType;		//文件类型 （1.省政府文件  2.国务院文件  3.其他文件）
+	
 	@Column(name = "STATUS", length = 30)
 	private String status;			//状态(0.待签收  1.办理中  2.已办结)
 
@@ -276,6 +279,22 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public Date getUploadDate() {
+		return uploadDate;
+	}
+
+	public void setUploadDate(Date uploadDate) {
+		this.uploadDate = uploadDate;
+	}
+
+	public Integer getTaskType() {
+		return taskType;
+	}
+
+	public void setTaskType(Integer taskType) {
+		this.taskType = taskType;
 	}
 	
 }

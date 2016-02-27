@@ -10,9 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hdc.entity.Datagrid;
+import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.TaskInfo;
@@ -82,5 +84,19 @@ public class TaskInfoController {
 			jsonList.add(map);
 		}
 		return new Datagrid<Object>(page.getTotal(), jsonList);
+	}
+	
+	@RequestMapping("/saveOrUpdate")
+	@ResponseBody
+	public Message saveOrUpdate(TaskInfo taskInfo, @RequestParam("file") MultipartFile file) {
+		Message message = new Message();
+		Integer id = taskInfo.getId();
+		if(BeanUtils.isBlank(id)) {
+			
+		} else {
+			
+		}
+		
+		return message;
 	}
 }
