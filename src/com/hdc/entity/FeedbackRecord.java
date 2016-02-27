@@ -4,13 +4,18 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 反馈记录
@@ -32,6 +37,11 @@ public class FeedbackRecord extends BaseCommonEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", length = 10, nullable = false, unique = true)
 	private Integer id;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="TASK_INFO")
+	@JsonIgnore
+	private TaskInfo taskInfo;
 	
 	@Column(name = "ORIGINAL_PERSON", length = 30)
 	private String originalPerson;		//原始起草人
@@ -60,6 +70,12 @@ public class FeedbackRecord extends BaseCommonEntity implements Serializable {
 	@Column(name = "CONTENT", length = 2000)
 	private String content;				//落实情况
 	
+	@Column(name = "REPLENISH", length = 2000)
+	private String replenish;			//补充建议（续报）
+	
+	@Column(name = "TYPE", length = 1)
+	private Integer type;				//反馈类型（0.正常反馈  1.续报）
+	
 	@Column(name = "FILE_NAME", length = 500)
 	private String fileName;			//附件名称
 	
@@ -78,6 +94,14 @@ public class FeedbackRecord extends BaseCommonEntity implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public TaskInfo getTaskInfo() {
+		return taskInfo;
+	}
+
+	public void setTaskInfo(TaskInfo taskInfo) {
+		this.taskInfo = taskInfo;
 	}
 
 	public String getOriginalPerson() {

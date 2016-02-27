@@ -29,7 +29,7 @@ public interface IBaseService<T> {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<T> findListPage(String tableSimpleName, Parameter param, Map<String, Object> params, Page<T> page, Boolean dataSetPermission) throws Exception;
+	public List<T> findListPage(String tableSimpleName, Parameter param, Map<String, Object> params, Page<T> page) throws Exception;
 	
 	/**
 	 * 获取数量
@@ -40,7 +40,7 @@ public interface IBaseService<T> {
 	 * @return
 	 * @throws Exception
 	 */
-	public Integer getCount(String tableSimpleName, Parameter param, Map<String, Object> params, Boolean dataSetPermission) throws Exception;
+	public Integer getCount(String tableSimpleName, Parameter param, Map<String, Object> params) throws Exception;
 	
 	/**
 	 * 条件查询
@@ -50,7 +50,7 @@ public interface IBaseService<T> {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<T> findByWhere(String tableSimpleName, Map<String, Object> params, Boolean dataSetPermission) throws Exception;
+	public List<T> findByWhere(String tableSimpleName, Map<String, Object> params) throws Exception;
 
 	/**
 	 * 获取唯一数据

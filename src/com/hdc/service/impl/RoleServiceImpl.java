@@ -21,12 +21,12 @@ public class RoleServiceImpl implements IRoleService {
 	@Override
 	public List<Role> getRoleListPage(Parameter param, Page<Role> page)
 			throws Exception {
-		return this.baseService.findListPage("Role", param, null, page, false);
+		return this.baseService.findListPage("Role", param, null, page);
 	}
 
 	@Override
 	public List<Role> getRoleList() throws Exception {
-		return this.baseService.findByWhere("Role", null, false);
+		return this.baseService.findByWhere("Role", null);
 	}
 
 	@Override

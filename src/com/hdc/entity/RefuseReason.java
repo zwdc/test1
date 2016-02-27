@@ -4,13 +4,18 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 拒绝原因
@@ -36,6 +41,11 @@ public class RefuseReason extends BaseCommonEntity implements Serializable {
 	@Column(name = "TITLE", length = 1000)
 	private String reason;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="TASK_INFO")
+	@JsonIgnore
+	private TaskInfo taskInfo;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -50,6 +60,14 @@ public class RefuseReason extends BaseCommonEntity implements Serializable {
 
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+
+	public TaskInfo getTaskInfo() {
+		return taskInfo;
+	}
+
+	public void setTaskInfo(TaskInfo taskInfo) {
+		this.taskInfo = taskInfo;
 	}
 	
 }

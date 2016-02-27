@@ -72,7 +72,7 @@ public class UserServiceImpl implements IUserService {
 		if(groupId != null){
 			map.put("group", groupId);
 		}
-		List<User> list = this.baseService.findListPage("User", param, map, page, false);
+		List<User> list = this.baseService.findListPage("User", param, map, page);
 		
 		return list;
 	}
@@ -266,7 +266,7 @@ public class UserServiceImpl implements IUserService {
      * @throws Exception 
      */
     private void synUserWithRoleToActiviti() throws Exception {
-        List<User> allUser = this.baseService.findByWhere("User", null, false);
+        List<User> allUser = this.baseService.findByWhere("User", null);
         for (User user : allUser) {
             String userId = user.getId().toString();
             String groupId = user.getRole().getId().toString();
@@ -290,7 +290,7 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public List<User> getUserList(Parameter param, Page<User> page) throws Exception {
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<User> list = this.baseService.findListPage("User", param, map, page, false);
+		List<User> list = this.baseService.findListPage("User", param, map, page);
 		return list;
 	}
 

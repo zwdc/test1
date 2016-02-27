@@ -51,7 +51,7 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 	}
 	
 	@Override
-	public List<T> findListPage(String tableSimpleName, Parameter param, Map<String, Object> map, Page<T> page, Boolean dataSetPermission) throws Exception {
+	public List<T> findListPage(String tableSimpleName, Parameter param, Map<String, Object> map, Page<T> page) throws Exception {
 		StringBuffer sb = new StringBuffer();  
         sb.append("select a from ").append(tableSimpleName).append(" a where a.isDelete = 0");  
         
@@ -117,7 +117,7 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 		}
 		
 		String hql = sb.toString();
-		Integer total = getCount(tableSimpleName, param, map, dataSetPermission);
+		Integer total = getCount(tableSimpleName, param, map);
 		
 		int[] pageParams = page.getPageParams(total);
 		List<T> list = this.baseDao.findByPage(hql, pageParams[0], pageParams[1]); 
@@ -130,7 +130,7 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 	}
 	
 	@Override
-	public Integer getCount(String tableSimpleName, Parameter param, Map<String, Object> map, Boolean dataSetPermission) throws Exception{
+	public Integer getCount(String tableSimpleName, Parameter param, Map<String, Object> map) throws Exception{
 		StringBuffer sb = new StringBuffer();  
         sb.append("select count(*) from ").append(tableSimpleName).append(" a where a.isDelete = 0");
 
@@ -192,7 +192,7 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 	}
 	
 	@Override
-	public List<T> findByWhere(String tableSimpleName, Map<String, Object> params, Boolean dataSetPermission) throws Exception {
+	public List<T> findByWhere(String tableSimpleName, Map<String, Object> params) throws Exception {
 		//如果有排序的需求可以加个String[] orderBy, String[] orderType变量来扩展
 		StringBuffer sb = new StringBuffer();  
         sb.append("select a from ").append(tableSimpleName).append(" a where a.isDelete = 0 ");  

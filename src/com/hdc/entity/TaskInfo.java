@@ -5,9 +5,12 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -15,6 +18,8 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 事项
@@ -37,6 +42,11 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 	@Column(name = "ID", length = 10, nullable = false, unique = true)
 	private Integer id;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="URGENCY_ID")
+	@JsonIgnore
+	private Urgency urgency;		//急缓程度
+	
 	@Column(name = "TITLE", length = 200)
 	private String title;			//标题
 	
@@ -48,8 +58,18 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 	@Column(name = "CREATE_TASK_DATE")
 	private Date createTaskDate;	//立项日期
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(name = "ASSIGN_DATE")
+	private Date assignDate;		//交办日期
+	
 	@Column(name = "FEEDBACK_CYCLE", length = 1)
-	private Integer feedback_cycle;	//反馈周期
+	private Integer feedbackCycle;	//反馈周期（0.默认一次  1.每周一次  2.每月一次）
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(name = "FEEDBACE_DATE")
+	private Date feedbaceDate;		//反馈时限
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -62,11 +82,15 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 	@Column(name = "CONTACTS_PHONE", length = 30)
 	private String contactsPhone;	//联系电话
 	
-	@Column(name = "HOST_UNIT", length = 100)
-	private String hostUnit;		//主办单位
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="HOST_GROUP_ID")
+	@JsonIgnore
+	private Group hostGroup;		//主办单位
 	
-	@Column(name = "ASSISTANT_UNIT", length = 100)
-	private String assistantUnit;	//协办单位
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="ASSISTANT_GROUP_ID")
+	@JsonIgnore
+	private Group assistantGroup;	//协办单位
 	
 	@Column(name = "TASK_CONTENT", length = 2000)
 	private String taskContent;		//事项内容
@@ -82,6 +106,11 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 	
 	@Column(name = "FILE_PATH", length = 1000)
 	private String filePath;		//文件路径
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(name = "UPLOAD_DATE")
+	private Date uploadDate ;		//上传时间
 	
 	@Column(name = "SUPERVISOR", length = 5)
 	private Integer supervisor;		//督办专员 id
@@ -121,12 +150,36 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 		this.createTaskDate = createTaskDate;
 	}
 
-	public Integer getFeedback_cycle() {
-		return feedback_cycle;
+	public Urgency getUrgency() {
+		return urgency;
 	}
 
-	public void setFeedback_cycle(Integer feedback_cycle) {
-		this.feedback_cycle = feedback_cycle;
+	public void setUrgency(Urgency urgency) {
+		this.urgency = urgency;
+	}
+
+	public Date getAssignDate() {
+		return assignDate;
+	}
+
+	public void setAssignDate(Date assignDate) {
+		this.assignDate = assignDate;
+	}
+
+	public Integer getFeedbackCycle() {
+		return feedbackCycle;
+	}
+
+	public void setFeedbackCycle(Integer feedbackCycle) {
+		this.feedbackCycle = feedbackCycle;
+	}
+
+	public Date getFeedbaceDate() {
+		return feedbaceDate;
+	}
+
+	public void setFeedbaceDate(Date feedbaceDate) {
+		this.feedbaceDate = feedbaceDate;
 	}
 
 	public Date getEndTaskDate() {
@@ -153,20 +206,20 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 		this.contactsPhone = contactsPhone;
 	}
 
-	public String getHostUnit() {
-		return hostUnit;
+	public Group getHostGroup() {
+		return hostGroup;
 	}
 
-	public void setHostUnit(String hostUnit) {
-		this.hostUnit = hostUnit;
+	public void setHostGroup(Group hostGroup) {
+		this.hostGroup = hostGroup;
 	}
 
-	public String getAssistantUnit() {
-		return assistantUnit;
+	public Group getAssistantGroup() {
+		return assistantGroup;
 	}
 
-	public void setAssistantUnit(String assistantUnit) {
-		this.assistantUnit = assistantUnit;
+	public void setAssistantGroup(Group assistantGroup) {
+		this.assistantGroup = assistantGroup;
 	}
 
 	public String getTaskContent() {

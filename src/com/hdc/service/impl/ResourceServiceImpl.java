@@ -79,7 +79,7 @@ public class ResourceServiceImpl implements IResourceService {
 
 	@Override
 	public List<Resource> getResourceList(Parameter param, Page<Resource> page) throws Exception {
-		return this.baseService.findListPage("Resource", param, null, page, false);
+		return this.baseService.findListPage("Resource", param, null, page);
 	}
 
 	@Override

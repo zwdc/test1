@@ -1,8 +1,9 @@
 [{
-	"brand" : [
+	"feedback" : [
 		{ "id":"", "name":"--请选择--" },
-		{ "id":"1", "name":"百胜" },
-		{ "id":"2", "name":"GE" }
+		{ "id":"0", "name":"默认一次" },
+		{ "id":"1", "name":"每周一次" },
+		{ "id":"2", "name":"每月一次" }
 	],
 		
 	"productPartType" : [

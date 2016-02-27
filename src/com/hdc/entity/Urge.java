@@ -5,9 +5,12 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -15,6 +18,8 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 催办
@@ -36,6 +41,11 @@ public class Urge extends BaseCommonEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID", length = 6, nullable = false, unique = true)
 	private Integer id;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="TASK_INFO")
+	@JsonIgnore
+	private TaskInfo taskInfo;
 	
 	@Column(name = "URGE_CONTENT", length = 1000)
 	private String urgeContent;		//催办内容
@@ -62,6 +72,14 @@ public class Urge extends BaseCommonEntity implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public TaskInfo getTaskInfo() {
+		return taskInfo;
+	}
+
+	public void setTaskInfo(TaskInfo taskInfo) {
+		this.taskInfo = taskInfo;
 	}
 
 	public String getUrgeContent() {
