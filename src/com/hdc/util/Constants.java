@@ -31,11 +31,10 @@ public class Constants {
 	
 	
 	/***************** service *******************/
-	public static final String VACATION_START_KEY = "com.yzky.vacation"; 
-	public static final String FILE_PATH  = File.separator + "file-store" + File.separator + "yzky" + File.separator + "contractFile";		//审批合同上传路径
-	public static final String FINAL_FILE_PATH = File.separator + "file-store" + File.separator + "yzky" + File.separator+ "finalFile"; 	//正本文件上传路径
-	public static final String BT_NOTICE_PATH = File.separator + "file-store" + File.separator + "yzky" + File.separator+ "BTNoticeFile"; 	//中标通知书上传路径
-	public static final String APTITUDE_PATH = File.separator + "file-store" + File.separator + "yzky" + File.separator+ "aptitudeFile"; 	//合作伙伴资质文件上传路径
+	public static final String FILE_PATH  = File.separator + "file-store" + File.separator + "zwdc" + File.separator + "attachmentFile";		//审批合同上传路径
+	public static final String FINAL_FILE_PATH = File.separator + "file-store" + File.separator + "zwdc" + File.separator+ "finalFile"; 	//正本文件上传路径
+	public static final String BT_NOTICE_PATH = File.separator + "file-store" + File.separator + "zwdc" + File.separator+ "BTNoticeFile"; 	//中标通知书上传路径
+	public static final String APTITUDE_PATH = File.separator + "file-store" + File.separator + "zwdc" + File.separator+ "aptitudeFile"; 	//合作伙伴资质文件上传路径
 	
     /**
      * 系统初始化时间
