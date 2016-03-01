@@ -88,9 +88,19 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 	private Group hostGroup;		//主办单位
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="HOST_USER_ID")
+	@JsonIgnore
+	private User hostUser;			//主办人
+	
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="ASSISTANT_GROUP_ID")
 	@JsonIgnore
 	private Group assistantGroup;	//协办单位
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="ASSISTANT_USER_ID")
+	@JsonIgnore
+	private User assistantUser;		//协办人
 	
 	@Column(name = "TASK_CONTENT", length = 2000)
 	private String taskContent;		//事项内容
@@ -295,6 +305,22 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 
 	public void setTaskType(Integer taskType) {
 		this.taskType = taskType;
+	}
+
+	public User getHostUser() {
+		return hostUser;
+	}
+
+	public void setHostUser(User hostUser) {
+		this.hostUser = hostUser;
+	}
+
+	public User getAssistantUser() {
+		return assistantUser;
+	}
+
+	public void setAssistantUser(User assistantUser) {
+		this.assistantUser = assistantUser;
 	}
 	
 }

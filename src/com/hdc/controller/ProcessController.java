@@ -107,7 +107,7 @@ public class ProcessController {
 		for(ProcessTask base : taskList){
 			Map<String, Object> map = new HashMap<String, Object>();
 			
-			switch (BusinessType.getValue(base.getBusinessType())) {
+/*			switch (BusinessType.getValue(base.getBusinessType())) {
 				case SALES:
 					map.put("business_type", "销售");
 					break;
@@ -116,7 +116,7 @@ public class ProcessController {
 					break;
 				default:
 					break;
-			}
+			}*/
 			
 			switch (BusinessForm.getValue(base.getBusinessForm())) {
 				case PROJECT:
@@ -210,7 +210,7 @@ public class ProcessController {
 			if(base.getProcessInstanceId().trim().equals(procInstId)){
 				Map<String, Object> map = new HashMap<String, Object>();
 				
-				switch (BusinessType.getValue(base.getBusinessType())) {
+				/*switch (BusinessType.getValue(base.getBusinessType())) {
 					case SALES:
 						map.put("business_type", "销售");
 						break;
@@ -219,7 +219,7 @@ public class ProcessController {
 						break;
 					default:
 						break;
-				}
+				}*/
 				
 				switch (BusinessForm.getValue(base.getBusinessForm())) {
 					case PROJECT:

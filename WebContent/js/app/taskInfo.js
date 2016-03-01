@@ -110,7 +110,7 @@ function formInit(row) {
 	            $.messager.progress('close');
 	            var json = $.parseJSON(data);
 	            if (json.status) {
-	            	taskInfo_dialog.dialog("refresh",ctx+"/invoice/toMain?id="+json.data);
+	            	taskInfo_dialog.dialog("refresh",ctx+"/taskInfo/toMain?id="+json.data);
 	            } 
 	            $.messager.show({
 					title : json.title,
@@ -163,7 +163,7 @@ function showTaskInfo(row) {
                 	$.messager.confirm('确认提示！','确认提交表单进入任务办理流程吗？',function(result){
                 		if(result){
                 			taskInfo_form.form('submit',{
-    	            		 	url: ctx+"/taskInfo/submitApprove",
+    	            		 	url: ctx+"/taskInfo/assignTask",
     	            	        onSubmit: function () {
     	            		        $.messager.progress({
     	            		            title: '提示信息！',

@@ -122,6 +122,7 @@ public class TaskInfoController {
 				this.taskInfoService.doUpdate(taskInfo);
 				message.setMessage("修改成功！");
 			}
+			message.setData(id);
 		} catch (Exception e) {
 			message.setStatus(Boolean.FALSE);
 			message.setTitle("出错了！");
@@ -143,4 +144,26 @@ public class TaskInfoController {
         long mb=1024*1024;  
         return ""+byteFile/mb+"MB";  
     } 
+    
+    /**
+     * 分配任务
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/assignTask")
+    @ResponseBody
+    public Message assignTask(
+    		TaskInfo taskInfo, 
+			@RequestParam("file") MultipartFile file,
+			HttpServletRequest request) throws Exception {
+    	Message message = new Message();
+    	if(!BeanUtils.isBlank(file)) {
+			String filePath = FileUploadUtils.upload(request, file, Constants.FILE_PATH);
+			taskInfo.setFilePath(filePath);
+			taskInfo.setFileName(file.getOriginalFilename());
+			taskInfo.setUploadDate(new Date());
+		}
+    	
+    	return message;
+    }
 }

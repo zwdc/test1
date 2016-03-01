@@ -106,23 +106,12 @@ public class ProcessServiceImpl implements IProcessService{
      * @return
      */
 	@Override
-    public List<ProcessTask> findTodoTask(User user, Page<ProcessTask> page,ProcessTask processTask) throws Exception{
+    public List<ProcessTask> findTodoTask(User user, Page<ProcessTask> page, ProcessTask processTask) throws Exception{
 		//taskCandidateOrAssigned查询某个人的待办任务，包含已签收、候选任务<候选人范围和候选组范围>
  		TaskQuery taskQuery = this.taskService.createTaskQuery().taskCandidateOrAssigned(user.getId().toString());
 		Integer totalSum = taskQuery.list().size();
 		
 		int[] pageParams = page.getPageParams(totalSum);
-		//查询代办
-		/*
-		if(map!=null){
-			List<Task> list1 = taskQuery.taskVariableValueLike("processTaskId", "%199%").orderByTaskCreateTime().desc().listPage(pageParams[0], pageParams[1]);
-			List<Task> list2 = taskQuery.processVariableValueLike("processTaskId", "%199%").list();
-			List<Task> list4 = taskQuery.taskVariableValueEquals("processTaskId", "199").list();
-			List<Task> list3 = taskQuery.processVariableValueEquals("processTaskId", "199").list();.taskVariableValueLike("title", "%"+processTask.getTitle()+"%")
-		}else{
-			List<Task> tasks = taskQuery.orderByTaskCreateTime().desc().listPage(pageParams[0], pageParams[1]);
-		}
-		*/
 		//查询代办
 		List<Task> tasks;
 		boolean flag=processTask!=null&&((processTask.getProjectName()!=null&&!processTask.getProjectName().trim().equals(""))||(processTask.getTitle()!=null&&!processTask.getTitle().trim().equals(""))||(processTask.getBusinessForm()!=null&&!processTask.getBusinessForm().trim().equals("")));

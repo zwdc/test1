@@ -48,10 +48,10 @@ public class ProcessTask extends BaseCommonEntity implements Serializable {
 	private String url;					//待处理任务的url
 	
 	@Column(name = "BUSINESS_TYPE", length = 50)
-	private String businessType;		//业务类型（采购、销售）
+	private String businessType;		//业务类型（1重要文件、2重要会议、3政府工作报告、4领导批示）
 	
 	@Column(name = "BUSINESS_FORM", length = 50)
-	private String businessForm;		//业务表单类型(立项表、销售审批表、合同、开票、出库单等) {@see Constants - BusinessForm}
+	private String businessForm;		//业务表单类型(1国务院文件、省政府文件、市政府文件. 2会议下分类 3工作报告分类...) {@see Constants - BusinessForm}
 	
 	@Column(name = "BUSINESS_OPERATION", length = 50)
 	private String businessOperation;	//业务类型操作（添加、修改、审批）	

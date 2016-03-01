@@ -83,11 +83,11 @@ public class Constants {
 	}
 	
 	/**
-	 * 业务类型枚举
+	 * 业务类型枚举（重要文件、重要会议、政府工作报告、领导批示）
 	 *
 	 */
 	public enum BusinessType {
-        SALES("SALES"), PROCUREMENT("PROCUREMENT"), OTHER("OTHER");
+		IMPORTANT_FILE("IMPORTANT_FILE"), IMPORTANT_MEETING("IMPORTANT_MEETING"), GOV_WORK_REPORT("GOV_WORK_REPORT"), LEAD_COMMENTS("LEAD_COMMENTS");
 		private final String value;
 		
 		private BusinessType(String value) {
@@ -102,14 +102,14 @@ public class Constants {
 		public static BusinessType getValue( String value) {
 			BusinessType bt = null;
 			switch (value) {
-				case "SALES":	
-					bt = SALES;
+				case "IMPORTANT_FILE":	
+					bt = IMPORTANT_FILE;
 					break;
-				case "PROCUREMENT":	
-					bt = PROCUREMENT;
+				case "IMPORTANT_MEETING":	
+					bt = IMPORTANT_MEETING;
 					break;
-				case "OTHER":	
-					bt = OTHER;
+				case "GOV_WORK_REPORT":	
+					bt = GOV_WORK_REPORT;
 					break;
 				default:
 					break;

@@ -45,4 +45,11 @@ public interface ITaskInfoService {
 	 * @throws Exception
 	 */
 	public void doDelete(Integer id) throws Exception;
+	
+	/**
+	 * 启动任务分配流程 
+	 * @param taskInfo
+	 * @throws Exception
+	 */
+	public void doStartProcess(TaskInfo taskInfo) throws Exception;
 }
