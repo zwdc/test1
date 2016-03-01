@@ -1,6 +1,9 @@
 package com.hdc.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -165,5 +168,32 @@ public class TaskInfoController {
 		}
     	
     	return message;
+    }
+    
+    public static int dayForWeek(String pTime) throws Exception {
+    	  DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    	  Calendar c = Calendar.getInstance();
+    	  c.setTime(format.parse(pTime));
+    	  int dayForWeek = 0;
+    	  if(c.get(Calendar.DAY_OF_WEEK) == 1){
+    	   dayForWeek = 7;
+    	  }else{
+    	   dayForWeek = c.get(Calendar.DAY_OF_WEEK) - 1;
+    	  }
+    	  return dayForWeek;
+	 }
+    
+    public static void main(String[] args) throws Exception {
+		System.out.println("当前日期是星期几："+dayForWeek("2016-03-06"));
+		
+		//一个月有几天
+		java.util.Calendar cal = java.util.Calendar.getInstance();
+		int maxDay = cal.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
+		System.out.println("本月有多少天："+maxDay);
+		
+		Calendar c = Calendar.getInstance();
+  	    System.out.println("今天是这个月的第几个星期几："+c.get(Calendar.DAY_OF_WEEK_IN_MONTH));
+  	    System.out.println("本月的第几周："+c.get(Calendar.WEEK_OF_MONTH));	
+		
     }
 }
