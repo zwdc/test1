@@ -104,7 +104,7 @@
 							},
 	  						{iconCls:'icon-search',
 								handler: function(e){
-									chooseGroup(false, 'assistantGroup');
+									chooseUser(false, 'assistantGroup');
 								}
 							}],editable:false,prompt:'选择协办单位'"/>
 				<input id="assistantGroup_id" name="assistantGroup" value = "${taskInfo.assistantGroup }" type="hidden"/>
