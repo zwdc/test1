@@ -1,6 +1,7 @@
 package com.hdc.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
@@ -15,7 +16,7 @@ public interface ITaskInfoService {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<TaskInfo> getListPage(Parameter param, Page<TaskInfo> page) throws Exception;
+	public List<TaskInfo> getListPage(Parameter param, Page<TaskInfo> page, Map<String, Object> map) throws Exception;
 	
 	/**
 	 * 通过id获取TaskInfo

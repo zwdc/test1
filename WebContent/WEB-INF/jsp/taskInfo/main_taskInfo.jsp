@@ -119,19 +119,34 @@
 		<tr>
 			<td colspan="4">拟办意见:<textarea class="easyui-kindeditor" name="suggestion" rows="3" >${taskInfo.suggestion }</textarea></td>
 		</tr>
-		<tr>
-			<td class="text-right">上次附件:</td>
-			<td><input class="easyui-filebox" type="text" id="file" name="file" multiple="multiple" data-options="prompt:'请选择文件...'" style="width: 90%;height: 25px;" required="required"></td>
-			<td colspan="2"></td>
-		</tr>
-		<tr>
-			<td colspan="3">
-				<c:if test="${taskInfo.fileName != null }">
-    				<a id="download" title="点击下载" href="${ctx }/taskInfo/downloadFile?id=${taskInfo.id}"><span class="glyphicon glyphicon-download-alt"></span>${taskInfo.fileName }</a>
-    			</c:if>
-			</td>
-			<td>${taskInfo.uploadDate }</td>
-		</tr>
 	</table>
+	<p class="text-danger">请先保存任务信息后，再上传合同文件！</p>
 </form>
+
+<!-- 上传合同 -->
+<c:if test="${taskInfo.id != null }">
+	<form id="uploadForm" method="post" encType="multipart/form-data">
+		<input name="taskInfoId" type="hidden" value="${taskInfo.id }">
+	    <table class="table table-bordered table-hover table-condensed">
+	    	<tr class="bg-primary">
+		  		<td colspan="4" align="center">上传合同</td>
+		  	</tr>
+	    	<tr>
+	    		<td colspan="3">
+	    			<input class="easyui-filebox" type="text" id="file" name="file" data-options="prompt:'请选择文件...'" style="width: 90%;height: 25px;" required="required">
+	    			<!-- <input type="file" id="file" name="file" style="width: 800px;height: 30px;"> -->
+	    		</td>
+	    		<td align="center"><button type="button" onclick="upload();" class="btn btn-primary btn-sm">&nbsp;上传&nbsp;</button></td>
+	    	</tr>
+	    	<tr>
+	    		<td>
+	    			<c:if test="${contract.fileName != null }">
+	    				<a id="download" title="点击下载" href="${ctx }/taskInfo/downloadFile?id=${taskInfoId.id}"><span class="glyphicon glyphicon-download-alt"></span>${contract.fileName }</a>
+	    			</c:if>
+	    		</td>
+	    		<td>${taskInfoId.uploadDate }</td>
+	    	</tr>
+	    </table>
+    </form>
+</c:if>
 </div>

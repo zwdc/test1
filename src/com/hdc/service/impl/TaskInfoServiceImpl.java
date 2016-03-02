@@ -29,8 +29,8 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
     private TaskService taskService;
 	
 	@Override
-	public List<TaskInfo> getListPage(Parameter param, Page<TaskInfo> page) throws Exception {
-		return this.baseService.findListPage("TaskInfo", param, null, page);
+	public List<TaskInfo> getListPage(Parameter param, Page<TaskInfo> page, Map<String, Object> map) throws Exception {
+		return this.baseService.findListPage("TaskInfo", param, map, page);
 	}
 
 	@Override
@@ -62,7 +62,7 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 		vars.put("hostUser", taskInfo.getHostUser().getId());
 		//启动流程
 		String processInstanceId = this.processService.startApproval("sales", taskInfo.getId().toString(), vars);	
-		// 根据processInstanceId查询第一个任务，即“填写事项信息”
+		// 根据processInstanceId查询第一个任务，即“录入任务”
 		Task firstTask = this.taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
 		// 完成第一个任务，任务继续向下流
 		this.processService.complete(firstTask.getId(), null, null);

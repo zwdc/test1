@@ -81,6 +81,45 @@ public class Constants {
 			return as;
 		}
 	}
+	/**
+	 * 任务状态 待签收、拒签收、办理中、已办结
+	 * @author ZML
+	 *
+	 */
+	public enum TaskInfoStatus {
+		WAIT_FOR_CLAIM("WAIT_FOR_CLAIM"),REFUSE_CLAIM("REFUSE_CLAIM"), IN_HANDLING("IN_HANDLING"), FINISHED("FINISHED");
+		
+		private final String value;
+		private TaskInfoStatus(String value) {
+			this.value = value;
+		}
+		
+		@Override
+        public String toString() {
+            return this.value;
+        }
+		
+		public static TaskInfoStatus getValue(String value) {
+			TaskInfoStatus tis = null;
+			switch(value) {
+				case "WAIT_FOR_CLAIM":
+					tis = WAIT_FOR_CLAIM;
+					break;
+				case "REFUSE_CLAIM":
+					tis = REFUSE_CLAIM;
+					break;
+				case "IN_HANDLING":
+					tis = IN_HANDLING;
+					break;
+				case "FINISHED":
+					tis = FINISHED;
+					break;
+				default:
+					break;
+			}
+			return tis;
+		}
+	}
 	
 	/**
 	 * 业务类型枚举（重要文件、重要会议、政府工作报告、领导批示）
