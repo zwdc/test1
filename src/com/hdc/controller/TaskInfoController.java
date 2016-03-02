@@ -282,9 +282,6 @@ public class TaskInfoController {
 		return mv;
 	}
     
-    
-    
-    
     public static int dayForWeek(String pTime) throws Exception {
     	  DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     	  Calendar c = Calendar.getInstance();
