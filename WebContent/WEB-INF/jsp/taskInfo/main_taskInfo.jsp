@@ -90,7 +90,7 @@
 									chooseGroup(false, 'hostGroup');
 								}
 							}],editable:false,prompt:'选择主办单位'"/>
-				<input id="hostGroup_id" name="hostGroup" value = "${project.hostGroup }" type="hidden"/>
+				<input id="hostGroup_id" name="hostGroup" value = "${taskInfo.hostGroup }" type="hidden"/>
 			</td>
 			<td class="text-right">协办单位:</td>
 			<td>
@@ -107,7 +107,7 @@
 									chooseGroup(false, 'assistantGroup');
 								}
 							}],editable:false,prompt:'选择主办单位'"/>
-				<input id="assistantGroup_id" name="assistantGroup" value = "${project.assistantGroup }" type="hidden"/>
+				<input id="assistantGroup_id" name="assistantGroup" value = "${taskInfo.assistantGroup }" type="hidden"/>
 			</td>
 		</tr>
 		<tr>
@@ -129,10 +129,10 @@
 		<input name="taskInfoId" type="hidden" value="${taskInfo.id }">
 	    <table class="table table-bordered table-hover table-condensed">
 	    	<tr class="bg-primary">
-		  		<td colspan="4" align="center">上传合同</td>
+		  		<td colspan="2" align="center">上传合同</td>
 		  	</tr>
 	    	<tr>
-	    		<td colspan="3">
+	    		<td>
 	    			<input class="easyui-filebox" type="text" id="file" name="file" data-options="prompt:'请选择文件...'" style="width: 90%;height: 25px;" required="required">
 	    			<!-- <input type="file" id="file" name="file" style="width: 800px;height: 30px;"> -->
 	    		</td>
