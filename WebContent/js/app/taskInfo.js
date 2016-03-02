@@ -229,9 +229,8 @@ function edit() {
         $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
     }
 }
-//删除项目
-function del() {
 
+function del() {
     var row = taskInfo_datagrid.datagrid('getSelected');
     if (row) {
         $.messager.confirm('确认提示！', '您确定要删除选中的数据?', function (result) {
@@ -261,7 +260,7 @@ function del() {
     	$.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
     }
 }
-//发票详情
+
 function details(){
     var row = taskInfo_datagrid.datagrid('getSelected');
     if (row) {
@@ -270,10 +269,9 @@ function details(){
         $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
     }
 }
-//显示发票详情窗口
+
 function showDetails(row) {
     //弹出对话窗口
-	var id = row.id;
 	taskInfo_dialog = $('<div/>').dialog({
     	title : "开票详情",
 		top: 20,
@@ -282,10 +280,7 @@ function showDetails(row) {
         modal: true,
         minimizable: true,
         maximizable: true,
-        href: ctx+"/taskInfo/toDetails/"+id,
-        onLoad: function () {
-        	$("#detailsRemark").kindeditor({readonlyMode : true});
-        },
+        href: ctx+"/taskInfo/details/"+row.id,
         buttons: [
             {
                 text: '关闭',

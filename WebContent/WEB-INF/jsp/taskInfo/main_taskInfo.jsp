@@ -75,7 +75,7 @@
 			<td><input id="taskType" name="taskType" value="${taskInfo.taskType }" data-options="prompt:'选择文件类型'" class="easyui-combobox" required="required"></td>
 		</tr>
 		<tr>
-			<td class="text-right">主办单位:</td>
+			<td class="text-right">承办单位:</td>
 			<td>
 				<input type="text" id="hostGroup_name" name="hostGroup_name" value = "${hostGroup_name }" class="easyui-textbox" required="required"
 	  			data-options="icons: [
@@ -89,7 +89,7 @@
 								handler: function(e){
 									chooseGroup(false, 'hostGroup');
 								}
-							}],editable:false,prompt:'选择主办单位'"/>
+							}],editable:false,prompt:'选择承办单位'"/>
 				<input id="hostGroup_id" name="hostGroup" value = "${taskInfo.hostGroup }" type="hidden"/>
 			</td>
 			<td class="text-right">协办单位:</td>
@@ -106,8 +106,44 @@
 								handler: function(e){
 									chooseGroup(false, 'assistantGroup');
 								}
-							}],editable:false,prompt:'选择主办单位'"/>
+							}],editable:false,prompt:'选择协办单位'"/>
 				<input id="assistantGroup_id" name="assistantGroup" value = "${taskInfo.assistantGroup }" type="hidden"/>
+			</td>
+		</tr>
+		<tr>
+			<td class="text-right">承办人员:</td>
+			<td>
+				<input type="text" id="hostUser_name" name="hostUser_name" value = "${hostUser_name }" class="easyui-textbox" required="required"
+	  			data-options="icons: [
+	  						{
+								iconCls:'icon-clear',
+								handler: function(e){
+									clearChoose('hostUser');
+								}
+							},
+	  						{iconCls:'icon-search',
+								handler: function(e){
+									chooseGroup(false, 'hostUser');
+								}
+							}],editable:false,prompt:'选择承办人员'"/>
+				<input id="hostUser_id" name="hostUser.id" value = "${taskInfo.hostUser.id }" type="hidden"/>
+			</td>
+			<td class="text-right">协办人员:</td>
+			<td>
+				<input type="text" id="assistantUser_name" name="assistantUser_name" value = "${assistantUser_name }" class="easyui-textbox" required="required"
+	  			data-options="icons: [
+	  						{
+								iconCls:'icon-clear',
+								handler: function(e){
+									clearChoose('assistantUser');
+								}
+							},
+	  						{iconCls:'icon-search',
+								handler: function(e){
+									chooseGroup(false, 'assistantUser');
+								}
+							}],editable:false,prompt:'选择协办人员'"/>
+				<input id="assistantUser_id" name="assistantUser.id" value = "${taskInfo.assistantUser.id }" type="hidden"/>
 			</td>
 		</tr>
 		<tr>
