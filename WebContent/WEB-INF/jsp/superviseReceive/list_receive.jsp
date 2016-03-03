@@ -68,7 +68,7 @@
 	  			height: fixHeight(0.8),
 	  			pagination:true,
 	  			rownumbers:true,
-	  			fitColumns:true,
+	  			//fitColumns:true,
 	  			border:false,
 	  			singleSelect:true,
 	  			striped:true,
@@ -82,11 +82,7 @@
 			            		  return moment(value).format("YYYY-MM-DD HH:mm:ss");
 							 }
 				     	},
-				     	{field:'feedbackCycle',title:'反馈周期',width:fixWidth(0.1),align:'center',
-				     		formatter:function(value, row){
-			            		return jqueryUtil.formatNumber(value);
-							}
-				     	},
+				     	{field:'feedbackCycle',title:'反馈周期',width:fixWidth(0.1),align:'center'},
 				     	{field:'hostGroup',title:'主板单位',width:fixWidth(0.1),align:'center'},
 				     	{field:'assistantGroup',title:'协办单位',width:fixWidth(0.1),align:'center'},
 				     	{field:'endTaskDate',title:'办结时限',width:fixWidth(0.1),align:'center',sortable:true,
@@ -172,73 +168,80 @@
 	  	
 	  //拒绝
 	  	function refuse() {
-		  	$("#refuse_dialog").show();
-		  	var refuse_form;
-	  		var refuse_dialog = $('#refuse_dialog').dialog({
-	  	    	title : "拒绝原因",
-	  			top: 20,
-	  			width : fixWidth(0.8),
-	  			height: 'auto',
-	  	        modal: true,
-	  	        minimizable: true,
-	  	        maximizable: true,
-	  	        buttons: [
-	  	            {
-	  	                text: '拒绝',
-	  	                iconCls: 'icon-remove',
-	  	                handler: function () {
-	  	                	$.messager.confirm('确认提示！','是否拒绝签收此任务？',function(result){
-	  	                		if(result){
-	  	                			refuse_form.form('submit',{
-	  	    	            		 	url: ctx+"/taskInfo/refuse",
-	  	    	            	        onSubmit: function () {
-	  	    	            		        $.messager.progress({
-	  	    	            		            title: '提示信息！',
-	  	    	            		            text: '数据处理中，请稍后....'
-	  	    	            		        });
-	  	    	            		        var isValid = $(this).form('validate');
-	  	    	            		        if (!isValid) {
-	  	    	            		            $.messager.progress('close');
-	  	    	            		        }
-	  	    	            		        return isValid;
-	  	    	            		    },
-	  	    	            		    success: function (data) {
-	  	    	            	            $.messager.progress('close');
-	  	    	            	            var json = $.parseJSON(data);
-	  	    	            	            if (json.status) {
-	  	    	            	            	refuse_dialog.dialog('destroy');//销毁对话框
-	  	    	            	            	s_datagrid.datagrid('reload');  //重新加载列表数据
-	  	    	            	            } 
-	  	    	            	            $.messager.show({
-	  	    	            					title : json.title,
-	  	    	            					msg : json.message,
-	  	    	            					timeout : 1000 * 2
-	  	    	            				});
-	  	    	            	        }
-	  	    	            	    });
-	  	                		}
-	  	                	});	
-	  	                }
-	  	            },
-	  	            {
-	  	            	text: '重置',
-	  	                iconCls: 'icon-reload',
-	  	                handler: function () {
-	  	                	refuse_form.form('reset');
-	  	                }
-	  	            },
-	  	            {
-	  	                text: '关闭',
-	  	                iconCls: 'icon-cancel',
-	  	                handler: function () {
-	  	                	refuse_dialog.dialog('destroy');
-	  	                }
-	  	            }
-	  	        ],
-	  	        onClose: function () {
-	  	        	refuse_dialog.dialog('destroy');
-	  	        }
-	  	    });
+		  	var row = s_datagrid.datagrid('getSelected');
+	  	    if (row) {
+			  	var refuse_form;
+	  	    	var refuse_dialog = $('<div/>').dialog({
+		  	    	title : "拒绝原因",
+		  			top: 20,
+		  			width : fixWidth(0.8),
+		  			height: 'auto',
+		  	        modal: true,
+		  	        minimizable: true,
+		  	        maximizable: true,
+		  	      	href: ctx+"/superviserReveive/toRefuse",
+		  	        buttons: [
+		  	            {
+		  	                text: '拒绝',
+		  	                iconCls: 'icon-remove',
+		  	                handler: function () {
+		  	                	$.messager.confirm('确认提示！','是否拒绝签收此任务？',function(result){
+		  	                		if(result){
+		  	                			refuse_form = $("#refuseForm").form('submit',{
+		  	    	            		 	url: ctx+"/taskInfo/refuse/"+row.id,
+		  	    	            	        onSubmit: function () {
+		  	    	            		        $.messager.progress({
+		  	    	            		            title: '提示信息！',
+		  	    	            		            text: '数据处理中，请稍后....'
+		  	    	            		        });
+		  	    	            		        if(KindEditor.instances[0].html() == "") {
+		  	    	            		        	$.messager.progress('close');
+		  	    	            		        	$.messager.alert("温馨提示", "请输入拒绝签收的原因！");
+		  	    	            		        	return false;
+		  	    	            		        }
+		  	    	            		        return true;
+		  	    	            		    },
+		  	    	            		    success: function (data) {
+		  	    	            	            $.messager.progress('close');
+		  	    	            	            var json = $.parseJSON(data);
+		  	    	            	            if (json.status) {
+		  	    	            	            	refuse_dialog.dialog('destroy');//销毁对话框
+		  	    	            	            	s_datagrid.datagrid('reload');  //重新加载列表数据
+		  	    	            	            } 
+		  	    	            	            $.messager.show({
+		  	    	            					title : json.title,
+		  	    	            					msg : json.message,
+		  	    	            					timeout : 1000 * 2
+		  	    	            				});
+		  	    	            	        }
+		  	    	            	    });
+		  	                		}
+		  	                	});	
+		  	                }
+		  	            },
+		  	            {
+		  	            	text: '重置',
+		  	                iconCls: 'icon-reload',
+		  	                handler: function () {
+		  	                	//refuse_form.form('reset');
+		  	                	KindEditor.instances[0].html("");
+		  	                }
+		  	            },
+		  	            {
+		  	                text: '关闭',
+		  	                iconCls: 'icon-cancel',
+		  	                handler: function () {
+		  	                	refuse_dialog.dialog('destroy');
+		  	                }
+		  	            }
+		  	        ],
+		  	        onClose: function () {
+		  	        	refuse_dialog.dialog('destroy');
+		  	        }
+		  	    });
+	  	    } else {
+	  	        $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
+	  	    }
 	  	}
   	</script>
 
@@ -310,15 +313,6 @@
 			<table id="o_datagrid"></table>
 		</div>
 	</div>
-  </div>
-  <div id="refuse_dialog" style="display: none;">
-  	<form id="refuseForm">
-		<div class="alert alert-warning" role="alert">
-		  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-		  填写具体拒绝签收的原因！
-		</div>
-  		<textarea class="easyui-kindeditor" name="reason" rows="3" ></textarea>
-  	</form>
   </div>
   </body>
 </html>

@@ -23,11 +23,7 @@ $(function(){
 	            		  return moment(value).format("YYYY-MM-DD HH:mm:ss");
 					 }
 		     	},
-		     	{field:'feedbackCycle',title:'反馈周期',width:fixWidth(0.1),align:'center',
-		     		formatter:function(value, row){
-	            		return jqueryUtil.formatNumber(value);
-					}
-		     	},
+		     	{field:'feedbackCycle',title:'反馈周期',width:fixWidth(0.1),align:'center'},
 		     	{field:'hostGroup',title:'主板单位',width:fixWidth(0.1),align:'center'},
 		     	{field:'assistantGroup',title:'协办单位',width:fixWidth(0.1),align:'center'},
 		     	{field:'endTaskDate',title:'办结时限',width:fixWidth(0.1),align:'center',sortable:true,

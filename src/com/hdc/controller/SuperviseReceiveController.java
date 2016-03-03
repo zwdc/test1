@@ -17,12 +17,19 @@ public class SuperviseReceiveController {
 	 * 跳转到督察接收
 	 * @return
 	 */
-	@RequestMapping(value = "/toList")
+	@RequestMapping("/toList")
 	public ModelAndView toSuperviseReceive() {
 		ModelAndView mv = new ModelAndView("superviseReceive/list_receive");
 		return mv;
 	}
 	
-	
+	/**
+	 * 填写拒绝原因
+	 * @return
+	 */
+	@RequestMapping("/toRefuse")
+	public String toRefuse() {
+		return "superviseReceive/refuse_reason";
+	}
 	
 }

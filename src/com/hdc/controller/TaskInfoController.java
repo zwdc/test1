@@ -28,9 +28,10 @@ import com.hdc.entity.Datagrid;
 import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
+import com.hdc.entity.RefuseReason;
 import com.hdc.entity.TaskInfo;
+import com.hdc.service.IRefuseReasonService;
 import com.hdc.service.ITaskInfoService;
-import com.hdc.service.IUserService;
 import com.hdc.util.BeanUtils;
 import com.hdc.util.Constants;
 import com.hdc.util.Constants.TaskInfoStatus;
@@ -52,7 +53,7 @@ public class TaskInfoController {
 	private ITaskInfoService taskInfoService;
 	
 	@Autowired
-	private IUserService userService;
+	private IRefuseReasonService rrefuseReasonService;
 	
 	/**
 	 * 跳转列表页面
@@ -247,9 +248,9 @@ public class TaskInfoController {
      * @return
      * @throws Exception 
      */
-    @RequestMapping("/claim")
+    @RequestMapping("/claim/{id}")
     @ResponseBody
-    public Message claim(@RequestParam("id") Integer id) throws Exception{
+    public Message claim(@PathVariable("id") Integer id) throws Exception{
     	Message message = new Message();
     	TaskInfo taskInfo = this.taskInfoService.findById(id);
     	taskInfo.setStatus(TaskInfoStatus.IN_HANDLING.toString());
@@ -264,13 +265,14 @@ public class TaskInfoController {
      * @return
      * @throws Exception
      */
-    @RequestMapping("/refuse")
+    @RequestMapping("/refuse/{id}")
     @ResponseBody
-    public Message refuseClaim(@RequestParam("id") Integer id) throws Exception {
+    public Message refuseClaim(@PathVariable("id") Integer id, RefuseReason refuseReason) throws Exception {
     	Message message = new Message();
     	TaskInfo taskInfo = this.taskInfoService.findById(id);
     	taskInfo.setStatus(TaskInfoStatus.REFUSE_CLAIM.toString());
-    	this.taskInfoService.doUpdate(taskInfo);
+    	refuseReason.setTaskInfo(taskInfo);
+    	this.rrefuseReasonService.doAdd(refuseReason);
     	message.setMessage("操作成功！");
     	return message;
     }
