@@ -224,7 +224,7 @@ function edit() {
     //选中的行（第一次选择的行）
     var row = taskInfo_datagrid.datagrid('getSelected');
     if (row) {
-        showtaskInfo(row);
+        showTaskInfo(row);
     } else {
         $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
     }

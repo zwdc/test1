@@ -1,5 +1,6 @@
 package com.hdc.controller;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.TaskInfo;
 import com.hdc.service.ITaskInfoService;
+import com.hdc.service.IUserService;
 import com.hdc.util.BeanUtils;
 import com.hdc.util.Constants;
 import com.hdc.util.Constants.TaskInfoStatus;
@@ -49,6 +51,9 @@ public class TaskInfoController {
 	@Autowired
 	private ITaskInfoService taskInfoService;
 	
+	@Autowired
+	private IUserService userService;
+	
 	/**
 	 * 跳转列表页面
 	 * @return
@@ -68,7 +73,8 @@ public class TaskInfoController {
 	public ModelAndView toMain(@RequestParam(value="id", required=false) Integer id) throws Exception {
 		ModelAndView mv = new ModelAndView("taskInfo/main_taskInfo");
 		if(!BeanUtils.isBlank(id)) {
-			mv.addObject("taskInfo", this.taskInfoService.findById(id));
+			TaskInfo taskInfo = this.taskInfoService.findById(id);
+			mv.addObject("taskInfo", taskInfo);
 		}
 		return mv;
 	}
@@ -98,6 +104,7 @@ public class TaskInfoController {
 		List<Object> jsonList=new ArrayList<Object>(); 
 		for(TaskInfo task : list) {
 			Map<String, Object> map=new HashMap<String, Object>();
+			map.put("id", task.getId());
 			map.put("title", task.getTitle());
 			map.put("taskNo", task.getTaskNo());
 			map.put("createTaskDate", task.getCreateTaskDate());
@@ -127,13 +134,14 @@ public class TaskInfoController {
 		try {
 			if(BeanUtils.isBlank(id)) {
 				taskInfo.setStatus(TaskInfoStatus.WAIT_FOR_CLAIM.toString());
-				this.taskInfoService.doAdd(taskInfo);
+				Serializable taskInfoId = this.taskInfoService.doAdd(taskInfo);
+				message.setData(taskInfoId.toString());
 				message.setMessage("添加成功！");
 			} else {
 				this.taskInfoService.doUpdate(taskInfo);
+				message.setData(id);
 				message.setMessage("修改成功！");
 			}
-			message.setData(id);
 		} catch (Exception e) {
 			message.setStatus(Boolean.FALSE);
 			message.setTitle("操作失败！");

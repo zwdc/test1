@@ -36,7 +36,7 @@
           <div class="col-sm-12">
             <label for="username" class="col-sm-2 control-label">用户名</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="name" placeholder="Username">
+              <input type="text" class="form-control" name="name" placeholder="Username" value="admin">
             </div>
           </div>              
         </div>
@@ -44,7 +44,7 @@
           <div class="col-sm-12">
             <label for="password" class="col-sm-2 control-label">密&nbsp;&nbsp;码</label>
             <div class="col-sm-10">
-              <input type="password" class="form-control" name="passwd" placeholder="Password">
+              <input type="password" class="form-control" name="passwd" placeholder="Password" value="123">
             </div>
           </div>
         </div>

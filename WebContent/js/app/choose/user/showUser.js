@@ -10,7 +10,7 @@ $(function() {
 	//数据列表
 	var groupId = $("#groupId").val();
     user_datagrid = $('#user_datagrid').datagrid({
-        url: ctx+"/user/chooseUser?groupId="+groupId,
+        url: ctx+"/choose/chooseUser?groupId="+groupId,
         width : 'auto',
 		height : $(".easyui-layout").height()-1,
 		pagination:true,

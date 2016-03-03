@@ -15,7 +15,7 @@ function chooseUser( multiSelect, key ){
         modal: true,
         minimizable: true,
         maximizable: true,
-        href: ctx+"/user/toChooseUser?multiSelect="+multiSelect+"&key="+key,
+        href: ctx+"/choose/toChooseUser?multiSelect="+multiSelect+"&key="+key,
         onClose: function () {
         	//clearChoose(key);
         	bpmn_dialog.dialog('destroy');
@@ -28,7 +28,7 @@ function addTab(title, groupId, key, multiSelect){
 	if ($('#userTabs').tabs('exists', title)){
 		$('#userTabs').tabs('select', title);
 	} else {
-		var url = ctx+"/user/toShowUser?groupId="+groupId+"&key="+key+"&multiSelect="+multiSelect;
+		var url = ctx+"/choose/toShowUser?groupId="+groupId+"&key="+key+"&multiSelect="+multiSelect;
 		var content = '<iframe scrolling="auto" frameborder="0"  src="'+url+'" style="width:100%;height:100%;"></iframe>';
 		$('#userTabs').tabs('add',{
 			title:title,

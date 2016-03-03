@@ -1,5 +1,6 @@
 package com.hdc.service.impl;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,8 +41,8 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 	}
 
 	@Override
-	public void doAdd(TaskInfo taskInfo) throws Exception {
-		this.baseService.add(taskInfo);
+	public Serializable doAdd(TaskInfo taskInfo) throws Exception {
+		return this.baseService.add(taskInfo);
 	}
 
 	@Override

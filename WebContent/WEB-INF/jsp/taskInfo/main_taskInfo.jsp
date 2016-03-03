@@ -3,9 +3,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-<link rel="stylesheet" href="${ctx}/css/bootstrap-table.min.css" type="text/css" />
-<script type="text/javascript" src="${ctx}/js/bootstrap-table.min.js"></script>
-<script type="text/javascript" src="${ctx}/js/bootstrap-table-zh-CN.min.js"></script>
+<script type="text/javascript" src="${ctx}/js/app/choose/group/choose_group.js?_=${sysInitTime}"></script>
+<script type="text/javascript" src="${ctx}/js/app/choose/user/user.js?_=${sysInitTime}"></script>
 <script type="text/javascript">
 	$(function() {
 		$.getJSON(ctx+"/js/app/app.json",function(data){
@@ -34,6 +33,35 @@
 		    textField: "name"
 		});  */
 	});
+	
+	function upload() {
+		$('#uploadForm').form('submit', {
+	    	url: ctx+"/taskInfo/uploadFile",
+	        onSubmit: function () {
+		        $.messager.progress({
+		            title: '提示信息！',
+		            text: '数据处理中，请稍后....'
+		        });
+		        var isValid = $(this).form('validate');
+		        if (!isValid) {
+		            $.messager.progress('close');
+		        }
+		        return isValid;
+		    },
+		    success: function (result) {
+		        $.messager.progress('close');
+		        var json = $.parseJSON(result);
+		        if (json.status) {
+		        	taskInfo_dialog.dialog("refresh",ctx+"/taskInfo/toMain?id="+json.data.toString());
+		        } 
+		        $.messager.show({
+					title : json.title,
+					msg : json.message,
+					timeout : 1000 * 2
+				});
+		    }
+	    });
+	}
 </script>
 <div class="easyui-layout">
 <form id="taskInfo_form" method="post">
@@ -42,6 +70,9 @@
     <input type="hidden" name="createDate" value="<fmt:formatDate value='${taskInfo.createDate }' type='both'/>">
     <input type="hidden" name="isDelete" value="${taskInfo.isDelete }">
     <input type="hidden" name="status" value="${taskInfo.status }">
+    <input type="hidden" name="fileName" id="fileName" value = "${taskInfo.fileName }"> <!-- id="fileName"不能删 -->
+	<input type="hidden" name="filePath" value = "${taskInfo.filePath }"> 
+	<input type="hidden" name="uploadDate" value = "<fmt:formatDate value='${taskInfo.uploadDate }' type='both'/>">
 	<table class="table table-bordered table-hover table-condensed">
 		<tr class="bg-primary">
 			<td colspan="4" align="center">事项信息</td>
@@ -70,14 +101,14 @@
 		</tr>
 		<tr>
 			<td class="text-right">急缓程度:</td>
-			<td><input id="urgency" name="urgency.id" value="${taskInfo.urgency.id }" data-options="prompt:'选择急缓程度'" class="easyui-combobox" required="required"></td>
+			<td><input id="urgency" name="urgency" value="${taskInfo.urgency }" data-options="prompt:'选择急缓程度'" class="easyui-combobox" required="required"></td>
 			<td class="text-right">文件类型:</td>
 			<td><input id="taskType" name="taskType" value="${taskInfo.taskType }" data-options="prompt:'选择文件类型'" class="easyui-combobox" required="required"></td>
 		</tr>
 		<tr>
 			<td class="text-right">承办单位:</td>
 			<td>
-				<input type="text" id="hostGroup_name" name="hostGroup_name" value = "${hostGroup_name }" class="easyui-textbox" required="required"
+				<input type="text" id="hostGroup_name" name="hostGroup_name" value = "${taskInfo.hostGroup.name }" class="easyui-textbox" required="required"
 	  			data-options="icons: [
 	  						{
 								iconCls:'icon-clear',
@@ -90,11 +121,11 @@
 									chooseGroup(false, 'hostGroup');
 								}
 							}],editable:false,prompt:'选择承办单位'"/>
-				<input id="hostGroup_id" name="hostGroup" value = "${taskInfo.hostGroup }" type="hidden"/>
+				<input id="hostGroup_id" name="hostGroup.id" value = "${taskInfo.hostGroup.id }" type="hidden"/>
 			</td>
 			<td class="text-right">协办单位:</td>
 			<td>
-				<input type="text" id="assistantGroup_name" name="assistantGroup_name" value = "${assistantGroup_name }" class="easyui-textbox" required="required"
+				<input type="text" id="assistantGroup_name" name="assistantGroup_name" value = "${taskInfo.assistantGroup.name }" class="easyui-textbox" required="required"
 	  			data-options="icons: [
 	  						{
 								iconCls:'icon-clear',
@@ -104,16 +135,16 @@
 							},
 	  						{iconCls:'icon-search',
 								handler: function(e){
-									chooseUser(false, 'assistantGroup');
+									chooseGroup(false, 'assistantGroup');
 								}
 							}],editable:false,prompt:'选择协办单位'"/>
-				<input id="assistantGroup_id" name="assistantGroup" value = "${taskInfo.assistantGroup }" type="hidden"/>
+				<input id="assistantGroup_id" name="assistantGroup.id" value = "${taskInfo.assistantGroup.id }" type="hidden"/>
 			</td>
 		</tr>
 		<tr>
 			<td class="text-right">承办人员:</td>
 			<td>
-				<input type="text" id="hostUser_name" name="hostUser_name" value = "${hostUser_name }" class="easyui-textbox" required="required"
+				<input type="text" id="hostUser_name" name="hostUser_name" value = "${taskInfo.hostUser.name }" class="easyui-textbox" required="required"
 	  			data-options="icons: [
 	  						{
 								iconCls:'icon-clear',
@@ -123,14 +154,14 @@
 							},
 	  						{iconCls:'icon-search',
 								handler: function(e){
-									chooseGroup(false, 'hostUser');
+									chooseUser(false, 'hostUser');
 								}
 							}],editable:false,prompt:'选择承办人员'"/>
 				<input id="hostUser_id" name="hostUser.id" value = "${taskInfo.hostUser.id }" type="hidden"/>
 			</td>
 			<td class="text-right">协办人员:</td>
 			<td>
-				<input type="text" id="assistantUser_name" name="assistantUser_name" value = "${assistantUser_name }" class="easyui-textbox" required="required"
+				<input type="text" id="assistantUser_name" name="assistantUser_name" value = "${taskInfo.assistantUser.name }" class="easyui-textbox" required="required"
 	  			data-options="icons: [
 	  						{
 								iconCls:'icon-clear',
@@ -140,7 +171,7 @@
 							},
 	  						{iconCls:'icon-search',
 								handler: function(e){
-									chooseGroup(false, 'assistantUser');
+									chooseUser(false, 'assistantUser');
 								}
 							}],editable:false,prompt:'选择协办人员'"/>
 				<input id="assistantUser_id" name="assistantUser.id" value = "${taskInfo.assistantUser.id }" type="hidden"/>
@@ -156,7 +187,7 @@
 			<td colspan="4">拟办意见:<textarea class="easyui-kindeditor" name="suggestion" rows="3" >${taskInfo.suggestion }</textarea></td>
 		</tr>
 	</table>
-	<p class="text-danger">请先保存任务信息后，再上传合同文件！</p>
+	<p class="text-danger">请先保存任务信息后，再上传附件！</p>
 </form>
 
 <!-- 上传合同 -->
@@ -165,7 +196,7 @@
 		<input name="taskInfoId" type="hidden" value="${taskInfo.id }">
 	    <table class="table table-bordered table-hover table-condensed">
 	    	<tr class="bg-primary">
-		  		<td colspan="2" align="center">上传合同</td>
+		  		<td colspan="2" align="center">上传附件</td>
 		  	</tr>
 	    	<tr>
 	    		<td>
@@ -176,11 +207,11 @@
 	    	</tr>
 	    	<tr>
 	    		<td>
-	    			<c:if test="${contract.fileName != null }">
-	    				<a id="download" title="点击下载" href="${ctx }/taskInfo/downloadFile?id=${taskInfoId.id}"><span class="glyphicon glyphicon-download-alt"></span>${contract.fileName }</a>
+	    			<c:if test="${taskInfo.fileName != null }">
+	    				<a id="download" title="点击下载" href="${ctx }/taskInfo/downloadFile?id=${taskInfo.id}"><span class="glyphicon glyphicon-download-alt"></span>${taskInfo.fileName }</a>
 	    			</c:if>
 	    		</td>
-	    		<td>${taskInfoId.uploadDate }</td>
+	    		<td>${taskInfo.uploadDate }</td>
 	    	</tr>
 	    </table>
     </form>

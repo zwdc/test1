@@ -3,7 +3,7 @@
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
   <head>
 	<title>公司列表管理</title>
 	<meta http-equiv="pragma" content="no-cache">
