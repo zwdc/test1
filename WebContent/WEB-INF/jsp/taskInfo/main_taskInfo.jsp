@@ -32,6 +32,17 @@
 			valueField: "id",
 		    textField: "name"
 		});  */
+		
+		$('#download').tooltip({
+			position: 'right',
+			content: '<span style="color:#fff">点击下载</span>',
+			onShow: function(){
+				$(this).tooltip('tip').css({
+					backgroundColor: '#666',
+					borderColor: '#666'
+				});
+			}
+		});
 	});
 	
 	function upload() {

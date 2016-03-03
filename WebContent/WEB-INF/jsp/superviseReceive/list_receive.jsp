@@ -10,6 +10,8 @@
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
+	<script type="text/javascript" src="${ctx}/kindeditor/kindeditor-min.js"></script>
+  	<script type="text/javascript" src="${ctx}/js/kindeditor.js?_=${sysInitTime}"></script>
   	<%-- <script type="text/javascript" src="${ctx}/js/app/choose/user/user.js?_=${sysInitTime}"></script> --%>
   	<script type="text/javascript">
   		var s_datagrid;
@@ -94,40 +96,165 @@
 				     	}
 	  	    	    ] 
 	  	        ],
-		        onCheck: function(index, row) {
-		        	//勾选一行时触发
-		        	setValue(row);
-		        },
-		        onCheckAll: function(rows) {
-		        	//勾选全部行时触发
-		        },
-		        onUncheckAll: function(rows) {
-		        	//取消勾选全部行时触发
-		        },
 		        onDblClickRow: function(index, row) {
 		        	//双击一行时触发
-		        	productPartDetails(row);	//显示详细信息页面
+		        	showDetails(row);	//显示详细信息页面
 		        },
 	  	        toolbar: "#"+toolbarId
 	  	    });
 	  		
 	  	}
+	  	
+	  	function details(){
+	  	    var row = s_datagrid.datagrid('getSelected');
+	  	    if (row) {
+	  	    	showDetails(row);
+	  	    } else {
+	  	        $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
+	  	    }
+	  	}
+
+	  	function showDetails(row) {
+	  	    //弹出对话窗口
+	  		var taskInfo_dialog = $('<div/>').dialog({
+	  	    	title : "任务详情",
+	  			top: 20,
+	  			width : fixWidth(0.8),
+	  			height: fixHeight(0.9),
+	  	        modal: true,
+	  	        minimizable: true,
+	  	        maximizable: true,
+	  	        href: ctx+"/taskInfo/details/"+row.id,
+	  	        buttons: [
+	  	            {
+	  	                text: '关闭',
+	  	                iconCls: 'icon-cancel',
+	  	                handler: function () {
+	  	                	taskInfo_dialog.dialog('destroy');
+	  	                }
+	  	            }
+	  	        ],
+	  	        onClose: function () {
+	  	        	taskInfo_dialog.dialog('destroy');
+	  	        }
+	  	    });
+	  	}
+	  	
+	  	//签收
+	  	function claim() {
+	  		var row = s_datagrid.datagrid('getSelected');
+	  	    if (row) {
+	  	    	$.messager.confirm('温馨提示！', '是否确认签收?', function (result) {
+		            if (result) {
+	  	                $.ajax({
+	  	            		async: false,
+	  	            		cache: false,
+	  	                    url: ctx + '/taskInfo/claim/'+row.id,
+	  	                    type: 'post',
+	  	                    dataType: 'json',
+	  	                    success: function (data) {
+	  	                        if (data.status) {
+	  	                        	s_datagrid.datagrid('load');
+	  	                        }
+	  	                        $.messager.show({
+	  	        					title : data.title,
+	  	        					msg : data.message,
+	  	        					timeout : 1000 * 2
+	  	        				});
+	  	                    }
+	  	                });
+		            }
+		  		});
+	  	    } else {
+	  	    	$.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
+	  	    }
+	  	}
+	  	
+	  //拒绝
+	  	function refuse() {
+		  	$("#refuse_dialog").show();
+		  	var refuse_form;
+	  		var refuse_dialog = $('#refuse_dialog').dialog({
+	  	    	title : "拒绝原因",
+	  			top: 20,
+	  			width : fixWidth(0.8),
+	  			height: 'auto',
+	  	        modal: true,
+	  	        minimizable: true,
+	  	        maximizable: true,
+	  	        buttons: [
+	  	            {
+	  	                text: '拒绝',
+	  	                iconCls: 'icon-remove',
+	  	                handler: function () {
+	  	                	$.messager.confirm('确认提示！','是否拒绝签收此任务？',function(result){
+	  	                		if(result){
+	  	                			refuse_form.form('submit',{
+	  	    	            		 	url: ctx+"/taskInfo/refuse",
+	  	    	            	        onSubmit: function () {
+	  	    	            		        $.messager.progress({
+	  	    	            		            title: '提示信息！',
+	  	    	            		            text: '数据处理中，请稍后....'
+	  	    	            		        });
+	  	    	            		        var isValid = $(this).form('validate');
+	  	    	            		        if (!isValid) {
+	  	    	            		            $.messager.progress('close');
+	  	    	            		        }
+	  	    	            		        return isValid;
+	  	    	            		    },
+	  	    	            		    success: function (data) {
+	  	    	            	            $.messager.progress('close');
+	  	    	            	            var json = $.parseJSON(data);
+	  	    	            	            if (json.status) {
+	  	    	            	            	refuse_dialog.dialog('destroy');//销毁对话框
+	  	    	            	            	s_datagrid.datagrid('reload');  //重新加载列表数据
+	  	    	            	            } 
+	  	    	            	            $.messager.show({
+	  	    	            					title : json.title,
+	  	    	            					msg : json.message,
+	  	    	            					timeout : 1000 * 2
+	  	    	            				});
+	  	    	            	        }
+	  	    	            	    });
+	  	                		}
+	  	                	});	
+	  	                }
+	  	            },
+	  	            {
+	  	            	text: '重置',
+	  	                iconCls: 'icon-reload',
+	  	                handler: function () {
+	  	                	refuse_form.form('reset');
+	  	                }
+	  	            },
+	  	            {
+	  	                text: '关闭',
+	  	                iconCls: 'icon-cancel',
+	  	                handler: function () {
+	  	                	refuse_dialog.dialog('destroy');
+	  	                }
+	  	            }
+	  	        ],
+	  	        onClose: function () {
+	  	        	refuse_dialog.dialog('destroy');
+	  	        }
+	  	    });
+	  	}
   	</script>
 
   </head>
-  <body>
-  <div class="easyui-layout" data-options="fit:true">
+  <body class="easyui-layout">
   <div data-options="region:'west',border:true" style="width: 30px">
-		<a href="javascript:void(0);" id="bt_dqs" class="easyui-linkbutton" data-options="toggle:true,group:'west',selected:true" style="height: 200px" onclick="statusName('WAIT_FOR_CLAIM', 'dqs');">代签收</a>
-		<a href="javascript:void(0);" id="bt_blz" class="easyui-linkbutton" data-options="toggle:true,group:'west'" style="height: 200px" onclick="statusName('IN_HANDLING', 'blz');">办理中</a>
-		<a href="javascript:void(0);" id="bt_ybl" class="easyui-linkbutton" data-options="toggle:true,group:'west'" style="height: 200px" onclick="statusName('FINISHED', 'ybl');">已办理</a>
+	<a href="javascript:void(0);" id="bt_dqs" class="easyui-linkbutton" data-options="toggle:true,group:'west',selected:true" style="height: 200px" onclick="statusName('WAIT_FOR_CLAIM', 'dqs');">代签收</a>
+	<a href="javascript:void(0);" id="bt_blz" class="easyui-linkbutton" data-options="toggle:true,group:'west'" style="height: 200px" onclick="statusName('IN_HANDLING', 'blz');">办理中</a>
+	<a href="javascript:void(0);" id="bt_ybl" class="easyui-linkbutton" data-options="toggle:true,group:'west'" style="height: 200px" onclick="statusName('FINISHED', 'ybl');">已办理</a>
   </div>
   <div data-options="region:'center',border:true">
 	<div id="dqs" style="padding:2px 0; display: none;">
 		<table>
 			<tr>
 				<td style="padding-left:2px">
-					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="details('tunhuo');">查看</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="details();">查看</a>
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="claim();">签收</a>
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="refuse();">拒绝</a>
 				</td>
@@ -138,7 +265,7 @@
 		<table>
 			<tr>
 				<td style="padding-left:2px">
-					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="details('tunhuo');">查看</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="details();">查看</a>
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="claim();">申请办结</a>
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="refuse();">反馈</a>
 				</td>
@@ -149,7 +276,7 @@
 		<table>
 			<tr>
 				<td style="padding-left:2px">
-					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="details('tunhuo');">查看</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="details();">查看</a>
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="claim();">续报</a>
 				</td>
 			</tr>
@@ -184,6 +311,14 @@
 		</div>
 	</div>
   </div>
+  <div id="refuse_dialog" style="display: none;">
+  	<form id="refuseForm">
+		<div class="alert alert-warning" role="alert">
+		  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+		  填写具体拒绝签收的原因！
+		</div>
+  		<textarea class="easyui-kindeditor" name="reason" rows="3" ></textarea>
+  	</form>
   </div>
   </body>
 </html>
