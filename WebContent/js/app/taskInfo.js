@@ -273,7 +273,7 @@ function details(){
 function showDetails(row) {
     //弹出对话窗口
 	taskInfo_dialog = $('<div/>').dialog({
-    	title : "开票详情",
+    	title : "任务详情",
 		top: 20,
 		width : fixWidth(0.8),
 		height : 'auto',

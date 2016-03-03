@@ -37,7 +37,7 @@
 		</tr>
 		<tr>
 			<td class="text-right">急缓程度:</td>
-			<td>${taskInfo.urgency.id }</td>
+			<td>${taskInfo.urgency }</td>
 			<td class="text-right">文件类型:</td>
 			<td>${taskInfo.taskType }</td>
 		</tr>
