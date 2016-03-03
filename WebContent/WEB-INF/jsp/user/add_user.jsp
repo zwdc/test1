@@ -3,6 +3,20 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <script type="text/javascript">
 $(function(){
+	//部门
+	$("#group").combobox({
+		width:160,
+		url:ctx+"/group/getAllGroup",
+		valueField: 'id',
+		textField: 'name',
+		onSelect:function(value){
+			$("#group_name").val(value.name);
+		},
+		required: true,
+		onLoadSuccess: function (data) {
+            $("#group").combobox('setValue',data[0].id);
+        }
+	});
 	//角色
 	$("#role").combobox({
 		width:160,
@@ -78,6 +92,10 @@ $(function(){
                    name="repasswd" class="easyui-textbox" required="required"
                    missingMessage="请再次填写密码." validType="equalTo['#passwd']"
                    invalidMessage="两次输入密码不匹配.">
+        </div>
+        <div class="fitem">
+            <label>部门:</label>
+			<input id="group" name="group.id" class="easyui-textbox" required="required" />
         </div>
         <div class="fitem">
             <label>角色:</label>

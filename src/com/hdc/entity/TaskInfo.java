@@ -42,11 +42,6 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 	@Column(name = "ID", length = 10, nullable = false, unique = true)
 	private Integer id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="URGENCY_ID")
-	@JsonIgnore
-	private Urgency urgency;		//急缓程度
-	
 	@Column(name = "TITLE", length = 200)
 	private String title;			//标题
 	
@@ -122,6 +117,9 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 	@Column(name = "UPLOAD_DATE")
 	private Date uploadDate ;		//上传时间
 	
+	@Column(name = "URGENCY", length = 1)
+	private Integer urgency;		//急缓程度
+	
 	@Column(name = "SUPERVISOR", length = 5)
 	private Integer supervisor;		//督办专员 id
 	
@@ -166,11 +164,11 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 		this.createTaskDate = createTaskDate;
 	}
 
-	public Urgency getUrgency() {
+	public Integer getUrgency() {
 		return urgency;
 	}
 
-	public void setUrgency(Urgency urgency) {
+	public void setUrgency(Integer urgency) {
 		this.urgency = urgency;
 	}
 

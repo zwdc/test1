@@ -38,7 +38,7 @@ public class RefuseReason extends BaseCommonEntity implements Serializable {
 	@Column(name = "ID", length = 5, nullable = false, unique = true)
 	private Integer id;
 	
-	@Column(name = "TITLE", length = 1000)
+	@Column(name = "REASON", length = 1000)
 	private String reason;
 
 	@ManyToOne(fetch = FetchType.LAZY)

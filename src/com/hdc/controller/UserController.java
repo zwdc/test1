@@ -88,6 +88,8 @@ public class UserController {
 			map.put("passwd", user.getPasswd());
 			map.put("registerDate", user.getRegisterDate());
 			map.put("locked", user.getIsDelete());
+			map.put("groupId", user.getGroup().getId());
+			map.put("group_name", user.getGroup().getName());
 			map.put("roleId", user.getRole().getId());
 			map.put("role_name", user.getRole().getName());
 			map.put("salt", user.getSalt());
@@ -293,22 +295,6 @@ public class UserController {
 		return "redirect:/userAction/toList_page";
 	}  
 	
-	
-	/**
-	 * 跳转选择候选人页面
-	 * @return
-	 * @throws Exception 
-	 */
-	@RequestMapping(value = "/toChooseUser")
-	public ModelAndView toChooseUser(@RequestParam("multiSelect") boolean multiSelect, @RequestParam("key") String key) throws Exception{
-		ModelAndView mv = new ModelAndView("choose/user/choose_user");
-		List<Role> list = this.roleService.getRoleList();
-		mv.addObject("key", key);
-		mv.addObject("multiSelect", multiSelect);
-		mv.addObject("groupList", list);
-		return mv;
-	}
-	
 	/**
 	 * 跳转选择任务委派人页面
 	 * @return
@@ -319,22 +305,6 @@ public class UserController {
 		ModelAndView mv = new ModelAndView("task/delegate_user");
 		List<Role> groupList = this.roleService.getRoleList();
 		mv.addObject("groupList", groupList);
-		return mv;
-	}
-	
-	/**
-	 * 在tabs中根据groupId显示用户列表
-	 * @return
-	 */
-	@RequestMapping(value = "/toShowUser")
-	public ModelAndView toShowUser(
-			@RequestParam("groupId") String groupId,
-			@RequestParam("multiSelect") boolean multiSelect, 
-			@RequestParam("key") String key){
-		ModelAndView mv = new ModelAndView("choose/user/show_user");
-		mv.addObject("groupId", groupId);
-		mv.addObject("multiSelect", multiSelect);
-		mv.addObject("key", key);
 		return mv;
 	}
 	

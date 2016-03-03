@@ -13,13 +13,13 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hdc.entity.Group;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
-import com.hdc.entity.Role;
 import com.hdc.entity.User;
 import com.hdc.service.IActivitiIdentityService;
 import com.hdc.service.IBaseService;
-import com.hdc.service.IRoleService;
+import com.hdc.service.IGroupService;
 import com.hdc.service.IUserService;
 import com.hdc.util.BeanUtils;
 
@@ -49,11 +49,11 @@ public class UserServiceImpl implements IUserService {
     protected IActivitiIdentityService activitIdentityService;
     
     @Autowired
-    protected IRoleService roleService;
+    protected IGroupService groupService;
     
     @Autowired
     private IBaseService<User> baseService;
-    
+
 	@Override
 	public User getUserByName(String user_name) throws Exception{
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -131,7 +131,7 @@ public class UserServiceImpl implements IUserService {
      */
     private void newActivitiUser(User user) {
         String userId = user.getId().toString();
-        String groupId = user.getRole().getId().toString();
+        String groupId = user.getGroup().getId().toString();
  
         if(StringUtils.isBlank(groupId)){
         	logger.error("groupId 为空不能同步membership");
@@ -166,7 +166,7 @@ public class UserServiceImpl implements IUserService {
     private void updateActivitiData(User user, org.activiti.engine.identity.User activitiUser) {
  
         String userId = user.getId().toString();
-        String groupId = user.getRole().getId().toString();
+        String groupId = user.getGroup().getId().toString();
  
         // 更新用户主体信息
         cloneAndSaveActivitiUser(user, activitiUser);
@@ -251,12 +251,12 @@ public class UserServiceImpl implements IUserService {
 	 * @throws Exception 
      */
     private void synRoleToActiviti() throws Exception {
-        List<Role> list = this.roleService.getRoleList();
-        for (Role role : list) {
-            String groupId = role.getId().toString();
+        List<Group> allGroup = this.groupService.getGroupList();
+        for (Group group : allGroup) {
+            String groupId = group.getId().toString();
             org.activiti.engine.identity.Group identity_group = identityService.newGroup(groupId);
-            identity_group.setName(role.getName());
-            identity_group.setType(role.getType());
+            identity_group.setName(group.getName());
+            identity_group.setType(group.getType());
             identityService.saveGroup(identity_group);
         }
     }
@@ -269,7 +269,7 @@ public class UserServiceImpl implements IUserService {
         List<User> allUser = this.baseService.findByWhere("User", null);
         for (User user : allUser) {
             String userId = user.getId().toString();
-            String groupId = user.getRole().getId().toString();
+            String groupId = user.getGroup().getId().toString();
             // 添加一个用户到Activiti
             saveActivitiUser(user);
  
@@ -284,7 +284,7 @@ public class UserServiceImpl implements IUserService {
      * @throws Exception
      */
     private void updateMembership(User user) throws Exception{
-    	this.activitIdentityService.updateMembership(user.getId().toString(), user.getRole().getId().toString());
+    	this.activitIdentityService.updateMembership(user.getId().toString(), user.getGroup().getId().toString());
     }
 
 	@Override

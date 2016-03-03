@@ -17,9 +17,9 @@ public class SuperviseReceiveController {
 	 * 跳转到督察接收
 	 * @return
 	 */
-	@RequestMapping(value = "/toSuperviseReceive")
+	@RequestMapping(value = "/toList")
 	public ModelAndView toSuperviseReceive() {
-		ModelAndView mv = new ModelAndView("/superviseReceive/list_receive");
+		ModelAndView mv = new ModelAndView("superviseReceive/list_receive");
 		return mv;
 	}
 	

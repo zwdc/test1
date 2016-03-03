@@ -6,6 +6,17 @@
 		$("#taskContent").kindeditor({readonlyMode: true});
 		$("#leadComments").kindeditor({readonlyMode: true});
 		$("#suggestion").kindeditor({readonlyMode: true});
+		
+		$('#download').tooltip({
+			position: 'right',
+			content: '<span style="color:#fff">点击下载</span>',
+			onShow: function(){
+				$(this).tooltip('tip').css({
+					backgroundColor: '#666',
+					borderColor: '#666'
+				});
+			}
+		});
 	})
 </script>
 <div class="easyui-layout">
@@ -37,7 +48,7 @@
 		</tr>
 		<tr>
 			<td class="text-right">急缓程度:</td>
-			<td>${taskInfo.urgency.id }</td>
+			<td>${taskInfo.urgency }</td>
 			<td class="text-right">文件类型:</td>
 			<td>${taskInfo.taskType }</td>
 		</tr>
@@ -57,7 +68,7 @@
 			<td colspan="4">拟办意见:<textarea class="easyui-kindeditor" id="suggestion" rows="3" >${taskInfo.suggestion }</textarea></td>
 		</tr>
   	</table>
-  	<c:if test="${contract.fileName != null }">
+  	<c:if test="${taskInfo.fileName != null }">
     	<div id="upload" class="easyui-layout">
 	    <table class="table table-bordered table-hover table-condensed">
 	    	<tr class="bg-primary">

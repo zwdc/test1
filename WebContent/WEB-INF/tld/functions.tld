@@ -5,16 +5,8 @@
         version="2.0">
     <description>functions</description>
     <tlib-version>3.0</tlib-version>
-    <short-name>yzky</short-name>
-    <uri>http://yzky.com/yzky/tags/functions</uri>
-
-<!--   	<function>
-        <description>打印许可</description>
-        <name>printPermission</name>
-        <function-class>com.wizsharing.util.Functions</function-class>
-        指定EL页面调用名字中实际调用的方法.指定处理类的实际方法.参数和回调函数要写完整路径
-        <function-signature>java.lang.String printPermission()</function-signature>
-    </function> -->
+    <short-name>zwdc</short-name>
+    <uri>http://zwdc.com/zwdc/tags/functions</uri>
 
   	<function>
         <description>获取审批状态</description>

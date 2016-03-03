@@ -224,7 +224,7 @@ function edit() {
     //选中的行（第一次选择的行）
     var row = taskInfo_datagrid.datagrid('getSelected');
     if (row) {
-        showtaskInfo(row);
+        showTaskInfo(row);
     } else {
         $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
     }
@@ -273,7 +273,7 @@ function details(){
 function showDetails(row) {
     //弹出对话窗口
 	taskInfo_dialog = $('<div/>').dialog({
-    	title : "开票详情",
+    	title : "任务详情",
 		top: 20,
 		width : fixWidth(0.8),
 		height : 'auto',
