@@ -118,7 +118,7 @@ public class ProcessController {
 					break;
 			}*/
 			
-			switch (BusinessForm.getValue(base.getBusinessForm())) {
+			/*switch (BusinessForm.getValue(base.getBusinessForm())) {
 				case PROJECT:
 					map.put("business_form", "立项表");
 					break;
@@ -154,7 +154,7 @@ public class ProcessController {
 					break;
 				default:
 					break;
-			}
+			}*/
 			map.put("user_name", base.getUser_name());
 			map.put("title", base.getTitle());
 			map.put("url", base.getUrl());
@@ -221,7 +221,7 @@ public class ProcessController {
 						break;
 				}*/
 				
-				switch (BusinessForm.getValue(base.getBusinessForm())) {
+				/*switch (BusinessForm.getValue(base.getBusinessForm())) {
 					case PROJECT:
 						map.put("business_form", "立项表");
 						break;
@@ -257,7 +257,7 @@ public class ProcessController {
 						break;
 					default:
 						break;
-				}
+				}*/
 				map.put("user_name", base.getUser_name());
 				map.put("title", base.getTitle());
 				map.put("url", base.getUrl());

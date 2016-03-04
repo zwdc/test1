@@ -291,3 +291,13 @@ function showDetails(row) {
         }
     });
 }
+
+function publishMessage() {
+	var goEasy = new GoEasy({
+        appkey: '0cf326d6-621b-495a-991e-a7681bcccf6a'
+    });
+	goEasy.publish({
+        channel: 'demo_channel',
+        message: 'Hello world!'
+    });
+}

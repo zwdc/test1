@@ -43,6 +43,8 @@
 				});
 			}
 		});
+		
+		$("#reason").kindeditor({readonlyMode: true});
 	});
 	
 	function upload() {
@@ -226,5 +228,25 @@
 	    	</tr>
 	    </table>
     </form>
+</c:if>
+
+<c:if test="${!empty refuseReasonList }">
+	<table class="table table-bordered table-hover table-condensed">
+		<tr class="bg-warning">
+	  		<td colspan="4" align="center">拒绝原因</td>
+	  	</tr>
+		<c:forEach items="${refuseReasonList }" var="r">
+			<tr>
+				<td class="text-right">拒绝人:</td>
+				<td>${r.createUser.name }</td>
+				<td class="text-right">拒绝时间:</td>
+				<td><fmt:formatDate value="${r.createDate }" type="both"/></td>
+			</tr>
+			<tr>
+				<td class="text-right">拒绝原因:</td>
+				<td colspan="3"><textarea class="easyui-kindeditor" id="reason" rows="3" >${r.reason }</textarea></td>
+			</tr>
+		</c:forEach>
+	</table>
 </c:if>
 </div>

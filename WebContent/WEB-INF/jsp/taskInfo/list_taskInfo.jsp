@@ -15,6 +15,7 @@
 	<script type="text/javascript" src="${ctx}/kindeditor/kindeditor-min.js"></script>
   	<script type="text/javascript" src="${ctx}/js/kindeditor.js"></script>
 	<script type="text/javascript" src="${ctx}/js/app/taskInfo.js?_=${sysInitTime}"></script>
+	<script type="text/javascript" src="${ctx}/js/goeasy.js"></script>
   </head>
   <body>
 	<div class="well well-small" style="margin-left: 5px;margin-top: 5px">
@@ -32,6 +33,7 @@
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="edit();">编辑</a>
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="del();">删除</a>
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="details();">详情</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="publishMessage();">发送</a>
 				</td>
 				<td style="padding-left:5px">
 					<input id="searchbox" type="text"/>

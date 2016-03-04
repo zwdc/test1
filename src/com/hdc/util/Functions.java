@@ -80,29 +80,14 @@ public class Functions {
 	public static String businessForm(String businessForm) {
 		String value = "";
 		switch (BusinessForm.getValue(businessForm)) {
-			case PROJECT:
+			case GWY_FILE:
 				value = "立项表";
 				break;
-			case SALES:
+			case SZF_FILE:
 				value = "销售审批表";
 				break;
-			case SALES_CONTRACT:
+			case QT_FILE:
 				value = "销售合同";
-				break;
-			case PROCUREMENT_CONTRACT:
-				value = "采购合同";
-				break;
-			case PAYMENT:
-				value = "开票";
-				break;
-			case OUTBOUND:
-				value = "出库单";
-				break;
-			case PROCUREMENT_TUNHUO:
-				value = "囤货采购审批表";
-				break;
-			case PROCUREMENT_BUHUO:
-				value = "补货采购审批表";
 				break;
 			default:
 				break;

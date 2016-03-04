@@ -1,6 +1,7 @@
 package com.hdc.service;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.hdc.entity.RefuseReason;
 
@@ -25,4 +26,12 @@ public interface IRefuseReasonService {
 	 * @throws Exception
 	 */
 	public void doDelete(Integer id) throws Exception;
+	
+	/**
+	 * 通过taskInfoId查找拒绝原因
+	 * @param taskInfoId
+	 * @return
+	 * @throws Exception
+	 */
+	public List<RefuseReason> findByTaskId(Integer taskInfoId) throws Exception;
 }

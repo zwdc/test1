@@ -158,11 +158,10 @@ public class Constants {
 	}
 	
 	/**
-	 * 业务表单类型（立项表、销售审批表、采购审批表、合同、开票、出库单等）-要与controller的ReequestMapping对应
-	 * 可用来完成任务时根据表单类型判断去调用controller。也用在评论中，显示是哪个业务表单的评论(审批失败 修改时显示评论内容用)。
+	 * 业务表单类型(省政府文件、国务院文件、其他文件   2会议下分类 3工作报告分类....)
 	 */
 	public enum  BusinessForm {
-		PROJECT("PROJECT"), SALES("SALES"), PROCUREMENT_TUNHUO("PROCUREMENT_TUNHUO"), PROCUREMENT_BUHUO("PROCUREMENT_BUHUO"), SALES_CONTRACT("SALES_CONTRACT"), PROCUREMENT_CONTRACT("PROCUREMENT_CONTRACT"), OTHER_CONTRACT("OTHER_CONTRACT"), OUTBOUND ("OUTBOUND"), INBOUND("INBOUND"), PAYMENT("PAYMENT"), INVOICE("INVOICE") ;
+		GWY_FILE("GWY_FILE"), SZF_FILE("SZF_FILE"), QT_FILE("QT_FILE");
 		private final String value;
 		
 		private BusinessForm(String value) {
@@ -177,38 +176,15 @@ public class Constants {
 		public static BusinessForm getValue( String value ) {
 			BusinessForm bf = null;
 			switch (value) {
-			case "PROJECT":
-				bf = PROJECT;
+			case "GWY_FILE":
+				bf = GWY_FILE;
 				break;
-			case "SALES":
-				bf = SALES;
+			case "SZF_FILE":
+				bf = SZF_FILE;
 				break;
-			case "PROCUREMENT_TUNHUO":
-				bf = PROCUREMENT_TUNHUO;
+			case "QT_FILE":
+				bf = QT_FILE;
 				break;
-			case "PROCUREMENT_BUHUO":
-				bf = PROCUREMENT_BUHUO;
-				break;
-			case "SALES_CONTRACT":
-				bf = SALES_CONTRACT;
-				break;
-			case "PROCUREMENT_CONTRACT":
-				bf = PROCUREMENT_CONTRACT;
-				break;
-			case "OTHER_CONTRACT":
-				bf = OTHER_CONTRACT;
-				break;
-			case "OUTBOUND":
-				bf = OUTBOUND;
-				break;
-			case "INBOUND":
-				bf = INBOUND;
-				break;
-			case "PAYMENT":
-				bf = PAYMENT;
-				break;
-			case "INVOICE":
-				bf=INVOICE;
 			default:
 				break;
 			}
@@ -222,7 +198,7 @@ public class Constants {
 	 *
 	 */
 	public enum OperationType {
-		ADD("ADD"), UPLOAD("UPLOAD"), APPROVAL("APPROVAL"), MODIFY("MODIFY"), PRINT("PRINT"), IN_BOUND("IN_BOUND"),STAMP("STAMP");
+		ADD("ADD"), MODIFY("MODIFY"), UPLOAD("UPLOAD"), APPROVAL("APPROVAL"), PRINT("PRINT"), IN_BOUND("IN_BOUND"),STAMP("STAMP");
 		private final String value;
 		
 		private OperationType(String value) {

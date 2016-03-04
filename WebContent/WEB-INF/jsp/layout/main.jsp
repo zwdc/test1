@@ -1,15 +1,13 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/taglibs/taglibs.jsp"%>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>首页</title>
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>首页</title>
 </head>
-
 <body>
-
 	<div data-options="region:'north',border:false" title="" style="overflow: hidden; padding: 5px;">
 		<div class="well well-small">
 			<h1 style="font-size:30px;"><strong>欢迎使用[亿舟康业]业务管理系统</strong></h1>

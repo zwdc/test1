@@ -54,4 +54,11 @@ public interface ITaskInfoService {
 	 * @throws Exception
 	 */
 	public void doStartProcess(TaskInfo taskInfo) throws Exception;
+	
+	/**
+	 * 签收任务
+	 * @param taskInfo
+	 * @throws Exception
+	 */
+	public void doClaimTask(TaskInfo taskInfo) throws Exception;
 }

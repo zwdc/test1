@@ -96,6 +96,7 @@
            	<tx:method name="doStart*" propagation="REQUIRED" />  
            	<tx:method name="doComplete*" propagation="REQUIRED" />
            	<tx:method name="doApproval*" propagation="REQUIRED" />
+           	<tx:method name="doClaim*" propagation="REQUIRED" />
            	
            	<!--hibernate4必须配置为开启事务(REQUIRED) 否则 getCurrentSession()获取不到-->
             <tx:method name="get*" propagation="REQUIRED" read-only="true"/>

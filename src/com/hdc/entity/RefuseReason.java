@@ -1,6 +1,7 @@
 package com.hdc.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,9 +12,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -26,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "REFUSE_REASON")
 @DynamicUpdate(true)
 @DynamicInsert(true)
-public class RefuseReason extends BaseCommonEntity implements Serializable {
+public class RefuseReason implements Serializable {
 
 	/**
 	 * 
@@ -45,6 +49,16 @@ public class RefuseReason extends BaseCommonEntity implements Serializable {
 	@JoinColumn(name="TASK_INFO")
 	@JsonIgnore
 	private TaskInfo taskInfo;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(name = "CREATE_DATE")
+	private Date createDate ;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="CREATE_USER_ID")
+	@JsonIgnore
+	private User createUser;
 	
 	public Integer getId() {
 		return id;
@@ -68,6 +82,22 @@ public class RefuseReason extends BaseCommonEntity implements Serializable {
 
 	public void setTaskInfo(TaskInfo taskInfo) {
 		this.taskInfo = taskInfo;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public User getCreateUser() {
+		return createUser;
+	}
+
+	public void setCreateUser(User createUser) {
+		this.createUser = createUser;
 	}
 	
 }

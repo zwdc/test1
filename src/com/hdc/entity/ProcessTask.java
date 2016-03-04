@@ -57,7 +57,7 @@ public class ProcessTask extends BaseCommonEntity implements Serializable {
 	private String businessOperation;	//业务类型操作（添加、修改、审批）	
 	
 	@Column(name = "BUSINESS_KEY", length = 15)
-	private Long businessKey;			//业务id
+	private Integer businessKey;		//业务id
 	
 	@Column(name = "PROJECT_ID", length = 15)
 	private Long projectId;				//项目id（以后应该会用到，根据项目id查出所有的流程）
@@ -178,11 +178,11 @@ public class ProcessTask extends BaseCommonEntity implements Serializable {
 		this.businessOperation = businessOperation;
 	}
 
-	public Long getBusinessKey() {
+	public Integer getBusinessKey() {
 		return businessKey;
 	}
 
-	public void setBusinessKey(Long businessKey) {
+	public void setBusinessKey(Integer businessKey) {
 		this.businessKey = businessKey;
 	}
 

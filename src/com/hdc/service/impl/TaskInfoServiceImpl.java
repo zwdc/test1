@@ -1,6 +1,7 @@
 package com.hdc.service.impl;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import com.hdc.entity.TaskInfo;
 import com.hdc.service.IBaseService;
 import com.hdc.service.IProcessService;
 import com.hdc.service.ITaskInfoService;
+import com.hdc.util.Constants.TaskInfoStatus;
 
 @Service
 public class TaskInfoServiceImpl implements ITaskInfoService {
@@ -67,6 +69,20 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 		Task firstTask = this.taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
 		// 完成第一个任务，任务继续向下流
 		this.processService.complete(firstTask.getId(), null, null);
+		
+		taskInfo.setStatus(TaskInfoStatus.WAIT_FOR_CLAIM.toString());
+		taskInfo.setAssignDate(new Date());
+		this.baseService.update(taskInfo);
+	}
+
+	@Override
+	public void doClaimTask(TaskInfo taskInfo) throws Exception {
+		Map<String, Object> variables = new HashMap<String, Object>();
+		variables.put("claim", true);
+		
+		this.processService.complete(taskInfo.getActTaskId(), null, variables);
+		this.baseService.update(taskInfo);
+		
 	}
 
 }

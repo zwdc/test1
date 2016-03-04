@@ -30,14 +30,17 @@ import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.RefuseReason;
 import com.hdc.entity.TaskInfo;
+import com.hdc.entity.User;
 import com.hdc.service.IRefuseReasonService;
 import com.hdc.service.ITaskInfoService;
 import com.hdc.util.BeanUtils;
 import com.hdc.util.Constants;
+import com.hdc.util.UserUtil;
 import com.hdc.util.Constants.TaskInfoStatus;
 import com.hdc.util.FileDownloadUtils;
 import com.hdc.util.upload.FileUploadUtils;
 import com.hdc.util.upload.exception.InvalidExtensionException;
+import com.uwantsoft.goeasy.client.goeasyclient.GoEasy;
 
 /**
  * 督察处对任务进行管理
@@ -53,7 +56,7 @@ public class TaskInfoController {
 	private ITaskInfoService taskInfoService;
 	
 	@Autowired
-	private IRefuseReasonService rrefuseReasonService;
+	private IRefuseReasonService refuseReasonService;
 	
 	/**
 	 * 跳转列表页面
@@ -75,7 +78,9 @@ public class TaskInfoController {
 		ModelAndView mv = new ModelAndView("taskInfo/main_taskInfo");
 		if(!BeanUtils.isBlank(id)) {
 			TaskInfo taskInfo = this.taskInfoService.findById(id);
+			List<RefuseReason> list = this.refuseReasonService.findByTaskId(id);
 			mv.addObject("taskInfo", taskInfo);
+			mv.addObject("refuseReasonList", list);
 		}
 		return mv;
 	}
@@ -134,7 +139,6 @@ public class TaskInfoController {
 		Integer id = taskInfo.getId();
 		try {
 			if(BeanUtils.isBlank(id)) {
-				taskInfo.setStatus(TaskInfoStatus.WAIT_FOR_CLAIM.toString());
 				Serializable taskInfoId = this.taskInfoService.doAdd(taskInfo);
 				message.setData(taskInfoId.toString());
 				message.setMessage("添加成功！");
@@ -254,7 +258,7 @@ public class TaskInfoController {
     	Message message = new Message();
     	TaskInfo taskInfo = this.taskInfoService.findById(id);
     	taskInfo.setStatus(TaskInfoStatus.IN_HANDLING.toString());
-    	this.taskInfoService.doUpdate(taskInfo);
+    	this.taskInfoService.doClaimTask(taskInfo);
     	message.setMessage("签收成功！");
     	return message;
     }
@@ -269,10 +273,13 @@ public class TaskInfoController {
     @ResponseBody
     public Message refuseClaim(@PathVariable("id") Integer id, RefuseReason refuseReason) throws Exception {
     	Message message = new Message();
+    	User user = UserUtil.getUserFromSession();
     	TaskInfo taskInfo = this.taskInfoService.findById(id);
     	taskInfo.setStatus(TaskInfoStatus.REFUSE_CLAIM.toString());
     	refuseReason.setTaskInfo(taskInfo);
-    	this.rrefuseReasonService.doAdd(refuseReason);
+    	refuseReason.setCreateDate(new Date());
+    	refuseReason.setCreateUser(user);
+    	this.refuseReasonService.doAdd(refuseReason);
     	message.setMessage("操作成功！");
     	return message;
     }
@@ -316,6 +323,17 @@ public class TaskInfoController {
 		Calendar c = Calendar.getInstance();
   	    System.out.println("今天是这个月的第几个星期几："+c.get(Calendar.DAY_OF_WEEK_IN_MONTH));
   	    System.out.println("本月的第几周："+c.get(Calendar.WEEK_OF_MONTH));	
+  	    
+  	    DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+  	    Date beginDate = format.parse("2016-03-04 15:27:30");
+  	    Date endDate = format.parse("2016-03-08 11:27:30");
+  	    long beginTime = beginDate.getTime(); 
+  	    long endTime = endDate.getTime(); 
+  	    long betweenDays = (long)((endTime - beginTime) / (1000 * 60 * 60 *24) + 0.5); 
+  	    System.out.println("相差天数："+betweenDays);
+  	    
+  	    GoEasy goEasy = new GoEasy("appkey");
+		goEasy.publish("demo_channel", "您有将要到期尚未反馈的督察信息");
 		
     }
 }
