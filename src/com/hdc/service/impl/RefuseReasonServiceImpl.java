@@ -52,6 +52,7 @@ public class RefuseReasonServiceImpl implements IRefuseReasonService {
 		processTask.setBusinessOperation(OperationType.MODIFY.toString());
 		Map<String, Object> variables = new HashMap<String, Object>();
 		variables.put("claim", false);
+		variables.put("processTask", processTask);
 		this.processService.complete(processTask.getTaskId(), null, variables);
 		
 		return this.baseService.add(refuseReason);

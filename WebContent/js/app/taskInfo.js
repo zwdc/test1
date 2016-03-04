@@ -297,7 +297,7 @@ function publishMessage() {
         appkey: '0cf326d6-621b-495a-991e-a7681bcccf6a'
     });
 	goEasy.publish({
-        channel: 'demo_channel',
+        channel: 'zwdc_user_1',
         message: 'Hello world!'
     });
 }

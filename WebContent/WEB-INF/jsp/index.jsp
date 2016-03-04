@@ -10,8 +10,12 @@
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
+    <link rel="stylesheet" href="${ctx}/css/messenger.css" type="text/css" />
+    <link rel="stylesheet" href="${ctx}/css/messenger-theme-flat.css" type="text/css" />
 	<script type="text/javascript" src="${ctx}/js/tree_admin.js"></script>
 	<script type="text/javascript" src="${ctx}/js/tree_user.js"></script>
+    <script type="text/javascript" src="${ctx}/js/messenger.min.js"></script>
+    <script type="text/javascript" src="${ctx}/js/messenger-theme-flat.js"></script>
 	<style type="text/css">
 		.ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
 	</style>
@@ -49,8 +53,65 @@
 			for (var i=0, l=nodes.length; i<l; i++) {
 				zTree.expandNode(nodes[i], true, false, false, false);
 			}
+			
+			Messenger.options = {
+   			    extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
+   			    theme: 'flat'
+   			}
+			//推送消息
+			 goEasy.subscribe({
+	             channel: "zwdc_user_${user.id}",
+	             onMessage: function(message){
+	                 //alert('Meessage received:'+message.content);
+	                 var msg = Messenger().post({
+	                	  message: message.content,
+	                	  hideAfter: 5,
+	         		 	  showCloseButton: true,
+	                	  actions: {
+	                	    retry: {
+	                	      label: '查看',
+	                	      phrase: 'Retrying TIME',
+	                	      auto: false,
+	                	      delay: 5,
+	                	      action: function() {
+	                	    	  
+	                	      }
+	                	    },
+	                	    cancel: {
+	                	      action: function() {
+	                	        return msg.cancel();
+	                	      }
+	                	    }
+	                	  }
+                	 });
+	             }
+	         });
 		});
 		
+		function showMessage() {
+			taskInfo_dialog = $('<div/>').dialog({
+		    	title : "任务详情",
+				top: 20,
+				width : fixWidth(0.8),
+				height : 'auto',
+		        modal: true,
+		        minimizable: true,
+		        maximizable: true,
+		        href: ctx+"/taskInfo/details/"+row.id,
+		        buttons: [
+		            {
+		                text: '关闭',
+		                iconCls: 'icon-cancel',
+		                handler: function () {
+		                	taskInfo_dialog.dialog('destroy');
+		                }
+		            }
+		        ],
+		        onClose: function () {
+		        	taskInfo_dialog.dialog('destroy');
+		        }
+		    });
+		}
 	</script>
  </head>
  <body class="easyui-layout">

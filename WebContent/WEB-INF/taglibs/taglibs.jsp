@@ -40,8 +40,13 @@
 <script type="text/javascript" src="${ctx}/js/easyui/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript" src="${ctx}/js/easyui/jqueryUtil.js?_=${sysInitTime}"></script>
 
+<script type="text/javascript" src="${ctx}/js/goeasy.js"></script>
+
 <script type="text/javascript" charset="utf-8">
-	var ctx = "${ctx}";
+	 var ctx = "${ctx}";
+	 var goEasy = new GoEasy({
+         appkey: '0cf326d6-621b-495a-991e-a7681bcccf6a'
+     });
 	<%-- var systemDate = "<%=new Date()%>"; --%>
 </script>
 <style type="text/css">

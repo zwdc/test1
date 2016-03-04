@@ -1,7 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-<script type="text/javascript" src="${ctx}/js/goeasy.js"></script>
+
 <script type="text/javascript" charset="utf-8">
 	var centerTabs;
 	var tabsMenu;
@@ -115,15 +115,6 @@
 			}
 		});
 		
-		 var goEasy = new GoEasy({
-             appkey: '0cf326d6-621b-495a-991e-a7681bcccf6a'
-         });
-		 goEasy.subscribe({
-             channel: "demo_channel",
-             onMessage: function(message){
-                 alert('Meessage received:'+message.content);
-             }
-         });
 	});
 
 	function addTab(title, url) {
