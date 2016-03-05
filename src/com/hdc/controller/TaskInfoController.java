@@ -116,10 +116,13 @@ public class TaskInfoController {
 			map.put("createTaskDate", task.getCreateTaskDate());
 			map.put("assignDate", task.getAssignDate());
 			map.put("endTaskDate", task.getEndTaskDate());
+			map.put("claimDate", task.getClaimDate());
 			map.put("feedbackCycle", task.getFeedbackCycle());
 			map.put("feedbaceDate", task.getFeedbaceDate());
 			map.put("hostGroup", task.getHostGroup().getId());				//主办单位
 			map.put("assistantGroup", task.getAssistantGroup().getId());	//协办单位
+			map.put("urgeCount", task.getUrge().size());					//催办数
+			map.put("feedbackCount", task.getFeedBack().size());			//反馈记录数
 			jsonList.add(map);
 		}
 		return new Datagrid<Object>(page.getTotal(), jsonList);
@@ -258,6 +261,7 @@ public class TaskInfoController {
     	Message message = new Message();
     	TaskInfo taskInfo = this.taskInfoService.findById(id);
     	taskInfo.setStatus(TaskInfoStatus.IN_HANDLING.toString());
+    	taskInfo.setClaimDate(new Date());
     	this.taskInfoService.doClaimTask(taskInfo);
     	message.setMessage("签收成功！");
     	return message;

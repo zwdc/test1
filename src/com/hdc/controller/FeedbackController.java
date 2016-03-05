@@ -16,6 +16,7 @@ import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Message;
 import com.hdc.entity.TaskInfo;
 import com.hdc.service.IFeedbackRecordService;
+import com.hdc.service.ITaskInfoService;
 import com.hdc.util.BeanUtils;
 import com.hdc.util.Constants;
 import com.hdc.util.upload.FileUploadUtils;
@@ -31,6 +32,9 @@ public class FeedbackController {
 
 	@Autowired
 	private IFeedbackRecordService feedbackService;
+	
+	@Autowired
+	private ITaskInfoService taskInfoService;
 	
 	/**
 	 * 跳转添加或修改页面
@@ -49,7 +53,8 @@ public class FeedbackController {
 			feedback = this.feedbackService.findById(id);
 		}
 		if(taskInfoId != null) {
-			feedback.setTaskInfo(new TaskInfo(taskInfoId));
+			TaskInfo taskInfo = this.taskInfoService.findById(taskInfoId);
+			feedback.setTaskInfo(taskInfo);
 		}
 		mv.addObject("feedback", feedback);
 		return mv;

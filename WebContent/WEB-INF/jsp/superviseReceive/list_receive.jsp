@@ -79,10 +79,30 @@
 				     	{field:'taskNo',title:'文号',width:fixWidth(0.1),align:'center',halign:'center'},
 				     	{field:'createTaskDate',title:'立项时间',width:fixWidth(0.1),align:'center',halign:'center',sortable:true,
 				     		formatter:function(value,row){
-			            		  return moment(value).format("YYYY-MM-DD HH:mm:ss");
-							 }
+			            		return moment(value).format("YYYY-MM-DD HH:mm:ss");
+							}
+				     	},
+				     	{field:'assignDate',title:'交办时间',width:fixWidth(0.1),align:'center',halign:'center',sortable:true,
+			     			formatter:function(value,row){
+			            	  	return moment(value).format("YYYY-MM-DD HH:mm:ss");
+							}
+				     	},
+				     	{field:'claimDate',title:'签收时间',width:fixWidth(0.1),align:'center',halign:'center',sortable:true,
+			     			formatter:function(value,row){
+		            		  	return moment(value).format("YYYY-MM-DD HH:mm:ss");
+						 	}
+				     	},
+				     	{field:'urgeCount',title:'催办情况',width:fixWidth(0.05),align:'center',
+				     		formatter:function(value,row){
+		            		  	return '<a href="javascript:void(0);" onclick="showUrge('+row.id+');">'+value+'</a>';
+						 	}	
 				     	},
 				     	{field:'feedbackCycle',title:'反馈周期',width:fixWidth(0.1),align:'center'},
+				     	{field:'feedbackCount',title:'反馈记录',width:fixWidth(0.05),align:'center',
+				     		formatter:function(value,row){
+		            		  	return '<a href="javascript:void(0);" onclick="showFeedback('+row.id+');">'+value+'</a>';
+						 	}	
+				     	},
 				     	{field:'hostGroup',title:'主板单位',width:fixWidth(0.1),align:'center'},
 				     	{field:'assistantGroup',title:'协办单位',width:fixWidth(0.1),align:'center'},
 				     	{field:'endTaskDate',title:'办结时限',width:fixWidth(0.1),align:'center',sortable:true,
@@ -99,6 +119,63 @@
 	  	        toolbar: "#"+toolbarId
 	  	    });
 	  		
+	  		if(status == "WAIT_FOR_CLAIM") {
+	  			s_datagrid.datagrid('hideColumn', 'urgeCount');
+	  			s_datagrid.datagrid('hideColumn', 'feedbackCount');
+	  			s_datagrid.datagrid('hideColumn', 'claimDate');
+	  		}
+	  	}
+	  	
+	  	//显示催办情况
+	  	function showUrge(taskInfoId) {
+	  		var urge_dialog = $('<div/>').dialog({
+	  	    	title : "催办记录",
+	  			top: 20,
+	  			width : fixWidth(0.8),
+	  			height: fixHeight(0.9),
+	  	        modal: true,
+	  	        minimizable: true,
+	  	        maximizable: true,
+	  	        href: ctx+"/urge/details/"+taskInfoId,
+	  	        buttons: [
+	  	            {
+	  	                text: '关闭',
+	  	                iconCls: 'icon-cancel',
+	  	                handler: function () {
+	  	                	urge_dialog.dialog('destroy');
+	  	                }
+	  	            }
+	  	        ],
+	  	        onClose: function () {
+	  	        	urge_dialog.dialog('destroy');
+	  	        }
+	  	    });
+	  	}
+	  	
+	  	//显示反馈记录
+	  	function showFeedback(taskInfoId) {
+	  		var feedback_dialog = $('<div/>').dialog({
+	  	    	title : "反馈记录",
+	  			top: 20,
+	  			width : fixWidth(0.8),
+	  			height: fixHeight(0.9),
+	  	        modal: true,
+	  	        minimizable: true,
+	  	        maximizable: true,
+	  	        href: ctx+"/feedback/details/"+taskInfoId,
+	  	        buttons: [
+	  	            {
+	  	                text: '关闭',
+	  	                iconCls: 'icon-cancel',
+	  	                handler: function () {
+	  	                	feedback_dialog.dialog('destroy');
+	  	                }
+	  	            }
+	  	        ],
+	  	        onClose: function () {
+	  	        	feedback_dialog.dialog('destroy');
+	  	        }
+	  	    });
 	  	}
 	  	
 	  	function details(){

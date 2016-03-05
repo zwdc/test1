@@ -2,6 +2,8 @@ package com.hdc.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -57,6 +60,11 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@Column(name = "ASSIGN_DATE")
 	private Date assignDate;		//交办日期
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(name = "CLAIM_DATE")
+	private Date claimDate;			//签收日期
 	
 	@Column(name = "FEEDBACK_CYCLE", length = 1)
 	private Integer feedbackCycle;	//反馈周期（0.默认一次  1.每周一次  2.每月一次）
@@ -132,6 +140,14 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 	@Column(name = "ACT_TASK_ID", length = 64)
 	private String actTaskId;		//activiti中任务的id  完成任务用(监听器每到到一个用户任务，则更新此id)
 
+	@OneToMany(mappedBy="taskInfo")
+	@JsonIgnore
+    private Set<FeedbackRecord> feedBack = new HashSet<FeedbackRecord>();
+    
+	@OneToMany(mappedBy="taskInfo")
+	@JsonIgnore
+	private Set<Urge> urge = new HashSet<Urge>();
+	
 	public TaskInfo() {
 		
 	}
@@ -339,5 +355,30 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 	public void setActTaskId(String actTaskId) {
 		this.actTaskId = actTaskId;
 	}
+
+	public Set<FeedbackRecord> getFeedBack() {
+		return feedBack;
+	}
+
+	public void setFeedBack(Set<FeedbackRecord> feedBack) {
+		this.feedBack = feedBack;
+	}
+
+	public Set<Urge> getUrge() {
+		return urge;
+	}
+
+	public void setUrge(Set<Urge> urge) {
+		this.urge = urge;
+	}
+
+	public Date getClaimDate() {
+		return claimDate;
+	}
+
+	public void setClaimDate(Date claimDate) {
+		this.claimDate = claimDate;
+	}
+	
 	
 }

@@ -3,8 +3,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-<script type="text/javascript" src="${ctx}/js/app/choose/group/choose_group.js?_=${sysInitTime}"></script>
-<script type="text/javascript" src="${ctx}/js/app/choose/user/user.js?_=${sysInitTime}"></script>
+<script type="text/javascript" src="${ctx}/kindeditor/kindeditor-min.js"></script>
+<script type="text/javascript" src="${ctx}/js/kindeditor.js"></script>
 <script type="text/javascript">
 	$(function() {
 		$('#download').tooltip({
@@ -37,7 +37,7 @@
 	            $.messager.progress('close');
 	            var json = $.parseJSON(data);
 	            if (json.status) {
-	            	
+	            	message_dialog.dialog('destroy');
 	            } 
 	            $.messager.show({
 					title : json.title,
@@ -61,8 +61,24 @@
 	<input type="hidden" name="uploadDate" value = "<fmt:formatDate value='${feedback.uploadDate }' type='both'/>">
 	<table class="table table-bordered table-hover table-condensed">
 		<tr class="bg-primary">
-			<td colspan="4" align="center">反馈信息</td>
+			<td colspan="6" align="center">反馈信息</td>
 		</tr>
+		<tr class="active">
+		  	<td colspan="8">
+		  		<span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;督查任务信息:
+		  	</td>
+	  	</tr>
+	  	<tr>
+	  		<td class="text-right">事项标题:</td>
+	  		<td colspan="3">${feedback.taskInfo.title }</td>
+	  		<td class="text-right">文号:</td>
+	  		<td>${feedback.taskInfo.taskNo }</td>
+	  	</tr>
+	  	<tr class="active">
+		  	<td colspan="8">
+		  		<span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;反馈信息:
+		  	</td>
+	  	</tr>
 		<tr>
 			<td class="text-right">原始起草人:</td>
 			<td><input name="originalPerson" class="easyui-textbox" data-options="prompt:'填写原始起草人'" value="${feedback.originalPerson }" required="required" type="text" style="width: 50%"></td>
@@ -73,11 +89,11 @@
 		</tr>
 		<tr>
 			<td class="text-right">处/科室:</td>
-			<td><input name="offices" class="easyui-textbox" data-options="prompt:'填写处/科室'"  value="${feedback.taskNo }" required="required" type="text"></td>
+			<td><input name="offices" class="easyui-textbox" data-options="prompt:'填写处/科室'"  value="${feedback.offices }" required="required" type="text"></td>
 			<td class="text-right">职务:</td>
-			<td><input name="dutyOf" class="easyui-textbox" data-options="prompt:'填写职务'"  value="${feedback.taskNo }" required="required" type="text"></td>
+			<td><input name="dutyOf" class="easyui-textbox" data-options="prompt:'填写职务'"  value="${feedback.dutyOf }" required="required" type="text"></td>
 			<td class="text-right">邮箱:</td>
-			<td><input name="email" class="easyui-textbox" data-options="prompt:'填写邮箱'"  value="${feedback.taskNo }" required="required" type="text"></td>
+			<td><input name="email" class="easyui-textbox" data-options="prompt:'填写邮箱'"  value="${feedback.email }" required="required" type="text"></td>
 		</tr>
 		<tr>
 			<td class="text-right">联络人:</td>
@@ -87,13 +103,12 @@
 			<td colspan="2"></td>
 		</tr>
 		<tr>
-			<td colspan="6">落实情况:<textarea class="easyui-kindeditor" name="taskContent" rows="3" >${feedback.taskContent }</textarea></td>
+			<td colspan="6">落实情况:<textarea class="easyui-kindeditor" name="content" rows="8">${feedback.content }</textarea></td>
 		</tr>
 		<tr>
 			<td class="text-right">附件:</td>
 			<td colspan="5"><input class="easyui-filebox" type="text" id="file" name="file" data-options="prompt:'请选择文件...'" style="width: 90%;height: 25px;" required="required"></td>
 		</tr>
 	</table>
-	<p class="text-danger">请先保存任务信息后，再上传附件！</p>
 </form>
 </div>

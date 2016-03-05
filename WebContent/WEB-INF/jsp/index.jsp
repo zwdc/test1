@@ -64,10 +64,10 @@
 		     });
 			//获取消息
 			 goEasy.subscribe({
-	             channel: "zwdc_user_1",
+	             channel: "zwdc_user_${user.id}",
 	             onMessage: function(message){  //1.获取消息
 	            	 alert(message.content);
-	            	 /* $.ajax({	//2.去任务表拿提示的任务
+	            	 $.ajax({	//2.去任务表拿提示的任务
 	                     url: ctx + '/processTask/getProcessTask/'+message.content,		
 	                     type: 'post',
 	                     dataType: 'json',
@@ -97,32 +97,41 @@
 		                       	 });
 	                         }
 	                     }
-	                 }); */
+	                 });
 	             }
 	         });
 		});
 		
+		var message_dialog;
 		function showMessage(data) {	//5.弹窗显示任务页面
-			taskInfo_dialog = $('<div/>').dialog({
+			message_dialog = $('<div/>').dialog({
 		    	title : "任务详情",
 				top: 20,
-				width : fixWidth(0.8),
+				width : ($(this).width() - 50) * 0.7,
 				height : 'auto',
 		        modal: true,
 		        minimizable: true,
 		        maximizable: true,
-		        href: data.url,
+		        href: ctx + data.url,
 		        buttons: [
+					{
+					    text: '提交',
+					    iconCls: 'icon-save',
+					    id: 'save',
+					    handler: function () {
+					    	submitForm();
+					    }
+					},
 		            {
 		                text: '关闭',
 		                iconCls: 'icon-cancel',
 		                handler: function () {
-		                	taskInfo_dialog.dialog('destroy');
+		                	message_dialog.dialog('destroy');
 		                }
 		            }
 		        ],
 		        onClose: function () {
-		        	taskInfo_dialog.dialog('destroy');
+		        	message_dialog.dialog('destroy');
 		        }
 		    });
 		}
