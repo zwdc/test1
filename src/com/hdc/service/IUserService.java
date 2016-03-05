@@ -45,13 +45,13 @@ public interface IUserService {
      * 同步用户、角色数据到工作流
      * @throws Exception
      */
-    public void synAllUserAndRoleToActiviti() throws Exception;
+    public void doAddAllUserAndRoleToActiviti() throws Exception;
  
     /**
      * 删除工作流引擎Activiti的用户、角色以及关系
      * @throws Exception
      */
-    public void deleteAllActivitiIdentifyData() throws Exception;
+    public void doDeleteAllActivitiIdentifyData() throws Exception;
 }
 
 

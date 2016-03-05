@@ -1,5 +1,6 @@
 package com.hdc.service;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.hdc.entity.FeedbackRecord;
@@ -11,6 +12,21 @@ import com.hdc.entity.FeedbackRecord;
  */
 public interface IFeedbackRecordService {
 
+	/**
+	 * 添加
+	 * @param feedback
+	 * @return
+	 * @throws Exception
+	 */
+	public Serializable doAdd(FeedbackRecord feedback) throws Exception;
+	
+	/**
+	 * 更新
+	 * @param feedback
+	 * @throws Exception
+	 */
+	public void doUpdate(FeedbackRecord feedback) throws Exception;
+	
 	/**
 	 * 根据反馈id查询反馈信息
 	 * @param id

@@ -53,7 +53,7 @@ public class UserServiceImpl implements IUserService {
     
     @Autowired
     private IBaseService<User> baseService;
-
+    
 	@Override
 	public User getUserByName(String user_name) throws Exception{
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -227,9 +227,9 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public void synAllUserAndRoleToActiviti() throws Exception {
+	public void doAddAllUserAndRoleToActiviti() throws Exception {
 		// 清空工作流用户、角色以及关系
-        deleteAllActivitiIdentifyData();
+		doDeleteAllActivitiIdentifyData();
         
         // 复制角色数据
         synRoleToActiviti();
@@ -240,7 +240,7 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public void deleteAllActivitiIdentifyData() throws Exception {
+	public void doDeleteAllActivitiIdentifyData() throws Exception {
 		this.activitIdentityService.deleteAllMemerShip();
 		this.activitIdentityService.deleteAllRole();
 		this.activitIdentityService.deleteAllUser();

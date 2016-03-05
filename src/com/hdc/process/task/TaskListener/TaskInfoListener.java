@@ -10,7 +10,6 @@ import com.hdc.entity.ProcessTask;
 import com.hdc.entity.TaskInfo;
 import com.hdc.service.IProcessTaskService;
 import com.hdc.service.ITaskInfoService;
-import com.hdc.util.BeanUtils;
 
 /**
  * 动态更新事项表(TaskInfo)中的 actTaskId
@@ -33,11 +32,11 @@ public class TaskInfoListener implements TaskListener {
 
 	@Override
 	public void notify(DelegateTask delegateTask) {
-		Integer taskInfoId = (Integer) delegateTask.getVariable("taskInfoId");
+		String taskInfoId = (String) delegateTask.getVariable("taskInfoId");
 		String processTaskId = (String) delegateTask.getVariable("processTaskId");
 		try {
-			if(!BeanUtils.isBlank(taskInfoId)){
-				TaskInfo taskInfo = this.taskInfoService.findById(taskInfoId);
+			if(StringUtils.isNotBlank(taskInfoId)){
+				TaskInfo taskInfo = this.taskInfoService.findById(new Integer(taskInfoId));
 				taskInfo.setActTaskId(delegateTask.getId());
 				this.taskInfoService.doUpdate(taskInfo);
 			}

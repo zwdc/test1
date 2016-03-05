@@ -1,6 +1,7 @@
 package com.hdc.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,9 +12,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -81,6 +85,11 @@ public class FeedbackRecord extends BaseCommonEntity implements Serializable {
 	
 	@Column(name = "FILE_PATH", length = 1000)
 	private String filePath;			//附件路径
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(name = "UPLOAD_DATE")
+	private Date uploadDate ;		//上传时间
 	
 	@Column(name = "STATUS", length = 30)
 	private String status;				//反馈情况（反馈中、已退回、已采用）
@@ -206,6 +215,30 @@ public class FeedbackRecord extends BaseCommonEntity implements Serializable {
 
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
+	}
+
+	public String getReplenish() {
+		return replenish;
+	}
+
+	public void setReplenish(String replenish) {
+		this.replenish = replenish;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
+	}
+
+	public Date getUploadDate() {
+		return uploadDate;
+	}
+
+	public void setUploadDate(Date uploadDate) {
+		this.uploadDate = uploadDate;
 	}
 
 }

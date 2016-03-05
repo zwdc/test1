@@ -332,8 +332,8 @@ public class TaskInfoController {
   	    long betweenDays = (long)((endTime - beginTime) / (1000 * 60 * 60 *24) + 0.5); 
   	    System.out.println("相差天数："+betweenDays);
   	    
-  	    GoEasy goEasy = new GoEasy("appkey");
-		goEasy.publish("demo_channel", "您有将要到期尚未反馈的督察信息");
+  	    GoEasy goEasy = new GoEasy("0cf326d6-621b-495a-991e-a7681bcccf6a");
+		goEasy.publish("zwdc_user_1", "您有将要到期尚未反馈的督察信息");
 		
     }
 }

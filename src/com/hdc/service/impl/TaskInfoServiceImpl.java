@@ -59,20 +59,21 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 
 	@Override
 	public void doStartProcess(TaskInfo taskInfo) throws Exception {
-		//初始化任务参数
-		Map<String, Object> vars = new HashMap<String, Object>();
-		vars.put("taskInfoId", taskInfo.getId());
-		vars.put("hostUser", taskInfo.getHostUser().getId());
-		//启动流程
-		String processInstanceId = this.processService.startApproval("sales", taskInfo.getId().toString(), vars);	
-		// 根据processInstanceId查询第一个任务，即“录入任务”
-		Task firstTask = this.taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
-		// 完成第一个任务，任务继续向下流
-		this.processService.complete(firstTask.getId(), null, null);
-		
 		taskInfo.setStatus(TaskInfoStatus.WAIT_FOR_CLAIM.toString());
 		taskInfo.setAssignDate(new Date());
 		this.baseService.update(taskInfo);
+		
+		//初始化任务参数
+		Map<String, Object> vars = new HashMap<String, Object>();
+		vars.put("taskInfoId", taskInfo.getId().toString());
+		vars.put("hostUser", taskInfo.getHostUser().getId().toString());
+		//启动流程
+		String processInstanceId = this.processService.startApproval("TaskInfo", taskInfo.getId().toString(), vars);	
+		// 根据processInstanceId查询第一个任务，即“录入任务”
+		Task firstTask = this.taskService.createTaskQuery().processInstanceId(processInstanceId).singleResult();
+		// 完成第一个任务，任务继续向下流
+		this.processService.complete(firstTask.getId().toString(), null, null);
+		
 	}
 
 	@Override

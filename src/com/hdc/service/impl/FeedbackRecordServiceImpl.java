@@ -1,5 +1,6 @@
 package com.hdc.service.impl;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,16 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 	public List<FeedbackRecord> findByTaskId(Integer id) throws Exception {
 		String hql = "from FeedbackRecord where taskInfo.id = " + id;
 		return this.baseService.find(hql);
+	}
+
+	@Override
+	public Serializable doAdd(FeedbackRecord feedback) throws Exception {
+		return this.baseService.add(feedback);
+	}
+
+	@Override
+	public void doUpdate(FeedbackRecord feedback) throws Exception {
+		this.baseService.update(feedback);
 	}
 
 }

@@ -132,6 +132,14 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 	@Column(name = "ACT_TASK_ID", length = 64)
 	private String actTaskId;		//activiti中任务的id  完成任务用(监听器每到到一个用户任务，则更新此id)
 
+	public TaskInfo() {
+		
+	}
+	
+	public TaskInfo(Integer id) {
+		this.id = id;
+	}
+	
 	public Integer getId() {
 		return id;
 	}

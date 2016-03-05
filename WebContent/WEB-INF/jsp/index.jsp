@@ -16,6 +16,7 @@
 	<script type="text/javascript" src="${ctx}/js/tree_user.js"></script>
     <script type="text/javascript" src="${ctx}/js/messenger.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/messenger-theme-flat.js"></script>
+    <script type="text/javascript" src="${ctx}/js/goeasy.js"></script>
 	<style type="text/css">
 		.ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
 	</style>
@@ -30,9 +31,9 @@
 			
 			//菜单
 			$.ajax({
-				async : false,			//同步，等待success完成后继续执行。
-				cache : false,
-				type: 'POST',
+				async: false,
+        		cache: false,
+				type: 'post',
 				dataType : "json",
 				url: ctx+"/menu",
 				error: function () {
@@ -58,37 +59,50 @@
    			    extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
    			    theme: 'flat'
    			}
-			//推送消息
+			 var goEasy = new GoEasy({
+		         appkey: '0cf326d6-621b-495a-991e-a7681bcccf6a'
+		     });
+			//获取消息
 			 goEasy.subscribe({
-	             channel: "zwdc_user_${user.id}",
-	             onMessage: function(message){
-	                 //alert('Meessage received:'+message.content);
-	                 var msg = Messenger().post({
-	                	  message: message.content,
-	                	  hideAfter: 5,
-	         		 	  showCloseButton: true,
-	                	  actions: {
-	                	    retry: {
-	                	      label: '查看',
-	                	      phrase: 'Retrying TIME',
-	                	      auto: false,
-	                	      delay: 5,
-	                	      action: function() {
-	                	    	  
-	                	      }
-	                	    },
-	                	    cancel: {
-	                	      action: function() {
-	                	        return msg.cancel();
-	                	      }
-	                	    }
-	                	  }
-                	 });
+	             channel: "zwdc_user_1",
+	             onMessage: function(message){  //1.获取消息
+	            	 alert(message.content);
+	            	 /* $.ajax({	//2.去任务表拿提示的任务
+	                     url: ctx + '/processTask/getProcessTask/'+message.content,		
+	                     type: 'post',
+	                     dataType: 'json',
+	                     success: function (data) {
+	                         if(data != null) {
+	                        	 var msg = Messenger().post({	//3.右上角显示消息弹窗
+		       	                	  message: data.title,
+		       	                	  hideAfter: 15,
+		       	         		 	  showCloseButton: true,
+		       	                	  actions: {
+		       	                	    retry: {
+		       	                	       label: '查看',
+		       	                	       phrase: 'Retrying TIME',
+		       	                	       auto: false,
+		       	                	       delay: 15,
+		       	                	       action: function() {
+		       	                	    	 showMessage(data);	//4.点击查看后，显示要办理的任务
+		       	                	       }
+		       	                	    },
+		       	                	    cancel: {
+		       	                	       label: '取消',
+		       	                	       action: function() {
+		       	                	         return msg.cancel();
+		       	                	       }
+		       	                	    }
+		       	                	  }
+		                       	 });
+	                         }
+	                     }
+	                 }); */
 	             }
 	         });
 		});
 		
-		function showMessage() {
+		function showMessage(data) {	//5.弹窗显示任务页面
 			taskInfo_dialog = $('<div/>').dialog({
 		    	title : "任务详情",
 				top: 20,
@@ -97,7 +111,7 @@
 		        modal: true,
 		        minimizable: true,
 		        maximizable: true,
-		        href: ctx+"/taskInfo/details/"+row.id,
+		        href: data.url,
 		        buttons: [
 		            {
 		                text: '关闭',

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
-  <process id="myProcess" name="My process" isExecutable="true">
+  <process id="TaskInfo" name="重要文件" isExecutable="true">
     <startEvent id="startevent1" name="Start" activiti:initiator="startUserId"></startEvent>
     <userTask id="usertask1" name="任务录入/下发" activiti:assignee="${startUserId}"></userTask>
     <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="usertask1"></sequenceFlow>
@@ -15,7 +15,7 @@
       <documentation>更改TaskInfo状态为 办理中</documentation>
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${claim}]]></conditionExpression>
     </sequenceFlow>
-    <userTask id="usertask3" name="申请办结">
+    <userTask id="usertask3" name="申请办结" activiti:assignee="${hostUser}">
       <extensionElements>
         <activiti:taskListener event="create" delegateExpression="${taskInfoListener}"></activiti:taskListener>
       </extensionElements>
@@ -23,13 +23,17 @@
     <sequenceFlow id="flow7" sourceRef="usertask2" targetRef="usertask3"></sequenceFlow>
     <exclusiveGateway id="exclusivegateway2" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow8" sourceRef="usertask3" targetRef="exclusivegateway2"></sequenceFlow>
-    <sequenceFlow id="flow9" name="同意" sourceRef="exclusivegateway2" targetRef="endevent1"></sequenceFlow>
+    <sequenceFlow id="flow9" name="同意" sourceRef="exclusivegateway2" targetRef="endevent1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isPass}]]></conditionExpression>
+    </sequenceFlow>
     <boundaryEvent id="boundarytimer1" name="Timer" attachedToRef="usertask2" cancelActivity="true">
       <timerEventDefinition>
         <timeCycle>0 0 12 * * ?</timeCycle>
       </timerEventDefinition>
     </boundaryEvent>
-    <sequenceFlow id="flow10" name="不同意" sourceRef="exclusivegateway2" targetRef="usertask2"></sequenceFlow>
+    <sequenceFlow id="flow10" name="不同意" sourceRef="exclusivegateway2" targetRef="usertask2">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!isPass}]]></conditionExpression>
+    </sequenceFlow>
     <userTask id="usertask6" name="任务签收/j拒绝" activiti:assignee="${hostUser}">
       <extensionElements>
         <activiti:taskListener event="create" delegateExpression="${taskInfoListener}"></activiti:taskListener>
@@ -41,8 +45,12 @@
     <sequenceFlow id="flow18" sourceRef="boundarytimer1" targetRef="servicetask1"></sequenceFlow>
     <exclusiveGateway id="exclusivegateway4" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow19" sourceRef="servicetask1" targetRef="exclusivegateway4"></sequenceFlow>
-    <sequenceFlow id="flow20" name="需要反馈" sourceRef="exclusivegateway4" targetRef="servicetask2"></sequenceFlow>
-    <sequenceFlow id="flow21" name="不需要反馈" sourceRef="exclusivegateway4" targetRef="usertask2"></sequenceFlow>
+    <sequenceFlow id="flow20" name="需要反馈" sourceRef="exclusivegateway4" targetRef="servicetask2">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${needFeedback}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow21" name="不需要反馈" sourceRef="exclusivegateway4" targetRef="usertask2">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!needFeedback}]]></conditionExpression>
+    </sequenceFlow>
     <sequenceFlow id="flow23" name="拒绝" sourceRef="exclusivegateway1" targetRef="usertask1">
       <documentation>更改TaskInfo状态为 拒签收</documentation>
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!claim}]]></conditionExpression>
@@ -50,8 +58,8 @@
     <sequenceFlow id="flow24" sourceRef="servicetask2" targetRef="usertask2"></sequenceFlow>
     <serviceTask id="servicetask2" name="提示填写反馈信息" activiti:delegateExpression="${remindFeedback}"></serviceTask>
   </process>
-  <bpmndi:BPMNDiagram id="BPMNDiagram_myProcess">
-    <bpmndi:BPMNPlane bpmnElement="myProcess" id="BPMNPlane_myProcess">
+  <bpmndi:BPMNDiagram id="BPMNDiagram_TaskInfo">
+    <bpmndi:BPMNPlane bpmnElement="TaskInfo" id="BPMNPlane_TaskInfo">
       <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
         <omgdc:Bounds height="35.0" width="35.0" x="26.0" y="221.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>

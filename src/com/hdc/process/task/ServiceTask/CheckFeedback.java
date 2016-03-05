@@ -28,9 +28,9 @@ public class CheckFeedback implements JavaDelegate {
 	
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
-		Integer taskInfoId = (Integer) execution.getVariable("taskInfoId");
-		TaskInfo taskInfo = this.taskInfoService.findById(taskInfoId);
-		List<FeedbackRecord> list =  this.feedbackService.findByTaskId(taskInfoId);
+		String taskInfoId = (String) execution.getVariable("taskInfoId");
+		TaskInfo taskInfo = this.taskInfoService.findById(new Integer(taskInfoId));
+		List<FeedbackRecord> list =  this.feedbackService.findByTaskId(new Integer(taskInfoId));
 		Integer feedbackCycle = taskInfo.getFeedbackCycle();	//获取反馈周期
 		switch (feedbackCycle) {
 			case 0:	//默认一次

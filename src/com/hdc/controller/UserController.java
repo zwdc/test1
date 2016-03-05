@@ -276,7 +276,7 @@ public class UserController {
 	public Message syncUserToActiviti() throws Exception {
 		Message message = new Message();
 		try {
-			this.userService.synAllUserAndRoleToActiviti();
+			this.userService.doAddAllUserAndRoleToActiviti();
 			message.setStatus(Boolean.TRUE);
             message.setMessage("同步用户信息成功！");
 		} catch (Exception e) {
@@ -290,7 +290,7 @@ public class UserController {
 	@RequiresPermissions("admin:user:delAllIdentifyData")
 	@RequestMapping("/delAllIdentifyData")
 	public String delAllIdentifyData(RedirectAttributes redirectAttributes) throws Exception {
-		this.userService.deleteAllActivitiIdentifyData();
+		this.userService.doDeleteAllActivitiIdentifyData();
 		redirectAttributes.addFlashAttribute("msg", "成功删除工作流引擎Activiti的用户、角色以及关系！");
 		return "redirect:/userAction/toList_page";
 	}  
