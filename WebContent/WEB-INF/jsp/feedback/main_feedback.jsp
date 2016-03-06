@@ -20,7 +20,7 @@
 	});
 	
 	function submitForm() {
-		$('#feedback_form').form({
+		$('#feedback_form').form('submit', {
 		 	url: ctx+"/feedback/saveOrUpdate",
 	        onSubmit: function () {
 		        $.messager.progress({
@@ -49,7 +49,7 @@
 	}
 </script>
 <div class="easyui-layout">
-<form id="feedback_form" method="post">
+<form id="feedback_form" method="post" encType="multipart/form-data">
 	<input type="hidden" id="feedbackId" name="id" value="${feedback.id }">
 	<input type="hidden" name="taskInfo.id" value="${feedback.taskInfo.id }">
 	<input type="hidden" name="createUserId" value="${feedback.createUserId }">

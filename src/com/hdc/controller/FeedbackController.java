@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -69,13 +70,14 @@ public class FeedbackController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/saveOrUpdate")
+	@ResponseBody
 	public Message saveOrUpdate(
 				FeedbackRecord feedback, 
 				@RequestParam("file") MultipartFile file,
 				HttpServletRequest request) throws Exception {
 		Message message = new Message();
 		Integer id = feedback.getId();
-		if(id != null) {
+		if(id == null) {
 			if(!BeanUtils.isBlank(file)) {
 				String filePath = FileUploadUtils.upload(request, file, Constants.FILE_PATH);
 				feedback.setFilePath(filePath);
