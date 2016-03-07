@@ -41,7 +41,6 @@ public class UserTest {
 //    	Group group = this.groupService.getGroupById("41");
 //    	assertEquals( group.getName(), "采购组" );
 //    	assertEquals( group.getType(), "procurement" );
-    	
 //    	Company company = this.companyService.getCompanyById(1);
     	
 //    	Role role = this.roleService.getRoleById("1");
