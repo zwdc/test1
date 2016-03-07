@@ -1,6 +1,7 @@
 package com.hdc.service;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import com.hdc.entity.FeedbackRecord;
@@ -42,4 +43,14 @@ public interface IFeedbackRecordService {
 	 * @throws Exception
 	 */
 	public List<FeedbackRecord> findByTaskId(Integer id) throws Exception;
+	
+	/**
+	 * 通过指定时间区间查询
+	 * @param beginDate
+	 * @param endDate
+	 * @return
+	 * @throws Exception
+	 */
+	public List<FeedbackRecord> findByDate(Date beginDate, Date endDate) throws Exception;
+	
 }

@@ -1,7 +1,10 @@
 package com.hdc.service.impl;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +38,16 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 	@Override
 	public void doUpdate(FeedbackRecord feedback) throws Exception {
 		this.baseService.update(feedback);
+	}
+
+	@Override
+	public List<FeedbackRecord> findByDate(Date beginDate, Date endDate)
+			throws Exception {
+		String hql = "from FeedbackRecord where createDate between :begin and :end";
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("begin", beginDate);
+		params.put("end", endDate);
+		return this.baseService.find(hql);
 	}
 
 }
