@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,12 +36,11 @@ import com.hdc.service.IRefuseReasonService;
 import com.hdc.service.ITaskInfoService;
 import com.hdc.util.BeanUtils;
 import com.hdc.util.Constants;
-import com.hdc.util.UserUtil;
 import com.hdc.util.Constants.TaskInfoStatus;
 import com.hdc.util.FileDownloadUtils;
+import com.hdc.util.UserUtil;
 import com.hdc.util.upload.FileUploadUtils;
 import com.hdc.util.upload.exception.InvalidExtensionException;
-import com.uwantsoft.goeasy.client.goeasyclient.GoEasy;
 
 /**
  * 督察处对任务进行管理
@@ -329,15 +329,21 @@ public class TaskInfoController {
   	    System.out.println("本月的第几周："+c.get(Calendar.WEEK_OF_MONTH));	
   	    
   	    DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-  	    Date beginDate = format.parse("2016-03-04 15:27:30");
+  	    Date beginDate = format.parse("2016-03-02 15:27:30");
   	    Date endDate = format.parse("2016-03-08 11:27:30");
   	    long beginTime = beginDate.getTime(); 
   	    long endTime = endDate.getTime(); 
-  	    long betweenDays = (long)((endTime - beginTime) / (1000 * 60 * 60 *24) + 0.5); 
+  	    long betweenDays = (long)((beginTime - endTime) / (1000 * 60 * 60 *24) + 0.5); 
   	    System.out.println("相差天数："+betweenDays);
   	    
-  	    GoEasy goEasy = new GoEasy("0cf326d6-621b-495a-991e-a7681bcccf6a");
-		goEasy.publish("zwdc_user_1", "您有将要到期尚未反馈的督察信息");
+  	    /*GoEasy goEasy = new GoEasy("0cf326d6-621b-495a-991e-a7681bcccf6a");
+		goEasy.publish("zwdc_user_1", "您有将要到期尚未反馈的督察信息");*/
+  	    
+	  	  GregorianCalendar gc=new GregorianCalendar(); 
+	  	  gc.setTime(beginDate); 
+	  	  gc.add(3, 1);
+	  	  //gc.set(gc.get(Calendar.YEAR),gc.get(Calendar.MONTH),gc.get(Calendar.DATE));
+	  	  System.out.println("日期计算："+format.format(gc.getTime()));
 		
     }
 }
