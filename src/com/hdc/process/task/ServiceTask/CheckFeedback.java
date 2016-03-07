@@ -1,6 +1,7 @@
 package com.hdc.process.task.ServiceTask;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.activiti.engine.delegate.DelegateExecution;
@@ -46,6 +47,23 @@ public class CheckFeedback implements JavaDelegate {
 				}
 				break;
 			case 1: //每周一次
+				Date assignDate = taskInfo.getAssignDate();		//交办时间
+				Date endTaskDate = taskInfo.getEndTaskDate();	//办结日期
+				Date nowDate = new Date();
+				long betweenDays = (long)((nowDate.getTime() - assignDate.getTime()) / (1000 * 60 * 60 *24) + 0.5); 
+				System.out.println(betweenDays/7);
+				long weeks = betweenDays/7;
+				
+				GregorianCalendar gc=new GregorianCalendar(); 
+			  	gc.setTime(assignDate); 
+			  	while(gc.getTime().getTime() <= endTaskDate.getTime()) {	//交办日期 < 半截日期
+			  		gc.add(3, 1);	//加一周
+			  		
+			  	}
+			  	
+				
+				
+				
 				
 				break;
 			case 2: //每月一次
