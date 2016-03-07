@@ -17,14 +17,6 @@ public class ResourceTest {
 
 	@Autowired
     private IResourceService resourceService;
-//    @Autowired  
-//    private WebApplicationContext wac;  
-//	private MockMvc mockMvc;  
-	  
-//    @Before  
-//    public void setUp() {  
-//        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();  
-//    }  
 	
 	@Test
 	public void resourceTest() throws Exception{
