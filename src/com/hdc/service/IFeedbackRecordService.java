@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.hdc.entity.FeedbackRecord;
 
 /**
@@ -52,5 +57,19 @@ public interface IFeedbackRecordService {
 	 * @throws Exception
 	 */
 	public List<FeedbackRecord> findByDate(Date beginDate, Date endDate) throws Exception;
+	
+	/**
+	 * 保存反馈 完成任务
+	 * @param feedback
+	 * @param taskId
+	 * @param file
+	 * @param request
+	 * @throws Exception
+	 */
+	public void doCompleteTask(
+			FeedbackRecord feedback, 
+			@RequestParam(value = "taskId", required = false) String taskId,
+			@RequestParam("file") MultipartFile file,
+			HttpServletRequest request) throws Exception;
 	
 }

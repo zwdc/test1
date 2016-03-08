@@ -19,10 +19,13 @@
 		});
 	});
 	
-	function submitForm(obj) {
+	function submitForm(obj, taskId) {
 		$('#feedback_form').form('submit', {
-		 	url: ctx+"/feedback/saveOrUpdate",
+		 	url: ctx+"/feedback/completeTask",
 	        onSubmit: function () {
+	        	if(taskId != null) {
+		        	param.taskId = taskId;
+	        	}
 		        $.messager.progress({
 		            title: '提示信息！',
 		            text: '数据处理中，请稍后....'

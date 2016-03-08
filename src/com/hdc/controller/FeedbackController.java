@@ -1,7 +1,5 @@
 package com.hdc.controller;
 
-import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,10 +18,6 @@ import com.hdc.entity.Message;
 import com.hdc.entity.TaskInfo;
 import com.hdc.service.IFeedbackRecordService;
 import com.hdc.service.ITaskInfoService;
-import com.hdc.util.BeanUtils;
-import com.hdc.util.Constants;
-import com.hdc.util.Constants.FeedbackStatus;
-import com.hdc.util.upload.FileUploadUtils;
 /**
  * 反馈控制器
  * @author zhao
@@ -76,30 +70,21 @@ public class FeedbackController {
 	@ResponseBody
 	public Message saveOrUpdate(
 				FeedbackRecord feedback, 
+				@RequestParam(value = "taskId", required = false) String taskId,
 				@RequestParam("file") MultipartFile file,
 				HttpServletRequest request) throws Exception {
 		Message message = new Message();
-		Integer id = feedback.getId();
-		if(id == null) {
-			if(!BeanUtils.isBlank(file)) {
-				String filePath = FileUploadUtils.upload(request, file, Constants.FILE_PATH);
-				feedback.setFilePath(filePath);
-				feedback.setFileName(file.getOriginalFilename());
-				feedback.setUploadDate(new Date());
-			}
-			feedback.setStatus(FeedbackStatus.FEEDBACKING.toString());
-			feedback.setIsDelay(0);		//是否迟报，得根据时间判断
-			Serializable feedbackId = this.feedbackService.doAdd(feedback);
-			message.setMessage("反馈成功!");
-			message.setData(feedbackId.toString());
-		} else {
-			this.feedbackService.doUpdate(feedback);
-			message.setMessage("修改成功！");
-			message.setData(id);
+		try {
+			this.feedbackService.doCompleteTask(feedback, taskId, file, request);
+			message.setMessage("操作成功!");
+		} catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("操作失败!");
+			throw e;
 		}
 		return message;
 	}
-
+	
 	/**
 	 * 查看taskInfoId下的所有反馈信息
 	 * @param id
@@ -113,4 +98,5 @@ public class FeedbackController {
 		mv.addObject("list", list);		
 		return mv;
 	} 
+	
 }
