@@ -82,12 +82,12 @@ public class Constants {
 		}
 	}
 	/**
-	 * 任务状态 待签收、拒签收、办理中、已办结
+	 * 任务状态 待签收、拒签收、办理中、申请办结、已办结
 	 * @author ZML
 	 *
 	 */
 	public enum TaskInfoStatus {
-		WAIT_FOR_CLAIM("WAIT_FOR_CLAIM"),REFUSE_CLAIM("REFUSE_CLAIM"), IN_HANDLING("IN_HANDLING"), FINISHED("FINISHED");
+		WAIT_FOR_CLAIM("WAIT_FOR_CLAIM"),REFUSE_CLAIM("REFUSE_CLAIM"), IN_HANDLING("IN_HANDLING"), APPLY_FINISHED("APPLY_FINISHED"), FINISHED("FINISHED");
 		
 		private final String value;
 		private TaskInfoStatus(String value) {
@@ -110,6 +110,9 @@ public class Constants {
 					break;
 				case "IN_HANDLING":
 					tis = IN_HANDLING;
+					break;
+				case "APPLY_FINISHED":
+					tis = APPLY_FINISHED;
 					break;
 				case "FINISHED":
 					tis = FINISHED;
