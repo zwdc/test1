@@ -337,10 +337,15 @@
 		  	      	href: ctx+"/feedback/toMain?taskInfoId="+row.id,
 		  	        buttons: [
 		  	            {
-		  	                text: '提交',
+		  	                text: '提交反馈',
 		  	                iconCls: 'icon-ok',
 		  	                handler: function () {
-		  	                	submitForm();
+		  	                	$.messager.confirm('温馨提示！','确认提交此反馈信息？',function(result){
+		  	                		if(result){
+				  	                	submitForm(feedback_dialog);
+				  	                	s_datagrid.datagrid('reload');
+		  	                		}
+		  	                	});
 		  	                }
 		  	            },
 		  	            {

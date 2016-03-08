@@ -95,7 +95,7 @@ public class FeedbackRecord extends BaseCommonEntity implements Serializable {
 	private String status;				//反馈情况（反馈中、已退回、已采用）
 	
 	@Column(name = "IS_DELAY", length = 1)
-	private Integer isDelay;				//是否迟报（是、否）
+	private Integer isDelay;				//是否迟报（1.是、0.否）
 
 	public Integer getId() {
 		return id;

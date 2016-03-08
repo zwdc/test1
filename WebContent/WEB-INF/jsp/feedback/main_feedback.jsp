@@ -19,7 +19,7 @@
 		});
 	});
 	
-	function submitForm() {
+	function submitForm(obj) {
 		$('#feedback_form').form('submit', {
 		 	url: ctx+"/feedback/saveOrUpdate",
 	        onSubmit: function () {
@@ -37,13 +37,14 @@
 	            $.messager.progress('close');
 	            var json = $.parseJSON(data);
 	            if (json.status) {
-	            	message_dialog.dialog('destroy');
+	            	obj.dialog('destroy');
 	            } 
 	            $.messager.show({
 					title : json.title,
 					msg : json.message,
 					timeout : 1000 * 2
 				});
+	            
 	        }
 	    });
 	}

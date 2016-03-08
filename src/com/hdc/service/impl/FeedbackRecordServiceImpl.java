@@ -26,7 +26,7 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 
 	@Override
 	public List<FeedbackRecord> findByTaskId(Integer id) throws Exception {
-		String hql = "from FeedbackRecord where taskInfo.id = " + id;
+		String hql = "from FeedbackRecord where taskInfo.id = " + id +" order by createDate ASC";
 		return this.baseService.find(hql);
 	}
 

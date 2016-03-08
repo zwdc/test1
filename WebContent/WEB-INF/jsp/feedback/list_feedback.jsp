@@ -61,6 +61,19 @@
 							<td colspan="4"><a id="download" title="点击下载" href="${ctx }/feedback/downloadFile?id=${feedback.id}"><span class="glyphicon glyphicon-download-alt"></span>&nbsp;${feedback.fileName }</a></td>
 	    					<td>${feedback.uploadDate }</td>
 						</tr>
+						<tr>
+							<td class="text-right">反馈情况:</td>
+							<td colspan="2">
+								<input type="radio" name="status${i.count }" ${feedback.status == 'FEEDBACKING'?'checked':'' } readonly="readonly"> 反馈中
+								<input type="radio" name="status${i.count }" ${feedback.status == 'RETURNED'?'checked':'' } readonly="readonly"> 已退回
+								<input type="radio" name="status${i.count }" ${feedback.status == 'ACCEPT'?'checked':'' } readonly="readonly"> 已采用
+							</td>
+							<td class="text-right">是否迟报:</td>
+							<td colspan="2">
+								<input type="radio" name="isDelay${i.count }" ${feedback.isDelay == 0?'checked':'' } readonly="readonly"> 否
+								<input type="radio" name="isDelay${i.count }" ${feedback.isDelay == 1?'checked':'' } readonly="readonly"> 是
+							</td>
+						</tr>
 					</table>
 					<script type="text/javascript">$("#content${i.count}").kindeditor({readonlyMode: true});</script>
 			    </div>

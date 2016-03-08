@@ -22,6 +22,7 @@ import com.hdc.service.IFeedbackRecordService;
 import com.hdc.service.ITaskInfoService;
 import com.hdc.util.BeanUtils;
 import com.hdc.util.Constants;
+import com.hdc.util.Constants.FeedbackStatus;
 import com.hdc.util.upload.FileUploadUtils;
 /**
  * 反馈控制器
@@ -86,6 +87,8 @@ public class FeedbackController {
 				feedback.setFileName(file.getOriginalFilename());
 				feedback.setUploadDate(new Date());
 			}
+			feedback.setStatus(FeedbackStatus.FEEDBACKING.toString());
+			feedback.setIsDelay(0);		//是否迟报，得根据时间判断
 			Serializable feedbackId = this.feedbackService.doAdd(feedback);
 			message.setMessage("反馈成功!");
 			message.setData(feedbackId.toString());

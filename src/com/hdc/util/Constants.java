@@ -122,6 +122,42 @@ public class Constants {
 	}
 	
 	/**
+	 * 反馈处理中、已退回、已采用
+	 * @author ZML
+	 *
+	 */
+	public enum FeedbackStatus {
+		FEEDBACKING("FEEDBACKING"), RETURNED("RETURNED"), ACCEPT("ACCEPT");
+		private final String value;
+		private FeedbackStatus(String value) {
+			this.value = value;
+		}
+		@Override
+        public String toString() {
+            return this.value;
+        }
+		
+		public static FeedbackStatus getValue(String value) {
+			FeedbackStatus feedback = null;
+			switch(value) {
+				case "FEEDBACKING":
+					feedback = FEEDBACKING;
+					break;
+				case "RETURNED":
+					feedback = RETURNED;
+					break;
+				case "ACCEPT":
+					feedback = ACCEPT;
+					break;
+				default:
+					break;
+			}
+			return feedback;
+		}
+		
+	}
+	
+	/**
 	 * 业务类型枚举（重要文件、重要会议、政府工作报告、领导批示）
 	 *
 	 */

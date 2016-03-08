@@ -140,7 +140,7 @@
 					    iconCls: 'icon-save',
 					    id: 'save',
 					    handler: function () {
-					    	submitForm();
+					    	submitForm(message_dialog);
 					    }
 					},
 		            {
