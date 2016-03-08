@@ -43,6 +43,8 @@ public class CheckFeedback implements JavaDelegate {
 			  	    long betweenDays = betweenDays(endDate, beginDate); 
 			  	    if(betweenDays <= 2) {	//提前两天提示
 			  	    	execution.setVariable("needFeedback", true);
+			  	    } else {
+			  	    	execution.setVariable("needFeedback", false);
 			  	    }
 				}
 				break;

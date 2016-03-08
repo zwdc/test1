@@ -298,6 +298,12 @@ function publishMessage() {
     });
 	goEasy.publish({
         channel: 'zwdc_user_1',
-        message: '2'
+        message: '2',
+        onSuccess:function(){
+        	alert("消息发布成功。");
+    	},
+    	onFailed: function (error) {
+    		alert("消息发送失败，错误编码："+error.code+" 错误信息："+error.content);
+    	}
     });
 }

@@ -124,6 +124,7 @@
 	  			s_datagrid.datagrid('hideColumn', 'feedbackCount');
 	  			s_datagrid.datagrid('hideColumn', 'claimDate');
 	  		}
+	  		
 	  	}
 	  	
 	  	//显示催办情况
@@ -162,7 +163,7 @@
 	  	        modal: true,
 	  	        minimizable: true,
 	  	        maximizable: true,
-	  	        href: ctx+"/feedback/details/"+taskInfoId,
+	  	        href: ctx+"/feedback/detailsTab/"+taskInfoId,
 	  	        buttons: [
 	  	            {
 	  	                text: '关闭',
@@ -320,14 +321,61 @@
 	  	        $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
 	  	    }
 	  	}
+	  
+	  	//反馈
+	  	function feedback() {
+	  		var row = s_datagrid.datagrid('getSelected');
+	  	    if (row) {
+	  	    	var feedback_dialog = $('<div/>').dialog({
+		  	    	title : "定期反馈",
+		  			top: 20,
+		  			width : fixWidth(0.8),
+		  			height: 'auto',
+		  	        modal: true,
+		  	        minimizable: true,
+		  	        maximizable: true,
+		  	      	href: ctx+"/feedback/toMain?taskInfoId="+row.id,
+		  	        buttons: [
+		  	            {
+		  	                text: '提交',
+		  	                iconCls: 'icon-ok',
+		  	                handler: function () {
+		  	                	submitForm();
+		  	                }
+		  	            },
+		  	            {
+		  	            	text: '重置',
+		  	                iconCls: 'icon-reload',
+		  	                handler: function () {
+		  	                	$('#feedback_form').form('reset');
+		  	                	KindEditor.instances[0].html("");
+		  	                }
+		  	            },
+		  	            {
+		  	                text: '关闭',
+		  	                iconCls: 'icon-cancel',
+		  	                handler: function () {
+		  	                	feedback_dialog.dialog('destroy');
+		  	                }
+		  	            }
+		  	        ],
+		  	        onClose: function () {
+		  	        	feedback_dialog.dialog('destroy');
+		  	        }
+		  	    });
+	  	    } else {
+	  	        $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
+	  	    }
+	  	}
+	  	
   	</script>
 
   </head>
   <body class="easyui-layout">
-  <div data-options="region:'west',border:true" style="width: 30px">
-	<a href="javascript:void(0);" id="bt_dqs" class="easyui-linkbutton" data-options="toggle:true,group:'west',selected:true" style="height: 200px" onclick="statusName('WAIT_FOR_CLAIM', 'dqs');">代签收</a>
-	<a href="javascript:void(0);" id="bt_blz" class="easyui-linkbutton" data-options="toggle:true,group:'west'" style="height: 200px" onclick="statusName('IN_HANDLING', 'blz');">办理中</a>
-	<a href="javascript:void(0);" id="bt_ybl" class="easyui-linkbutton" data-options="toggle:true,group:'west'" style="height: 200px" onclick="statusName('FINISHED', 'ybl');">已办理</a>
+  <div data-options="region:'west',border:false" style="width: 30px; height: auto;">
+	<a href="javascript:void(0);" id="bt_dqs" class="easyui-linkbutton" data-options="toggle:true,group:'west',selected:true" style="height: 25%" onclick="statusName('WAIT_FOR_CLAIM', 'dqs');">代签收</a>
+	<a href="javascript:void(0);" id="bt_blz" class="easyui-linkbutton" data-options="toggle:true,group:'west'" style="height: 25%" onclick="statusName('IN_HANDLING', 'blz');">办理中</a>
+	<a href="javascript:void(0);" id="bt_ybl" class="easyui-linkbutton" data-options="toggle:true,group:'west'" style="height: 25%" onclick="statusName('FINISHED', 'ybl');">已办理</a>
   </div>
   <div data-options="region:'center',border:true">
 	<div id="dqs" style="padding:2px 0; display: none;">
@@ -346,8 +394,8 @@
 			<tr>
 				<td style="padding-left:2px">
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="details();">查看</a>
-					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="claim();">申请办结</a>
-					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="refuse();">反馈</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="endTask();">申请办结</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="feedback();">反馈</a>
 				</td>
 			</tr>
 		</table>
@@ -357,7 +405,7 @@
 			<tr>
 				<td style="padding-left:2px">
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="details();">查看</a>
-					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="claim();">续报</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="feedback();">续报</a>
 				</td>
 			</tr>
 		</table>

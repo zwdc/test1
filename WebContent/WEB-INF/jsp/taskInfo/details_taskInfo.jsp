@@ -53,10 +53,16 @@
 			<td>${taskInfo.taskType }</td>
 		</tr>
 		<tr>
-			<td class="text-right">主办单位:</td>
+			<td class="text-right">承办单位:</td>
 			<td>${taskInfo.hostGroup.name }</td>
 			<td class="text-right">协办单位:</td>
 			<td>${taskInfo.assistantGroup.name }</td>
+		</tr>
+		<tr>
+			<td class="text-right">承办人员:</td>
+			<td>${taskInfo.hostUser.name }</td>
+			<td class="text-right">协办人员:</td>
+			<td>${taskInfo.assistantUser.name }</td>
 		</tr>
 		<tr>
 			<td colspan="4">事项内容:<textarea class="easyui-kindeditor" id="taskContent" rows="3" >${taskInfo.taskContent }</textarea></td>

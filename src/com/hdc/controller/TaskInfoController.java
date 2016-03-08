@@ -41,6 +41,9 @@ import com.hdc.util.FileDownloadUtils;
 import com.hdc.util.UserUtil;
 import com.hdc.util.upload.FileUploadUtils;
 import com.hdc.util.upload.exception.InvalidExtensionException;
+import com.uwantsoft.goeasy.client.goeasyclient.GoEasy;
+import com.uwantsoft.goeasy.client.goeasyclient.listener.GoEasyError;
+import com.uwantsoft.goeasy.client.goeasyclient.listener.PublishListener;
 
 /**
  * 督察处对任务进行管理
@@ -336,14 +339,25 @@ public class TaskInfoController {
   	    long betweenDays = (long)((beginTime - endTime) / (1000 * 60 * 60 *24) + 0.5); 
   	    System.out.println("相差天数："+betweenDays);
   	    
-  	    /*GoEasy goEasy = new GoEasy("0cf326d6-621b-495a-991e-a7681bcccf6a");
-		goEasy.publish("zwdc_user_1", "您有将要到期尚未反馈的督察信息");*/
+  	    GregorianCalendar gc=new GregorianCalendar(); 
+  	    gc.setTime(beginDate); 
+  	    gc.add(3, 1);	//加一周
+  	    //gc.set(gc.get(Calendar.YEAR),gc.get(Calendar.MONTH),gc.get(Calendar.DATE));
+  	    System.out.println("日期计算："+format.format(gc.getTime()));
   	    
-	  	  GregorianCalendar gc=new GregorianCalendar(); 
-	  	  gc.setTime(beginDate); 
-	  	  gc.add(3, 1);
-	  	  //gc.set(gc.get(Calendar.YEAR),gc.get(Calendar.MONTH),gc.get(Calendar.DATE));
-	  	  System.out.println("日期计算："+format.format(gc.getTime()));
-		
+  	    //测试推送
+  	    GoEasy goEasy = new GoEasy("0cf326d6-621b-495a-991e-a7681bcccf6a");
+		goEasy.publish("zwdc_user_1", "您有将要到期尚未反馈的督察信息", new PublishListener(){
+			@Override
+			public void onSuccess() {
+				System.out.println("消息发布成功。");
+			}
+			@Override
+			public void onFailed(GoEasyError error) {
+				System.out.println("消息发布失败, 错误编码：" + error.getCode() + " 错误信息： " +
+						error.getContent());
+			}
+		});
+  	    
     }
 }

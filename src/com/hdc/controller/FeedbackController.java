@@ -2,11 +2,13 @@ package com.hdc.controller;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -95,4 +97,17 @@ public class FeedbackController {
 		return message;
 	}
 
+	/**
+	 * 查看taskInfoId下的所有反馈信息
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/detailsTab/{taskInfoId}")
+	public ModelAndView detailsTab(@PathVariable("taskInfoId") Integer id) throws Exception {
+		ModelAndView mv = new ModelAndView("feedback/list_feedback");
+		List<FeedbackRecord> list = this.feedbackService.findByTaskId(id);
+		mv.addObject("list", list);		
+		return mv;
+	} 
 }
