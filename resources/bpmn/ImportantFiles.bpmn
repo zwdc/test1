@@ -4,7 +4,7 @@
     <startEvent id="startevent1" name="Start" activiti:initiator="startUserId"></startEvent>
     <userTask id="usertask1" name="任务录入/下发" activiti:assignee="${startUserId}"></userTask>
     <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="usertask1"></sequenceFlow>
-    <userTask id="usertask2" name="办理中">
+    <userTask id="usertask2" name="办理中" activiti:assignee="${hostUser}">
       <extensionElements>
         <activiti:taskListener event="create" delegateExpression="${taskInfoListener}"></activiti:taskListener>
       </extensionElements>
@@ -15,7 +15,7 @@
       <documentation>更改TaskInfo状态为 办理中</documentation>
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${claim}]]></conditionExpression>
     </sequenceFlow>
-    <userTask id="usertask3" name="申请办结" activiti:assignee="${hostUser}">
+    <userTask id="usertask3" name="申请办结(审批)" activiti:assignee="${startUserId}">
       <extensionElements>
         <activiti:taskListener event="create" delegateExpression="${taskInfoListener}"></activiti:taskListener>
       </extensionElements>
@@ -45,7 +45,7 @@
     <sequenceFlow id="flow18" sourceRef="boundarytimer1" targetRef="servicetask1"></sequenceFlow>
     <exclusiveGateway id="exclusivegateway4" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow19" sourceRef="servicetask1" targetRef="exclusivegateway4"></sequenceFlow>
-    <sequenceFlow id="flow20" name="需要反馈" sourceRef="exclusivegateway4" targetRef="servicetask2">
+    <sequenceFlow id="flow20" name="需要反馈" sourceRef="exclusivegateway4" targetRef="usertask7">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${needFeedback}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="flow21" name="不需要反馈" sourceRef="exclusivegateway4" targetRef="usertask2">
@@ -55,8 +55,13 @@
       <documentation>更改TaskInfo状态为 拒签收</documentation>
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!claim}]]></conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="flow24" sourceRef="servicetask2" targetRef="usertask2"></sequenceFlow>
-    <serviceTask id="servicetask2" name="提示填写反馈信息" activiti:delegateExpression="${remindFeedback}"></serviceTask>
+    <userTask id="usertask7" name="填写反馈信息" activiti:assignee="${hostUser}">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${taskInfoListener}"></activiti:taskListener>
+        <activiti:taskListener event="create" delegateExpression="${remindFeedback}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow24" sourceRef="usertask7" targetRef="usertask2"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_TaskInfo">
     <bpmndi:BPMNPlane bpmnElement="TaskInfo" id="BPMNPlane_TaskInfo">
@@ -68,9 +73,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="usertask2" id="BPMNShape_usertask2">
         <omgdc:Bounds height="55.0" width="105.0" x="520.0" y="210.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="boundarytimer1" id="BPMNShape_boundarytimer1">
-        <omgdc:Bounds height="30.0" width="30.0" x="558.0" y="254.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
         <omgdc:Bounds height="35.0" width="35.0" x="930.0" y="220.0"></omgdc:Bounds>
@@ -84,6 +86,9 @@
       <bpmndi:BPMNShape bpmnElement="exclusivegateway2" id="BPMNShape_exclusivegateway2">
         <omgdc:Bounds height="40.0" width="40.0" x="840.0" y="218.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="boundarytimer1" id="BPMNShape_boundarytimer1">
+        <omgdc:Bounds height="30.0" width="30.0" x="558.0" y="254.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="usertask6" id="BPMNShape_usertask6">
         <omgdc:Bounds height="55.0" width="105.0" x="256.0" y="211.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
@@ -93,7 +98,7 @@
       <bpmndi:BPMNShape bpmnElement="exclusivegateway4" id="BPMNShape_exclusivegateway4">
         <omgdc:Bounds height="40.0" width="40.0" x="670.0" y="359.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="servicetask2" id="BPMNShape_servicetask2">
+      <bpmndi:BPMNShape bpmnElement="usertask7" id="BPMNShape_usertask7">
         <omgdc:Bounds height="55.0" width="105.0" x="794.0" y="351.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
