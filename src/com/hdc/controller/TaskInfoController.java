@@ -126,6 +126,7 @@ public class TaskInfoController {
 			map.put("assistantGroup", task.getAssistantGroup().getId());	//协办单位
 			map.put("urgeCount", task.getUrge().size());					//催办数
 			map.put("feedbackCount", task.getFeedBack().size());			//反馈记录数
+			map.put("status", task.getStatus());
 			jsonList.add(map);
 		}
 		return new Datagrid<Object>(page.getTotal(), jsonList);
@@ -288,6 +289,27 @@ public class TaskInfoController {
     	refuseReason.setCreateUser(user);
     	this.refuseReasonService.doAdd(refuseReason);
     	message.setMessage("操作成功！");
+    	return message;
+    }
+    
+    /**
+     * 申请办结
+     * @param taskInfoId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/applyForEnd/{taskInfoId}")
+    @ResponseBody
+    public Message applyForEnd(@PathVariable("taskInfoId") Integer id) throws Exception {
+    	Message message = new Message();
+    	try {
+    		this.taskInfoService.doCompleteTask(id);
+    		message.setMessage("申请成功！");
+		} catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("申请失败!");
+			throw e;
+		}
     	return message;
     }
     

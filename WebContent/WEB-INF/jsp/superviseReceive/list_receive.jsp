@@ -107,8 +107,22 @@
 				     	{field:'assistantGroup',title:'协办单位',width:fixWidth(0.1),align:'center'},
 				     	{field:'endTaskDate',title:'办结时限',width:fixWidth(0.1),align:'center',sortable:true,
 				     		formatter:function(value,row){
-			            		  return moment(value).format("YYYY-MM-DD");
-							 }
+		            			return moment(value).format("YYYY-MM-DD");
+							}
+				     	},
+				     	{field:'status',title:'办理状态',width:fixWidth(0.1),align:'center',sortable:true,
+				     		formatter:function(value,row){
+				     			switch (value) {
+									case "IN_HANDLING":
+										return "<span class='text-success'>办理中</span>";
+									case "APPLY_FINISHED":
+										return "<span class='text-warning'>申请办结</span>";
+									case "FINISHED":
+										return "<span class='text-danger'>已办结</span>";
+									default:
+										return "";
+								}
+							}
 				     	}
 	  	    	    ] 
 	  	        ],
@@ -123,6 +137,7 @@
 	  			s_datagrid.datagrid('hideColumn', 'urgeCount');
 	  			s_datagrid.datagrid('hideColumn', 'feedbackCount');
 	  			s_datagrid.datagrid('hideColumn', 'claimDate');
+	  			s_datagrid.datagrid('hideColumn', 'status');
 	  		}
 	  		
 	  	}
@@ -244,7 +259,7 @@
 	  	    }
 	  	}
 	  	
-	  //拒绝
+	    //拒绝
 	  	function refuse() {
 		  	var row = s_datagrid.datagrid('getSelected');
 	  	    if (row) {
@@ -342,7 +357,7 @@
 		  	                handler: function () {
 		  	                	$.messager.confirm('温馨提示！','确认提交此反馈信息？',function(result){
 		  	                		if(result){
-				  	                	submitForm(feedback_dialog);
+				  	                	submitForm(feedback_dialog, null);
 				  	                	s_datagrid.datagrid('reload');
 		  	                		}
 		  	                	});
@@ -373,8 +388,36 @@
 	  	    }
 	  	}
 	  	
+	  	//申请办结
+	  	function applyForEnd() {
+	  		var row = s_datagrid.datagrid('getSelected');
+	  	    if (row) {
+		  		$.messager.confirm('温馨提示！','确认申请办结此事项？',function(result){
+	          		if(result){
+	          			$.ajax({
+	  	            		async: false,
+	  	            		cache: false,
+	  	                    url: ctx + '/taskInfo/applyForEnd/'+row.id,
+	  	                    type: 'post',
+	  	                    dataType: 'json',
+	  	                    success: function (data) {
+	  	                        if (data.status) {
+	  	                        	s_datagrid.datagrid('load');
+	  	                        }
+	  	                        $.messager.show({
+	  	        					title : data.title,
+	  	        					msg : data.message,
+	  	        					timeout : 1000 * 2
+	  	        				});
+	  	                    }
+	  	                });
+	          		}
+	          	});
+	  	    } else {
+	  	        $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
+	  	    }
+	  	}
   	</script>
-
   </head>
   <body class="easyui-layout">
   <div data-options="region:'west',border:false" style="width: 30px; height: auto;">
@@ -399,7 +442,7 @@
 			<tr>
 				<td style="padding-left:2px">
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="details();">查看</a>
-					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="endTask();">申请办结</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="applyForEnd();">申请办结</a>
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="feedback();">反馈</a>
 				</td>
 			</tr>

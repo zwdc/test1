@@ -61,4 +61,11 @@ public interface ITaskInfoService {
 	 * @throws Exception
 	 */
 	public void doClaimTask(TaskInfo taskInfo) throws Exception;
+	
+	/**
+	 * 申请办结
+	 * @param id
+	 * @throws Exception
+	 */
+	public void doCompleteTask(Integer id) throws Exception;
 }
