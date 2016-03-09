@@ -28,6 +28,7 @@
 
 <link rel="stylesheet" href="${ctx}/css/zTreeStyle/zTreeStyle.css" type="text/css" />
 <link rel="stylesheet" href="${ctx}/css/themes/<%=easyuiThemeName %>/easyui.css" type="text/css">
+<%-- <link rel="stylesheet" type="text/css" href="${ctx}/css/themes/mobile.css"> --%>
 <link rel="stylesheet" type="text/css" href="${ctx}/css/themes/icon.css">
 <link rel="stylesheet" type="text/css" href="${ctx}/css/themes/common.css">
 
@@ -37,6 +38,7 @@
 <script type="text/javascript" src="${ctx}/js/login/bootstrap.min.js"></script>
 
 <script type="text/javascript" src="${ctx}/js/easyui/jquery.easyui.min.js"></script>
+<%-- <script type="text/javascript" src="${ctx}/js/easyui/jquery.easyui.mobile.js"></script> --%>
 <script type="text/javascript" src="${ctx}/js/easyui/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript" src="${ctx}/js/easyui/jqueryUtil.js?_=${sysInitTime}"></script>
 

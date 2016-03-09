@@ -16,7 +16,8 @@
 	<script type="text/javascript" src="${ctx}/js/tree_user.js"></script>
     <script type="text/javascript" src="${ctx}/js/messenger.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/messenger-theme-flat.js"></script>
-    <script type="text/javascript" src="${ctx}/js/goeasy.js"></script>
+    <%-- <script type="text/javascript" src="${ctx}/js/goeasy.js"></script> --%>
+    <script type="text/javascript" src="https://cdn.goeasy.io/goeasy.js"></script>
 	<style type="text/css">
 		.ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
 	</style>
