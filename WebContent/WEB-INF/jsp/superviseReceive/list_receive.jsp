@@ -421,7 +421,7 @@
   </head>
   <body class="easyui-layout">
   <div data-options="region:'west',border:false" style="width: 30px; height: auto;">
-	<a href="javascript:void(0);" id="bt_dqs" class="easyui-linkbutton" data-options="toggle:true,group:'west',selected:true" style="height: 25%" onclick="statusName('WAIT_FOR_CLAIM', 'dqs');">代签收</a>
+	<a href="javascript:void(0);" id="bt_dqs" class="easyui-linkbutton" data-options="toggle:true,group:'west',selected:true" style="height: 25%" onclick="statusName('WAIT_FOR_CLAIM', 'dqs');">待签收</a>
 	<a href="javascript:void(0);" id="bt_blz" class="easyui-linkbutton" data-options="toggle:true,group:'west'" style="height: 25%" onclick="statusName('IN_HANDLING', 'blz');">办理中</a>
 	<a href="javascript:void(0);" id="bt_ybl" class="easyui-linkbutton" data-options="toggle:true,group:'west'" style="height: 25%" onclick="statusName('FINISHED', 'ybl');">已办理</a>
   </div>
