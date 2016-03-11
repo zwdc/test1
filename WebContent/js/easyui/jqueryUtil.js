@@ -12,10 +12,9 @@
 		            	window.location.href= ctx+"/login"; 
 		            });
 		        } else if(XMLHttpRequest.status == "405") {
-		        	//$.messager.alert('提示信息', "您没有权限操作!", 'info');
-		        	alert(XMLHttpRequest.status);
+		        	$.messager.alert('错误', XMLHttpRequest.responseText);
 		        } else if (textStatus == "error") {
-		            $.messager.alert('提示信息', "请求超时！请稍后再试！", 'info');
+		        	$.messager.alert('错误', XMLHttpRequest.responseText);
 		        }
 		    },
 		    error : function(XMLHttpRequest, textStatus, errorThrown) {
