@@ -14,7 +14,7 @@
   <div id="main-wrapper">
     <div class="navbar navbar-inverse" role="navigation">
       <div class="navbar-header">
-        <div class="logo"><h1>业务管理系统</h1></div>
+        <div class="logo"  align="center"><h1>河北省政务督查考评系统</h1></div>
       </div>   
     </div>
     <div class="template-page-wrapper">
