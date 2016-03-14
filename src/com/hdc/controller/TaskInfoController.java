@@ -26,14 +26,17 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hdc.entity.Datagrid;
+import com.hdc.entity.Group;
 import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.RefuseReason;
 import com.hdc.entity.TaskInfo;
 import com.hdc.entity.User;
+import com.hdc.service.IGroupService;
 import com.hdc.service.IRefuseReasonService;
 import com.hdc.service.ITaskInfoService;
+import com.hdc.service.IUserService;
 import com.hdc.util.BeanUtils;
 import com.hdc.util.Constants;
 import com.hdc.util.Constants.TaskInfoStatus;
@@ -60,6 +63,12 @@ public class TaskInfoController {
 	
 	@Autowired
 	private IRefuseReasonService refuseReasonService;
+	
+	@Autowired
+	private IUserService userService;
+	
+	@Autowired
+	private IGroupService groupService;
 	
 	/**
 	 * 跳转列表页面
@@ -122,16 +131,44 @@ public class TaskInfoController {
 			map.put("claimDate", task.getClaimDate());
 			map.put("feedbackCycle", task.getFeedbackCycle());
 			map.put("feedbaceDate", task.getFeedbaceDate());
-			map.put("hostGroup", task.getHostGroup().getId());				//主办单位
-			map.put("assistantGroup", task.getAssistantGroup().getId());	//协办单位
-			map.put("urgeCount", task.getUrge().size());					//催办数
-			map.put("feedbackCount", task.getFeedBack().size());			//反馈记录数
+			map.put("hostGroup", getGroupName(task.getHostGroup()));	//主办单位
+			map.put("hostUser", getUserName(task.getHostUser()));		//主办人
+			map.put("urgeCount", task.getUrge().size());				//催办数
+			map.put("feedbackCount", task.getFeedBack().size());		//反馈记录数
 			map.put("status", task.getStatus());
 			jsonList.add(map);
 		}
 		return new Datagrid<Object>(page.getTotal(), jsonList);
 	}
 	
+	private String getUserName(String userIds) throws NumberFormatException, Exception {
+		if( null == userIds ){
+			return "" ;
+		} else {
+			String[] ids = userIds.split(",");
+			String names = "";
+			for(String id : ids){
+				User user = this.userService.getUserById(new Integer(id));
+				names += user.getName()+",";
+			}
+			return names.substring(0, names.length()-1);
+		}
+	}
+	
+	private String getGroupName(String groupIds) throws Exception {
+		if( null == groupIds ){
+			return "" ;
+		} else {
+			String[] ids = groupIds.split(",");
+			String names = "";
+			for(String id : ids) {
+				Group group = this.groupService.getGroupById(new Integer(id));
+				names += group.getName()+",";
+			}
+			return names.substring(0, names.length()-1);
+		}
+	}
+ 	
 	/**
 	 * 添加或修改
 	 * @param taskInfo

@@ -36,7 +36,8 @@ $(function() {
               		  return moment(value).format("YYYY-MM-DD HH:mm:ss");
               	  }
               },
-              {field : 'group',title : '用户组',width : fixWidth(0.3),align : 'center'}
+              {field : 'group',title : '用户组',width : fixWidth(0.3),align : 'center'},
+              {field : 'role',title : '角色',width : fixWidth(0.3),align : 'center'}
     	    ] 
         ]
     });

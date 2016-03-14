@@ -111,7 +111,8 @@ public class ChooseController {
 			Map<String, Object> map=new HashMap<String, Object>();
 			map.put("id", user.getId());
 			map.put("name", user.getName());
-			map.put("group", user.getRole().getName());
+			map.put("group", user.getGroup().getName());
+			map.put("role", user.getRole().getName());
 			map.put("registerDate", user.getRegisterDate());
 			jsonList.add(map);
 		}

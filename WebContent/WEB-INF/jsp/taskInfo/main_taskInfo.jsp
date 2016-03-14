@@ -121,7 +121,7 @@
 		<tr>
 			<td class="text-right">承办单位:</td>
 			<td>
-				<input type="text" id="hostGroup_name" name="hostGroup_name" value = "${taskInfo.hostGroup.name }" class="easyui-textbox" required="required"
+				<input type="text" id="hostGroup_name" name="hostGroup_name" value = "${taskInfo.hostGroup }" class="easyui-textbox" required="required"
 	  			data-options="icons: [
 	  						{
 								iconCls:'icon-clear',
@@ -131,14 +131,14 @@
 							},
 	  						{iconCls:'icon-search',
 								handler: function(e){
-									chooseGroup(false, 'hostGroup');
+									chooseGroup(true, 'hostGroup');
 								}
 							}],editable:false,prompt:'选择承办单位'"/>
-				<input id="hostGroup_id" name="hostGroup.id" value = "${taskInfo.hostGroup.id }" type="hidden"/>
+				<input id="hostGroup_id" name="hostGroup.id" value = "${taskInfo.hostGroup }" type="hidden"/>
 			</td>
 			<td class="text-right">协办单位:</td>
 			<td>
-				<input type="text" id="assistantGroup_name" name="assistantGroup_name" value = "${taskInfo.assistantGroup.name }" class="easyui-textbox" required="required"
+				<input type="text" id="assistantGroup_name" name="assistantGroup_name" value = "${taskInfo.assistantGroup }" class="easyui-textbox" required="required"
 	  			data-options="icons: [
 	  						{
 								iconCls:'icon-clear',
@@ -148,16 +148,16 @@
 							},
 	  						{iconCls:'icon-search',
 								handler: function(e){
-									chooseGroup(false, 'assistantGroup');
+									chooseGroup(true, 'assistantGroup');
 								}
 							}],editable:false,prompt:'选择协办单位'"/>
-				<input id="assistantGroup_id" name="assistantGroup.id" value = "${taskInfo.assistantGroup.id }" type="hidden"/>
+				<input id="assistantGroup_id" name="assistantGroup.id" value = "${taskInfo.assistantGroup }" type="hidden"/>
 			</td>
 		</tr>
 		<tr>
 			<td class="text-right">承办人员:</td>
 			<td>
-				<input type="text" id="hostUser_name" name="hostUser_name" value = "${taskInfo.hostUser.name }" class="easyui-textbox" required="required"
+				<input type="text" id="hostUser_name" name="hostUser_name" value = "${taskInfo.hostUser }" class="easyui-textbox" required="required"
 	  			data-options="icons: [
 	  						{
 								iconCls:'icon-clear',
@@ -167,14 +167,14 @@
 							},
 	  						{iconCls:'icon-search',
 								handler: function(e){
-									chooseUser(false, 'hostUser');
+									chooseUser(true, 'hostUser');
 								}
 							}],editable:false,prompt:'选择承办人员'"/>
-				<input id="hostUser_id" name="hostUser.id" value = "${taskInfo.hostUser.id }" type="hidden"/>
+				<input id="hostUser_id" name="hostUser.id" value = "${taskInfo.hostUser }" type="hidden"/>
 			</td>
 			<td class="text-right">协办人员:</td>
 			<td>
-				<input type="text" id="assistantUser_name" name="assistantUser_name" value = "${taskInfo.assistantUser.name }" class="easyui-textbox" required="required"
+				<input type="text" id="assistantUser_name" name="assistantUser_name" value = "${taskInfo.assistantUser }" class="easyui-textbox" required="required"
 	  			data-options="icons: [
 	  						{
 								iconCls:'icon-clear',
@@ -184,11 +184,31 @@
 							},
 	  						{iconCls:'icon-search',
 								handler: function(e){
-									chooseUser(false, 'assistantUser');
+									chooseUser(true, 'assistantUser');
 								}
 							}],editable:false,prompt:'选择协办人员'"/>
-				<input id="assistantUser_id" name="assistantUser.id" value = "${taskInfo.assistantUser.id }" type="hidden"/>
+				<input id="assistantUser_id" name="assistantUser.id" value = "${taskInfo.assistantUser }" type="hidden"/>
 			</td>
+		</tr>
+		<tr>
+			<td class="text-right">分管领导:</td>
+			<td>
+				<input type="text" id="leadership_name" name="leadership_name" value = "${taskInfo.leadership }" class="easyui-textbox" required="required"
+	  			data-options="icons: [
+	  						{
+								iconCls:'icon-clear',
+								handler: function(e){
+									clearChoose('leadership');
+								}
+							},
+	  						{iconCls:'icon-search',
+								handler: function(e){
+									chooseUser(true, 'leadership');
+								}
+							}],editable:false,prompt:'选择协办人员'"/>
+				<input id="leadership_id" name="leadership.id" value = "${taskInfo.leadership }" type="hidden"/>
+			</td>
+			<td colspan="2"></td>
 		</tr>
 		<tr>
 			<td colspan="4">事项内容:<textarea class="easyui-kindeditor" name="taskContent" rows="3" >${taskInfo.taskContent }</textarea></td>

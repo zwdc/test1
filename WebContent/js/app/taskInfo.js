@@ -24,8 +24,8 @@ $(function(){
 					 }
 		     	},
 		     	{field:'feedbackCycle',title:'反馈周期',width:fixWidth(0.1),align:'center'},
-		     	{field:'hostGroup',title:'主板单位',width:fixWidth(0.1),align:'center'},
-		     	{field:'assistantGroup',title:'协办单位',width:fixWidth(0.1),align:'center'},
+		     	{field:'hostGroup',title:'主办单位',width:fixWidth(0.1),align:'center'},
+		     	{field:'hostUser',title:'主办人',width:fixWidth(0.1),align:'center'},
 		     	{field:'endTaskDate',title:'办结时限',width:fixWidth(0.1),align:'center',sortable:true,
 		     		formatter:function(value,row){
 	            		  return moment(value).format("YYYY-MM-DD");
@@ -34,16 +34,16 @@ $(function(){
 		     	{field: 'status',title: '状态',width:fixWidth(0.05),align:'center', halign:'center',sortable:true,
 	            	  formatter:function(value, row){
 	            		  switch (value) {
-							case "APPROVAL_SUCCESS":
-								return "<span class='text-success'>审批通过</span>";
-							case "APPROVAL_FAILED":
-								return "<span class='text-danger'>审批失败</span>";
-							case "WAITING_FOR_APPROVAL":
-								return "<span class='text-warning'>待申请审批</span>";
-							case "PENDING":
-								return "<span class='text-primary'>审批中</span>";
-							case "REAPPROVAL":
-								return "<span class='text-danger'>需要重新审批</span>";
+							case "IN_HANDLING":
+								return "<span class='text-success'>办理中</span>";
+							case "REFUSE_CLAIM":
+								return "<span class='text-danger'>拒绝签收</span>";
+							case "WAIT_FOR_CLAIM":
+								return "<span class='text-warning'>待签收</span>";
+							case "APPLY_FINISHED":
+								return "<span class='text-primary'>申请办结</span>";
+							case "FINISHED":
+								return "<span class='text-muted'>已办结</span>";
 							default:
 								return "";
 						  }
@@ -126,7 +126,7 @@ function showTaskInfo(row) {
 		
 	}
 	taskInfo_dialog = $('<div/>').dialog({
-    	title : "开票申请信息",
+    	title : "任务信息",
     	top: 20,
 		width : fixWidth(0.8),
 		height : 'auto',

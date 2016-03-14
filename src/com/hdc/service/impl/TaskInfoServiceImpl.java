@@ -75,7 +75,7 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 		//初始化任务参数
 		Map<String, Object> vars = new HashMap<String, Object>();
 		vars.put("taskInfoId", taskInfo.getId().toString());
-		vars.put("hostUser", taskInfo.getHostUser().getId().toString());
+		vars.put("hostUser", taskInfo.getHostUser());
 		//启动流程
 		String processInstanceId = this.processService.startApproval("TaskInfo", taskInfo.getId().toString(), vars);	
 		// 根据processInstanceId查询第一个任务，即“录入任务”

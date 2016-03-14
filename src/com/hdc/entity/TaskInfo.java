@@ -7,12 +7,9 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -85,25 +82,20 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 	@Column(name = "CONTACTS_PHONE", length = 30)
 	private String contactsPhone;	//联系电话
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="HOST_GROUP_ID")
-	@JsonIgnore
-	private Group hostGroup;		//主办单位
+	@Column(name = "LEADER_SHIP", length = 20)
+	private String leadership;		//领导
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="HOST_USER_ID")
-	@JsonIgnore
-	private User hostUser;			//主办人
+	@Column(name = "HOST_GROUP_ID", length = 50)
+	private String hostGroup;		//主办单位（多个）
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="ASSISTANT_GROUP_ID")
-	@JsonIgnore
-	private Group assistantGroup;	//协办单位
+	@Column(name = "HOST_USER_ID", length = 50)
+	private String hostUser;		//主办人（多个）
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="ASSISTANT_USER_ID")
-	@JsonIgnore
-	private User assistantUser;		//协办人
+	@Column(name = "ASSISTANT_GROUP_ID", length = 50)
+	private String assistantGroup;	//协办单位
+	
+	@Column(name = "ASSISTANT_USER_ID", length = 50)
+	private String assistantUser;	//协办人
 	
 	@Column(name = "TASK_CONTENT", length = 2000)
 	private String taskContent;		//事项内容
@@ -244,22 +236,6 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 		this.contactsPhone = contactsPhone;
 	}
 
-	public Group getHostGroup() {
-		return hostGroup;
-	}
-
-	public void setHostGroup(Group hostGroup) {
-		this.hostGroup = hostGroup;
-	}
-
-	public Group getAssistantGroup() {
-		return assistantGroup;
-	}
-
-	public void setAssistantGroup(Group assistantGroup) {
-		this.assistantGroup = assistantGroup;
-	}
-
 	public String getTaskContent() {
 		return taskContent;
 	}
@@ -332,22 +308,6 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 		this.taskType = taskType;
 	}
 
-	public User getHostUser() {
-		return hostUser;
-	}
-
-	public void setHostUser(User hostUser) {
-		this.hostUser = hostUser;
-	}
-
-	public User getAssistantUser() {
-		return assistantUser;
-	}
-
-	public void setAssistantUser(User assistantUser) {
-		this.assistantUser = assistantUser;
-	}
-
 	public String getActTaskId() {
 		return actTaskId;
 	}
@@ -379,6 +339,45 @@ public class TaskInfo extends BaseCommonEntity implements Serializable{
 	public void setClaimDate(Date claimDate) {
 		this.claimDate = claimDate;
 	}
-	
+
+	public String getHostGroup() {
+		return hostGroup;
+	}
+
+	public void setHostGroup(String hostGroup) {
+		this.hostGroup = hostGroup;
+	}
+
+	public String getHostUser() {
+		return hostUser;
+	}
+
+	public void setHostUser(String hostUser) {
+		this.hostUser = hostUser;
+	}
+
+	public String getAssistantGroup() {
+		return assistantGroup;
+	}
+
+	public void setAssistantGroup(String assistantGroup) {
+		this.assistantGroup = assistantGroup;
+	}
+
+	public String getAssistantUser() {
+		return assistantUser;
+	}
+
+	public void setAssistantUser(String assistantUser) {
+		this.assistantUser = assistantUser;
+	}
+
+	public String getLeadership() {
+		return leadership;
+	}
+
+	public void setLeadership(String leadership) {
+		this.leadership = leadership;
+	}
 	
 }
