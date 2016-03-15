@@ -15,7 +15,7 @@
       <documentation>更改TaskInfo状态为 办理中</documentation>
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${claim}]]></conditionExpression>
     </sequenceFlow>
-    <userTask id="usertask3" name="申请办结(审批)" activiti:assignee="${startUserId}">
+    <userTask id="usertask3" name="审批申请办结" activiti:assignee="${startUserId}">
       <extensionElements>
         <activiti:taskListener event="create" delegateExpression="${taskInfoListener}"></activiti:taskListener>
       </extensionElements>
@@ -34,10 +34,13 @@
     <sequenceFlow id="flow10" name="不同意" sourceRef="exclusivegateway2" targetRef="usertask2">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!isPass}]]></conditionExpression>
     </sequenceFlow>
-    <userTask id="usertask6" name="任务签收/j拒绝" activiti:assignee="${hostUser}">
+    <userTask id="usertask6" name="任务签收/j拒绝" activiti:assignee="${hostUsers}">
       <extensionElements>
         <activiti:taskListener event="create" delegateExpression="${taskInfoListener}"></activiti:taskListener>
       </extensionElements>
+      <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${hostUsers}" activiti:elementVariable="hostUser">
+        <completionCondition>${claim == false}</completionCondition>
+      </multiInstanceLoopCharacteristics>
     </userTask>
     <sequenceFlow id="flow16" sourceRef="usertask1" targetRef="usertask6"></sequenceFlow>
     <sequenceFlow id="flow17" sourceRef="usertask6" targetRef="exclusivegateway1"></sequenceFlow>
@@ -74,6 +77,9 @@
       <bpmndi:BPMNShape bpmnElement="usertask2" id="BPMNShape_usertask2">
         <omgdc:Bounds height="55.0" width="105.0" x="520.0" y="210.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="boundarytimer1" id="BPMNShape_boundarytimer1">
+        <omgdc:Bounds height="30.0" width="30.0" x="558.0" y="254.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
         <omgdc:Bounds height="35.0" width="35.0" x="930.0" y="220.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
@@ -85,9 +91,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="exclusivegateway2" id="BPMNShape_exclusivegateway2">
         <omgdc:Bounds height="40.0" width="40.0" x="840.0" y="218.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="boundarytimer1" id="BPMNShape_boundarytimer1">
-        <omgdc:Bounds height="30.0" width="30.0" x="558.0" y="254.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="usertask6" id="BPMNShape_usertask6">
         <omgdc:Bounds height="55.0" width="105.0" x="256.0" y="211.0"></omgdc:Bounds>

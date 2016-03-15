@@ -77,10 +77,10 @@ public class ProcessTask extends BaseCommonEntity implements Serializable {
 	@Column(name = "TASK_NAME", length = 300)
 	private String taskName;
 	
-	@Column(name = "ASSIGN", length = 50)
+	@Column(name = "ASSIGN", length = 5)
 	private String assign;				//任务处理人
 	
-	@Column(name = "OWNER", length = 50)
+	@Column(name = "OWNER", length = 5)
 	private String owner;				//任务执行人
 	
 	@Transient
