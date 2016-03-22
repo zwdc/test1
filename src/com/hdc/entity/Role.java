@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "ROLE")
 @DynamicUpdate(true)
 @DynamicInsert(true)
-public class Role extends BaseCommonEntity implements Serializable{
+public class Role extends BaseEntity implements Serializable{
 
 	/**
 	 * 

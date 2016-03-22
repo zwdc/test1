@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "USERS")
 @DynamicUpdate(true)
 @DynamicInsert(true)
-public class User extends BaseCommonEntity implements Serializable{
+public class User extends BaseEntity implements Serializable{
 
 	private static final long serialVersionUID = -6662232329895785824L;
 

@@ -26,7 +26,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Table(name = "PROCESS_TASK")
 @DynamicUpdate(true)
 @DynamicInsert(true)
-public class ProcessTask extends BaseCommonEntity implements Serializable {
+public class ProcessTask extends BaseEntity implements Serializable {
 
 	private static final long serialVersionUID = -3175127942643941761L;
 	

@@ -13,15 +13,15 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 /**
- * 缓急程度
+ * 缓急程度（先留着，存到了app.json中）
  * @author ZML
  *
  */
 @Entity
-@Table(name = "URGENCY")
+@Table(name = "urgency")
 @DynamicUpdate(true)
 @DynamicInsert(true)
-public class Urgency extends BaseCommonEntity implements Serializable {
+public class Urgency extends BaseEntity implements Serializable {
 
 	/**
 	 * 
@@ -30,10 +30,10 @@ public class Urgency extends BaseCommonEntity implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID", length = 5, nullable = false, unique = true)
+	@Column(name = "id", length = 5, nullable = false, unique = true)
 	private Integer id;
 	
-	@Column(name = "TITLE", length = 500)
+	@Column(name = "title", length = 500)
 	private String title;
 
 	public Integer getId() {
