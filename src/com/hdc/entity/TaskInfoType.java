@@ -13,12 +13,12 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 /**
- * 事项分类
+ * 任务类型
  * @author ZML
  *
  */
 @Entity
-@Table(name = "TASK_INFO_TYPE")
+@Table(name = "task_info_type")
 @DynamicUpdate(true)
 @DynamicInsert(true)
 public class TaskInfoType implements Serializable {
@@ -30,11 +30,17 @@ public class TaskInfoType implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID", length = 5, nullable = false, unique = true)
+	@Column(name = "id", length = 5, nullable = false, unique = true)
 	private Integer id;
 	
-	@Column(name = "NAME", length = 50, nullable = false)
+	@Column(name = "parentId", length = 5, nullable = false)
+    private Integer parentId;
+	
+	@Column(name = "name", length = 50, nullable = false)
 	private String name;
+	
+	@Column(name = "is_delete", length = 1)
+    private Integer isDelete;
 
 	public Integer getId() {
 		return id;
@@ -50,6 +56,22 @@ public class TaskInfoType implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Integer getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Integer parentId) {
+		this.parentId = parentId;
+	}
+
+	public Integer getIsDelete() {
+		return isDelete;
+	}
+
+	public void setIsDelete(Integer isDelete) {
+		this.isDelete = isDelete;
 	}
 	
 }

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "URGE")
 @DynamicUpdate(true)
 @DynamicInsert(true)
-public class Urge extends BaseCommonEntity implements Serializable {
+public class Urge extends BaseEntity implements Serializable {
 
 	/**
 	 * 

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "FEEDBACK_RECORD")
 @DynamicUpdate(true)
 @DynamicInsert(true)
-public class FeedbackRecord extends BaseCommonEntity implements Serializable {
+public class FeedbackRecord extends BaseEntity implements Serializable {
 
 	/**
 	 * 

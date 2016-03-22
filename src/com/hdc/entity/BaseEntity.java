@@ -15,7 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  *
  */
 @MappedSuperclass
-public class BaseCommonEntity {
+public class BaseEntity {
 
 	@Column(name = "CREATE_USER_ID", length = 5)
 	private Integer createUserId;

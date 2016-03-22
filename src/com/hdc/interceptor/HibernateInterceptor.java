@@ -7,7 +7,7 @@ import org.hibernate.CallbackException;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.type.Type;
 
-import com.hdc.entity.BaseCommonEntity;
+import com.hdc.entity.BaseEntity;
 import com.hdc.entity.User;
 import com.hdc.util.UserUtil;
 
@@ -31,7 +31,7 @@ public class HibernateInterceptor extends EmptyInterceptor {
 	public boolean onFlushDirty(Object entity,Serializable id, Object[] currentState, Object[] previousState, String[] propertyNames,Type[] types) throws CallbackException {
 	    
         //记录更新时间、更新人
-        if (entity instanceof BaseCommonEntity) {
+        if (entity instanceof BaseEntity) {
         	boolean updateDateFlag = false;
         	boolean updateUserIdFlag = false;
         	for (int i = 0, length = propertyNames.length; i < length; i++) {
@@ -39,13 +39,13 @@ public class HibernateInterceptor extends EmptyInterceptor {
         			updateDateFlag = true;
 					Date updateDate = new Date();
 					currentState[i] = updateDate;
-					((BaseCommonEntity) entity).setUpdateDate(updateDate);
+					((BaseEntity) entity).setUpdateDate(updateDate);
 				} else if ( propertyNames[i].equalsIgnoreCase("updateUserId") && !updateUserIdFlag ) {
 					updateUserIdFlag = true;
 					User user = UserUtil.getUserFromSession();
 					if (user != null) {
 						currentState[i] = user.getId();
-						((BaseCommonEntity) entity).setUpdateUserId(user.getId());
+						((BaseEntity) entity).setUpdateUserId(user.getId());
 					}
 				}
         		if(updateDateFlag && updateUserIdFlag){
@@ -61,7 +61,7 @@ public class HibernateInterceptor extends EmptyInterceptor {
 	public boolean onSave(Object entity, Serializable id, Object[] currentState, String[] propertyNames, Type[] types) {
 		
 		//记录添加时间、添加人、isDelete
-        if (entity instanceof BaseCommonEntity) {
+        if (entity instanceof BaseEntity) {
         	boolean createDateFlag = false;
         	boolean createUserIdFlag = false;
         	boolean isDeleteFlag = false;
@@ -72,17 +72,17 @@ public class HibernateInterceptor extends EmptyInterceptor {
         			createDateFlag = true;
 					Date createDate = new Date();
 					currentState[i] = createDate;
-					((BaseCommonEntity) entity).setCreateDate(createDate);
+					((BaseEntity) entity).setCreateDate(createDate);
 				} else if ( propertyNames[i].equalsIgnoreCase("createUserId") && !createUserIdFlag ) {
 					createUserIdFlag = true;
 					if (user != null) {
 						currentState[i] = user.getId();
-						((BaseCommonEntity) entity).setCreateUserId(user.getId());
+						((BaseEntity) entity).setCreateUserId(user.getId());
 					}
 				} else if ( propertyNames[i].equalsIgnoreCase("isDelete") && !isDeleteFlag ) {
 					isDeleteFlag = true;
 					currentState[i] = 0;
-					((BaseCommonEntity) entity).setIsDelete(0);
+					((BaseEntity) entity).setIsDelete(0);
 				}
         		
         		if(createDateFlag && createUserIdFlag && isDeleteFlag){

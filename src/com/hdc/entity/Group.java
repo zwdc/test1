@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "GROUPS")
 @DynamicUpdate(true)
 @DynamicInsert(true)
-public class Group extends BaseCommonEntity implements Serializable{
+public class Group extends BaseEntity implements Serializable{
 
 	/**
 	 * 
