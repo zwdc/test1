@@ -132,9 +132,9 @@ public class TaskInfoController {
 //			map.put("feedbackCycle", task.getFeedbackCycle());
 //			map.put("feedbaceDate", task.getFeedbaceDate());
 			map.put("hostGroup", getGroupName(task.getHostGroup()));	//主办单位
-			map.put("hostUser", getUserName(task.getHostUser()));		//主办人
-			map.put("urgeCount", task.getUrge().size());				//催办数
-			map.put("feedbackCount", task.getFeedBack().size());		//反馈记录数
+//			map.put("hostUser", getUserName(task.getHostUser()));		//主办人
+//			map.put("urgeCount", task.getUrge().size());				//催办数
+//			map.put("feedbackCount", task.getFeedBack().size());		//反馈记录数
 			map.put("status", task.getStatus());
 			jsonList.add(map);
 		}
@@ -218,9 +218,9 @@ public class TaskInfoController {
 			if(!BeanUtils.isBlank(file)) {
 				String filePath = FileUploadUtils.upload(request, file, Constants.FILE_PATH);
 				TaskInfo taskInfo = this.taskInfoService.findById(id);
-				taskInfo.setFilePath(filePath);
+				/*taskInfo.setFilePath(filePath);
 				taskInfo.setFileName(file.getOriginalFilename());
-				taskInfo.setUploadDate(new Date());
+				taskInfo.setUploadDate(new Date());*/
 				this.taskInfoService.doUpdate(taskInfo);
 				message.setMessage("文件上传成功!");
 				message.setData(id.toString());
@@ -260,12 +260,12 @@ public class TaskInfoController {
     		HttpServletRequest request, HttpServletResponse response) throws Exception {
     	if(!BeanUtils.isBlank(id)){
     		TaskInfo taskInfo = this.taskInfoService.findById(id);
-    		if(StringUtils.isBlank(taskInfo.getFileName()) || StringUtils.isBlank(taskInfo.getFilePath())){
+    		/*if(StringUtils.isBlank(taskInfo.getFileName()) || StringUtils.isBlank(taskInfo.getFilePath())){
     			response.setContentType("text/html;charset=utf-8");
                 response.getWriter().write("您下载的文件不存在！");
     		} else {
     			FileDownloadUtils.download(request, response, taskInfo.getFilePath());
-    		}
+    		}*/
     	} else {
     		response.setContentType("text/html;charset=utf-8");
             response.getWriter().write("您下载的文件不存在！");

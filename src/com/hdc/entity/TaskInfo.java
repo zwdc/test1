@@ -2,15 +2,12 @@ package com.hdc.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,8 +15,6 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 事项
@@ -92,7 +87,7 @@ public class TaskInfo extends BaseEntity implements Serializable{
 	@Column(name = "FEEDBACE_DATE")
 	private Date feedbaceDate;		//反馈时限
 */	
-	@Column(name = "CONTACTS", length = 30)
+/*	@Column(name = "CONTACTS", length = 30)
 	private String contacts;		//联系人
 	
 	@Column(name = "CONTACTS_PHONE", length = 30)
@@ -143,7 +138,7 @@ public class TaskInfo extends BaseEntity implements Serializable{
     
 	@OneToMany(mappedBy="taskInfo")
 	@JsonIgnore
-	private Set<Urge> urge = new HashSet<Urge>();
+	private Set<Urge> urge = new HashSet<Urge>();*/
 	
 	public TaskInfo() {
 		
@@ -193,116 +188,12 @@ public class TaskInfo extends BaseEntity implements Serializable{
 		this.endTaskDate = endTaskDate;
 	}
 
-	public String getContacts() {
-		return contacts;
-	}
-
-	public void setContacts(String contacts) {
-		this.contacts = contacts;
-	}
-
-	public String getContactsPhone() {
-		return contactsPhone;
-	}
-
-	public void setContactsPhone(String contactsPhone) {
-		this.contactsPhone = contactsPhone;
-	}
-
-	public String getTaskContent() {
-		return taskContent;
-	}
-
-	public void setTaskContent(String taskContent) {
-		this.taskContent = taskContent;
-	}
-
-	public String getLeadComments() {
-		return leadComments;
-	}
-
-	public void setLeadComments(String leadComments) {
-		this.leadComments = leadComments;
-	}
-
-	public String getSuggestion() {
-		return suggestion;
-	}
-
-	public void setSuggestion(String suggestion) {
-		this.suggestion = suggestion;
-	}
-
-	public String getFileName() {
-		return fileName;
-	}
-
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-
-	public String getFilePath() {
-		return filePath;
-	}
-
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
-
-	public Integer getSupervisor() {
-		return supervisor;
-	}
-
-	public void setSupervisor(Integer supervisor) {
-		this.supervisor = supervisor;
-	}
-
 	public String getStatus() {
 		return status;
 	}
 
 	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	public Date getUploadDate() {
-		return uploadDate;
-	}
-
-	public void setUploadDate(Date uploadDate) {
-		this.uploadDate = uploadDate;
-	}
-
-	public Integer getTaskType() {
-		return taskType;
-	}
-
-	public void setTaskType(Integer taskType) {
-		this.taskType = taskType;
-	}
-
-	public String getActTaskId() {
-		return actTaskId;
-	}
-
-	public void setActTaskId(String actTaskId) {
-		this.actTaskId = actTaskId;
-	}
-
-	public Set<FeedbackRecord> getFeedBack() {
-		return feedBack;
-	}
-
-	public void setFeedBack(Set<FeedbackRecord> feedBack) {
-		this.feedBack = feedBack;
-	}
-
-	public Set<Urge> getUrge() {
-		return urge;
-	}
-
-	public void setUrge(Set<Urge> urge) {
-		this.urge = urge;
 	}
 
 	public String getHostGroup() {
@@ -313,14 +204,6 @@ public class TaskInfo extends BaseEntity implements Serializable{
 		this.hostGroup = hostGroup;
 	}
 
-	public String getHostUser() {
-		return hostUser;
-	}
-
-	public void setHostUser(String hostUser) {
-		this.hostUser = hostUser;
-	}
-
 	public String getAssistantGroup() {
 		return assistantGroup;
 	}
@@ -329,20 +212,36 @@ public class TaskInfo extends BaseEntity implements Serializable{
 		this.assistantGroup = assistantGroup;
 	}
 
-	public String getAssistantUser() {
-		return assistantUser;
+	public String getInfo() {
+		return info;
 	}
 
-	public void setAssistantUser(String assistantUser) {
-		this.assistantUser = assistantUser;
+	public void setInfo(String info) {
+		this.info = info;
 	}
 
-	public String getLeadership() {
-		return leadership;
+	public String getTaskInfo() {
+		return taskInfo;
 	}
 
-	public void setLeadership(String leadership) {
-		this.leadership = leadership;
+	public void setTaskInfo(String taskInfo) {
+		this.taskInfo = taskInfo;
 	}
-	
+
+	public Date getEndHandleDate() {
+		return endHandleDate;
+	}
+
+	public void setEndHandleDate(Date endHandleDate) {
+		this.endHandleDate = endHandleDate;
+	}
+
+	public Date getClaimLimitDate() {
+		return claimLimitDate;
+	}
+
+	public void setClaimLimitDate(Date claimLimitDate) {
+		this.claimLimitDate = claimLimitDate;
+	}
+
 }

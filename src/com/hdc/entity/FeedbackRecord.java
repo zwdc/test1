@@ -22,7 +22,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * 反馈记录
+ * 反馈表
  * @author zhao
  *
  */
@@ -39,62 +39,79 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID", length = 10, nullable = false, unique = true)
+	@Column(name = "id", length = 10, nullable = false, unique = true)
 	private Integer id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="TASK_INFO")
+	@JoinColumn(name="project_id")
 	@JsonIgnore
-	private TaskInfo taskInfo;
+	private Project project;
 	
-	@Column(name = "ORIGINAL_PERSON", length = 30)
-	private String originalPerson;		//原始起草人
+	@Column(name = "work_plan", length = 2000)
+	private String workPlan;				//阶段工作计划
 	
-	@Column(name = "PHONE", length = 30)
-	private String phone;				//手机
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(name = "feedback_start_date")
+	private Date feedbackStartDate;			//反馈开始时间
 	
-	@Column(name = "WORK_PHONE", length = 30)
-	private String workPhone;			//办公电话
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(name = "feedback_end_date")
+	private Date feedbaceEndDate;			//反馈结束时间
 	
-	@Column(name = "OFFICES", length = 100)
-	private String offices;				//处/科室
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(name = "feedback_date")
+	private Date feedbackDate;				//反馈日期
 	
-	@Column(name = "DUTY_OF", length = 50)
-	private String dutyOf;				//职务
+	@Column(name = "situation", length = 4000)
+	private String situation ;				//落实情况
 	
-	@Column(name = "EMAIL", length = 100)
-	private String email;				//邮箱
+	@Column(name = "problems", length = 4000)
+	private String problems ;				//存在问题
 	
-	@Column(name = "CONTACTS", length = 100)
-	private String contacts;			//联系人
+	@Column(name = "solutiona", length = 4000)
+	private String solutions;				//解决措施
 	
-	@Column(name = "CONTACTS_PHONE", length = 100)
-	private String contactsPhone;		//联系电话
+	@Column(name = "type", length = 1)
+	private Integer type;					//反馈类型（0.正常反馈  1.续报）
 	
-	@Column(name = "CONTENT", length = 2000)
-	private String content;				//落实情况
+	@Column(name = "task_schedule", length = 3)
+	private Integer taskSchedule;			//任务进度
 	
-	@Column(name = "REPLENISH", length = 2000)
-	private String replenish;			//补充建议（续报）
+	@Column(name = "suggestion", length = 1000)
+	private String suggestion;				//督导意见
 	
-	@Column(name = "TYPE", length = 1)
-	private Integer type;				//反馈类型（0.正常反馈  1.续报）
+	@Column(name = "status", length = 30)
+	private String status;					//反馈情况（反馈中、已退回、已采用）
+	
+	@Column(name = "refuse_count", length = 2)
+	private Integer refuseCount;			//拒绝次数
+	
+	@Column(name = "warning_level", length = 2)
+	private Integer warningLevel;			//预警级别
+	
+	@Column(name = "delay_count", length = 2)
+	private Integer delayCount;				//延期次数
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(name = "delay_date")
+	private Date delayDate;					//延期结束时间
 	
 	@Column(name = "FILE_NAME", length = 500)
-	private String fileName;			//附件名称
+	private String fileName;				//附件名称
 	
 	@Column(name = "FILE_PATH", length = 1000)
-	private String filePath;			//附件路径
+	private String filePath;				//附件路径
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@Column(name = "UPLOAD_DATE")
-	private Date uploadDate ;		//上传时间
+	private Date uploadDate ;				//上传时间
 	
-	@Column(name = "STATUS", length = 30)
-	private String status;				//反馈情况（反馈中、已退回、已采用）
-	
-	@Column(name = "IS_DELAY", length = 1)
+	@Column(name = "is_delay", length = 1)
 	private Integer isDelay;				//是否迟报（1.是、0.否）
 
 	public Integer getId() {
@@ -105,84 +122,92 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 		this.id = id;
 	}
 
-	public TaskInfo getTaskInfo() {
-		return taskInfo;
+	public Project getProject() {
+		return project;
 	}
 
-	public void setTaskInfo(TaskInfo taskInfo) {
-		this.taskInfo = taskInfo;
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
-	public String getOriginalPerson() {
-		return originalPerson;
+	public String getWorkPlan() {
+		return workPlan;
 	}
 
-	public void setOriginalPerson(String originalPerson) {
-		this.originalPerson = originalPerson;
+	public void setWorkPlan(String workPlan) {
+		this.workPlan = workPlan;
 	}
 
-	public String getPhone() {
-		return phone;
+	public Date getFeedbackStartDate() {
+		return feedbackStartDate;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setFeedbackStartDate(Date feedbackStartDate) {
+		this.feedbackStartDate = feedbackStartDate;
 	}
 
-	public String getWorkPhone() {
-		return workPhone;
+	public Date getFeedbaceEndDate() {
+		return feedbaceEndDate;
 	}
 
-	public void setWorkPhone(String workPhone) {
-		this.workPhone = workPhone;
+	public void setFeedbaceEndDate(Date feedbaceEndDate) {
+		this.feedbaceEndDate = feedbaceEndDate;
 	}
 
-	public String getOffices() {
-		return offices;
+	public Date getFeedbackDate() {
+		return feedbackDate;
 	}
 
-	public void setOffices(String offices) {
-		this.offices = offices;
+	public void setFeedbackDate(Date feedbackDate) {
+		this.feedbackDate = feedbackDate;
 	}
 
-	public String getDutyOf() {
-		return dutyOf;
+	public String getSituation() {
+		return situation;
 	}
 
-	public void setDutyOf(String dutyOf) {
-		this.dutyOf = dutyOf;
+	public void setSituation(String situation) {
+		this.situation = situation;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getProblems() {
+		return problems;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setProblems(String problems) {
+		this.problems = problems;
 	}
 
-	public String getContacts() {
-		return contacts;
+	public String getSolutions() {
+		return solutions;
 	}
 
-	public void setContacts(String contacts) {
-		this.contacts = contacts;
+	public void setSolutions(String solutions) {
+		this.solutions = solutions;
 	}
 
-	public String getContactsPhone() {
-		return contactsPhone;
+	public Integer getType() {
+		return type;
 	}
 
-	public void setContactsPhone(String contactsPhone) {
-		this.contactsPhone = contactsPhone;
+	public void setType(Integer type) {
+		this.type = type;
 	}
 
-	public String getContent() {
-		return content;
+	public Integer getTaskSchedule() {
+		return taskSchedule;
 	}
 
-	public void setContent(String content) {
-		this.content = content;
+	public void setTaskSchedule(Integer taskSchedule) {
+		this.taskSchedule = taskSchedule;
+	}
+
+	public String getSuggestion() {
+		return suggestion;
+	}
+
+	public void setSuggestion(String suggestion) {
+		this.suggestion = suggestion;
 	}
 
 	public String getStatus() {
@@ -193,12 +218,36 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 		this.status = status;
 	}
 
-	public Integer getIsDelay() {
-		return isDelay;
+	public Integer getRefuseCount() {
+		return refuseCount;
 	}
 
-	public void setIsDelay(Integer isDelay) {
-		this.isDelay = isDelay;
+	public void setRefuseCount(Integer refuseCount) {
+		this.refuseCount = refuseCount;
+	}
+
+	public Integer getWarningLevel() {
+		return warningLevel;
+	}
+
+	public void setWarningLevel(Integer warningLevel) {
+		this.warningLevel = warningLevel;
+	}
+
+	public Integer getDelayCount() {
+		return delayCount;
+	}
+
+	public void setDelayCount(Integer delayCount) {
+		this.delayCount = delayCount;
+	}
+
+	public Date getDelayDate() {
+		return delayDate;
+	}
+
+	public void setDelayDate(Date delayDate) {
+		this.delayDate = delayDate;
 	}
 
 	public String getFileName() {
@@ -217,28 +266,20 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 		this.filePath = filePath;
 	}
 
-	public String getReplenish() {
-		return replenish;
-	}
-
-	public void setReplenish(String replenish) {
-		this.replenish = replenish;
-	}
-
-	public Integer getType() {
-		return type;
-	}
-
-	public void setType(Integer type) {
-		this.type = type;
-	}
-
 	public Date getUploadDate() {
 		return uploadDate;
 	}
 
 	public void setUploadDate(Date uploadDate) {
 		this.uploadDate = uploadDate;
+	}
+
+	public Integer getIsDelay() {
+		return isDelay;
+	}
+
+	public void setIsDelay(Integer isDelay) {
+		this.isDelay = isDelay;
 	}
 
 }

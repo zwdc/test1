@@ -52,7 +52,7 @@ public class FeedbackController {
 		}
 		if(taskInfoId != null) {
 			TaskInfo taskInfo = this.taskInfoService.findById(taskInfoId);
-			feedback.setTaskInfo(taskInfo);
+//			feedback.setTaskInfo(taskInfo);
 		}
 		mv.addObject("feedback", feedback);
 		return mv;

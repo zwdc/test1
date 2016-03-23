@@ -45,7 +45,7 @@ public class RefuseReasonServiceImpl implements IRefuseReasonService {
 		processTask.setUser_id(user.getId());
 		processTask.setBusinessType(BusinessType.IMPORTANT_FILE.toString());	//业务类型：重要文件
 		processTask.setBusinessKey(taskInfo.getId());
-		processTask.setTaskId(taskInfo.getActTaskId());
+//		processTask.setTaskId(taskInfo.getActTaskId());
 		processTask.setTitle("拒绝签收的任务事项！");
 		processTask.setUrl("/taskInfo/toMain?id="+taskInfo.getId());
 		//processTask.setBusinessForm(BusinessForm.QT_FILE.toString());			//业务表单：省政府文件

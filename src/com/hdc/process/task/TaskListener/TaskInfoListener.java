@@ -37,7 +37,7 @@ public class TaskInfoListener implements TaskListener {
 		try {
 			if(StringUtils.isNotBlank(taskInfoId)){
 				TaskInfo taskInfo = this.taskInfoService.findById(new Integer(taskInfoId));
-				taskInfo.setActTaskId(delegateTask.getId());
+//				taskInfo.setActTaskId(delegateTask.getId());
 				this.taskInfoService.doUpdate(taskInfo);
 			}
 			if(StringUtils.isNotBlank(processTaskId)){

@@ -75,7 +75,7 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 		//初始化任务参数
 		Map<String, Object> vars = new HashMap<String, Object>();
 		vars.put("taskInfoId", taskInfo.getId().toString());
-		vars.put("hostUser", taskInfo.getHostUser());
+//		vars.put("hostUser", taskInfo.getHostUser());
 		//启动流程
 		String processInstanceId = this.processService.startApproval("TaskInfo", taskInfo.getId().toString(), vars);	
 		// 根据processInstanceId查询第一个任务，即“录入任务”
@@ -90,7 +90,7 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 		Map<String, Object> variables = new HashMap<String, Object>();
 		variables.put("claim", true);
 		
-		this.processService.complete(taskInfo.getActTaskId(), null, variables);
+//		this.processService.complete(taskInfo.getActTaskId(), null, variables);
 		this.baseService.update(taskInfo);
 		
 	}
@@ -117,7 +117,7 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 		//初始化任务参数
 		Map<String, Object> vars = new HashMap<String, Object>();
 		vars.put("processTaskId", processTaskId.toString());
-		this.processService.complete(taskInfo.getActTaskId(), null, vars);		//完成“办理中” 节点任务
+//		this.processService.complete(taskInfo.getActTaskId(), null, vars);		//完成“办理中” 节点任务
 		
 	}
 

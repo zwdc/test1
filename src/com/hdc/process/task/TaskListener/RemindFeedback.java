@@ -42,7 +42,7 @@ public class RemindFeedback implements TaskListener {
 			if(StringUtils.isNotBlank(userId)) {
 				//给办理人提示代办事项
 				TaskInfo taskInfo = this.taskInfoService.findById(new Integer(taskInfoId));
-				taskInfo.setActTaskId(delegateTask.getId());
+//				taskInfo.setActTaskId(delegateTask.getId());
 				this.taskInfoService.doUpdate(taskInfo);
 				ProcessTask processTask = new ProcessTask();
 				processTask.setUser_name("系统管理");
