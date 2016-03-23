@@ -124,13 +124,13 @@ public class TaskInfoController {
 			Map<String, Object> map=new HashMap<String, Object>();
 			map.put("id", task.getId());
 			map.put("title", task.getTitle());
-			map.put("taskNo", task.getTaskNo());
+//			map.put("taskNo", task.getTaskNo());
 			map.put("createTaskDate", task.getCreateTaskDate());
-			map.put("assignDate", task.getAssignDate());
+//			map.put("assignDate", task.getAssignDate());
 			map.put("endTaskDate", task.getEndTaskDate());
-			map.put("claimDate", task.getClaimDate());
-			map.put("feedbackCycle", task.getFeedbackCycle());
-			map.put("feedbaceDate", task.getFeedbaceDate());
+//			map.put("claimDate", task.getClaimDate());
+//			map.put("feedbackCycle", task.getFeedbackCycle());
+//			map.put("feedbaceDate", task.getFeedbaceDate());
 			map.put("hostGroup", getGroupName(task.getHostGroup()));	//主办单位
 			map.put("hostUser", getUserName(task.getHostUser()));		//主办人
 			map.put("urgeCount", task.getUrge().size());				//催办数
@@ -302,7 +302,7 @@ public class TaskInfoController {
     	Message message = new Message();
     	TaskInfo taskInfo = this.taskInfoService.findById(id);
     	taskInfo.setStatus(TaskInfoStatus.IN_HANDLING.toString());
-    	taskInfo.setClaimDate(new Date());
+//    	taskInfo.setClaimDate(new Date());
     	this.taskInfoService.doClaimTask(taskInfo);
     	message.setMessage("签收成功！");
     	return message;

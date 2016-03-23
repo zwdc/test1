@@ -39,43 +39,59 @@ public class TaskInfo extends BaseEntity implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID", length = 10, nullable = false, unique = true)
+	@Column(name = "id", length = 10, nullable = false, unique = true)
 	private Integer id;
 	
-	@Column(name = "TITLE", length = 200)
-	private String title;			//标题
+	@Column(name = "title", length = 200)
+	private String title;			//任务标题
 	
-	@Column(name = "TASK_NO", length = 200)
-	private String taskNo;			//文号
+	@Column(name = "info", length = 200)
+	private String info;			//任务简称
+	
+	@Column(name = "task_info", length = 2000)
+	private String taskInfo;		//任务说明
+	
+	@Column(name = "host_group", length = 50)
+	private String hostGroup;		//主办单位（多个）
+	
+	@Column(name = "assistant_group", length = 1000)
+	private String assistantGroup;	//协办单位(手写单位名称，不参与业务)
+	
+	@Column(name = "urgency", length = 1)
+	private Integer urgency;		//急缓程度
+	
+	@Column(name = "STATUS", length = 30)
+	private String status;			//状态(待签收  办理中  已办结) TaskInfoStatus
+
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@Column(name = "CREATE_TASK_DATE")
+	@Column(name = "create_task_date")
 	private Date createTaskDate;	//立项日期
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@Column(name = "ASSIGN_DATE")
-	private Date assignDate;		//交办日期
+	@Column(name = "end_task_date")
+	private Date endTaskDate;		//结束时限
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@Column(name = "CLAIM_DATE")
-	private Date claimDate;			//签收日期
-	
-	@Column(name = "FEEDBACK_CYCLE", length = 1)
-	private Integer feedbackCycle;	//反馈周期（0.默认一次  1.每周一次  2.每月一次）
+	@Column(name = "end_handle_date")
+	private Date endHandleDate;		//办结日期(最后一个人办结时间)
 	
 	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(name = "claim_limit_date")
+	private Date claimLimitDate;	//签收时限
+	
+/*	@Column(name = "FEEDBACK_CYCLE", length = 1)
+	private Integer feedbackCycle;	//反馈周期（0.默认一次  1.每周一次  2.每月一次）
+*/	
+/*	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@Column(name = "FEEDBACE_DATE")
 	private Date feedbaceDate;		//反馈时限
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@Column(name = "END_TASK_DATE")
-	private Date endTaskDate;		//办结时限
-	
+*/	
 	@Column(name = "CONTACTS", length = 30)
 	private String contacts;		//联系人
 	
@@ -85,14 +101,9 @@ public class TaskInfo extends BaseEntity implements Serializable{
 	@Column(name = "LEADER_SHIP", length = 20)
 	private String leadership;		//领导
 	
-	@Column(name = "HOST_GROUP_ID", length = 50)
-	private String hostGroup;		//主办单位（多个）
 	
 	@Column(name = "HOST_USER_ID", length = 50)
 	private String hostUser;		//主办人（多个）
-	
-	@Column(name = "ASSISTANT_GROUP_ID", length = 50)
-	private String assistantGroup;	//协办单位
 	
 	@Column(name = "ASSISTANT_USER_ID", length = 50)
 	private String assistantUser;	//协办人
@@ -117,17 +128,11 @@ public class TaskInfo extends BaseEntity implements Serializable{
 	@Column(name = "UPLOAD_DATE")
 	private Date uploadDate ;		//上传时间
 	
-	@Column(name = "URGENCY", length = 1)
-	private Integer urgency;		//急缓程度
-	
 	@Column(name = "SUPERVISOR", length = 5)
 	private Integer supervisor;		//督办专员 id
 	
 	@Column(name = "TASK_TYPE", length = 1)
 	private Integer taskType;		//文件类型 （1.省政府文件  2.国务院文件  3.其他文件）
-	
-	@Column(name = "STATUS", length = 30)
-	private String status;			//状态(0.待签收  1.办理中  2.已办结) TaskInfoStatus
 	
 	@Column(name = "ACT_TASK_ID", length = 64)
 	private String actTaskId;		//activiti中任务的id  完成任务用(监听器每到到一个用户任务，则更新此id)
@@ -164,14 +169,6 @@ public class TaskInfo extends BaseEntity implements Serializable{
 		this.title = title;
 	}
 
-	public String getTaskNo() {
-		return taskNo;
-	}
-
-	public void setTaskNo(String taskNo) {
-		this.taskNo = taskNo;
-	}
-
 	public Date getCreateTaskDate() {
 		return createTaskDate;
 	}
@@ -186,30 +183,6 @@ public class TaskInfo extends BaseEntity implements Serializable{
 
 	public void setUrgency(Integer urgency) {
 		this.urgency = urgency;
-	}
-
-	public Date getAssignDate() {
-		return assignDate;
-	}
-
-	public void setAssignDate(Date assignDate) {
-		this.assignDate = assignDate;
-	}
-
-	public Integer getFeedbackCycle() {
-		return feedbackCycle;
-	}
-
-	public void setFeedbackCycle(Integer feedbackCycle) {
-		this.feedbackCycle = feedbackCycle;
-	}
-
-	public Date getFeedbaceDate() {
-		return feedbaceDate;
-	}
-
-	public void setFeedbaceDate(Date feedbaceDate) {
-		this.feedbaceDate = feedbaceDate;
 	}
 
 	public Date getEndTaskDate() {
@@ -330,14 +303,6 @@ public class TaskInfo extends BaseEntity implements Serializable{
 
 	public void setUrge(Set<Urge> urge) {
 		this.urge = urge;
-	}
-
-	public Date getClaimDate() {
-		return claimDate;
-	}
-
-	public void setClaimDate(Date claimDate) {
-		this.claimDate = claimDate;
 	}
 
 	public String getHostGroup() {

@@ -32,7 +32,7 @@ public class CheckFeedback implements JavaDelegate {
 		String taskInfoId = (String) execution.getVariable("taskInfoId");
 		TaskInfo taskInfo = this.taskInfoService.findById(new Integer(taskInfoId));
 		List<FeedbackRecord> list =  this.feedbackService.findByTaskId(new Integer(taskInfoId));
-		Integer feedbackCycle = taskInfo.getFeedbackCycle();	//获取反馈周期
+		/*Integer feedbackCycle = taskInfo.getFeedbackCycle();	//获取反馈周期
 		switch (feedbackCycle) {
 			case 0:	//默认一次
 				if(list.size() > 0){
@@ -97,7 +97,7 @@ public class CheckFeedback implements JavaDelegate {
 				break;
 			default:
 				break;
-		}
+		}*/
 		
 	}
 	

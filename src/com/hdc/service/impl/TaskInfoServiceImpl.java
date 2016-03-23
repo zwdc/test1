@@ -69,7 +69,7 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 	@Override
 	public void doStartProcess(TaskInfo taskInfo) throws Exception {
 		taskInfo.setStatus(TaskInfoStatus.WAIT_FOR_CLAIM.toString());
-		taskInfo.setAssignDate(new Date());
+//		taskInfo.setAssignDate(new Date());
 		this.baseService.update(taskInfo);
 		
 		//初始化任务参数
