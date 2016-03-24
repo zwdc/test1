@@ -30,17 +30,14 @@ import com.hdc.entity.Group;
 import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
-import com.hdc.entity.RefuseReason;
 import com.hdc.entity.TaskInfo;
 import com.hdc.entity.User;
 import com.hdc.service.IGroupService;
-import com.hdc.service.IRefuseReasonService;
 import com.hdc.service.ITaskInfoService;
 import com.hdc.service.IUserService;
 import com.hdc.util.BeanUtils;
 import com.hdc.util.Constants;
 import com.hdc.util.Constants.TaskInfoStatus;
-import com.hdc.util.FileDownloadUtils;
 import com.hdc.util.UserUtil;
 import com.hdc.util.upload.FileUploadUtils;
 import com.hdc.util.upload.exception.InvalidExtensionException;
@@ -60,9 +57,6 @@ public class TaskInfoController {
 
 	@Autowired
 	private ITaskInfoService taskInfoService;
-	
-	@Autowired
-	private IRefuseReasonService refuseReasonService;
 	
 	@Autowired
 	private IUserService userService;
@@ -90,9 +84,7 @@ public class TaskInfoController {
 		ModelAndView mv = new ModelAndView("taskInfo/main_taskInfo");
 		if(!BeanUtils.isBlank(id)) {
 			TaskInfo taskInfo = this.taskInfoService.findById(id);
-			List<RefuseReason> list = this.refuseReasonService.findByTaskId(id);
 			mv.addObject("taskInfo", taskInfo);
-			mv.addObject("refuseReasonList", list);
 		}
 		return mv;
 	}
@@ -316,15 +308,11 @@ public class TaskInfoController {
      */
     @RequestMapping("/refuse/{id}")
     @ResponseBody
-    public Message refuseClaim(@PathVariable("id") Integer id, RefuseReason refuseReason) throws Exception {
+    public Message refuseClaim(@PathVariable("id") Integer id) throws Exception {
     	Message message = new Message();
     	User user = UserUtil.getUserFromSession();
     	TaskInfo taskInfo = this.taskInfoService.findById(id);
     	taskInfo.setStatus(TaskInfoStatus.REFUSE_CLAIM.toString());
-    	refuseReason.setTaskInfo(taskInfo);
-    	refuseReason.setCreateDate(new Date());
-    	refuseReason.setCreateUser(user);
-    	this.refuseReasonService.doAdd(refuseReason);
     	message.setMessage("操作成功！");
     	return message;
     }
