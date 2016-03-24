@@ -17,23 +17,23 @@ import org.springframework.format.annotation.DateTimeFormat;
 @MappedSuperclass
 public class BaseEntity {
 
-	@Column(name = "CREATE_USER_ID", length = 5)
+	@Column(name = "create_user_id", length = 5)
 	private Integer createUserId;
 	
-	@Column(name = "UPDATE_USER_ID", length = 5)
+	@Column(name = "update_user_id", length = 5)
 	private Integer updateUserId;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@Column(name = "CREATE_DATE")
+	@Column(name = "create_date")
 	private Date createDate ;					//创建时间
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@Column(name = "UPDATE_DATE")
+	@Column(name = "update_date")
 	private Date updateDate ;					//修改时间
 	
-	@Column(name = "IS_DELETE", length = 2)
+	@Column(name = "is_delete", length = 2)
     private Integer isDelete;
 
 	public Integer getCreateUserId() {
