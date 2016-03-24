@@ -56,7 +56,7 @@ public class Project extends BaseEntity implements Serializable {
 	@Column(name = "status", length = 30)
 	private String status;			//项目状态
 	
-	@Column(name = "status", length = 4000)
+	@Column(name = "suggestion", length = 4000)
 	private String suggestion;		//拟办意见
 	
 	@Column(name="score", precision = 5, scale = 2)

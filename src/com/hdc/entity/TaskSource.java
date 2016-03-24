@@ -22,7 +22,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * 项目来源
+ * 任务来源
  * @author ZML
  *
  */
@@ -70,7 +70,7 @@ public class TaskSource implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="type_id")
 	@JsonIgnore
-	private TaskInfoType taskInfoType;
+	private TaskInfoType taskInfoType;	//任务类型
 	
 	@Column(name = "is_delete", length = 1)
     private Integer isDelete;

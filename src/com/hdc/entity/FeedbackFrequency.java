@@ -45,7 +45,7 @@ public class FeedbackFrequency implements Serializable {
 	@Column(name = "single_task")
 	private Date singleTask;		//单次任务日期
 	
-	@Column(name = "name", length = 20)
+	@Column(name = "weekly_task", length = 20)
 	private String weeklyTask;		//每周任务(0周日 1周一 2周二...6周六)
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -58,7 +58,7 @@ public class FeedbackFrequency implements Serializable {
 	@Column(name = "weekly_end_date")
 	private Date weeklyEndDate;		//每周结束时间
 	
-	@Column(name = "name", length = 25)
+	@Column(name = "monthly_task", length = 25)
 	private String monthlyTask;		//每月任务
 	
 	@Column(name = "monthly_start_date", length = 2)

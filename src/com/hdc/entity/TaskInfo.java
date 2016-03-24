@@ -5,9 +5,12 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -15,6 +18,8 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 事项
@@ -78,6 +83,11 @@ public class TaskInfo extends BaseEntity implements Serializable{
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@Column(name = "claim_limit_date")
 	private Date claimLimitDate;	//签收时限
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="task_source")
+	@JsonIgnore
+	private TaskSource taskSource;	//任务来源
 	
 /*	@Column(name = "FEEDBACK_CYCLE", length = 1)
 	private Integer feedbackCycle;	//反馈周期（0.默认一次  1.每周一次  2.每月一次）
