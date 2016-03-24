@@ -43,8 +43,26 @@ $(function() {
             e.preventDefault();
             $('#treegrid_menu').menu('show', {
                 left: e.pageX,
-                top: e.pageY
+                top: e.pageY,
+                onClick:function(item){   
+                	if("add" == item.id) {
+                		row.name = "";
+            			row.isDelete = 0;
+            			row.parentId = row.id;
+            			row.id = "";
+            			show(row);
+                	} else if("edit" == item.id) {
+                		if(row.parentId == 0) {
+                			row.parentId = "";
+                			show(row);
+                		}
+                		show(row);
+                	} else if("delete" == item.id) {
+                		delRows();
+                	}
+				}
             });
+            
         }
 	});
 });

@@ -32,9 +32,9 @@
 	</div>
 	
 	<div id="treegrid_menu" class="easyui-menu" style="width:120px;display: none;">
-	    <div onclick="showResource();" data-options="iconCls:'icon-add'">新增</div>
-	    <div onclick="openResource();" data-options="iconCls:'icon-edit'">编辑</div>
-	    <div onclick="delRows();" data-options="iconCls:'icon-remove'">删除</div>
+	    <div id="add" data-options="iconCls:'icon-add'">新增</div>
+	    <div id="edit" data-options="iconCls:'icon-edit'">编辑</div>
+	    <div id="delete" data-options="iconCls:'icon-remove'">删除</div>
 	</div>
 	
 	<table id="taskType_treegrid" title="类型管理"></table>

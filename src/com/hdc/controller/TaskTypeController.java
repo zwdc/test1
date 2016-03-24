@@ -72,6 +72,7 @@ public class TaskTypeController {
 			if(taskType.getParentId() == null) {
 				taskType.setParentId(0);
 			}
+			taskType.setIsDelete(0);
 			this.taskTypeService.doAdd(taskType);
 			message.setMessage("添加成功！");
 		} else {
