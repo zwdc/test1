@@ -106,7 +106,8 @@ function formInit(row) {
 	            $.messager.progress('close');
 	            var json = $.parseJSON(data);
 	            if (json.status) {
-	            	taskInfo_dialog.dialog("refresh",ctx+"/taskInfo/toMain?id="+json.data);
+	            	taskInfo_dialog.dialog('destroy');//销毁对话框
+	            	taskInfo_datagrid.datagrid('reload');//重新加载列表数据
 	            } 
 	            $.messager.show({
 					title : json.title,

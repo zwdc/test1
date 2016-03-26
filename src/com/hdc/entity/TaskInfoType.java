@@ -1,6 +1,7 @@
 package com.hdc.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,9 +9,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * 任务类型
@@ -33,14 +37,19 @@ public class TaskInfoType implements Serializable {
 	@Column(name = "id", length = 5, nullable = false, unique = true)
 	private Integer id;
 	
-	@Column(name = "parentId", length = 5, nullable = false)
-    private Integer parentId;
+	@Column(name = "parentId", length = 5)
+    private Integer parentId;		//父节点(没用先留着，新需求2016-03-25)
 	
 	@Column(name = "name", length = 50, nullable = false)
 	private String name;
 	
 	@Column(name = "is_delete", length = 1)
     private Integer isDelete;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(name = "create_date")
+	private Date createDate ;					//创建时间
 
 	public Integer getId() {
 		return id;
@@ -72,6 +81,14 @@ public class TaskInfoType implements Serializable {
 
 	public void setIsDelete(Integer isDelete) {
 		this.isDelete = isDelete;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 	
 }

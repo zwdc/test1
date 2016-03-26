@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "task_source")
 @DynamicUpdate(true)
 @DynamicInsert(true)
-public class TaskSource implements Serializable {
+public class TaskSource extends BaseEntity implements Serializable {
 
 	/**
 	 * 
@@ -71,9 +71,6 @@ public class TaskSource implements Serializable {
 	@JoinColumn(name="type_id")
 	@JsonIgnore
 	private TaskInfoType taskInfoType;	//任务类型
-	
-	@Column(name = "is_delete", length = 1)
-    private Integer isDelete;
 
 	public Integer getId() {
 		return id;
@@ -145,14 +142,6 @@ public class TaskSource implements Serializable {
 
 	public void setTaskInfoType(TaskInfoType taskInfoType) {
 		this.taskInfoType = taskInfoType;
-	}
-
-	public Integer getIsDelete() {
-		return isDelete;
-	}
-
-	public void setIsDelete(Integer isDelete) {
-		this.isDelete = isDelete;
 	}
 
 }

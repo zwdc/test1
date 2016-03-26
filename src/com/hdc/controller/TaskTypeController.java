@@ -1,5 +1,6 @@
 package com.hdc.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hdc.entity.Message;
+import com.hdc.entity.Page;
+import com.hdc.entity.Parameter;
 import com.hdc.entity.TaskInfoType;
 import com.hdc.service.ITaskTypeService;
 
@@ -46,12 +49,25 @@ public class TaskTypeController {
 	}
 	
 	/**
-	 * 获取所有类型
+	 * 获取分页数据
 	 * @param param
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping("/getList")
+	@ResponseBody
+	public List<TaskInfoType> getList(Parameter param) throws Exception {
+		Page<TaskInfoType> page = new Page<TaskInfoType>(param.getPage(), param.getRows());
+		return this.taskTypeService.getListPage(param, page);
+	}
+	
+	/**
+	 * 获取所有类型
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getAll")
 	@ResponseBody
 	public List<TaskInfoType> getList() throws Exception {
 		return this.taskTypeService.getAllList();
@@ -69,10 +85,8 @@ public class TaskTypeController {
 		Message message = new Message();
 		Integer id = taskType.getId();
 		if(id == null) {
-			if(taskType.getParentId() == null) {
-				taskType.setParentId(0);
-			}
 			taskType.setIsDelete(0);
+			taskType.setCreateDate(new Date());
 			this.taskTypeService.doAdd(taskType);
 			message.setMessage("添加成功！");
 		} else {
