@@ -22,7 +22,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  *
  */
 @Entity
-@Table(name = "FEEDBACK_RECORD")
+@Table(name = "FEEDBACK_FREQUENCY")
 @DynamicUpdate(true)
 @DynamicInsert(true)
 public class FeedbackFrequency implements Serializable {
@@ -66,6 +66,14 @@ public class FeedbackFrequency implements Serializable {
 	
 	@Column(name = "monthly_end_date", length = 2)
 	private Integer monthlyEndDate;	//每月结束日期(天)
+	
+	@Column(name = "is_delete", length = 1)
+	private Integer isDelete;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "HH:mm:ss")
+	@Column(name = "create_date")
+	private Date createDate;
 
 	public Integer getId() {
 		return id;
@@ -137,6 +145,22 @@ public class FeedbackFrequency implements Serializable {
 
 	public void setMonthlyEndDate(Integer monthlyEndDate) {
 		this.monthlyEndDate = monthlyEndDate;
+	}
+
+	public Integer getIsDelete() {
+		return isDelete;
+	}
+
+	public void setIsDelete(Integer isDelete) {
+		this.isDelete = isDelete;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 	
 }
