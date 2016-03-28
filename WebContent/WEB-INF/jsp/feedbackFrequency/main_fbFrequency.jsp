@@ -60,59 +60,122 @@
     <input type="hidden" name="createDate" value="<fmt:formatDate value='${feedback.createDate }' type='both'/>">
     <input type="hidden" name="isDelete" value="${feedback.isDelete }">
     <input type="hidden" name="status" value="${feedback.status }">
-    <input type="hidden" name="fileName" id="fileName" value = "${feedback.fileName }"> <!-- id="fileName"不能删 -->
+    <input type="hidden" name="fileName" id="fileName" value = "${feedback.fileName }">
 	<input type="hidden" name="filePath" value = "${feedback.filePath }"> 
 	<input type="hidden" name="uploadDate" value = "<fmt:formatDate value='${feedback.uploadDate }' type='both'/>">
+	<div class="table-responsive">
 	<table class="table table-bordered table-hover table-condensed">
 		<tr class="bg-primary">
-			<td colspan="6" align="center">反馈信息</td>
+			<td colspan="4" align="center">反馈信息</td>
 		</tr>
+		<tr>
+	  		<td class="text-right">频度名称:</td>
+	  		<td>
+	  			<input name="phone" class="easyui-textbox" data-options="prompt:'填写频度名称'"  value="${feedback.phone }" required="required" type="text">
+	  		</td>
+	  		<td class="text-right">执行方式:</td>
+	  		<td>
+	  			<select id="type" class="easyui-combobox" name="type" style="width:180px;" data-options="required:true">
+					<option value="1">默认一次</option>
+					<option value="2">每周一次</option>
+					<option value="3">每月一次</option>
+				</select>
+	  		</td>
+	  	</tr>
 		<tr class="active">
-		  	<td colspan="8">
-		  		<span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;督查任务信息:
+		  	<td colspan="4">
+		  		<span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;默认一次:
 		  	</td>
 	  	</tr>
 	  	<tr>
-	  		<td class="text-right">事项标题:</td>
-	  		<td colspan="3">${feedback.taskInfo.title }</td>
-	  		<td class="text-right">文号:</td>
-	  		<td>${feedback.taskInfo.taskNo }</td>
+	  		<td class="text-right">
+	  			<input type="radio" name="type" value="0">
+	  		</td>
+	  		<td>默认一次</td>
+	  		<td class="text-right">选择反馈时间:</td>
+	  		<td>
+	  			<input name="sourceDate" class="easyui-datetimebox" data-options="prompt:'反馈时间',editable:false" value="${source.sourceDate }" required="required">
+	  		</td>
 	  	</tr>
 	  	<tr class="active">
 		  	<td colspan="8">
-		  		<span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;反馈信息:
+		  		<span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;每周一次:
 		  	</td>
 	  	</tr>
 		<tr>
-			<td class="text-right">原始起草人:</td>
-			<td><input name="originalPerson" class="easyui-textbox" data-options="prompt:'填写原始起草人'" value="${feedback.originalPerson }" required="required" type="text" style="width: 50%"></td>
-			<td class="text-right">手机:</td>
-			<td><input name="phone" class="easyui-textbox" data-options="prompt:'填写手机号'"  value="${feedback.phone }" required="required" type="text"></td>
-			<td class="text-right">办公电话:</td>
-			<td><input name="workPhone" class="easyui-textbox" data-options="prompt:'填写办公电话'"  value="${feedback.workPhone }" required="required" type="text"></td>
+			<td class="text-right">
+	  			<input type="radio" name="type" value="0">
+	  		</td>
+	  		<td>每周一次</td>
+	  		<td class="text-right">选择反馈时间:</td>
+	  		<td>
+	  			<input name="sourceDate" class="easyui-datetimebox" data-options="prompt:'反馈时间',editable:false" value="${source.sourceDate }" required="required">
+	  		</td>
 		</tr>
 		<tr>
-			<td class="text-right">处/科室:</td>
-			<td><input name="offices" class="easyui-textbox" data-options="prompt:'填写处/科室'"  value="${feedback.offices }" required="required" type="text"></td>
-			<td class="text-right">职务:</td>
-			<td><input name="dutyOf" class="easyui-textbox" data-options="prompt:'填写职务'"  value="${feedback.dutyOf }" required="required" type="text"></td>
-			<td class="text-right">邮箱:</td>
-			<td><input name="email" class="easyui-textbox" data-options="prompt:'填写邮箱'"  value="${feedback.email }" required="required" type="text"></td>
-		</tr>
-		<tr>
-			<td class="text-right">联络人:</td>
-			<td><input name="contacts" class="easyui-textbox" data-options="prompt:'填写联络人'" value="${feedback.contacts }" required="required" type="text"></td>
-			<td class="text-right">联系电话:</td>
-			<td><input name="contactsPhone" class="easyui-textbox" data-options="prompt:'填写联系电话'" value="${feedback.contactsPhone }" required="required" type="text"></td>
-			<td colspan="2"></td>
-		</tr>
-		<tr>
-			<td colspan="6">落实情况:<textarea class="easyui-kindeditor" name="content" rows="8">${feedback.content }</textarea></td>
-		</tr>
-		<tr>
-			<td class="text-right">附件:</td>
-			<td colspan="5"><input class="easyui-filebox" type="text" id="file" name="file" data-options="prompt:'请选择文件...'" style="width: 90%;height: 25px;" required="required"></td>
+			<td colspan="4">
+				<table class="table table-bordered table-hover table-condensed">
+	  				<tr>
+	  					<td rowspan="3" class="text-center">
+	  						<input type="radio" name="type" value="0">每月一次
+	  					</td>
+	  					<td>
+	  						<div class="checkbox">
+		  						<label class="checkbox-inline">
+		  							<input type="checkbox">一月
+		  						</label>
+		  						<label class="checkbox-inline">
+		  							<input type="checkbox">二月
+		  						</label>
+		  						<label class="checkbox-inline">
+		  							<input type="checkbox">三月
+		  						</label>
+		  						<label class="checkbox-inline">
+		  							<input type="checkbox">四月
+		  						</label>
+		  						<label class="checkbox-inline">
+		  							<input type="checkbox">五月
+		  						</label>
+		  						<label class="checkbox-inline">
+		  							<input type="checkbox">六月
+		  						</label>
+	  						</div>
+	  					</td>
+	  				</tr>
+	  				<tr>
+	  					<td>
+	  						<div class="checkbox">
+		  						<label class="checkbox-inline">
+		  							<input type="checkbox">七月
+		  						</label>
+		  						<label class="checkbox-inline">
+		  							<input type="checkbox">八月
+		  						</label>
+		  						<label class="checkbox-inline">
+		  							<input type="checkbox">九月
+		  						</label>
+		  						<label class="checkbox-inline">
+		  							<input type="checkbox">十月
+		  						</label>
+		  						<label class="checkbox-inline">
+		  							<input type="checkbox">十一月
+		  						</label>
+		  						<label class="checkbox-inline">
+		  							<input type="checkbox">十二月
+	  							</label>
+	  						</div>
+	  					</td>
+	  				</tr>
+	  				<tr>
+	  					<td>
+	  						<input name="sourceDate" class="easyui-datetimebox" data-options="prompt:'反馈时间',editable:false" value="${source.sourceDate }" required="required"> - 
+	  						<input name="sourceDate" class="easyui-datetimebox" data-options="prompt:'反馈时间',editable:false" value="${source.sourceDate }" required="required">
+	  					</td>
+	  				</tr>
+	  			</table>
+	  		</td>
 		</tr>
 	</table>
+	</div>
 </form>
 </div>

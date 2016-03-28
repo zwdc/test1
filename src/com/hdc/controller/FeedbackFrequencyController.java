@@ -1,7 +1,6 @@
 package com.hdc.controller;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.hdc.entity.Datagrid;
 import com.hdc.entity.FeedbackFrequency;
 import com.hdc.entity.Message;
 import com.hdc.entity.Page;
@@ -61,9 +61,11 @@ public class FeedbackFrequencyController {
 	 * @throws Exception 
 	 */
 	@RequestMapping("/getList")
-	public List<FeedbackFrequency> getList(Parameter param) throws Exception {
+	@ResponseBody
+	public Datagrid<FeedbackFrequency> getList(Parameter param) throws Exception {
 		Page<FeedbackFrequency> page = new Page<FeedbackFrequency>(param.getPage(), param.getRows());
-		return this.feedbackFrequencyService.getListPage(param, page);
+		this.feedbackFrequencyService.getListPage(param, page);
+		return new Datagrid<FeedbackFrequency>(page.getTotal(), page.getResult());
 	}
 	
 	/**

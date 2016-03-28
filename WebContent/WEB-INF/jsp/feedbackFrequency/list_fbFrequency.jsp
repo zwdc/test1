@@ -39,6 +39,6 @@
 		<div data-options="name:'createDate'">创建日期</div>
 	</div>
 	
-	<table id="taskSource_datagrid" title="反馈频度管理"></table>
+	<table id="feedback_datagrid" title="反馈频度管理"></table>
   </body>
 </html>

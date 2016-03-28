@@ -20,7 +20,7 @@ $(function() {
         columns : [ 
             [ 
               {field: 'name', title: '频度名称', width: fixWidth(0.3), align: 'left', halign: 'center', sortable: true},
-              {field: '', title: '频度类型', width: fixWidth(0.4), align: 'left', halign: 'center'},
+              {field: 'type', title: '频度类型', width: fixWidth(0.4), align: 'left', halign: 'center'},
               {field: 'createDate', title: '创建日期', width: fixWidth(0.1), align: 'center', sortable: true}
     	    ] 
         ],
