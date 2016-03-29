@@ -88,7 +88,7 @@ function add(row) {
 	feedback_dialog = $('<div/>').dialog({
     	title : "频度信息",
 		top: 20,
-		width : fixWidth(0.8),
+		width : fixWidth(0.6),
 		height : 'auto',
         modal: true,
         minimizable: true,

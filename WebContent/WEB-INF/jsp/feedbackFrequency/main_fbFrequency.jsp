@@ -69,54 +69,91 @@
 			<td colspan="4" align="center">反馈信息</td>
 		</tr>
 		<tr>
-	  		<td class="text-right">频度名称:</td>
-	  		<td>
+	  		<td class="text-right" style="width: 205px;">频度名称:</td>
+	  		<td style="padding: 8px;">
 	  			<input name="phone" class="easyui-textbox" data-options="prompt:'填写频度名称'"  value="${feedback.phone }" required="required" type="text">
-	  		</td>
-	  		<td class="text-right">执行方式:</td>
-	  		<td>
-	  			<select id="type" class="easyui-combobox" name="type" style="width:180px;" data-options="required:true">
-					<option value="1">默认一次</option>
-					<option value="2">每周一次</option>
-					<option value="3">每月一次</option>
-				</select>
 	  		</td>
 	  	</tr>
 		<tr class="active">
-		  	<td colspan="4">
+		  	<td colspan="2">
 		  		<span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;默认一次:
 		  	</td>
 	  	</tr>
 	  	<tr>
-	  		<td class="text-right">
-	  			<input type="radio" name="type" value="0">
-	  		</td>
-	  		<td>默认一次</td>
-	  		<td class="text-right">选择反馈时间:</td>
-	  		<td>
-	  			<input name="sourceDate" class="easyui-datetimebox" data-options="prompt:'反馈时间',editable:false" value="${source.sourceDate }" required="required">
+	  		<td colspan="2">
+	  			<div class="table-responsive">
+		  		<table class="table table-bordered">
+	  				<tr>
+	  					<td rowspan="2" class="text-center" style="width: 200px; vertical-align:middle;">
+	  						<input type="radio" name="type" value="0">默认一次
+	  					</td>
+	  					<td>
+	  						<input name="sourceDate" class="easyui-datetimebox" data-options="prompt:'选择日期',editable:false" value="${source.sourceDate }" required="required">
+	  					</td>
+	  				</tr>
+		  		</table>
+		  		</div>
 	  		</td>
 	  	</tr>
 	  	<tr class="active">
-		  	<td colspan="8">
+		  	<td colspan="2">
 		  		<span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;每周一次:
 		  	</td>
 	  	</tr>
 		<tr>
-			<td class="text-right">
-	  			<input type="radio" name="type" value="0">
-	  		</td>
-	  		<td>每周一次</td>
-	  		<td class="text-right">选择反馈时间:</td>
-	  		<td>
-	  			<input name="sourceDate" class="easyui-datetimebox" data-options="prompt:'反馈时间',editable:false" value="${source.sourceDate }" required="required">
+	  		<td colspan="2">
+	  			<div class="table-responsive">
+	  			<table class="table table-bordered">
+	  				<tr>
+	  					<td rowspan="2" class="text-center" style="width: 200px; vertical-align:middle;">
+	  						<input type="radio" name="type" value="0">每周一次
+	  					</td>
+	  					<td>
+	  						<div class="checkbox">
+		  						<label class="checkbox-inline">
+		  							<input type="checkbox">周日
+		  						</label>
+		  						<label class="checkbox-inline">
+		  							<input type="checkbox">周一
+		  						</label>
+		  						<label class="checkbox-inline">
+		  							<input type="checkbox">周二
+		  						</label>
+		  						<label class="checkbox-inline">
+		  							<input type="checkbox">周三
+		  						</label>
+		  						<label class="checkbox-inline">
+		  							<input type="checkbox">周四
+		  						</label>
+		  						<label class="checkbox-inline">
+		  							<input type="checkbox">周五
+		  						</label>
+		  						<label class="checkbox-inline">
+		  							<input type="checkbox">周六
+		  						</label>
+	  						</div>
+	  					</td>
+	  				</tr>
+	  				<tr>
+	  					<td>
+	  						<input name="sourceDate" class="easyui-timespinner" data-options="prompt:'设置时间',showSeconds:true" value="${source.sourceDate }" required="required">
+	  					</td>
+	  				</tr>
+	  			</table>
+	  			</div>
 	  		</td>
 		</tr>
+	  	<tr class="active">
+		  	<td colspan="2">
+		  		<span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;每月一次:
+		  	</td>
+	  	</tr>
 		<tr>
-			<td colspan="4">
-				<table class="table table-bordered table-hover table-condensed">
+			<td colspan="2">
+				<div class="table-responsive">
+				<table class="table table-bordered">
 	  				<tr>
-	  					<td rowspan="3" class="text-center">
+	  					<td rowspan="3" class="text-center" style="width: 200px; vertical-align:middle;">
 	  						<input type="radio" name="type" value="0">每月一次
 	  					</td>
 	  					<td>
@@ -173,6 +210,7 @@
 	  					</td>
 	  				</tr>
 	  			</table>
+	  			</div>
 	  		</td>
 		</tr>
 	</table>
