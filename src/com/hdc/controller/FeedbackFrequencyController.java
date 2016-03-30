@@ -74,16 +74,17 @@ public class FeedbackFrequencyController {
 	 */
 	@RequestMapping("/saveOrUpdate")
 	@ResponseBody
-	public Message saveOrUpdate(FeedbackFrequency f) throws Exception {
+	public Message saveOrUpdate(FeedbackFrequency fb) throws Exception {
 		Message message = new Message();
-		Integer id = f.getId();
+		Integer id = fb.getId();
+		System.out.println(fb.getWeeklyTask());
 		try {
 			if(id == null) {
-				f.setIsDelete(0);
-				f.setCreateDate(new Date());
-				this.feedbackFrequencyService.doAdd(f);
+				fb.setIsDelete(0);
+				fb.setCreateDate(new Date());
+				this.feedbackFrequencyService.doAdd(fb);
 			} else {
-				this.feedbackFrequencyService.doUpdate(f);
+				this.feedbackFrequencyService.doUpdate(fb);
 			}
 			message.setMessage("操作成功！");
 		} catch (Exception e) {

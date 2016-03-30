@@ -63,13 +63,13 @@
 			 var goEasy = new GoEasy({
 		         appkey: '0cf326d6-621b-495a-991e-a7681bcccf6a',
 		         onConnected: function() {
-		        	alert("成功连接 GoEasy。");
+		        	//alert("成功连接 GoEasy。");
 	        	 },
 	        	 onDisconnected: function() {
-	        	 	alert("与 GoEasy 连接断开。");
+	        	 	//alert("与 GoEasy 连接断开。");
 	        	 },
 	        	 onConnectFailed: function(error) {
-	        	 	alert("与 GoEasy 连接失败，错误编码："+error.code+"错误信息："+error.content);
+	        	 	//alert("与 GoEasy 连接失败，错误编码："+error.code+"错误信息："+error.content);
 	        	 }
 		     });
 			//获取消息
@@ -116,10 +116,10 @@
 	                 });
 	             },
 	             onSuccess: function () {
-            	 	alert("Channel 订阅成功。");
+            	 	//alert("Channel 订阅成功。");
             	 },
             	 onFailed: function (error) {
-            	 	alert("Channel 订阅失败, 错误编码：" + error.code + " 错误信息：" + error.content)
+            	 	//alert("Channel 订阅失败, 错误编码：" + error.code + " 错误信息：" + error.content)
             	 }
 	         });
 		});

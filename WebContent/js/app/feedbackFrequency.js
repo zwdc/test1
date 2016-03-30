@@ -20,8 +20,23 @@ $(function() {
         columns : [ 
             [ 
               {field: 'name', title: '频度名称', width: fixWidth(0.3), align: 'left', halign: 'center', sortable: true},
-              {field: 'type', title: '频度类型', width: fixWidth(0.4), align: 'left', halign: 'center'},
-              {field: 'createDate', title: '创建日期', width: fixWidth(0.1), align: 'center', sortable: true}
+              {field: 'type', title: '频度类型', width: fixWidth(0.4), align: 'left', halign: 'center',
+            	  formatter:function(value,row){
+            		  if(value == 1) {
+            			  return "默认一次";
+            		  } else if(value == 2) {
+            			  return "每周一次"
+            		  } else if(value == 3) {
+            			  return "每月一次";
+            		  }
+            	  }
+            	  
+              },
+              {field: 'createDate', title: '创建日期', width: fixWidth(0.1), align: 'center', sortable: true,
+            	  formatter:function(value,row){
+            		  return moment(value).format("YYYY-MM-DD HH:mm:ss");
+				  }
+              }
     	    ] 
         ],
         toolbar: "#toolbar"
@@ -49,7 +64,7 @@ function fixWidth(percent) {
 
 //初始化表单
 function formInit(row) {
-	feedback_form = $('#taskSourceForm').form({
+	feedback_form = $('#fbFrequencyForm').form({
         url: ctx+"/feedbackFrequency/saveOrUpdate",
         onSubmit: function () {
 	        $.messager.progress({
@@ -59,6 +74,13 @@ function formInit(row) {
 	        var isValid = $(this).form('validate');
 	        if (!isValid) {
 	            $.messager.progress('close');
+	        } else {
+	        	var type = $("input[name='type']:checked").val();
+	        	if(typeof(type) == "undefined") {
+	        		$.messager.progress('close');
+	        		$.messager.alert('温馨提示','至少选择一种反馈类型！','info');
+	        		return false;
+	        	}
 	        }
 	        return isValid;
 	    },
