@@ -32,6 +32,11 @@ import com.hdc.util.FileDownloadUtils;
 import com.hdc.util.upload.FileUploadUtils;
 import com.hdc.util.upload.exception.InvalidExtensionException;
 
+/**
+ * 任务来源控制器
+ * @author ZML
+ *
+ */
 @Controller
 @RequestMapping("/taskSource")
 public class TaskSourceController {

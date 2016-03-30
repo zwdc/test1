@@ -22,7 +22,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  *
  */
 @Entity
-@Table(name = "FEEDBACK_RECORD")
+@Table(name = "FEEDBACK_FREQUENCY")
 @DynamicUpdate(true)
 @DynamicInsert(true)
 public class FeedbackFrequency implements Serializable {
@@ -39,6 +39,9 @@ public class FeedbackFrequency implements Serializable {
 	
 	@Column(name = "name", length = 200)
 	private String name;			//频度名称
+	
+	@Column(name = "type", length = 1)
+	private Integer type;			// 1.单次任务  2.每周任务  3.每月任务
 		
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -61,11 +64,19 @@ public class FeedbackFrequency implements Serializable {
 	@Column(name = "monthly_task", length = 25)
 	private String monthlyTask;		//每月任务
 	
-	@Column(name = "monthly_start_date", length = 2)
-	private Integer monthlyStartDate;	//每月开始日期(天)
+	@Column(name = "monthly_start_day", length = 2)
+	private Integer monthlyStartDay;	//每月开始日期(天)
 	
-	@Column(name = "monthly_end_date", length = 2)
-	private Integer monthlyEndDate;	//每月结束日期(天)
+	@Column(name = "monthly_end_day", length = 2)
+	private Integer monthlyEndDay;	//每月结束日期(天)
+	
+	@Column(name = "is_delete", length = 1)
+	private Integer isDelete;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "HH:mm:ss")
+	@Column(name = "create_date")
+	private Date createDate;
 
 	public Integer getId() {
 		return id;
@@ -122,21 +133,45 @@ public class FeedbackFrequency implements Serializable {
 	public void setMonthlyTask(String monthlyTask) {
 		this.monthlyTask = monthlyTask;
 	}
-
-	public Integer getMonthlyStartDate() {
-		return monthlyStartDate;
+	
+	public Integer getMonthlyStartDay() {
+		return monthlyStartDay;
 	}
 
-	public void setMonthlyStartDate(Integer monthlyStartDate) {
-		this.monthlyStartDate = monthlyStartDate;
+	public void setMonthlyStartDay(Integer monthlyStartDay) {
+		this.monthlyStartDay = monthlyStartDay;
 	}
 
-	public Integer getMonthlyEndDate() {
-		return monthlyEndDate;
+	public Integer getMonthlyEndDay() {
+		return monthlyEndDay;
 	}
 
-	public void setMonthlyEndDate(Integer monthlyEndDate) {
-		this.monthlyEndDate = monthlyEndDate;
+	public void setMonthlyEndDay(Integer monthlyEndDay) {
+		this.monthlyEndDay = monthlyEndDay;
+	}
+
+	public Integer getIsDelete() {
+		return isDelete;
+	}
+
+	public void setIsDelete(Integer isDelete) {
+		this.isDelete = isDelete;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Integer getType() {
+		return type;
+	}
+
+	public void setType(Integer type) {
+		this.type = type;
 	}
 	
 }

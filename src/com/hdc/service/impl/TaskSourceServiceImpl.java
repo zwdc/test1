@@ -25,7 +25,7 @@ public class TaskSourceServiceImpl implements ITaskSourceService {
 
 	@Override
 	public List<TaskSource> getAllList() throws Exception {
-		String hql = "from TaskSource where isDelete = 0";
+		String hql = "from TaskSource where isDelete = 0 order by createDate desc";
 		return this.baseService.find(hql);
 	}
 
