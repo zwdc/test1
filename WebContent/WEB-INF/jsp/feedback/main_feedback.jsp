@@ -21,7 +21,7 @@
 	
 	function submitForm(obj, taskId) {
 		$('#feedback_form').form('submit', {
-		 	url: ctx+"/feedback/completeTask",
+		 	url: ctx+"/feedback/saveOrUpdate",
 	        onSubmit: function () {
 	        	if(taskId != null) {
 		        	param.taskId = taskId;

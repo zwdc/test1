@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -92,6 +93,24 @@ public class TaskInfoController {
 	@RequestMapping("/toChooseGroup")
 	public String toChooseGroup() {
 		return "taskInfo/choose_group";
+	}
+	
+	/**
+	 * 根据承办单位显示 单位下的联系人
+	 * 解决返回值为乱码
+	 * @param groupId
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/getGroupUser/{groupId}", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
+	@ResponseBody
+	public String getGroupUser(@PathVariable("groupId") Integer groupId) throws Exception {
+		Group group = this.groupService.getGroupById(groupId);
+		String userNames = "";
+		for(User user : group.getUser()) {
+			userNames += user.getName()+"、";
+		}
+		return userNames.substring(0, userNames.length()-1);
 	}
 	
 	/**
