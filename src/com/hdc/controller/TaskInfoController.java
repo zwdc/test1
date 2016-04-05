@@ -89,6 +89,11 @@ public class TaskInfoController {
 		return mv;
 	}
 	
+	@RequestMapping("/toChooseGroup")
+	public String toChooseGroup() {
+		return "taskInfo/choose_group";
+	}
+	
 	/**
 	 * 获取列表分页数据
 	 * @param param
