@@ -140,24 +140,19 @@ public class TaskInfoController {
 			Map<String, Object> map=new HashMap<String, Object>();
 			map.put("id", task.getId());
 			map.put("title", task.getTitle());
-//			map.put("taskNo", task.getTaskNo());
+			map.put("info", task.getInfo());
 			map.put("createTaskDate", task.getCreateTaskDate());
-//			map.put("assignDate", task.getAssignDate());
 			map.put("endTaskDate", task.getEndTaskDate());
-//			map.put("claimDate", task.getClaimDate());
-//			map.put("feedbackCycle", task.getFeedbackCycle());
-//			map.put("feedbaceDate", task.getFeedbaceDate());
-			map.put("hostGroup", getGroupName(task.getHostGroup()));	//主办单位
-//			map.put("hostUser", getUserName(task.getHostUser()));		//主办人
-//			map.put("urgeCount", task.getUrge().size());				//催办数
-//			map.put("feedbackCount", task.getFeedBack().size());		//反馈记录数
+			map.put("taskSourceName", task.getTaskSource().getName()); 	//任务来源
+			map.put("fbFrequencyName", task.getFbFrequency().getName());//反馈频度
+			map.put("urgency", task.getUrgency());	//急缓程度
 			map.put("status", task.getStatus());
 			jsonList.add(map);
 		}
 		return new Datagrid<Object>(page.getTotal(), jsonList);
 	}
 	
-	private String getUserName(String userIds) throws NumberFormatException, Exception {
+	/*private String getUserName(String userIds) throws NumberFormatException, Exception {
 		if( null == userIds ){
 			return "" ;
 		} else {
@@ -183,7 +178,7 @@ public class TaskInfoController {
 			}
 			return names.substring(0, names.length()-1);
 		}
-	}
+	}*/
  	
 	/**
 	 * 添加或修改

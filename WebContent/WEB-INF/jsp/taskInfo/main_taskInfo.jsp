@@ -27,27 +27,21 @@
 		 	panelWidth: 500,
 			idField: 'id',
 			textField: 'name',
-			url: ctx+'/taskSource/getAllList',
+			url: ctx+'/taskSource/getList',
 			method: 'post',
 			pagination:true,
 			rownumbers:true,
 			fitColumns: true,
 			striped:true,
 			columns: [[
-				{field: 'name', title: '来源名称', width: fixWidth(0.1), align: 'center', sortable: true},
-	            {field: 'sourceDate', title: '来源时间', width: fixWidth(0.1), align: 'center', sortable: true,
+				{field: 'name', title: '来源名称', width: 200, align: 'left', halign: 'center', sortable: true},
+	            {field: 'sourceDate', title: '来源时间', width: 100, align: 'center', sortable: true,
 	            	  formatter: function(value, row) {
 	            		  moment(value).format("YYYY-MM-DD HH:mm:ss");
 	            	  }  
 	            },
-	            {field: 'taskType', title: '任务类型', width: fixWidth(0.3), align: 'left',halign: 'center'}
+	            {field: 'taskTypeName', title: '任务类型', width: 100, align: 'center'}
 			]],
-			onSelect: function(index, row) {
-				$("#bankName").textbox("setValue", row.bank);
-				$("#telephone").textbox("setValue",row.companyPhone);
-				$("#bankAccount").textbox("setValue",row.bankAccount);
-				$("#mailingAddress").textbox("setValue",row.address);
-			},
 	        toolbar: "#combo_toolbar"
  		});
  		 
@@ -84,7 +78,18 @@
 			                var checkedRowIndex = hostGroup.datagrid('getRowIndex', checkedRow);
 			                hostGroup.datagrid('deleteRow', checkedRowIndex);
 			            }
-				    	
+			            //重新设置hostGroupId
+			            var groupIds = "";
+			            var rows = hostGroup.datagrid('getRows');
+			            if(rows.length > 0) {
+			            	for(var j = 0; j < rows.length; j++){
+			            		var row = rows[j];
+			            		groupIds += row.groupId + ',';
+			            	}
+			            	$("#hostGroupId").val(groupIds.substring(0, groupIds.length-1));
+			            } else {
+			            	$("#hostGroupId").val("");
+			            }
 				    } else {
 				    	$.messager.alert("提示", "您未勾选任何操作对象，请勾选一行数据！");
 				    }
@@ -92,35 +97,6 @@
 			}]
 		});
 	});
-	
-	function upload() {
-		$('#uploadForm').form('submit', {
-	    	url: ctx+"/taskInfo/uploadFile",
-	        onSubmit: function () {
-		        $.messager.progress({
-		            title: '提示信息！',
-		            text: '数据处理中，请稍后....'
-		        });
-		        var isValid = $(this).form('validate');
-		        if (!isValid) {
-		            $.messager.progress('close');
-		        }
-		        return isValid;
-		    },
-		    success: function (result) {
-		        $.messager.progress('close');
-		        var json = $.parseJSON(result);
-		        if (json.status) {
-		        	taskInfo_dialog.dialog("refresh",ctx+"/taskInfo/toMain?id="+json.data.toString());
-		        } 
-		        $.messager.show({
-					title : json.title,
-					msg : json.message,
-					timeout : 1000 * 2
-				});
-		    }
-	    });
-	}
 	
 	var group_datagrid, group_dialog;
 	function chooseHostGroup() {
@@ -176,6 +152,9 @@
 	}
 	
 	function selectGroups() {
+		$('#hostGroupDatagrid').datagrid('loadData', { total: 0, rows: [] }); //清空已生成的牵头单位
+		$("#hostGroupId").val("");	//清空id
+		//重新生成牵头单位
 		var rows = group_datagrid.datagrid('getChecked');
 		var groupIds = "";
 		$.each(rows, function(index, field) { 
@@ -186,7 +165,8 @@
                 success: function (data) {
 					$('#hostGroupDatagrid').datagrid('insertRow',{
 						row: {
-							name: field.name,
+							groupId: field.id,
+							groupName: field.name,
 							userNames: data
 						}
 					});
@@ -223,7 +203,7 @@
 		</tr>
 		<tr>
 			<td class="text-right">任务标题:</td>
-			<td colspan="3"><input name="title" class="easyui-textbox" data-options="prompt:'填写事项标题'" value="${taskInfo.title }" required="required" type="text" style="width: 50%"></td>
+			<td colspan="3"><input name="title" class="easyui-textbox" data-options="prompt:'填写任务标题'" value="${taskInfo.title }" required="required" type="text" style="width: 50%"></td>
 		</tr>
 		<tr>
 			<td class="text-right">任务简称:</td>
@@ -246,11 +226,12 @@
 		<tr>
 			<td class="text-right">牵头单位:</td>
 			<td colspan="3">
-				<table id="hostGroupDatagrid" class="easyui-datagrid" data-options="fitColumns:true,rownumbers:true,border:true">
+				<table id="hostGroupDatagrid" class="easyui-datagrid" data-options="url:'${ctx }/group/getHostGroupList?groupIds=${taskInfo.hostGroup }',fitColumns:true,rownumbers:true,border:true">
 				    <thead>
 						<tr>
 							<th data-options="field:'ck',checkbox:true"></th>
-							<th data-options="field:'name'" width="40%">牵头单位名称</th>
+							<th data-options="field:'groupId',hidden:true">ID</th>
+							<th data-options="field:'groupName'" width="40%">牵头单位名称</th>
 							<th data-options="field:'userNames'" width="50%">联系人</th>
 						</tr>
 				    </thead>
@@ -259,12 +240,6 @@
 				<input id="hostGroupId" name="hostGroup" value = "${taskInfo.hostGroup }" type="hidden"/>
 			</td>
 		</tr>
-		<%-- <tr>
-			<td colspan="4">事项内容:<textarea class="easyui-kindeditor" name="taskContent" rows="3" >${taskInfo.taskContent }</textarea></td>
-		</tr>
-		<tr>
-			<td colspan="4">领导批示:<textarea class="easyui-kindeditor" name="leadComments" rows="3" >${taskInfo.leadComments }</textarea></td>
-		</tr>  --%>
 		<tr>
 			<td class="text-right">责任单位:</td>
 			<td colspan="3">

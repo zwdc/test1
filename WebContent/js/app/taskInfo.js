@@ -16,22 +16,31 @@ $(function(){
 		striped:true,					//隔行变色
 		columns:[
 		    [
-		     	{field:'title',title:'标题',width:fixWidth(0.2),align:'left',halign:'center'},
-		     	{field:'taskNo',title:'文号',width:fixWidth(0.1),align:'center',halign:'center'},
-		     	{field:'createTaskDate',title:'立项时间',width:fixWidth(0.1),align:'center',halign:'center',sortable:true,
+		     	{field:'title',title:'任务标题',width:fixWidth(0.2),align:'left',halign:'center'},
+		     	{field:'info',title:'任务简称',width:fixWidth(0.2),align:'left',halign:'center'},
+		     	{field:'createTaskDate',title:'开始时间',width:fixWidth(0.1),align:'center',sortable:true,
 		     		formatter:function(value,row){
 	            		  return moment(value).format("YYYY-MM-DD HH:mm:ss");
 					 }
 		     	},
-		     	{field:'feedbackCycle',title:'反馈周期',width:fixWidth(0.1),align:'center'},
-		     	{field:'hostGroup',title:'主办单位',width:fixWidth(0.1),align:'center'},
-		     	{field:'hostUser',title:'主办人',width:fixWidth(0.1),align:'center'},
-		     	{field:'endTaskDate',title:'办结时限',width:fixWidth(0.1),align:'center',sortable:true,
+		     	{field:'endTaskDate',title:'结束时限',width:fixWidth(0.1),align:'center',sortable:true,
 		     		formatter:function(value,row){
-	            		  return moment(value).format("YYYY-MM-DD HH:mm:ss");
+		     			return moment(value).format("YYYY-MM-DD HH:mm:ss");
+		     		}
+		     	},
+		     	{field:'fbFrequencyName',title:'反馈频度',width:fixWidth(0.1),align:'center'},
+		     	{field:'taskSourceName',title:'任务来源',width:fixWidth(0.1),align:'center'},
+		     	{field:'urgency',title:'急缓程度',width:fixWidth(0.1),align:'center',sortable:true,
+		     		formatter:function(value,row){
+	            		  switch (value) {
+	            		  	case 0: return "特提";
+	            		  	case 1: return "特急";
+	            		  	case 2: return "加急";
+	            		  	case 3: return "平急";
+	            		  } 
 					 }
 		     	},
-		     	{field: 'status',title: '状态',width:fixWidth(0.05),align:'center', halign:'center',sortable:true,
+		     	{field: 'status',title: '状态',width:fixWidth(0.1),align:'center', halign:'center',sortable:true,
 	            	  formatter:function(value, row){
 	            		  switch (value) {
 							case "IN_HANDLING":

@@ -1,7 +1,9 @@
 [{
 	"urgencyType" : [
-		{ "id":"0", "name":"特急" },
-		{ "id":"1", "name":"一般" }
+		{ "id":"0", "name":"特提" },
+		{ "id":"1", "name":"特急" },
+		{ "id":"2", "name":"加急" },
+		{ "id":"3", "name":"平急" }
 	],
 		
 	"productPartType" : [

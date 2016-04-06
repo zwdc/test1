@@ -190,7 +190,7 @@ public class TaskSourceController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/getAllList")
+/*	@RequestMapping("/getAllList")
 	@ResponseBody
 	public List<Object> getList() throws Exception {
 		List<TaskSource> list = this.taskSourceService.getAllList();
@@ -204,5 +204,5 @@ public class TaskSourceController {
 			jsonList.add(map);
 		}
 		return jsonList;
-	}
+	}*/
 }

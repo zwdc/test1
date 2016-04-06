@@ -1,7 +1,11 @@
 package com.hdc.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +20,7 @@ import com.hdc.entity.Group;
 import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
+import com.hdc.entity.User;
 import com.hdc.service.IGroupService;
 import com.hdc.util.BeanUtils;
 
@@ -139,4 +144,31 @@ public class GroupController {
 		return "group/search";
 	}
 	
+	/**
+	 * 立项页面获取 牵头单位列表及人员信息
+	 * @param groupIds
+	 * @return
+	 * @throws NumberFormatException
+	 * @throws Exception
+	 */
+	@RequestMapping("/getHostGroupList")
+	@ResponseBody
+	public List<Object> getList(@RequestParam("groupIds") String groupIds) throws NumberFormatException, Exception {
+		List<Object> jsonList = new ArrayList<Object>();
+		for(String groupId : groupIds.split(",")) {
+			if(StringUtils.isNotBlank(groupId)) {
+				Map<String, Object> map = new HashMap<String, Object>();
+				Group group = this.groupService.getGroupById(new Integer(groupId));
+				String userNames = "";
+				for(User user : group.getUser()) {
+					userNames += user.getName();
+				}
+				map.put("groupId", group.getId());
+				map.put("groupName", group.getName());
+				map.put("userNames", userNames);
+				jsonList.add(map);
+			}
+		}
+		return jsonList;
+	}
 }

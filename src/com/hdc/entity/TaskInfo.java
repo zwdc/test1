@@ -259,4 +259,20 @@ public class TaskInfo extends BaseEntity implements Serializable{
 		this.claimLimitDate = claimLimitDate;
 	}
 
+	public TaskSource getTaskSource() {
+		return taskSource;
+	}
+
+	public void setTaskSource(TaskSource taskSource) {
+		this.taskSource = taskSource;
+	}
+
+	public FeedbackFrequency getFbFrequency() {
+		return fbFrequency;
+	}
+
+	public void setFbFrequency(FeedbackFrequency fbFrequency) {
+		this.fbFrequency = fbFrequency;
+	}
+
 }
