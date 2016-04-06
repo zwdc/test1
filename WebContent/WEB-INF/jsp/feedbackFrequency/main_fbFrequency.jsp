@@ -221,10 +221,10 @@
 	  				</tr>
 	  				<tr>
 	  					<td>
-	  						<select id="monthlyStartDay" name="monthlyStartDay"  class="easyui-combobox"  data-options="prompt:'选择一天',editable:false"  style="width: 100px">
+	  						<select name="monthlyStartDay"  class="easyui-combobox"  data-options="prompt:'选择一天',editable:false"  style="width: 50px">
 	  							<c:forEach begin="1" end="31" step="1" var="day">
 	  								<c:choose>
-	  									<c:when test="${monthlyStartDay == day }">
+	  									<c:when test="${feedback.monthlyStartDay == day}">
 	  										<option selected="selected" value="${day }">${day }</option>
 	  									</c:when>
 	  									<c:otherwise>
@@ -233,10 +233,10 @@
 	  								</c:choose>
 	  							</c:forEach>
 							</select> -
-	  						<select id="monthlyEndDay" name="monthlyEndDay"  class="easyui-combobox"  data-options="prompt:'选择一天',editable:false"  style="width: 100px">
+	  						<select  name="monthlyEndDay"  class="easyui-combobox"  data-options="prompt:'选择一天',editable:false"  style="width: 50px">
 	  							<c:forEach begin="1" end="31" step="1" var="day">
 	  								<c:choose>
-	  									<c:when test="${monthlyEndDay == day }">
+	  									<c:when test="${feedback.monthlyEndDay == day}">
 	  										<option selected="selected" value="${day }">${day }</option>
 	  									</c:when>
 	  									<c:otherwise>

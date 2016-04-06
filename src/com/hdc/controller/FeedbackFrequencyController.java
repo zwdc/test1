@@ -1,7 +1,6 @@
 package com.hdc.controller;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -78,7 +77,6 @@ public class FeedbackFrequencyController {
 	public Message saveOrUpdate(FeedbackFrequency fb) throws Exception {
 		Message message = new Message();
 		Integer id = fb.getId();
-		System.out.println(fb.getWeeklyTask());
 		try {
 			if(id == null) {
 				fb.setIsDelete(0);
@@ -108,16 +106,19 @@ public class FeedbackFrequencyController {
 		mv.addObject("f", this.feedbackFrequencyService.findById(id));
 		return mv;
 	}
-	
 	/**
-	 * 获取下拉列表
+	 * 删除
+	 * @param id
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	@RequestMapping("/getAllList")
+	@RequestMapping("/delete/{id}")
 	@ResponseBody
-	public List<FeedbackFrequency> getAllList() throws Exception {
-		return this.feedbackFrequencyService.getAllList();
+	public Message delete(@PathVariable("id") Integer id) throws Exception {
+		Message message = new Message();
+		this.feedbackFrequencyService.doDelete(id);
+		message.setMessage("删除成功！");
+		return message;
 	}
 	
 }

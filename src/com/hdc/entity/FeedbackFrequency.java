@@ -74,7 +74,7 @@ public class FeedbackFrequency implements Serializable {
 	private Integer isDelete;
 	
 	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "HH:mm:ss")
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@Column(name = "create_date")
 	private Date createDate;
 
