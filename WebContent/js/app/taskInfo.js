@@ -28,7 +28,7 @@ $(function(){
 		     	{field:'hostUser',title:'主办人',width:fixWidth(0.1),align:'center'},
 		     	{field:'endTaskDate',title:'办结时限',width:fixWidth(0.1),align:'center',sortable:true,
 		     		formatter:function(value,row){
-	            		  return moment(value).format("YYYY-MM-DD");
+	            		  return moment(value).format("YYYY-MM-DD HH:mm:ss");
 					 }
 		     	},
 		     	{field: 'status',title: '状态',width:fixWidth(0.05),align:'center', halign:'center',sortable:true,

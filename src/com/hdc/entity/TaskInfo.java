@@ -60,7 +60,7 @@ public class TaskInfo extends BaseEntity implements Serializable{
 	@Column(name = "urgency", length = 1)
 	private Integer urgency;		//急缓程度
 	
-	@Column(name = "STATUS", length = 30)
+	@Column(name = "status", length = 30)
 	private String status;			//状态(待签收  办理中  已办结) TaskInfoStatus
 
 	
@@ -88,6 +88,11 @@ public class TaskInfo extends BaseEntity implements Serializable{
 	@JoinColumn(name="task_source")
 	@JsonIgnore
 	private TaskSource taskSource;	//任务来源
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="fb_frequency")
+	@JsonIgnore
+	private FeedbackFrequency fbFrequency; //反馈频度
 	
 /*	@Column(name = "FEEDBACK_CYCLE", length = 1)
 	private Integer feedbackCycle;	//反馈周期（0.默认一次  1.每周一次  2.每月一次）

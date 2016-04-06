@@ -8,45 +8,63 @@
 <script type="text/javascript">
 	$(function() {
 		$.getJSON(ctx+"/js/app/app.json",function(data){
-			$('#feedback').combobox({
-				valueField: "id",
-			    textField: "name",
-			    data: data[0].feedback
-			});
-			
 			$('#urgency').combobox({
 				valueField: "id",
 			    textField: "name",
 			    data: data[0].urgencyType
 			});
-			
-			$('#taskType').combobox({
-				valueField: "id",
-			    textField: "name",
-			    data: data[0].taskType
-			});
 		});
 		
-		/* $('#urgency').combobox({
-			url:ctx+"/urgency/urgencyList",
+		//反馈频度
+		$('#fbFrequency').combobox({
+			url:ctx+"/feedbackFrequency/getAllList",
 			valueField: "id",
 		    textField: "name"
-		});  */
-		
-		$('#download').tooltip({
-			position: 'right',
-			content: '<span style="color:#fff">点击下载</span>',
-			onShow: function(){
-				$(this).tooltip('tip').css({
-					backgroundColor: '#666',
-					borderColor: '#666'
-				});
-			}
 		});
+		
+		//反馈来源
+		var taskSourceGrid=$("#taskSource").combogrid({
+		 	panelWidth: 500,
+			idField: 'id',
+			textField: 'name',
+			url: ctx+'/taskSource/getAllList',
+			method: 'post',
+			pagination:true,
+			rownumbers:true,
+			fitColumns: true,
+			striped:true,
+			columns: [[
+				{field: 'name', title: '来源名称', width: fixWidth(0.1), align: 'center', sortable: true},
+	            {field: 'sourceDate', title: '来源时间', width: fixWidth(0.1), align: 'center', sortable: true,
+	            	  formatter: function(value, row) {
+	            		  moment(value).format("YYYY-MM-DD HH:mm:ss");
+	            	  }  
+	            },
+	            {field: 'taskType', title: '任务类型', width: fixWidth(0.3), align: 'left',halign: 'center'}
+			]],
+			onSelect: function(index, row) {
+				$("#bankName").textbox("setValue", row.bank);
+				$("#telephone").textbox("setValue",row.companyPhone);
+				$("#bankAccount").textbox("setValue",row.bankAccount);
+				$("#mailingAddress").textbox("setValue",row.address);
+			},
+	        toolbar: "#combo_toolbar"
+ 		});
+ 		 
+ 		$("#combo_paramBox").searchbox({ 
+ 			menu:"#combo_searchMenu", 
+ 			prompt :'模糊查询',
+ 		    searcher:function(value, name){   
+ 		    	var str="{\"searchName\":\""+name+"\",\"searchValue\":\""+value+"\"}";
+ 	            var obj = eval('('+str+')');
+ 	           taskSourceGrid.combogrid('grid').datagrid('reload',obj); 
+ 		    }
+ 		});
+		
 		
 		$("#reason").kindeditor({readonlyMode: true});
 		
-		$('#hostGroupDatagrid').datagrid({
+		var hostGroup = $('#hostGroupDatagrid').datagrid({
 			toolbar: [{
 				text:'添加牵头单位',
 				iconCls: 'icon-add',
@@ -56,7 +74,21 @@
 			},'-',{
 				text:'删除单位',
 				iconCls: 'icon-remove',
-				handler: function(){alert('help')}
+				handler: function(){
+					debugger;
+					var allCheckedRows = hostGroup.datagrid('getChecked');
+				    if (allCheckedRows.length > 0) {
+			            var checkedRowLength = allCheckedRows.length;
+			            for (var i = 0; i < checkedRowLength; i++) {
+			                var checkedRow = allCheckedRows[i];
+			                var checkedRowIndex = hostGroup.datagrid('getRowIndex', checkedRow);
+			                hostGroup.datagrid('deleteRow', checkedRowIndex);
+			            }
+				    	
+				    } else {
+				    	$.messager.alert("提示", "您未勾选任何操作对象，请勾选一行数据！");
+				    }
+				}
 			}]
 		});
 	});
@@ -165,6 +197,19 @@
 		$("#hostGroupId").val(groupIds.substring(0, groupIds.length-1));
 	}
 </script>
+<div id="combo_toolbar" style="padding:2px 0; display: none;">
+	<table>
+		<tr>
+			<td style="padding-left:5px">
+				<input id="combo_paramBox" style="width: 200px" class="easyui-searchbox" type="text"/>
+			</td>
+		</tr>
+	</table>
+</div>
+<div id="combo_searchMenu" style="display: none;">
+	<div data-options="name:'name'">来源名称</div>
+	<div data-options="name:'code'">来源时间</div>
+</div>
 <div class="easyui-layout">
 <form id="taskInfo_form" method="post">
 	<input type="hidden" id="taskInfoId" name="id" value="${taskInfo.id }">
@@ -172,9 +217,6 @@
     <input type="hidden" name="createDate" value="<fmt:formatDate value='${taskInfo.createDate }' type='both'/>">
     <input type="hidden" name="isDelete" value="${taskInfo.isDelete }">
     <input type="hidden" name="status" value="${taskInfo.status }">
-    <input type="hidden" name="fileName" id="fileName" value = "${taskInfo.fileName }"> <!-- id="fileName"不能删 -->
-	<input type="hidden" name="filePath" value = "${taskInfo.filePath }"> 
-	<input type="hidden" name="uploadDate" value = "<fmt:formatDate value='${taskInfo.uploadDate }' type='both'/>">
 	<table class="table table-bordered table-hover table-condensed">
 		<tr class="bg-primary">
 			<td colspan="4" align="center">任务信息</td>
@@ -191,22 +233,23 @@
 		</tr>
 		<tr>
 			<td class="text-right">任务来源:</td>
-			<td><input name="taskNo" class="easyui-textbox" data-options="prompt:'填写文号'"  value="${taskInfo.taskNo }" required="required" type="text"></td>
+			<td><input id="taskSource" name="taskSource.id" class="easyui-combogrid" data-options="prompt:'选择来源'"  value="${taskInfo.taskSource.id }" required="required"></td>
 			<td class="text-right">开始时间:</td>
 			<td><input name="createTaskDate" class="easyui-datetimebox" data-options="prompt:'选择立项时间',editable:false" value="${taskInfo.createTaskDate }" required="required"></td>
 		</tr>
 		<tr>
-			<td class="text-right">反馈周期:</td>
-			<td><input id="feedback" name="feedbackCycle" class="easyui-combobox" data-options="prompt:'选择反馈周期'" value="${taskInfo.feedbackCycle }" required="required"></td>
+			<td class="text-right">反馈频度:</td>
+			<td><input id="fbFrequency" name="fbFrequency.id" class="easyui-combobox" data-options="prompt:'选择反馈频度'" value="${taskInfo.fbFrequency.id }" required="required"></td>
 			<td class="text-right">办结时限:</td>
 			<td><input name="endTaskDate" class="easyui-datetimebox" data-options="prompt:'选择立项时间',editable:false" value="${taskInfo.endTaskDate }" required="required"></td>
 		</tr>
 		<tr>
 			<td class="text-right">牵头单位:</td>
 			<td colspan="3">
-				<table id="hostGroupDatagrid" class="easyui-datagrid" data-options="fitColumns:true,singleSelect:true,rownumbers:true,border:true">
+				<table id="hostGroupDatagrid" class="easyui-datagrid" data-options="fitColumns:true,rownumbers:true,border:true">
 				    <thead>
 						<tr>
+							<th data-options="field:'ck',checkbox:true"></th>
 							<th data-options="field:'name'" width="40%">牵头单位名称</th>
 							<th data-options="field:'userNames'" width="50%">联系人</th>
 						</tr>

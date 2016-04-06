@@ -152,7 +152,7 @@ public class TaskSourceController {
      * @param response
      * @throws Exception
      */
-    @RequestMapping(value = "/downloadFile")
+    @RequestMapping("/downloadFile")
     public void downloadFile(
     		@RequestParam("id") Integer id,
     		HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -177,11 +177,32 @@ public class TaskSourceController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/details/{id}")
+	@RequestMapping("/details/{id}")
 	public ModelAndView details(@PathVariable("id") Integer id) throws Exception {
 		ModelAndView mv = new ModelAndView("taskSource/details_taskSource");
 		TaskSource taskSource = this.taskSourceService.findById(id);
 		mv.addObject("source", taskSource);
 		return mv;
+	}
+	
+	/**
+	 * 获取下拉列表
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getAllList")
+	@ResponseBody
+	public List<Object> getList() throws Exception {
+		List<TaskSource> list = this.taskSourceService.getAllList();
+		List<Object> jsonList=new ArrayList<Object>(); 
+		for(TaskSource taskSource : list) {
+			Map<String, Object> map=new HashMap<String, Object>();
+			map.put("id", taskSource.getId());
+			map.put("name", taskSource.getName());
+			map.put("taskType", taskSource.getTaskInfoType().getName());
+			map.put("sourceDate", taskSource.getSourceDate());
+			jsonList.add(map);
+		}
+		return jsonList;
 	}
 }

@@ -1,6 +1,7 @@
 package com.hdc.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -106,6 +107,17 @@ public class FeedbackFrequencyController {
 		ModelAndView mv = new ModelAndView("feedbackFrequency/details_fbFrequency");
 		mv.addObject("f", this.feedbackFrequencyService.findById(id));
 		return mv;
+	}
+	
+	/**
+	 * 获取下拉列表
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping("/getAllList")
+	@ResponseBody
+	public List<FeedbackFrequency> getAllList() throws Exception {
+		return this.feedbackFrequencyService.getAllList();
 	}
 	
 }

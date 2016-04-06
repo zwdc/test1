@@ -1,19 +1,7 @@
 [{
-	"feedback" : [
-		{ "id":"0", "name":"默认一次" },
-		{ "id":"1", "name":"每周一次" },
-		{ "id":"2", "name":"每月一次" }
-	],
-	
 	"urgencyType" : [
 		{ "id":"0", "name":"特急" },
 		{ "id":"1", "name":"一般" }
-	],
-	
-	"taskType" : [
-		{ "id":"1", "name":"省政府文件" },
-		{ "id":"2", "name":"国务院文件" },
-		{ "id":"3", "name":"其他文件" }
 	],
 		
 	"productPartType" : [
