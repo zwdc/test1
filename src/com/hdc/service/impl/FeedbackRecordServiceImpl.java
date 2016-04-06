@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.hdc.entity.FeedbackFrequency;
 import com.hdc.entity.FeedbackRecord;
+import com.hdc.entity.Page;
+import com.hdc.entity.Parameter;
 import com.hdc.service.IBaseService;
 import com.hdc.service.IFeedbackRecordService;
 import com.hdc.service.IProcessService;
@@ -30,6 +33,18 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 	
 	@Autowired
 	private IProcessService processService;
+	
+	@Override
+	public List<FeedbackRecord> getListPage(Parameter param,
+			Page<FeedbackRecord> page) throws Exception {
+		return this.baseService.findListPage("FeedbackRecord", param, null, page);
+	}
+	
+	@Override
+	public List<FeedbackRecord> getAllList() throws Exception {
+		String hql = "from FeedbackRecord where isDelete = 0 order by createDate desc";
+		return this.baseService.find(hql);
+	}
 	
 	@Override
 	public FeedbackRecord findById(Integer id) throws Exception {

@@ -13,8 +13,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.hdc.entity.Datagrid;
+import com.hdc.entity.FeedbackFrequency;
 import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Message;
+import com.hdc.entity.Page;
+import com.hdc.entity.Parameter;
 import com.hdc.entity.TaskInfo;
 import com.hdc.service.IFeedbackRecordService;
 import com.hdc.service.ITaskInfoService;
@@ -33,6 +37,28 @@ public class FeedbackController {
 	
 	@Autowired
 	private ITaskInfoService taskInfoService;
+	
+	/**
+	 * 跳转列表页面
+	 * @return
+	 */
+	@RequestMapping("/toList")
+	public String toList() {
+		return "feedback/list_feedback";
+	}
+	
+	/**
+	 * 获取分页数据
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping("/getList")
+	@ResponseBody
+	public Datagrid<FeedbackRecord> getList(Parameter param) throws Exception {
+		Page<FeedbackRecord> page = new Page<FeedbackRecord>(param.getPage(), param.getRows());
+		this.feedbackService.getListPage(param, page);
+		return new Datagrid<FeedbackRecord>(page.getTotal(), page.getResult());
+	}
 	
 	/**
 	 * 跳转添加或修改页面

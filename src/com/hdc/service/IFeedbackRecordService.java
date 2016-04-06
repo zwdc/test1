@@ -9,7 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.hdc.entity.FeedbackFrequency;
 import com.hdc.entity.FeedbackRecord;
+import com.hdc.entity.Page;
+import com.hdc.entity.Parameter;
 
 /**
  * 反馈接口
@@ -18,6 +21,20 @@ import com.hdc.entity.FeedbackRecord;
  */
 public interface IFeedbackRecordService {
 
+	/**
+	 * 获取分页数据
+	 * @param param
+	 * @param page
+	 * @return
+	 * @throws Exception
+	 */
+	public List<FeedbackRecord> getListPage(Parameter param, Page<FeedbackRecord> page) throws Exception;
+	/**
+	 * 获取所有列表
+	 * @return
+	 * @throws Exception
+	 */
+	public List<FeedbackRecord> getAllList() throws Exception;
 	/**
 	 * 添加
 	 * @param feedback
