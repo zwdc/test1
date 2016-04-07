@@ -41,7 +41,7 @@
     </textAnnotation>
     <association id="association2" sourceRef="textannotation2" targetRef="exclusivegateway2"></association>
     <textAnnotation id="textannotation3">
-      <text>同意修改时要在添加项目表中的备注项里，用红色字体标注，修改的具体原因以供秘书长参考</text>
+      <text>同意修改时要在添加任务表中的备注项里，用红色字体标注，修改的具体原因以供秘书长参考</text>
     </textAnnotation>
     <association id="association3" sourceRef="textannotation3" targetRef="exclusivegateway3"></association>
   </process>
