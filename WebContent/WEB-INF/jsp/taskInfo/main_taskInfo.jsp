@@ -15,6 +15,26 @@
 			});
 		});
 		
+		$('#createTaskDate').datetimebox({
+			onSelect: function(startDate){
+				//根据开始时间，限制结束时间的范围，不能小于开始时间。
+				$('#endTaskDate').datetimebox().datetimebox('calendar').calendar({
+					validator: function(endDate){
+						return endDate >= startDate;
+					},
+					onSelect: function(endDate){
+						//根据开始时间和结束时限，限制签收时间。
+						$('#claimLimitDate').datetimebox().datetimebox('calendar').calendar({
+							validator: function(date){
+								return startDate <= date && date <= endDate;
+							}
+						});
+					}
+				});
+				
+			}
+		});
+		
 		//反馈频度
 		$('#fbFrequency').combobox({
 			url:ctx+"/feedbackFrequency/getAllList",
@@ -219,13 +239,13 @@
 		</tr>
 		<tr>
 			<td class="text-right">开始时间:</td>
-			<td><input name="createTaskDate" class="easyui-datetimebox" data-options="prompt:'选择立项时间',editable:false" value="${taskInfo.createTaskDate }" required="required"></td>
+			<td><input id="createTaskDate" name="createTaskDate" class="easyui-datetimebox" data-options="prompt:'选择立项时间',editable:false" value="${taskInfo.createTaskDate }" required="required"></td>
 			<td class="text-right">办结时限:</td>
-			<td><input name="endTaskDate" class="easyui-datetimebox" data-options="prompt:'选择立项时间',editable:false" value="${taskInfo.endTaskDate }" required="required"></td>
+			<td><input id="endTaskDate" name="endTaskDate" class="easyui-datetimebox" data-options="prompt:'选择半截时间',editable:false" value="${taskInfo.endTaskDate }" required="required"></td>
 		</tr>
 		<tr>
 			<td class="text-right">签收时限:</td>
-			<td><input name="claimLimitDate" class="easyui-datetimebox" data-options="prompt:'选择签收时限',editable:false" value="${taskInfo.claimLimitDate }" required="required"></td>
+			<td><input id="claimLimitDate" name="claimLimitDate" class="easyui-datetimebox" data-options="prompt:'选择签收时限',editable:false" value="${taskInfo.claimLimitDate }" required="required"></td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>
@@ -249,6 +269,12 @@
 			<td class="text-right">责任单位:</td>
 			<td colspan="3">
 				<textarea name="assistantGroup" rows="3" cols="80" style="width: 100%">${taskInfo.assistantGroup }</textarea>
+			</td>
+		</tr>
+		<tr>
+			<td class="text-right">备注:</td>
+			<td colspan="3">
+				<textarea name="remark" class="easyui-kindeditor" rows="3" cols="80" style="width: 100%">${taskInfo.assistantGroup }</textarea>
 			</td>
 		</tr>
 	</table>

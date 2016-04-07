@@ -4,9 +4,13 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <script type="text/javascript">
 	$(function() {
-		$('#download').tooltip({
+		$("#monthlyStartDay, #monthlyEndDay").val('');
+		$('#weeklyStartTime,#monthlyStartTime').timespinner('setValue', '08:00:00');
+		$('#weeklyEndTime,#monthlyEndTime').timespinner('setValue', '18:00:00');
+		
+		$('#singleTaskInfo').tooltip({
 			position: 'right',
-			content: '<span style="color:#fff">点击下载</span>',
+			content: '<span style="color:#fff">在此日期之前进行反馈！</span>',
 			onShow: function(){
 				$(this).tooltip('tip').css({
 					backgroundColor: '#666',
@@ -15,8 +19,16 @@
 			}
 		});
 		
-		$("#monthlyStartDay, #monthlyEndDay").val('');
-
+		$('#weeklyTaskInfo,#monthTaskInfo').tooltip({
+			position: 'right',
+			content: '<span style="color:#fff">在此日期范围内进行反馈！</span>',
+			onShow: function(){
+				$(this).tooltip('tip').css({
+					backgroundColor: '#666',
+					borderColor: '#666'
+				});
+			}
+		});
 	});
 	
 	function checkType(type) {
@@ -27,19 +39,20 @@
 			//禁用每周
 			$("#weekly").addClass("disabled");
 			$("input[name='weeklyTask']").attr("disabled","disabled");
-			$("#weeklyStartDate,#weeklyEndDate").timespinner("disable");
-			//$("#weeklyStartDate,#weeklyEndDate").validatebox({required: false});
+			$("#weeklyStartTime,#weeklyEndTime").timespinner("disable");
+			//$("#weeklyStartTime,#weeklyEndTime").validatebox({required: false});
 			//禁用每月
 			$("#monthly").addClass("disabled");
 			$("input[name='monthlyTask']").attr("disabled","disabled");
 			$("#monthlyStartDay,#monthlyEndDay").combobox("disable");
+			$("#monthlyStartTime,#monthlyEndTime").timespinner("disable");
 			//$("#monthlyStartDay,#monthlyEndDay").validatebox({required: false});
 		} else if(type == 2) {
 			//打开每周
 			$("#weekly").removeClass("disabled");
 			$("input[name='weeklyTask']").removeAttr("disabled");
-			$("#weeklyStartDate,#weeklyEndDate").timespinner("enable");
-			//$("#weeklyStartDate,#weeklyEndDate").validatebox({required: true});
+			$("#weeklyStartTime,#weeklyEndTime").timespinner("enable");
+			//$("#weeklyStartTime,#weeklyEndTime").validatebox({required: true});
 			//禁用一次
 			$("#singleTask").datetimebox("disable");
 			//$("#singleTask").validatebox({required: false});
@@ -47,12 +60,14 @@
 			$("#monthly").addClass("disabled");
 			$("input[name='monthlyTask']").attr("disabled","disabled");
 			$("#monthlyStartDay,#monthlyEndDay").combobox("disable");
+			$("#monthlyStartTime,#monthlyEndTime").timespinner("disable");
 			//$("#monthlyStartDay,#monthlyEndDay").validatebox({required: false});
 		} else if(type == 3) {
 			//打开每月
 			$("#monthly").removeClass("disabled");
 			$("input[name='monthlyTask']").removeAttr("disabled");
 			$("#monthlyStartDay,#monthlyEndDay").combobox("enable");
+			$("#monthlyStartTime,#monthlyEndTime").timespinner("enable");
 			//$("#monthlyStartDay,#monthlyEndDay").validatebox({required: true});
 			//禁用一次
 			$("#singleTask").datetimebox("disable");
@@ -60,8 +75,8 @@
 			//禁用每周
 			$("#weekly").addClass("disabled");
 			$("input[name='weeklyTask']").attr("disabled","disabled");
-			$("#weeklyStartDate,#weeklyEndDate").timespinner("disable");
-			//$("#weeklyStartDate,#weeklyEndDate").validatebox({required: false});
+			$("#weeklyStartTime,#weeklyEndTime").timespinner("disable");
+			//$("#weeklyStartTime,#weeklyEndTime").validatebox({required: false});
 		}
 	}
 </script>
@@ -98,6 +113,7 @@
 	  					</td>
 	  					<td style="vertical-align:middle;">
 	  						<input id="singleTask" name="singleTask" class="easyui-datetimebox" data-options="prompt:'选择日期',editable:false" value="${feedback.singleTask }">
+	  						<small><abbr id="singleTaskInfo"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></abbr></small>
 	  					</td>
 	  				</tr>
 		  		</table>
@@ -147,10 +163,10 @@
 	  				</tr>
 	  				<tr>
 	  					<td>
-	  						<input id="weeklyStartDate" name="weeklyStartDate" class="easyui-timespinner" data-options="prompt:'设置开始时间',showSeconds:true" style="width: 100px" value="<fmt:formatDate value='${feedback.weeklyStartDate }' type='time'/>">
+	  						<input id="weeklyStartTime" name="weeklyStartDate" class="easyui-timespinner" data-options="prompt:'设置开始时间',showSeconds:true" style="width: 100px" value="<fmt:formatDate value='${feedback.weeklyStartTime }' type='time'/>">
 	  						-
-	  						<input id="weeklyEndDate" name="weeklyEndDate" class="easyui-timespinner" data-options="prompt:'设置结束时间',showSeconds:true" style="width: 100px" value="<fmt:formatDate value='${feedback.weeklyEndDate }' type='time'/>">
-	  						
+	  						<input id="weeklyEndTime" name="weeklyEndDate" class="easyui-timespinner" data-options="prompt:'设置结束时间',showSeconds:true" style="width: 100px" value="<fmt:formatDate value='${feedback.weeklyEndTime }' type='time'/>">
+	  						<small><abbr id="weeklyTaskInfo"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></abbr></small>
 	  					</td>
 	  				</tr>
 	  			</table>
@@ -221,7 +237,7 @@
 	  				</tr>
 	  				<tr>
 	  					<td>
-	  						<select name="monthlyStartDay"  class="easyui-combobox"  data-options="prompt:'选择一天',editable:false"  style="width: 50px">
+	  						<select name="monthlyStartDay"  class="easyui-combobox"  data-options="prompt:'选择一天',editable:false"  style="width: 45px">
 	  							<c:forEach begin="1" end="31" step="1" var="day">
 	  								<c:choose>
 	  									<c:when test="${feedback.monthlyStartDay == day}">
@@ -232,8 +248,10 @@
 	  									</c:otherwise>
 	  								</c:choose>
 	  							</c:forEach>
-							</select> -
-	  						<select  name="monthlyEndDay"  class="easyui-combobox"  data-options="prompt:'选择一天',editable:false"  style="width: 50px">
+							</select> 
+							<input id="monthStartTime" name="monthStartTime" class="easyui-timespinner" data-options="prompt:'设置开始时间',showSeconds:true" style="width: 100px" value="<fmt:formatDate value='${feedback.monthStartTime }' type='time'/>">
+							-
+	  						<select  name="monthlyEndDay"  class="easyui-combobox"  data-options="prompt:'选择一天',editable:false"  style="width: 45px">
 	  							<c:forEach begin="1" end="31" step="1" var="day">
 	  								<c:choose>
 	  									<c:when test="${feedback.monthlyEndDay == day}">
@@ -245,6 +263,8 @@
 	  								</c:choose>
 	  							</c:forEach>
 							</select>
+	  						<input id="monthEndTime" name="monthEndTime" class="easyui-timespinner" data-options="prompt:'设置结束时间',showSeconds:true" style="width: 100px" value="<fmt:formatDate value='${feedback.monthEndTime }' type='time'/>">
+							<small><abbr id="monthTaskInfo"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></abbr></small>
 	  					</td>
 	  				</tr>
 	  			</table>

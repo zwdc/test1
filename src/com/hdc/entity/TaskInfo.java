@@ -67,7 +67,7 @@ public class TaskInfo extends BaseEntity implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@Column(name = "create_task_date")
-	private Date createTaskDate;	//立项日期
+	private Date createTaskDate;	//立项日期（开始日期）
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -94,66 +94,8 @@ public class TaskInfo extends BaseEntity implements Serializable{
 	@JsonIgnore
 	private FeedbackFrequency fbFrequency; //反馈频度
 	
-/*	@Column(name = "FEEDBACK_CYCLE", length = 1)
-	private Integer feedbackCycle;	//反馈周期（0.默认一次  1.每周一次  2.每月一次）
-*/	
-/*	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@Column(name = "FEEDBACE_DATE")
-	private Date feedbaceDate;		//反馈时限
-*/	
-/*	@Column(name = "CONTACTS", length = 30)
-	private String contacts;		//联系人
-	
-	@Column(name = "CONTACTS_PHONE", length = 30)
-	private String contactsPhone;	//联系电话
-	
-	@Column(name = "LEADER_SHIP", length = 20)
-	private String leadership;		//领导
-	
-	
-	@Column(name = "HOST_USER_ID", length = 50)
-	private String hostUser;		//主办人（多个）
-	
-	@Column(name = "ASSISTANT_USER_ID", length = 50)
-	private String assistantUser;	//协办人
-	
-	@Column(name = "TASK_CONTENT", length = 2000)
-	private String taskContent;		//事项内容
-	
-	@Column(name = "LEAD_COMMENTS", length = 2000)
-	private String leadComments;	//领导批示
-	
-	@Column(name = "SUGGESTION", length = 2000)
-	private String suggestion;		//拟办意见
-	
-	@Column(name = "FILE_NAME", length = 500)
-	private String fileName;		//文件名称
-	
-	@Column(name = "FILE_PATH", length = 1000)
-	private String filePath;		//文件路径
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@Column(name = "UPLOAD_DATE")
-	private Date uploadDate ;		//上传时间
-	
-	@Column(name = "SUPERVISOR", length = 5)
-	private Integer supervisor;		//督办专员 id
-	
-	@Column(name = "TASK_TYPE", length = 1)
-	private Integer taskType;		//文件类型 （1.省政府文件  2.国务院文件  3.其他文件）
-	
-	@Column(name = "ACT_TASK_ID", length = 64)
-	private String actTaskId;		//activiti中任务的id  完成任务用(监听器每到到一个用户任务，则更新此id)
-
-	@OneToMany(mappedBy="taskInfo")
-	@JsonIgnore
-    private Set<FeedbackRecord> feedBack = new HashSet<FeedbackRecord>();
-    
-	@OneToMany(mappedBy="taskInfo")
-	@JsonIgnore
-	private Set<Urge> urge = new HashSet<Urge>();*/
+	@Column(name = "remark", length = 2000)
+	private String remark;
 	
 	public TaskInfo() {
 		
@@ -275,4 +217,12 @@ public class TaskInfo extends BaseEntity implements Serializable{
 		this.fbFrequency = fbFrequency;
 	}
 
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	
 }

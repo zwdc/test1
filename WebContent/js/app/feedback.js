@@ -24,7 +24,11 @@ $(function() {
 						  return moment(value).format("MM月DD日")+"-"+moment(row.feedbackEndDate).format("MM月DD日");
 					  }
 				},
-              {field: 'type', title: '牵头单位', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
+              {field: 'project', title: '牵头单位', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true,
+					formatter:function(value,row,index){
+	            		  return row.project.group.name;
+					}
+              },
               {field: 'createUserId', title: '填报人', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
               {field: 'feedbackDate', title: '反馈时间', width: fixWidth(0.2), align: 'center', halign: 'center', sortable: true,
             	  formatter:function(value,row){

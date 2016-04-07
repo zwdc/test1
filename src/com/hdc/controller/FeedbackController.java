@@ -1,6 +1,9 @@
 package com.hdc.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -55,8 +58,8 @@ public class FeedbackController {
 	@ResponseBody
 	public Datagrid<FeedbackRecord> getList(Parameter param) throws Exception {
 		Page<FeedbackRecord> page = new Page<FeedbackRecord>(param.getPage(), param.getRows());
-		this.feedbackService.getListPage(param, page);
-		return new Datagrid<FeedbackRecord>(page.getTotal(), page.getResult());
+		List<FeedbackRecord> fbList=this.feedbackService.getListPage(param, page);
+		return new Datagrid<FeedbackRecord>(page.getTotal(),page.getResult());
 	}
 	
 	/**

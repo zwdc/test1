@@ -1,7 +1,9 @@
 package com.hdc.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,6 +23,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * 反馈表
@@ -42,11 +46,21 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 	@Column(name = "id", length = 10, nullable = false, unique = true)
 	private Integer id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="project_id")
-	@JsonIgnore
 	private Project project;
 	
+	@OneToMany(fetch = FetchType.EAGER)
+	private Set<FeedbackAtt> fdaList;
+	
+	public Set<FeedbackAtt> getFdaList() {
+		return fdaList;
+	}
+
+	public void setFdaList(Set<FeedbackAtt> fdaList) {
+		this.fdaList = fdaList;
+	}
+
 	@Column(name = "work_plan", length = 2000)
 	private String workPlan;				//阶段工作计划
 	

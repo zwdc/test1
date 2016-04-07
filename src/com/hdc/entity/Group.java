@@ -48,7 +48,6 @@ public class Group extends BaseEntity implements Serializable{
 	private String type;
 
 	@OneToMany(mappedBy="group")
-	@JsonIgnore
     private Set<User> user = new HashSet<User>();
     
 	public Group(){

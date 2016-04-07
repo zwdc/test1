@@ -1,6 +1,7 @@
 package com.hdc.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -119,6 +120,17 @@ public class FeedbackFrequencyController {
 		this.feedbackFrequencyService.doDelete(id);
 		message.setMessage("删除成功！");
 		return message;
+	}
+	
+	/**
+	 * 获取下拉列表数据
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getAllList")
+	@ResponseBody
+	public List<FeedbackFrequency> getAllList() throws Exception {
+		return this.feedbackFrequencyService.getAllList();
 	}
 	
 }

@@ -53,13 +53,13 @@ public class FeedbackFrequency implements Serializable {
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "HH:mm:ss")
-	@Column(name = "weekly_start_date")
-	private Date weeklyStartDate;	//每周开始时间
+	@Column(name = "weekly_start_time")
+	private Date weeklyStartTime;	//每周开始时间
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "HH:mm:ss")
-	@Column(name = "weekly_end_date")
-	private Date weeklyEndDate;		//每周结束时间
+	@Column(name = "weekly_end_time")
+	private Date weeklyEndTime;		//每周结束时间
 	
 	@Column(name = "monthly_task", length = 25)
 	private String monthlyTask;		//每月任务
@@ -67,8 +67,18 @@ public class FeedbackFrequency implements Serializable {
 	@Column(name = "monthly_start_day", length = 2)
 	private Integer monthlyStartDay;	//每月开始日期(天)
 	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "HH:mm:ss")
+	@Column(name = "weekly_start_date")
+	private Date monthlyStartTime;	//每周开始时间
+	
 	@Column(name = "monthly_end_day", length = 2)
 	private Integer monthlyEndDay;	//每月结束日期(天)
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "HH:mm:ss")
+	@Column(name = "weekly_end_date")
+	private Date monthlyEndTime;		//每周结束时间
 	
 	@Column(name = "is_delete", length = 1)
 	private Integer isDelete;
@@ -108,22 +118,6 @@ public class FeedbackFrequency implements Serializable {
 
 	public void setWeeklyTask(String weeklyTask) {
 		this.weeklyTask = weeklyTask;
-	}
-
-	public Date getWeeklyStartDate() {
-		return weeklyStartDate;
-	}
-
-	public void setWeeklyStartDate(Date weeklyStartDate) {
-		this.weeklyStartDate = weeklyStartDate;
-	}
-
-	public Date getWeeklyEndDate() {
-		return weeklyEndDate;
-	}
-
-	public void setWeeklyEndDate(Date weeklyEndDate) {
-		this.weeklyEndDate = weeklyEndDate;
 	}
 
 	public String getMonthlyTask() {
@@ -172,6 +166,38 @@ public class FeedbackFrequency implements Serializable {
 
 	public void setType(Integer type) {
 		this.type = type;
+	}
+
+	public Date getWeeklyStartTime() {
+		return weeklyStartTime;
+	}
+
+	public void setWeeklyStartTime(Date weeklyStartTime) {
+		this.weeklyStartTime = weeklyStartTime;
+	}
+
+	public Date getWeeklyEndTime() {
+		return weeklyEndTime;
+	}
+
+	public void setWeeklyEndTime(Date weeklyEndTime) {
+		this.weeklyEndTime = weeklyEndTime;
+	}
+
+	public Date getMonthlyStartTime() {
+		return monthlyStartTime;
+	}
+
+	public void setMonthlyStartTime(Date monthlyStartTime) {
+		this.monthlyStartTime = monthlyStartTime;
+	}
+
+	public Date getMonthlyEndTime() {
+		return monthlyEndTime;
+	}
+
+	public void setMonthlyEndTime(Date monthlyEndTime) {
+		this.monthlyEndTime = monthlyEndTime;
 	}
 	
 }
