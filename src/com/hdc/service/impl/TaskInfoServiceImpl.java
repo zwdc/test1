@@ -1,7 +1,7 @@
 package com.hdc.service.impl;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hdc.entity.FeedbackFrequency;
 import com.hdc.entity.Group;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
@@ -20,6 +21,7 @@ import com.hdc.entity.Project;
 import com.hdc.entity.TaskInfo;
 import com.hdc.entity.User;
 import com.hdc.service.IBaseService;
+import com.hdc.service.IFeedbackFrequencyService;
 import com.hdc.service.IProcessService;
 import com.hdc.service.IProcessTaskService;
 import com.hdc.service.IProjectService;
@@ -38,6 +40,9 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 	
 	@Autowired
 	private IProjectService projectService;
+	
+	@Autowired
+	private IFeedbackFrequencyService fbFrequentyService;
 	
 	@Autowired
 	private IProcessService processService;
@@ -109,6 +114,36 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 				this.projectService.doAdd(project);
 			}
 		}
+	}
+	
+	private void saveFeedback(TaskInfo taskInfo) throws Exception {
+		Integer fbFrequencyId = taskInfo.getFbFrequency().getId();
+		if(fbFrequencyId != null) {
+			FeedbackFrequency fbFrequency = this.fbFrequentyService.findById(fbFrequencyId);
+			Date startDate = taskInfo.getCreateTaskDate();
+			Date endDate = taskInfo.getEndTaskDate();
+			Integer fbType = taskInfo.getFbFrequency().getType();
+			if(!startDate.after(endDate)) {	//判断日期是否正确
+				switch (fbType) {
+					case 1:	//单次任务
+						
+						break;
+					case 2:	//每周任务
+						
+						break;
+					case 3:	//每月任务
+						
+						break;
+	
+					default:
+						break;
+				}
+			}
+			
+		}
+		
+		
+		
 	}
 	
 	@Override
