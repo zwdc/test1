@@ -11,6 +11,7 @@ public class GroupTest {
 	
     @Test
 	public void groupTest() throws Exception{
+    	
 		/*Group group = new Group();
 		group.setName("督察处");
 		group.setType("SUPERVISE_DEPARTMENT");
