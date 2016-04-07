@@ -11,7 +11,7 @@ $(function() {
 	taskType_datagrid = $('#taskType_datagrid').datagrid({
         url: ctx+"/taskType/getList",
         width : 'auto',
-		height : fixHeight(0.89),
+		height : fixHeight(1),
 		pagination:true,
 		rownumbers:true,
 		border:false,

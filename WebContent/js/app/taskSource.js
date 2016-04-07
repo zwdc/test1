@@ -22,7 +22,11 @@ $(function() {
               {field: 'name', title: '任务来源名称', width: fixWidth(0.3), align: 'left', halign: 'center', sortable: true},
               {field: 'info', title: '任务来源简介', width: fixWidth(0.4), align: 'left', halign: 'center'},
               {field: 'taskTypeName', title: '所属分类', width: fixWidth(0.2), align: 'center', sortable: true},
-              {field: 'createDate', title: '创建日期', width: fixWidth(0.1), align: 'center', sortable: true}
+              {field: 'createDate', title: '创建日期', width: fixWidth(0.1), align: 'center', sortable: true,
+		     		formatter:function(value,row){
+		     			return moment(value).format("YYYY-MM-DD HH:mm:ss");
+		     		}
+              }
     	    ] 
         ],
         toolbar: "#toolbar"

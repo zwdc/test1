@@ -162,14 +162,14 @@ function showTaskInfo(row) {
                 }
             },
             {
-            	text: '分配任务',
+            	text: '申请审批',
             	iconCls: 'icon-ok',
             	id: 'ok',
             	handler: function () {
                 	$.messager.confirm('确认提示！','确认提交表单进入任务办理流程吗？',function(result){
                 		if(result){
                 			taskInfo_form.form('submit',{
-    	            		 	url: ctx+"/taskInfo/assignTask",
+    	            		 	url: ctx+"/taskInfo/approvalTask",
     	            	        onSubmit: function () {
     	            		        $.messager.progress({
     	            		            title: '提示信息！',
@@ -206,7 +206,7 @@ function showTaskInfo(row) {
                 text: '重置',
                 iconCls: 'icon-reload',
                 handler: function () {
-                	taskInfo_form.form('reset');
+                	taskInfo_form.form('clear');
                 }
             },
             {

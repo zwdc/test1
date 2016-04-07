@@ -283,13 +283,13 @@ public class TaskInfoController {
     	}
     }
     /**
-     * 分配任务
+     * 申请审批，由秘书长先进行审批，通过后承办单位可签收。
      * @return
      * @throws Exception
      */
-    @RequestMapping("/assignTask")
+    @RequestMapping("/approvalTask")
     @ResponseBody
-    public Message assignTask(TaskInfo taskInfo) throws Exception {
+    public Message approvalTask(TaskInfo taskInfo) throws Exception {
     	Message message = new Message();
     	try {
     		this.taskInfoService.doStartProcess(taskInfo);

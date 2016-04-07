@@ -1,24 +1,30 @@
 package com.hdc.service.impl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hdc.entity.Group;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.ProcessTask;
+import com.hdc.entity.Project;
 import com.hdc.entity.TaskInfo;
 import com.hdc.entity.User;
 import com.hdc.service.IBaseService;
 import com.hdc.service.IProcessService;
 import com.hdc.service.IProcessTaskService;
+import com.hdc.service.IProjectService;
 import com.hdc.service.ITaskInfoService;
+import com.hdc.util.Constants.ApprovalStatus;
 import com.hdc.util.Constants.BusinessType;
 import com.hdc.util.Constants.OperationType;
 import com.hdc.util.Constants.TaskInfoStatus;
@@ -29,6 +35,9 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 
 	@Autowired
 	private IBaseService<TaskInfo> baseService;
+	
+	@Autowired
+	private IProjectService projectService;
 	
 	@Autowired
 	private IProcessService processService;
@@ -68,7 +77,6 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 	@Override
 	public void doStartProcess(TaskInfo taskInfo) throws Exception {
 		taskInfo.setStatus(TaskInfoStatus.WAIT_FOR_CLAIM.toString());
-//		taskInfo.setAssignDate(new Date());
 		this.baseService.update(taskInfo);
 		
 		//初始化任务参数
@@ -83,7 +91,26 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 		this.processService.complete(firstTask.getId().toString(), null, null);
 		
 	}
-
+	
+	/**
+	 * 根据主办单位，生成项目表
+	 * @param groupIds
+	 * @param taskInfoId
+	 * @throws Exception
+	 */
+	private void saveHostGroup(String groupIds, Integer taskInfoId) throws Exception {
+		if(StringUtils.isNotBlank(groupIds)) {
+			for(String groupId : groupIds.split(",")){
+				//List<Object[]> paramList = new ArrayList<Object[]>();
+				Project project = new Project();
+				project.setGroup(new Group(new Integer(groupId)));
+				project.setTaskInfo(new TaskInfo(taskInfoId));
+				project.setStatus(ApprovalStatus.PENDING.toString());
+				this.projectService.doAdd(project);
+			}
+		}
+	}
+	
 	@Override
 	public void doClaimTask(TaskInfo taskInfo) throws Exception {
 		Map<String, Object> variables = new HashMap<String, Object>();

@@ -37,7 +37,7 @@
 				{field: 'name', title: '来源名称', width: 200, align: 'left', halign: 'center', sortable: true},
 	            {field: 'sourceDate', title: '来源时间', width: 100, align: 'center', sortable: true,
 	            	  formatter: function(value, row) {
-	            		  moment(value).format("YYYY-MM-DD HH:mm:ss");
+	            		 return moment(value).format("YYYY-MM-DD HH:mm:ss");
 	            	  }  
 	            },
 	            {field: 'taskTypeName', title: '任务类型', width: 100, align: 'center'}
@@ -214,14 +214,19 @@
 		<tr>
 			<td class="text-right">任务来源:</td>
 			<td><input id="taskSource" name="taskSource.id" class="easyui-combogrid" data-options="prompt:'选择来源'"  value="${taskInfo.taskSource.id }" required="required"></td>
-			<td class="text-right">开始时间:</td>
-			<td><input name="createTaskDate" class="easyui-datetimebox" data-options="prompt:'选择立项时间',editable:false" value="${taskInfo.createTaskDate }" required="required"></td>
-		</tr>
-		<tr>
 			<td class="text-right">反馈频度:</td>
 			<td><input id="fbFrequency" name="fbFrequency.id" class="easyui-combobox" data-options="prompt:'选择反馈频度'" value="${taskInfo.fbFrequency.id }" required="required"></td>
+		</tr>
+		<tr>
+			<td class="text-right">开始时间:</td>
+			<td><input name="createTaskDate" class="easyui-datetimebox" data-options="prompt:'选择立项时间',editable:false" value="${taskInfo.createTaskDate }" required="required"></td>
 			<td class="text-right">办结时限:</td>
 			<td><input name="endTaskDate" class="easyui-datetimebox" data-options="prompt:'选择立项时间',editable:false" value="${taskInfo.endTaskDate }" required="required"></td>
+		</tr>
+		<tr>
+			<td class="text-right">签收时限:</td>
+			<td><input name="claimLimitDate" class="easyui-datetimebox" data-options="prompt:'选择签收时限',editable:false" value="${taskInfo.claimLimitDate }" required="required"></td>
+			<td colspan="2"></td>
 		</tr>
 		<tr>
 			<td class="text-right">牵头单位:</td>
