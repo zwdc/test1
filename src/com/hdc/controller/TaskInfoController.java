@@ -60,9 +60,6 @@ public class TaskInfoController {
 	private ITaskInfoService taskInfoService;
 	
 	@Autowired
-	private IUserService userService;
-	
-	@Autowired
 	private IGroupService groupService;
 	
 	/**

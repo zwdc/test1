@@ -3,11 +3,16 @@ package com.hdc.entity;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 普通基类
@@ -17,11 +22,15 @@ import org.springframework.format.annotation.DateTimeFormat;
 @MappedSuperclass
 public class BaseEntity {
 
-	@Column(name = "create_user_id", length = 5)
-	private Integer createUserId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="create_user_id")
+	@JsonIgnore
+	private User createUser;
 	
-	@Column(name = "update_user_id", length = 5)
-	private Integer updateUserId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="update_user_id")
+	@JsonIgnore
+	private User updateUser;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -36,20 +45,20 @@ public class BaseEntity {
 	@Column(name = "is_delete", length = 2)
     private Integer isDelete;
 
-	public Integer getCreateUserId() {
-		return createUserId;
+	public User getCreateUser() {
+		return createUser;
 	}
 
-	public void setCreateUserId(Integer createUserId) {
-		this.createUserId = createUserId;
+	public void setCreateUser(User createUser) {
+		this.createUser = createUser;
 	}
 
-	public Integer getUpdateUserId() {
-		return updateUserId;
+	public User getUpdateUser() {
+		return updateUser;
 	}
 
-	public void setUpdateUserId(Integer updateUserId) {
-		this.updateUserId = updateUserId;
+	public void setUpdateUser(User updateUser) {
+		this.updateUser = updateUser;
 	}
 
 	public Date getCreateDate() {
@@ -76,5 +85,4 @@ public class BaseEntity {
 		this.isDelete = isDelete;
 	}
 
-	
 }

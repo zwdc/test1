@@ -55,19 +55,17 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 	@Override
 	public List<T> findListPage(String tableSimpleName, Parameter param, Map<String, Object> map, Page<T> page, Boolean dataSetPermission) throws Exception {
 		StringBuffer sb = new StringBuffer();  
-        sb.append("select a from ").append(tableSimpleName).append(" a ");  
+        sb.append("select a from ").append(tableSimpleName).append(" a where a.isDelete=0");  
         
-		if(dataSetPermission) {
+		/*if(dataSetPermission) {
         	//获取数据权限
-        	sb.append(" left join User u on u.id = a.createUserId where a.isDelete=0 ").append(this.getDataSetPermission());	
+        	sb.append(" left join User u with u.id = a.createUserId where a.isDelete=0 ").append(this.getDataSetPermission());	
         } else{
         	sb.append(" where a.isDelete=0 ");        	
-        }
-        
-/*        if(dataSetPermission) {
-        	//获取数据权限
-        	sb.append(this.getDataSetPermission());
         }*/
+        if(dataSetPermission) {
+        	sb.append(this.getDataSetPermission());
+        }
         
         //自定义查询条件
         if (map != null && !map.isEmpty()) {
@@ -141,13 +139,17 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 	@Override
 	public Integer getCount(String tableSimpleName, Parameter param, Map<String, Object> map, Boolean dataSetPermission) throws Exception{
 		StringBuffer sb = new StringBuffer();  
-        sb.append("select count(*) from ").append(tableSimpleName).append(" a ");
+        sb.append("select count(*) from ").append(tableSimpleName).append(" a where a.isDelete=0");
 
-		if(dataSetPermission) {
+		/*if(dataSetPermission) {
         	//获取数据权限
-        	sb.append(" left join User u on u.id = a.createUserId where a.isDelete=0 ").append(this.getDataSetPermission());	
+        	sb.append(" left join User u with u.id = a.createUserId where a.isDelete=0 ").append(this.getDataSetPermission());	
         } else{
         	sb.append(" where a.isDelete=0 ");        	
+        }*/
+        
+        if(dataSetPermission) {
+        	sb.append(this.getDataSetPermission());
         }
         
         //自定义查询条件
@@ -210,7 +212,7 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
         
         if(dataSetPermission) {
         	//获取数据权限
-        	sb.append(" left join User u on u.id = a.createUserId where a.isDelete=0 ").append(this.getDataSetPermission());	
+        	sb.append(" left join User u with u.id = a.createUserId where a.isDelete=0 ").append(this.getDataSetPermission());	
         } else{
         	sb.append(" where a.isDelete=0 ");        	
         }
@@ -273,9 +275,9 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 		StringBuffer sb = new StringBuffer(); 
 		User user = UserUtil.getUserFromSession();
 		if(user.getGroupData() == 1) {
-			sb.append(" and u.group = " + user.getGroup().getId().toString());
+			sb.append(" and a.createUser.group = " + user.getGroup().getId().toString());
 		} else if(user.getSelfData() == 1) {
-			sb.append(" and a.createUserId = " + user.getId().toString());
+			sb.append(" and a.createUser = " + user.getId().toString());
 		}
 		return sb;
 	}

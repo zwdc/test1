@@ -20,7 +20,7 @@ public class TaskSourceServiceImpl implements ITaskSourceService {
 	
 	@Override
 	public List<TaskSource> getListPage(Parameter param, Page<TaskSource> page) throws Exception {
-		return this.baseService.findListPage("TaskSource", param, null, page, true);
+		return this.baseService.findListPage("TaskSource", param, null, page, false);
 	}
 
 	@Override

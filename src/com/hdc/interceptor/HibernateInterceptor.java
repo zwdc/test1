@@ -40,12 +40,12 @@ public class HibernateInterceptor extends EmptyInterceptor {
 					Date updateDate = new Date();
 					currentState[i] = updateDate;
 					((BaseEntity) entity).setUpdateDate(updateDate);
-				} else if ( propertyNames[i].equalsIgnoreCase("updateUserId") && !updateUserIdFlag ) {
+				} else if ( propertyNames[i].equalsIgnoreCase("updateUser") && !updateUserIdFlag ) {
 					updateUserIdFlag = true;
 					User user = UserUtil.getUserFromSession();
 					if (user != null) {
-						currentState[i] = user.getId();
-						((BaseEntity) entity).setUpdateUserId(user.getId());
+						currentState[i] = user;
+						((BaseEntity) entity).setUpdateUser(user);
 					}
 				}
         		if(updateDateFlag && updateUserIdFlag){
@@ -73,11 +73,11 @@ public class HibernateInterceptor extends EmptyInterceptor {
 					Date createDate = new Date();
 					currentState[i] = createDate;
 					((BaseEntity) entity).setCreateDate(createDate);
-				} else if ( propertyNames[i].equalsIgnoreCase("createUserId") && !createUserIdFlag ) {
+				} else if ( propertyNames[i].equalsIgnoreCase("createUser") && !createUserIdFlag ) {
 					createUserIdFlag = true;
 					if (user != null) {
-						currentState[i] = user.getId();
-						((BaseEntity) entity).setCreateUserId(user.getId());
+						currentState[i] = user;
+						((BaseEntity) entity).setCreateUser(user);
 					}
 				} else if ( propertyNames[i].equalsIgnoreCase("isDelete") && !isDeleteFlag ) {
 					isDeleteFlag = true;

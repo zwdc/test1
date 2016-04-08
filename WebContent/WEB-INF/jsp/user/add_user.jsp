@@ -32,10 +32,39 @@ $(function(){
         }
 	});
 	
+	//角色权限
 	$('#dataPermission').combobox({
-	    url:'combobox_data.json',
 	    valueField:'id',
-	    textField:'text'
+	    textField:'value',
+	    data: [{
+			id: '1',
+			value: '所有数据'
+		},{
+			id: '2',
+			value: '所在部门'
+		},{
+			id: '3',
+			value: '仅本人'
+		}],
+		onSelect: function(record){
+			switch(record.id) {
+				case '1':
+					$("#allData").val(1);
+					$("#groupData").val(0);
+					$("#selfData").val(0);
+					break;
+				case '2':
+					$("#allData").val(0);
+					$("#groupData").val(1);
+					$("#selfData").val(0);
+					break;
+				case '3':
+					$("#allData").val(0);
+					$("#groupData").val(0);
+					$("#selfData").val(1);
+					break;
+			}
+		}
 	});
 	
 	//扩展easyui的validatebox
@@ -82,7 +111,10 @@ $(function(){
 
 <div id="dlg" class="easyui-layout" style="padding:10px 20px">
     <div class="ftitle"><img src="${ctx }/images/fromedit.png" style="margin-bottom: -3px;"/> 用户信息</div>
-    <form id="user_form" method="post" >
+    <form id="user_form" method="post">
+    	<input id="allData" name="allData" type="hidden">
+    	<input id="groupData" name="groupData" type="hidden">
+    	<input id="selfData" name="selfData" type="hidden">
         <div class="fitem">
             <label>用户名:</label>
             <input id="name" name="name" class="easyui-textbox" required="required">

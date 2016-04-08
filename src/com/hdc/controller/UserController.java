@@ -92,6 +92,9 @@ public class UserController {
 			map.put("group_name", user.getGroup().getName());
 			map.put("roleId", user.getRole().getId());
 			map.put("role_name", user.getRole().getName());
+			map.put("allData", user.getAllData());
+			map.put("groupData", user.getGroupData());
+			map.put("selfData", user.getSelfData());
 			map.put("salt", user.getSalt());
 			map.put("isDelete", user.getIsDelete());
 			jsonList.add(map);
