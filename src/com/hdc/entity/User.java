@@ -66,6 +66,18 @@ public class User extends BaseEntity implements Serializable{
 	@JsonIgnore
 	private Role role;				//所属角色（职位）
 	
+	@Column(name="data_all", length=1)
+	private Integer allData ;			//是否有查询所有数据的权限：0无；1有
+	
+	@Column(name="data_group", length=1) 
+	private Integer groupData ;			//是否有查询部门数据的权限
+	
+//	@Column(name="data_role", length=1)
+//	private Integer roleData ;			//是否有查询角色数据的权限
+	
+	@Column(name="data_self", length=1)
+	private Integer selfData ;			//是否有查询自己数据的权限
+	
 	public User(){
 		
 	}
@@ -142,4 +154,27 @@ public class User extends BaseEntity implements Serializable{
 		this.group = group;
 	}
 
+	public Integer getAllData() {
+		return allData;
+	}
+
+	public void setAllData(Integer allData) {
+		this.allData = allData;
+	}
+
+	public Integer getGroupData() {
+		return groupData;
+	}
+
+	public void setGroupData(Integer groupData) {
+		this.groupData = groupData;
+	}
+
+	public Integer getSelfData() {
+		return selfData;
+	}
+
+	public void setSelfData(Integer selfData) {
+		this.selfData = selfData;
+	}
 }

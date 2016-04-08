@@ -25,7 +25,7 @@ public class GroupServiceImpl implements IGroupService {
 	
 	@Override
 	public List<Group> getGroupListPage(Parameter param, Page<Group> page) throws Exception{
-		List<Group> list = this.baseService.findListPage("Group", param, null, page);
+		List<Group> list = this.baseService.findListPage("Group", param, null, page, false);
 		return list;
 	}
 
@@ -52,7 +52,7 @@ public class GroupServiceImpl implements IGroupService {
 
 	@Override
 	public List<Group> getGroupList() throws Exception {
-		return this.baseService.findByWhere("Group", null);
+		return this.baseService.findByWhere("Group", null, false);
 	}
 
 	@Override

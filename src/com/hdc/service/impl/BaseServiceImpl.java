@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import com.hdc.dao.IBaseDao;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
+import com.hdc.entity.User;
 import com.hdc.service.IBaseService;
+import com.hdc.util.UserUtil;
 
 
 
@@ -51,9 +53,16 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 	}
 	
 	@Override
-	public List<T> findListPage(String tableSimpleName, Parameter param, Map<String, Object> map, Page<T> page) throws Exception {
+	public List<T> findListPage(String tableSimpleName, Parameter param, Map<String, Object> map, Page<T> page, Boolean dataSetPermission) throws Exception {
 		StringBuffer sb = new StringBuffer();  
-        sb.append("select a from ").append(tableSimpleName).append(" a where a.isDelete = 0");  
+        sb.append("select a from ").append(tableSimpleName).append(" a ");  
+        
+		if(dataSetPermission) {
+        	//获取数据权限
+        	sb.append(" left join User u on u.id = a.createUserId where a.isDelete=0 ").append(this.getDataSetPermission());	
+        } else{
+        	sb.append(" where a.isDelete=0 ");        	
+        }
         
 /*        if(dataSetPermission) {
         	//获取数据权限
@@ -117,7 +126,7 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 		}
 		
 		String hql = sb.toString();
-		Integer total = getCount(tableSimpleName, param, map);
+		Integer total = getCount(tableSimpleName, param, map, dataSetPermission);
 		
 		int[] pageParams = page.getPageParams(total);
 		List<T> list = this.baseDao.findByPage(hql, pageParams[0], pageParams[1]); 
@@ -130,14 +139,16 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 	}
 	
 	@Override
-	public Integer getCount(String tableSimpleName, Parameter param, Map<String, Object> map) throws Exception{
+	public Integer getCount(String tableSimpleName, Parameter param, Map<String, Object> map, Boolean dataSetPermission) throws Exception{
 		StringBuffer sb = new StringBuffer();  
-        sb.append("select count(*) from ").append(tableSimpleName).append(" a where a.isDelete = 0");
+        sb.append("select count(*) from ").append(tableSimpleName).append(" a ");
 
-/*        if(dataSetPermission) {
+		if(dataSetPermission) {
         	//获取数据权限
-        	sb.append(this.getDataSetPermission());	
-        }*/
+        	sb.append(" left join User u on u.id = a.createUserId where a.isDelete=0 ").append(this.getDataSetPermission());	
+        } else{
+        	sb.append(" where a.isDelete=0 ");        	
+        }
         
         //自定义查询条件
         if (map != null && !map.isEmpty()) {
@@ -192,15 +203,17 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 	}
 	
 	@Override
-	public List<T> findByWhere(String tableSimpleName, Map<String, Object> params) throws Exception {
+	public List<T> findByWhere(String tableSimpleName, Map<String, Object> params, Boolean dataSetPermission) throws Exception {
 		//如果有排序的需求可以加个String[] orderBy, String[] orderType变量来扩展
 		StringBuffer sb = new StringBuffer();  
-        sb.append("select a from ").append(tableSimpleName).append(" a where a.isDelete = 0 ");  
+        sb.append("select a from ").append(tableSimpleName).append(" a ");  
         
-/*        if(dataSetPermission) {
+        if(dataSetPermission) {
         	//获取数据权限
-        	sb.append(this.getDataSetPermission());
-        }*/
+        	sb.append(" left join User u on u.id = a.createUserId where a.isDelete=0 ").append(this.getDataSetPermission());	
+        } else{
+        	sb.append(" where a.isDelete=0 ");        	
+        }
         
         //自定义查询条件
         if (params != null && !params.isEmpty()) {
@@ -256,25 +269,16 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 	}
 	
 	//获取数据权限
-/*	@Override
 	public StringBuffer getDataSetPermission() throws Exception{
 		StringBuffer sb = new StringBuffer(); 
 		User user = UserUtil.getUserFromSession();
-		DataSetPermission dataSet = this.dataSetService.findByUserId(user.getId());
-		if(dataSet.getAllData() != null && dataSet.getAllData() == 1) {
-			return sb;
-		} else if(dataSet.getCompanyData() == 1) {
-			sb.append(" and a.companyCode="+user.getCompany().getId().toString());
-		} else if(dataSet.getGroupData() == 1) {
-			sb.append(" and (a.companyCode="+user.getCompany().getId().toString()+" and a.groupCode="+user.getGroup().getId().toString()+")");
-		} else if(dataSet.getRoleData() == 1) {
-			sb.append(" and (a.companyCode="+user.getCompany().getId().toString()+" and a.groupCode="+user.getGroup().getId().toString()+" a.and roleCode="+user.getRole().getId().toString()+")");
-		} else if(dataSet.getSelfData() == 1) {
-			sb.append(" and a.createUserId="+user.getId().toString());
+		if(user.getGroupData() == 1) {
+			sb.append(" and u.group = " + user.getGroup().getId().toString());
+		} else if(user.getSelfData() == 1) {
+			sb.append(" and a.createUserId = " + user.getId().toString());
 		}
-		
 		return sb;
-	}*/
+	}
 
 	
 }

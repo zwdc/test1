@@ -31,6 +31,13 @@ $(function(){
             $("#role").combobox('setValue',data[0].id);
         }
 	});
+	
+	$('#dataPermission').combobox({
+	    url:'combobox_data.json',
+	    valueField:'id',
+	    textField:'text'
+	});
+	
 	//扩展easyui的validatebox
     $.extend($.fn.validatebox.defaults.rules, {
        /*必须和某个字段相等*/
@@ -95,11 +102,15 @@ $(function(){
         </div>
         <div class="fitem">
             <label>部门:</label>
-			<input id="group" name="group.id" class="easyui-textbox" required="required" />
+			<input id="group" name="group.id" class="easyui-combobox" required="required" />
         </div>
         <div class="fitem">
             <label>角色:</label>
-			<input id="role" name="role.id" class="easyui-textbox" required="required" />
+			<input id="role" name="role.id" class="easyui-combobox" required="required" />
+        </div>
+        <div class="fitem">
+            <label>数据权限:</label>
+			<input id="dataPermission" class="easyui-combobox" required="required" />
         </div>
         <div class="fitem">
             <label>状态:</label>

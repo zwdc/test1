@@ -21,7 +21,7 @@ public class TaskTypeServiceImpl implements ITaskTypeService {
 	@Override
 	public List<TaskInfoType> getListPage(Parameter param, Page<TaskInfoType> page)
 			throws Exception {
-		return this.baseService.findListPage("TaskInfoType", param, null, page);
+		return this.baseService.findListPage("TaskInfoType", param, null, page, false);
 	}
 
 	@Override
