@@ -29,13 +29,35 @@ $(function() {
 	            		  return row.project.group.name;
 					}
               },
-              {field: 'createUserId', title: '填报人', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
+              {field: 'createUser', title: '填报人', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true,
+            	  formatter:function(value,row,index){
+            		  return value.name;
+				}
+              },
               {field: 'feedbackDate', title: '反馈时间', width: fixWidth(0.2), align: 'center', halign: 'center', sortable: true,
             	  formatter:function(value,row){
             		  return moment(value).format("YYYY-MM-DD HH:mm:ss");
 				  }
               },
-              {field: 'status', title: '状态', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
+              {field: 'status', title: '状态', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true,
+            	  formatter:function(value){
+            		  if (value=="ACCEPT") {           			
+                      	return "采用";
+                      }else if(value=="RETURNED"){
+                    	  return "退回"; 
+                      }else{
+                    	  return "反馈中"; 
+                      }
+            	  },
+            	  styler:function(value){
+            		  if (value=="ACCEPT") {           			
+                          return 'background-color:green;color:white';
+                        }else if(value=="RETURNED"){
+                      	  return 'background-color:orange;color:white';; 
+                        }
+              	  }
+              },
+              
               {field: 'isDelay', title: '是否延期', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true},
               {field: 'refuseCount', title: '退回次数', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true},
               {field: 'type', title: '操作', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true}             

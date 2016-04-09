@@ -1,6 +1,7 @@
 package com.hdc.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,8 +68,11 @@ public class GroupController {
 		Integer id = group.getId();
 		try {
 			if(BeanUtils.isBlank(id)) {
+				group.setIsDelete(0);
+				group.setCreateDate(new Date());
 				this.groupService.doAdd(group);
 			} else {
+				group.setUpdateDate(new Date());
 				this.groupService.doUpdate(group);
 			}
 			message.setMessage("操作成功！");

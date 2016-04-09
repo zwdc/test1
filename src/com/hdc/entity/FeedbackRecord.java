@@ -51,6 +51,7 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 	private Project project;
 	
 	@OneToMany(fetch = FetchType.EAGER)
+	@JoinColumn(name="feedbackatt_id")
 	private Set<FeedbackAtt> fdaList;
 	
 	public Set<FeedbackAtt> getFdaList() {

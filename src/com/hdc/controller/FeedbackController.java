@@ -58,7 +58,7 @@ public class FeedbackController {
 	@ResponseBody
 	public Datagrid<FeedbackRecord> getList(Parameter param) throws Exception {
 		Page<FeedbackRecord> page = new Page<FeedbackRecord>(param.getPage(), param.getRows());
-		List<FeedbackRecord> fbList=this.feedbackService.getListPage(param, page);
+		this.feedbackService.getListPage(param, page);
 		return new Datagrid<FeedbackRecord>(page.getTotal(),page.getResult());
 	}
 	
