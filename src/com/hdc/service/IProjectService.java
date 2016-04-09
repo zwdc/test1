@@ -1,6 +1,7 @@
 package com.hdc.service;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.hdc.entity.Project;
 
@@ -33,4 +34,12 @@ public interface IProjectService {
 	 * @throws Exception
 	 */
 	public void doDelete(Integer id) throws Exception;
+	
+	/**
+	 * 根据taskInfoId查询
+	 * @param taskInfoId
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Project> findByTaskInfo(Integer taskInfoId) throws Exception;
 }
