@@ -60,9 +60,6 @@ public class TaskInfoController {
 	private ITaskInfoService taskInfoService;
 	
 	@Autowired
-	private IUserService userService;
-	
-	@Autowired
 	private IGroupService groupService;
 	
 	/**
@@ -132,8 +129,7 @@ public class TaskInfoController {
 		}
 		if(taskType != null) {
 			m.put("taskType", taskType);
-		}
-		
+		}		
 		List<TaskInfo> list = this.taskInfoService.getListPage(param, page, m);
 		List<Object> jsonList=new ArrayList<Object>(); 
 		for(TaskInfo task : list) {
