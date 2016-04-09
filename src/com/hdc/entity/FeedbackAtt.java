@@ -12,6 +12,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * 反馈附件
+ * @author Administrator
+ *
+ */
 @Entity
 @Table(name="feedback_att")
 public class FeedbackAtt implements Serializable{

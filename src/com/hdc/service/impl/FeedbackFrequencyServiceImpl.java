@@ -21,7 +21,7 @@ public class FeedbackFrequencyServiceImpl implements IFeedbackFrequencyService {
 	@Override
 	public List<FeedbackFrequency> getListPage(Parameter param,
 			Page<FeedbackFrequency> page) throws Exception {
-		return this.baseService.findListPage("FeedbackFrequency", param, null, page);
+		return this.baseService.findListPage("FeedbackFrequency", param, null, page, false);
 	}
 
 	@Override
