@@ -4,8 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <script type="text/javascript">
 	$(function() {
-		$('#weeklyStartTime').timespinner('setValue', '08:00');
-		/* 此处报错，因为一开始加载页面的时候 timespinner还没渲染 */
+		$("#monthlyStartDay, #monthlyEndDay").val('');
 		/* $('#weeklyStartTime,#monthlyStartTime').timespinner('setValue', '08:00'); */
 		/* $('#weeklyEndTime,#monthlyEndTime').timespinner('setValue', '18:00'); */
 		
