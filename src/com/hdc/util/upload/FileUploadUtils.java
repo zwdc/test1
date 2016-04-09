@@ -203,8 +203,8 @@ public class FileUploadUtils {
      * @return
      */
     public static final String extractUploadDir(HttpServletRequest request) {
-    	//return request.getServletContext().getRealPath("/");	//上传到项目所在目录，重新部署后文件会消失
-		return "";	//不指定具体路径，文件保存在项目所在盘符下。
+    	return request.getServletContext().getRealPath("/");	//上传到项目所在目录，重新部署后文件会消失
+		//return "";	//不指定具体路径，文件保存在项目所在盘符下。
     }
 
     /**

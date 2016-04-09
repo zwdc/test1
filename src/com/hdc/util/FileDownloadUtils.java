@@ -21,15 +21,21 @@ public class FileDownloadUtils {
     }
 
     public static void download(HttpServletRequest request, HttpServletResponse response, String filePath, String displayName) throws IOException {
-        File file = new File(filePath);
+        
+    	//此处的路径应该是系统绝对路径
+    	//D:\dev-plam-jeecms\workspace\zwdc\WebContent\\file-store\zwdc\attachmentFile\1.jpg
+    	File file = new File(request.getSession().getServletContext().getRealPath("/")+filePath);
 
         if(StringUtils.isEmpty(displayName)) {
             displayName = file.getName();
         }
+        System.out.println(request.getSession().getServletContext().getRealPath("/")+filePath);
+        System.out.println(file.exists());
+        System.out.println(file.canRead());
 
         if (!file.exists() || !file.canRead()) {
             response.setContentType("text/html;charset=utf-8");
-            response.getWriter().write("您下载的文件不存在！");
+            response.getWriter().write("您下载的文件不存在！xxxx");
             return;
         }
 
@@ -56,7 +62,6 @@ public class FileDownloadUtils {
         BufferedInputStream is = null;
         OutputStream os = null;
         try {
-
             os = response.getOutputStream();
             is = new BufferedInputStream(new FileInputStream(file));
             IOUtils.copy(is, os);
@@ -74,7 +79,7 @@ public class FileDownloadUtils {
         if (ArrayUtils.isEmpty(bytes)) {
             response.setContentType("text/html;charset=utf-8");
             response.setCharacterEncoding("utf-8");
-            response.getWriter().write("您下载的文件不存在！");
+            response.getWriter().write("您下载的文件不存在！rrrrrr");
             return;
         }
 
