@@ -19,8 +19,6 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 /**
  * 事项
  * @author ZML
@@ -84,14 +82,12 @@ public class TaskInfo extends BaseEntity implements Serializable{
 	@Column(name = "claim_limit_date")
 	private Date claimLimitDate;	//签收时限
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="task_source")
-	@JsonIgnore
 	private TaskSource taskSource;	//任务来源
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="fb_frequency")
-	@JsonIgnore
 	private FeedbackFrequency fbFrequency; //反馈频度
 	
 	@Column(name = "remark", length = 2000)

@@ -19,9 +19,6 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 /**
  * 项目表(具体到哪个单位)
  * @author zhao
@@ -48,9 +45,8 @@ public class Project extends BaseEntity implements Serializable {
 	@JoinColumn(name="group_id")
     private Group group;			//承办单位
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="task_info")
-	@JsonIgnore
 	private TaskInfo taskInfo;		//任务
 	
 	@Column(name = "status", length = 30)
