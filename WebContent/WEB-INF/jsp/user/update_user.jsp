@@ -29,10 +29,61 @@ $(function(){
 		},
 		required: true,
 		onLoadSuccess: function (data) {
+			debugger;
 			var roleId = $("#roleId").val();
             $("#role").combobox('setValue',roleId);
         }
 	});
+	
+	//角色权限
+	$('#dataPermission').combobox({
+	    valueField:'id',
+	    textField:'value',
+	    data: [{
+			id: '1',
+			value: '所有数据'
+		},{
+			id: '2',
+			value: '所在部门'
+		},{
+			id: '3',
+			value: '仅本人'
+		}],
+		onSelect: function(record){
+			switch(record.id) {
+				case '1':
+					$("#allData").val(1);
+					$("#groupData").val(0);
+					$("#selfData").val(0);
+					break;
+				case '2':
+					$("#allData").val(0);
+					$("#groupData").val(1);
+					$("#selfData").val(0);
+					break;
+				case '3':
+					$("#allData").val(0);
+					$("#groupData").val(0);
+					$("#selfData").val(1);
+					break;
+			}
+		},
+		onLoadSuccess: function (data) {
+			debugger;
+			var allData = $("#allData").val();
+			var groupData = $("#groupData").val();
+			var selfData = $("#selfData").val();
+			if(allData == 1) {
+				$("#dataPermission").combobox('setValue',1);
+			} else if(groupData == 1) {
+				$("#dataPermission").combobox('setValue',2);
+			} else if(selfData == 1) {
+				$("#dataPermission").combobox('setValue',3);
+			}
+            
+        }
+	});
+	
 	//扩展easyui的validatebox
     $.extend($.fn.validatebox.defaults.rules, {
        //必须和某个字段相等
@@ -92,11 +143,14 @@ $(function(){
 <div id="dlg" class="easyui-layout" style="padding:10px 20px">
     <div class="ftitle"><img src="${ctx }/images/fromedit.png" style="margin-bottom: -3px;"/> 用户信息</div>
     <form id="user_form" method="post" >
-		<input type="hidden" name="id" id="id"/>
-		<input type="hidden" name="groupId" id="groupId"/>
-		<input type="hidden" name="roleId" id="roleId"/>
-		<input type="hidden" name="registerDate"/>
-		<input type="hidden" name="isDelete"/>
+		<input id="id" name="id" type="hidden" />
+		<input id="groupId" name="groupId" type="hidden" />
+		<input id="roleId" name="roleId" type="hidden" />
+		<input id="allData" name="allData" type="hidden"/>
+    	<input id="groupData" name="groupData" type="hidden"/>
+    	<input id="selfData" name="selfData" type="hidden"/>
+		<input name="registerDate" type="hidden" />
+		<input name="isDelete" type="hidden" />
         <div class="fitem">
             <label>用户名:</label>
             <input id="name" name="name" class="easyui-textbox easyui-validatebox" required="required">
@@ -116,13 +170,17 @@ $(function(){
         </div>
       <div class="fitem">
             <label>部门:</label>
-			<input id="group" name="group.id" class="easyui-textbox" required="required" />
+			<input id="group" name="group.id" class="easyui-combobox" required="required" />
 			<input name="group_name" id="group_name" type="hidden" />
         </div>
          <div class="fitem">
             <label>角色:</label>
 			<input id="role" name="role.id" class="easyui-combobox" required="required" />
 			<input name="role_name" id="role_name" type="hidden" />
+        </div>
+        <div class="fitem">
+            <label>数据权限:</label>
+			<input id="dataPermission" class="easyui-combobox" required="required" />
         </div>
         <div class="fitem">
             <label>状态:</label>

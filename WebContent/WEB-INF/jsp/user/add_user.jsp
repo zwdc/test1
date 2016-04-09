@@ -31,6 +31,42 @@ $(function(){
             $("#role").combobox('setValue',data[0].id);
         }
 	});
+	
+	//角色权限
+	$('#dataPermission').combobox({
+	    valueField:'id',
+	    textField:'value',
+	    data: [{
+			id: '1',
+			value: '所有数据'
+		},{
+			id: '2',
+			value: '所在部门'
+		},{
+			id: '3',
+			value: '仅本人'
+		}],
+		onSelect: function(record){
+			switch(record.id) {
+				case '1':
+					$("#allData").val(1);
+					$("#groupData").val(0);
+					$("#selfData").val(0);
+					break;
+				case '2':
+					$("#allData").val(0);
+					$("#groupData").val(1);
+					$("#selfData").val(0);
+					break;
+				case '3':
+					$("#allData").val(0);
+					$("#groupData").val(0);
+					$("#selfData").val(1);
+					break;
+			}
+		}
+	});
+	
 	//扩展easyui的validatebox
     $.extend($.fn.validatebox.defaults.rules, {
        /*必须和某个字段相等*/
@@ -75,7 +111,10 @@ $(function(){
 
 <div id="dlg" class="easyui-layout" style="padding:10px 20px">
     <div class="ftitle"><img src="${ctx }/images/fromedit.png" style="margin-bottom: -3px;"/> 用户信息</div>
-    <form id="user_form" method="post" >
+    <form id="user_form" method="post">
+    	<input id="allData" name="allData" type="hidden">
+    	<input id="groupData" name="groupData" type="hidden">
+    	<input id="selfData" name="selfData" type="hidden">
         <div class="fitem">
             <label>用户名:</label>
             <input id="name" name="name" class="easyui-textbox" required="required">
@@ -95,11 +134,15 @@ $(function(){
         </div>
         <div class="fitem">
             <label>部门:</label>
-			<input id="group" name="group.id" class="easyui-textbox" required="required" />
+			<input id="group" name="group.id" class="easyui-combobox" required="required" />
         </div>
         <div class="fitem">
             <label>角色:</label>
-			<input id="role" name="role.id" class="easyui-textbox" required="required" />
+			<input id="role" name="role.id" class="easyui-combobox" required="required" />
+        </div>
+        <div class="fitem">
+            <label>数据权限:</label>
+			<input id="dataPermission" class="easyui-combobox" required="required" />
         </div>
         <div class="fitem">
             <label>状态:</label>

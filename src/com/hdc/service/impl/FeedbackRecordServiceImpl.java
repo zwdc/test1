@@ -37,7 +37,7 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 	@Override
 	public List<FeedbackRecord> getListPage(Parameter param,
 			Page<FeedbackRecord> page) throws Exception {
-		return this.baseService.findListPage("FeedbackRecord", param, null, page);
+		return this.baseService.findListPage("FeedbackRecord", param, null, page, true);
 	}
 	
 	@Override
