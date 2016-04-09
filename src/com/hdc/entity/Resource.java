@@ -57,7 +57,7 @@ public class Resource implements Serializable {
 	@Column(name = "note", length = 300)
     private String note; 							//说明
 	
-	@Column(name = "IS_DELETE", length = 2, nullable = false)
+	@Column(name = "is_delete", length = 1)
     private Integer isDelete;
     
 	public Integer getId() {

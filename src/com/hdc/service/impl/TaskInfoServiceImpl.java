@@ -1,7 +1,10 @@
 package com.hdc.service.impl;
 
 import java.io.Serializable;
+import java.text.DateFormatSymbols;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -140,10 +143,10 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 			if(!startDate.after(endDate)) {	//判断日期是否正确
 				for(Project project : listProject){	//每个项目下，生成反馈表
 					FeedbackRecord feedback = new FeedbackRecord();
+					feedback.setProject(project);
+					feedback.setIsDelay(0);
 					switch (fbType) {
 						case 1:	//单次任务
-							feedback.setProject(project);
-							feedback.setIsDelay(0);
 							Date singleTaskDate = fbFrequency.getSingleTask();				//此日期前进行反馈
 							feedback.setFeedbackStartDate(taskInfo.getCreateTaskDate());	//项目开始时间
 							feedback.setFeedbaceEndDate(singleTaskDate);
@@ -159,6 +162,7 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 						default:
 							break;
 					}
+					
 				}
 			}
 			
@@ -202,6 +206,28 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 		vars.put("processTaskId", processTaskId.toString());
 //		this.processService.complete(taskInfo.getActTaskId(), null, vars);		//完成“办理中” 节点任务
 		
+	}
+	
+	public static void main(String[] args) {
+		Calendar c_begin = new GregorianCalendar();
+	     Calendar c_end = new GregorianCalendar();
+	     DateFormatSymbols dfs = new DateFormatSymbols();
+	     String[] weeks = dfs.getWeekdays();
+	     
+	     c_begin.set(2010, 3, 2); //Calendar的月从0-11，所以4月是3.
+	     c_end.set(2010, 4, 20); //Calendar的月从0-11，所以5月是4.
+	 
+	     int count = 1;
+	     c_end.add(Calendar.DAY_OF_YEAR, 1);  //结束日期下滚一天是为了包含最后一天
+	     
+	     while(c_begin.before(c_end)){
+	       System.out.println("第"+count+"周  日期："+new java.sql.Date(c_begin.getTime().getTime())+","+weeks[c_begin.get(Calendar.DAY_OF_WEEK)]);
+	 
+	      if(c_begin.get(Calendar.DAY_OF_WEEK)==Calendar.SUNDAY){
+	          count++;
+	      }
+	      c_begin.add(Calendar.DAY_OF_YEAR, 1);
+	     }
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.hdc.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,11 +12,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 
@@ -29,7 +31,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "GROUPS")
 @DynamicUpdate(true)
 @DynamicInsert(true)
-public class Group extends BaseEntity implements Serializable{
+public class Group implements Serializable{
 
 	/**
 	 * 
@@ -38,14 +40,27 @@ public class Group extends BaseEntity implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "GROUP_ID", length = 5, nullable = false, unique = true)
+	@Column(name = "group_id", length = 5, nullable = false, unique = true)
 	private Integer id;
 	
-	@Column(name = "NAME", length = 50, nullable = false)
+	@Column(name = "name", length = 50, nullable = false)
 	private String name;
 	
-	@Column(name = "TYPE", length = 50, nullable = false)
+	@Column(name = "type", length = 50, nullable = false)
 	private String type;
+	
+	@Column(name = "is_delete", length = 1)
+    private Integer isDelete;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(name = "create_date")
+	private Date createDate ;					//创建时间
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(name = "update_date")
+	private Date updateDate ;					//修改时间
 
 	@OneToMany(mappedBy="group")
     private Set<User> user = new HashSet<User>();
@@ -92,6 +107,30 @@ public class Group extends BaseEntity implements Serializable{
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public Integer getIsDelete() {
+		return isDelete;
+	}
+
+	public void setIsDelete(Integer isDelete) {
+		this.isDelete = isDelete;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 
 }

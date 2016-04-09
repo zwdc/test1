@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "ROLE")
 @DynamicUpdate(true)
 @DynamicInsert(true)
-public class Role extends BaseEntity implements Serializable{
+public class Role implements Serializable{
 
 	/**
 	 * 
@@ -50,6 +50,9 @@ public class Role extends BaseEntity implements Serializable{
 	@OneToMany(mappedBy="role")
 	@JsonIgnore
     private Set<User> user = new HashSet<User>();
+	
+	@Column(name = "IS_DELETE", length = 1)
+    private Integer isDelete;
 	
 	public Role() {
 		
@@ -82,6 +85,22 @@ public class Role extends BaseEntity implements Serializable{
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public Set<User> getUser() {
+		return user;
+	}
+
+	public void setUser(Set<User> user) {
+		this.user = user;
+	}
+
+	public Integer getIsDelete() {
+		return isDelete;
+	}
+
+	public void setIsDelete(Integer isDelete) {
+		this.isDelete = isDelete;
 	}
 	
 }

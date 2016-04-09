@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "USERS")
 @DynamicUpdate(true)
 @DynamicInsert(true)
-public class User extends BaseEntity implements Serializable{
+public class User implements Serializable{
 
 	private static final long serialVersionUID = -6662232329895785824L;
 
@@ -77,6 +77,19 @@ public class User extends BaseEntity implements Serializable{
 	
 	@Column(name="DATE_SELF", length=1)
 	private Integer selfData ;			//是否有查询自己数据的权限
+	
+	@Column(name = "IS_DELETE", length = 1)
+    private Integer isDelete;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(name = "create_date")
+	private Date createDate ;					//创建时间
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@Column(name = "update_date")
+	private Date updateDate ;					//修改时间
 	
 	public User(){
 		
@@ -177,4 +190,29 @@ public class User extends BaseEntity implements Serializable{
 	public void setSelfData(Integer selfData) {
 		this.selfData = selfData;
 	}
+
+	public Integer getIsDelete() {
+		return isDelete;
+	}
+
+	public void setIsDelete(Integer isDelete) {
+		this.isDelete = isDelete;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
+	}
+	
 }

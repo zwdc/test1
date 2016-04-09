@@ -124,6 +124,7 @@ public class UserController {
 	public Message doAdd(@ModelAttribute("user") User user,
 						@Value("#{APP_PROPERTIES['account.user.add.syntoactiviti']}") Boolean synToActiviti) throws Exception{
 		user.setRegisterDate(new Date());
+		user.setCreateDate(new Date());
 		user.setIsDelete(0);
 		this.userService.doAdd(user, synToActiviti);
 		return new Message(Boolean.TRUE, "添加成功！");
@@ -161,6 +162,7 @@ public class UserController {
 			if(StringUtils.isBlank(rePasswd)) {
 				user.setPasswd(password);
 				user.setSalt(salt);
+				user.setUpdateDate(new Date());
 				this.userService.doUpdate(user, false);
 			} else {
 				this.userService.doUpdate(user, true);

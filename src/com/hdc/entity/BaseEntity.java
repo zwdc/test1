@@ -38,7 +38,7 @@ public class BaseEntity {
 	@Column(name = "update_date")
 	private Date updateDate ;					//修改时间
 	
-	@Column(name = "is_delete", length = 2)
+	@Column(name = "is_delete", length = 1)
     private Integer isDelete;
 
 	public User getCreateUser() {
