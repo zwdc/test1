@@ -4,9 +4,10 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <script type="text/javascript">
 	$(function() {
-		$("#monthlyStartDay, #monthlyEndDay").val('');
-		$('#weeklyStartTime,#monthlyStartTime').timespinner('setValue', '08:00:00');
-		$('#weeklyEndTime,#monthlyEndTime').timespinner('setValue', '18:00:00');
+		$('#weeklyStartTime').timespinner('setValue', '08:00');
+		/* 此处报错，因为一开始加载页面的时候 timespinner还没渲染 */
+		/* $('#weeklyStartTime,#monthlyStartTime').timespinner('setValue', '08:00'); */
+		/* $('#weeklyEndTime,#monthlyEndTime').timespinner('setValue', '18:00'); */
 		
 		$('#singleTaskInfo').tooltip({
 			position: 'right',
@@ -249,7 +250,7 @@
 	  								</c:choose>
 	  							</c:forEach>
 							</select> 
-							<input id="monthStartTime" name="monthStartTime" class="easyui-timespinner" data-options="prompt:'设置开始时间',showSeconds:true" style="width: 100px" value="<fmt:formatDate value='${feedback.monthStartTime }' type='time'/>">
+							<input id="monthlyStartTime" name="monthlyStartTime" class="easyui-timespinner" data-options="prompt:'设置开始时间',showSeconds:true" style="width: 100px" value="<fmt:formatDate value='${feedback.monthlyStartTime }' type='time'/>">
 							-
 	  						<select  name="monthlyEndDay"  class="easyui-combobox"  data-options="prompt:'选择一天',editable:false"  style="width: 45px">
 	  							<c:forEach begin="1" end="31" step="1" var="day">
@@ -263,7 +264,7 @@
 	  								</c:choose>
 	  							</c:forEach>
 							</select>
-	  						<input id="monthEndTime" name="monthEndTime" class="easyui-timespinner" data-options="prompt:'设置结束时间',showSeconds:true" style="width: 100px" value="<fmt:formatDate value='${feedback.monthEndTime }' type='time'/>">
+	  						<input id="monthlyEndTime" name="monthlyEndTime" class="easyui-timespinner" data-options="prompt:'设置结束时间',showSeconds:true" style="width: 100px" value="<fmt:formatDate value='${feedback.monthlyEndTime }' type='time'/>">
 							<small><abbr id="monthTaskInfo"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></abbr></small>
 	  					</td>
 	  				</tr>

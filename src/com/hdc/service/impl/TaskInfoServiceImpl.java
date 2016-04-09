@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hdc.entity.FeedbackFrequency;
+import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Group;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
@@ -22,6 +23,7 @@ import com.hdc.entity.TaskInfo;
 import com.hdc.entity.User;
 import com.hdc.service.IBaseService;
 import com.hdc.service.IFeedbackFrequencyService;
+import com.hdc.service.IFeedbackRecordService;
 import com.hdc.service.IProcessService;
 import com.hdc.service.IProcessTaskService;
 import com.hdc.service.IProjectService;
@@ -43,6 +45,9 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 	
 	@Autowired
 	private IFeedbackFrequencyService fbFrequentyService;
+	
+	@Autowired
+	private IFeedbackRecordService feedbackService;
 	
 	@Autowired
 	private IProcessService processService;
@@ -103,20 +108,29 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 	 * @param taskInfoId
 	 * @throws Exception
 	 */
-	private void saveHostGroup(String groupIds, Integer taskInfoId) throws Exception {
+	private void saveHostGroup(TaskInfo taskInfo) throws Exception {
+		String groupIds = taskInfo.getHostGroup(); 
 		if(StringUtils.isNotBlank(groupIds)) {
 			for(String groupId : groupIds.split(",")){
 				//List<Object[]> paramList = new ArrayList<Object[]>();
 				Project project = new Project();
 				project.setGroup(new Group(new Integer(groupId)));
-				project.setTaskInfo(new TaskInfo(taskInfoId));
+				project.setTaskInfo(taskInfo);
 				project.setStatus(ApprovalStatus.PENDING.toString());
 				this.projectService.doAdd(project);
+				//生成一个项目表 就要针对此项目表 生成反馈表
+				//saveFeedback(project, taskInfo);
 			}
 		}
 	}
 	
+	/**
+	 * 根据反馈频度生产反馈表
+	 * @param taskInfo
+	 * @throws Exception
+	 */
 	private void saveFeedback(TaskInfo taskInfo) throws Exception {
+		List<Project> listProject = this.projectService.findByTaskInfo(taskInfo.getId());
 		Integer fbFrequencyId = taskInfo.getFbFrequency().getId();
 		if(fbFrequencyId != null) {
 			FeedbackFrequency fbFrequency = this.fbFrequentyService.findById(fbFrequencyId);
@@ -124,19 +138,27 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 			Date endDate = taskInfo.getEndTaskDate();
 			Integer fbType = taskInfo.getFbFrequency().getType();
 			if(!startDate.after(endDate)) {	//判断日期是否正确
-				switch (fbType) {
-					case 1:	//单次任务
-						
-						break;
-					case 2:	//每周任务
-						
-						break;
-					case 3:	//每月任务
-						
-						break;
-	
-					default:
-						break;
+				for(Project project : listProject){	//每个项目下，生成反馈表
+					FeedbackRecord feedback = new FeedbackRecord();
+					switch (fbType) {
+						case 1:	//单次任务
+							feedback.setProject(project);
+							feedback.setIsDelay(0);
+							Date singleTaskDate = fbFrequency.getSingleTask();				//此日期前进行反馈
+							feedback.setFeedbackStartDate(taskInfo.getCreateTaskDate());	//项目开始时间
+							feedback.setFeedbaceEndDate(singleTaskDate);
+							this.feedbackService.doAdd(feedback);
+							break;
+						case 2:	//每周任务
+							
+							break;
+						case 3:	//每月任务
+							
+							break;
+		
+						default:
+							break;
+					}
 				}
 			}
 			

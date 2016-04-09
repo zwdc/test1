@@ -1,6 +1,7 @@
 package com.hdc.service.impl;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,12 @@ public class ProjectServiceImpl implements IProjectService {
 	public void doDelete(Integer id) throws Exception {
 		String hql = "update Project set isDelete = 1 where id = " + id.toString();
 		this.baseService.executeHql(hql);
+	}
+
+	@Override
+	public List<Project> findByTaskInfo(Integer taskInfoId) throws Exception {
+		String hql = "select * from Project where taskInfo.id = " + taskInfoId.toString();
+		return this.baseService.find(hql);
 	}
 
 }
