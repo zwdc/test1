@@ -39,7 +39,7 @@ public class ProjectServiceImpl implements IProjectService {
 
 	@Override
 	public List<Project> findByTaskInfo(Integer taskInfoId) throws Exception {
-		String hql = "select * from Project where taskInfo.id = " + taskInfoId.toString();
+		String hql = "from Project where taskInfo.id = " + taskInfoId.toString();
 		return this.baseService.find(hql);
 	}
 

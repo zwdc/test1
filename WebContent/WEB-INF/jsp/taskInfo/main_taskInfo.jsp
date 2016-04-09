@@ -213,7 +213,7 @@
 <div class="easyui-layout">
 <form id="taskInfo_form" method="post">
 	<input type="hidden" id="taskInfoId" name="id" value="${taskInfo.id }">
-	<input type="hidden" name="createUserId" value="${taskInfo.createUserId }">
+	<input type="hidden" name="createUser.id" value="${taskInfo.createUser.id }">
     <input type="hidden" name="createDate" value="<fmt:formatDate value='${taskInfo.createDate }' type='both'/>">
     <input type="hidden" name="isDelete" value="${taskInfo.isDelete }">
     <input type="hidden" name="status" value="${taskInfo.status }">

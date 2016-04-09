@@ -83,10 +83,10 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 		Integer id = feedback.getId();
 		if(id == null) {
 			if(!BeanUtils.isBlank(file)) {
-				String filePath = FileUploadUtils.upload(request, file, Constants.FILE_PATH);
+				/*String filePath = FileUploadUtils.upload(request, file, Constants.FILE_PATH);
 				feedback.setFilePath(filePath);
 				feedback.setFileName(file.getOriginalFilename());
-				feedback.setUploadDate(new Date());
+				feedback.setUploadDate(new Date());*/
 			}
 			feedback.setStatus(FeedbackStatus.FEEDBACKING.toString());
 			feedback.setIsDelay(0);		//是否迟报，得根据时间判断

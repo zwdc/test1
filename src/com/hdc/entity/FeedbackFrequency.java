@@ -51,14 +51,16 @@ public class FeedbackFrequency implements Serializable {
 	@Column(name = "weekly_task", length = 20)
 	private String weeklyTask;		//每周任务(0周日 1周一 2周二...6周六)
 	
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.TIME)
 	@DateTimeFormat(pattern = "HH:mm:ss")
 	@Column(name = "weekly_start_time")
+	/*@Column(name = "weekly_start_time", length = 8)*/
 	private Date weeklyStartTime;	//每周开始时间
 	
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.TIME)
 	@DateTimeFormat(pattern = "HH:mm:ss")
 	@Column(name = "weekly_end_time")
+	/*@Column(name = "weekly_end_time", length = 8)*/
 	private Date weeklyEndTime;		//每周结束时间
 	
 	@Column(name = "monthly_task", length = 25)
@@ -67,18 +69,18 @@ public class FeedbackFrequency implements Serializable {
 	@Column(name = "monthly_start_day", length = 2)
 	private Integer monthlyStartDay;	//每月开始日期(天)
 	
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.TIME)
 	@DateTimeFormat(pattern = "HH:mm:ss")
-	@Column(name = "weekly_start_date")
-	private Date monthlyStartTime;	//每周开始时间
+	@Column(name = "monthly_start_time")
+	private Date monthlyStartTime;	//每月开始时间
 	
 	@Column(name = "monthly_end_day", length = 2)
 	private Integer monthlyEndDay;	//每月结束日期(天)
 	
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.TIME)
 	@DateTimeFormat(pattern = "HH:mm:ss")
-	@Column(name = "weekly_end_date")
-	private Date monthlyEndTime;		//每周结束时间
+	@Column(name = "monthly_end_time")
+	private Date monthlyEndTime;		//每月结束时间
 	
 	@Column(name = "is_delete", length = 1)
 	private Integer isDelete;

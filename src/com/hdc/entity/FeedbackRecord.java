@@ -1,7 +1,6 @@
 package com.hdc.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
@@ -21,9 +20,6 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * 反馈表
@@ -50,18 +46,9 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 	@JoinColumn(name="project_id")
 	private Project project;
 	
-	@OneToMany(fetch = FetchType.EAGER)
-	@JoinColumn(name="feedbackatt_id")
+	@OneToMany(mappedBy = "fdRecord",fetch = FetchType.EAGER)
 	private Set<FeedbackAtt> fdaList;
 	
-	public Set<FeedbackAtt> getFdaList() {
-		return fdaList;
-	}
-
-	public void setFdaList(Set<FeedbackAtt> fdaList) {
-		this.fdaList = fdaList;
-	}
-
 	@Column(name = "work_plan", length = 2000)
 	private String workPlan;				//阶段工作计划
 	
@@ -73,7 +60,7 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@Column(name = "feedback_end_date")
-	private Date feedbaceEndDate;			//反馈结束时间
+	private Date feedbackEndDate;			//反馈结束时间
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -115,17 +102,6 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 	@Column(name = "delay_date")
 	private Date delayDate;					//延期结束时间
 	
-	@Column(name = "FILE_NAME", length = 500)
-	private String fileName;				//附件名称
-	
-	@Column(name = "FILE_PATH", length = 1000)
-	private String filePath;				//附件路径
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@Column(name = "UPLOAD_DATE")
-	private Date uploadDate ;				//上传时间
-	
 	@Column(name = "is_delay", length = 1)
 	private Integer isDelay;				//是否迟报（1.是、0.否）
 
@@ -161,12 +137,20 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 		this.feedbackStartDate = feedbackStartDate;
 	}
 
-	public Date getFeedbaceEndDate() {
-		return feedbaceEndDate;
+	public Set<FeedbackAtt> getFdaList() {
+		return fdaList;
 	}
 
-	public void setFeedbaceEndDate(Date feedbaceEndDate) {
-		this.feedbaceEndDate = feedbaceEndDate;
+	public void setFdaList(Set<FeedbackAtt> fdaList) {
+		this.fdaList = fdaList;
+	}
+
+	public Date getFeedbackEndDate() {
+		return feedbackEndDate;
+	}
+
+	public void setFeedbackEndDate(Date feedbackEndDate) {
+		this.feedbackEndDate = feedbackEndDate;
 	}
 
 	public Date getFeedbackDate() {
@@ -263,30 +247,6 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 
 	public void setDelayDate(Date delayDate) {
 		this.delayDate = delayDate;
-	}
-
-	public String getFileName() {
-		return fileName;
-	}
-
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
-
-	public String getFilePath() {
-		return filePath;
-	}
-
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
-
-	public Date getUploadDate() {
-		return uploadDate;
-	}
-
-	public void setUploadDate(Date uploadDate) {
-		this.uploadDate = uploadDate;
 	}
 
 	public Integer getIsDelay() {

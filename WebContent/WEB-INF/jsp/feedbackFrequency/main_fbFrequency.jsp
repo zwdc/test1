@@ -4,7 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <script type="text/javascript">
 	$(function() {
-		$("#monthlyStartDay, #monthlyEndDay").val('');
+		//$("#monthlyStartDay, #monthlyEndDay").val('');
 		/* $('#weeklyStartTime,#monthlyStartTime').timespinner('setValue', '08:00'); */
 		/* $('#weeklyEndTime,#monthlyEndTime').timespinner('setValue', '18:00'); */
 		
@@ -138,34 +138,34 @@
 	  					<td>
 	  						<div id="weekly" class="checkbox">
 		  						<label class="checkbox-inline">
-		  							<input type="checkbox" name="weeklyTask" ${fn:contains(feedback.weeklyTask, '7')?'checked':''} value="7">周日
+		  							<input type="checkbox" name="weeklyTask" ${fn:contains(feedback.weeklyTask, '1')?'checked':''} value="1">周日
 		  						</label>
 		  						<label class="checkbox-inline">
-		  							<input type="checkbox" name="weeklyTask" ${fn:contains(feedback.weeklyTask, '1')?'checked':''} value="1">周一
+		  							<input type="checkbox" name="weeklyTask" ${fn:contains(feedback.weeklyTask, '2')?'checked':''} value="2">周一
 		  						</label>
 		  						<label class="checkbox-inline">
-		  							<input type="checkbox" name="weeklyTask" ${fn:contains(feedback.weeklyTask, '2')?'checked':''} value="2">周二
+		  							<input type="checkbox" name="weeklyTask" ${fn:contains(feedback.weeklyTask, '3')?'checked':''} value="3">周二
 		  						</label>
 		  						<label class="checkbox-inline">
-		  							<input type="checkbox" name="weeklyTask" ${fn:contains(feedback.weeklyTask, '3')?'checked':''} value="3">周三
+		  							<input type="checkbox" name="weeklyTask" ${fn:contains(feedback.weeklyTask, '4')?'checked':''} value="4">周三
 		  						</label>
 		  						<label class="checkbox-inline">
-		  							<input type="checkbox" name="weeklyTask" ${fn:contains(feedback.weeklyTask, '4')?'checked':''} value="4">周四
+		  							<input type="checkbox" name="weeklyTask" ${fn:contains(feedback.weeklyTask, '5')?'checked':''} value="5">周四
 		  						</label>
 		  						<label class="checkbox-inline">
-		  							<input type="checkbox" name="weeklyTask" ${fn:contains(feedback.weeklyTask, '5')?'checked':''} value="5">周五
+		  							<input type="checkbox" name="weeklyTask" ${fn:contains(feedback.weeklyTask, '6')?'checked':''} value="6">周五
 		  						</label>
 		  						<label class="checkbox-inline">
-		  							<input type="checkbox" name="weeklyTask" ${fn:contains(feedback.weeklyTask, '6')?'checked':''} value="6">周六
+		  							<input type="checkbox" name="weeklyTask" ${fn:contains(feedback.weeklyTask, '7')?'checked':''} value="7">周六
 		  						</label>
 	  						</div>
 	  					</td>
 	  				</tr>
 	  				<tr>
 	  					<td>
-	  						<input id="weeklyStartTime" name="weeklyStartDate" class="easyui-timespinner" data-options="prompt:'设置开始时间',showSeconds:true" style="width: 100px" value="<fmt:formatDate value='${feedback.weeklyStartTime }' type='time'/>">
+	  						<input id="weeklyStartTime" name="weeklyStartTime" class="easyui-timespinner" data-options="prompt:'设置开始时间',showSeconds:true" style="width: 100px" value="<fmt:formatDate value='${feedback.weeklyStartTime }' type='time'/>">
 	  						-
-	  						<input id="weeklyEndTime" name="weeklyEndDate" class="easyui-timespinner" data-options="prompt:'设置结束时间',showSeconds:true" style="width: 100px" value="<fmt:formatDate value='${feedback.weeklyEndTime }' type='time'/>">
+	  						<input id="weeklyEndTime" name="weeklyEndTime" class="easyui-timespinner" data-options="prompt:'设置结束时间',showSeconds:true" style="width: 100px" value="<fmt:formatDate value='${feedback.weeklyEndTime }' type='time'/>">
 	  						<small><abbr id="weeklyTaskInfo"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></abbr></small>
 	  					</td>
 	  				</tr>
@@ -237,7 +237,7 @@
 	  				</tr>
 	  				<tr>
 	  					<td>
-	  						<select name="monthlyStartDay"  class="easyui-combobox"  data-options="prompt:'选择一天',editable:false"  style="width: 45px">
+	  						<select id="monthlyStartDay" name="monthlyStartDay"  class="easyui-combobox"  data-options="prompt:'天',editable:false"  style="width: 45px">
 	  							<c:forEach begin="1" end="31" step="1" var="day">
 	  								<c:choose>
 	  									<c:when test="${feedback.monthlyStartDay == day}">
@@ -251,7 +251,7 @@
 							</select> 
 							<input id="monthlyStartTime" name="monthlyStartTime" class="easyui-timespinner" data-options="prompt:'设置开始时间',showSeconds:true" style="width: 100px" value="<fmt:formatDate value='${feedback.monthlyStartTime }' type='time'/>">
 							-
-	  						<select  name="monthlyEndDay"  class="easyui-combobox"  data-options="prompt:'选择一天',editable:false"  style="width: 45px">
+	  						<select id="monthlyEndDay" name="monthlyEndDay"  class="easyui-combobox"  data-options="prompt:'天',editable:false"  style="width: 45px">
 	  							<c:forEach begin="1" end="31" step="1" var="day">
 	  								<c:choose>
 	  									<c:when test="${feedback.monthlyEndDay == day}">
