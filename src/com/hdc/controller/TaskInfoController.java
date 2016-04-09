@@ -107,7 +107,11 @@ public class TaskInfoController {
 		for(User user : group.getUser()) {
 			userNames += user.getName()+"、";
 		}
-		return userNames.substring(0, userNames.length()-1);
+		if(StringUtils.isNotBlank(userNames)) {
+			return userNames.substring(0, userNames.length()-1);
+		} else {
+			return "";
+		}
 	}
 	
 	/**
