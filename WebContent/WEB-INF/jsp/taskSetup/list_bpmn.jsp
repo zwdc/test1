@@ -10,7 +10,7 @@
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
-	<script type="text/javascript" src="${ctx}/js/app/bpmn.js"></script>
+	<script type="text/javascript" src="${ctx}/js/app/userTask.js"></script>
 	<script type="text/javascript" src="${ctx}/js/app/choose/user/user.js"></script>
 	<script type="text/javascript" src="${ctx}/js/app/choose/group/choose_group.js"></script>
   </head>

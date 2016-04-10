@@ -88,7 +88,7 @@
 	<div class="table-responsive">
 	<table class="table table-bordered table-hover table-condensed">
 		<tr class="bg-primary">
-			<td colspan="4" align="center">反馈信息</td>
+			<td colspan="4" align="center">反馈频度信息</td>
 		</tr>
 		<tr>
 	  		<td class="text-right" style="width: 205px;">频度名称:</td>

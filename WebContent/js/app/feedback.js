@@ -132,9 +132,9 @@ function add(row) {
 		_url = ctx+"/feedback/toMain?id="+row.id;
 	}
 	feedback_dialog = $('<div/>').dialog({
-    	title : "频度信息",
+    	title : "反馈信息",
 		top: 20,
-		width : fixWidth(0.6),
+		width : fixWidth(0.9),
 		height : 'auto',
         modal: true,
         minimizable: true,

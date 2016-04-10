@@ -55,64 +55,88 @@
 <div class="easyui-layout">
 <form id="feedback_form" method="post" encType="multipart/form-data">
 	<input type="hidden" id="feedbackId" name="id" value="${feedback.id }">
-	<input type="hidden" name="taskInfo.id" value="${feedback.taskInfo.id }">
-	<input type="hidden" name="createUserId" value="${feedback.createUserId }">
+	<input type="hidden" name="createUser.id" value="${feedback.createUser.id }">
     <input type="hidden" name="createDate" value="<fmt:formatDate value='${feedback.createDate }' type='both'/>">
     <input type="hidden" name="isDelete" value="${feedback.isDelete }">
     <input type="hidden" name="status" value="${feedback.status }">
-    <input type="hidden" name="fileName" id="fileName" value = "${feedback.fileName }"> <!-- id="fileName"不能删 -->
-	<input type="hidden" name="filePath" value = "${feedback.filePath }"> 
-	<input type="hidden" name="uploadDate" value = "<fmt:formatDate value='${feedback.uploadDate }' type='both'/>">
-	<table class="table table-bordered table-hover table-condensed">
+	<table class="table table-bordered table-hover" style="width: 100%;">
 		<tr class="bg-primary">
 			<td colspan="6" align="center">反馈信息</td>
 		</tr>
-		<tr class="active">
-		  	<td colspan="8">
-		  		<span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;督查任务信息:
-		  	</td>
+		<tr>
+			<td class="text-right">起草人:</td>
+			<td><input type="text" name="originalPerson" class="easyui-textbox"
+				value="${user.name }" data-option="prompt:'起草人'"
+				required="required" readonly="readonly" ></td>
+			<td class="text-right">牵头部门:</td>
+			<td colspan="1"><input type="text" name="ManagerName"
+				class="easyui-textbox" value="${feedback.project.group.name }"
+				data-option="prompt:'牵头部门'"  required="required" readonly="readonly">
+			</td>
+			<td class="text-right">反馈时限:</td>
+			<td><input name="feedbaceEndDateString" class="easyui-textbox"
+				data-options="prompt:'反馈时限',editable:false"
+				value="<fmt:formatDate value='${feedback.feedbackEndDate }' type='both'/>" required="required" readonly="readonly"></td>
+			
+		</tr>
+		
+		<tr>
+			<td class="text-right">记录状态:</td>
+			<td><input type="text" name="statusString" class="easyui-textbox"
+				value="${(feedback.status eq 'FEEDBACKING' ) ? '反馈中' : ((feedback_noTaskId.status eq 'RETURNED') ? '已退回' : '已采用') }" data-option="prompt:'来源名称'"
+				 required="required" readonly="readonly"></td>
+			<td class="text-right">是否延期:</td>
+			<td><input type="text" name="delayCountString" class="easyui-textbox"
+				value="${feedback.delayCount>0?'延期':'未延期' }" data-option="prompt:'来源名称'"
+				 required="required" readonly="readonly"></td>
+			<td class="text-right">反馈开始时间:</td>
+			<td ><input name="feedbackStartDateString" class="easyui-textbox"
+				data-options="prompt:'反馈开始时间',editable:false"
+				 value="<fmt:formatDate value='${feedback.feedbackStartDate }' type='both'/>" required="required" readonly="readonly"></td>
+		</tr>
+		<tr>
+			<td class="text-right">阶段工作计划:</td>
+			<td colspan="5"><textarea class="easyui-kindeditor"
+					data-options="readonlyMode: true" name="workPlanString" rows="3">${feedback.workPlan }</textarea>
+			</td>
+		</tr>
+		<tr>
+			<td class="text-right">落实情况:</td>
+			<td colspan="5"><textarea class="easyui-kindeditor"
+					name="situation" rows="3">${feedback.situation }</textarea></td>
+		</tr>
+		
+		<tr>
+			<td class="text-right">存在问题/困难:</td>
+			<td colspan="5"><textarea class="easyui-kindeditor"
+					name="problems" rows="3">${feedback.problems }</textarea></td>
+		</tr>
+		<tr>
+			<td class="text-right">解决措施/建议:</td>
+			<td colspan="5"><textarea class="easyui-kindeditor"
+					name="solutions" rows="3">${feedback.solutions }</textarea></td>
+		</tr>
+		<tr>
+	  		<td class="text-right">佐证材料上传:</td>
+	  		<td colspan="3">
+		    	<input class="easyui-filebox" type="text" id="file" name="file" data-options="prompt:'请选择文件...'" style="width: 65%;height: 25px;">
+		    	<c:if test="${feedback.id != null }">
+		    		<small><abbr id="title"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></abbr></small>
+		    	</c:if>
+	  		</td>
 	  	</tr>
-	  	<tr>
-	  		<td class="text-right">事项标题:</td>
-	  		<td colspan="3">${feedback.taskInfo.title }</td>
-	  		<td class="text-right">文号:</td>
-	  		<td>${feedback.taskInfo.taskNo }</td>
-	  	</tr>
-	  	<tr class="active">
-		  	<td colspan="8">
-		  		<span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;反馈信息:
-		  	</td>
-	  	</tr>
-		<tr>
-			<td class="text-right">原始起草人:</td>
-			<td><input name="originalPerson" class="easyui-textbox" data-options="prompt:'填写原始起草人'" value="${feedback.originalPerson }" required="required" type="text" style="width: 50%"></td>
-			<td class="text-right">手机:</td>
-			<td><input name="phone" class="easyui-textbox" data-options="prompt:'填写手机号'"  value="${feedback.phone }" required="required" type="text"></td>
-			<td class="text-right">办公电话:</td>
-			<td><input name="workPhone" class="easyui-textbox" data-options="prompt:'填写办公电话'"  value="${feedback.workPhone }" required="required" type="text"></td>
-		</tr>
-		<tr>
-			<td class="text-right">处/科室:</td>
-			<td><input name="offices" class="easyui-textbox" data-options="prompt:'填写处/科室'"  value="${feedback.offices }" required="required" type="text"></td>
-			<td class="text-right">职务:</td>
-			<td><input name="dutyOf" class="easyui-textbox" data-options="prompt:'填写职务'"  value="${feedback.dutyOf }" required="required" type="text"></td>
-			<td class="text-right">邮箱:</td>
-			<td><input name="email" class="easyui-textbox" data-options="prompt:'填写邮箱'"  value="${feedback.email }" required="required" type="text"></td>
-		</tr>
-		<tr>
-			<td class="text-right">联络人:</td>
-			<td><input name="contacts" class="easyui-textbox" data-options="prompt:'填写联络人'" value="${feedback.contacts }" required="required" type="text"></td>
-			<td class="text-right">联系电话:</td>
-			<td><input name="contactsPhone" class="easyui-textbox" data-options="prompt:'填写联系电话'" value="${feedback.contactsPhone }" required="required" type="text"></td>
-			<td colspan="2"></td>
-		</tr>
-		<tr>
-			<td colspan="6">落实情况:<textarea class="easyui-kindeditor" name="content" rows="8">${feedback.content }</textarea></td>
-		</tr>
-		<tr>
-			<td class="text-right">附件:</td>
-			<td colspan="5"><input class="easyui-filebox" type="text" id="file" name="file" data-options="prompt:'请选择文件...'" style="width: 90%;height: 25px;" required="required"></td>
-		</tr>
+		<c:if test="${feedback.id != null }">
+		  	<tr>
+		  		<td class="text-right">佐证材料下载：</td>
+		   		<td>
+		   			<c:if test="${feedback.fileName != null }">
+		   				<a id="download" title="点击下载" href="${ctx }/taskSource/downloadFile?id=${source.id}"><span class="glyphicon glyphicon-download-alt"></span>${source.fileName }</a>
+		   			</c:if>
+		   		</td>
+		   		<td class="text-right">上传时间:</td>
+		   		<td>${source.uploadDate }</td>
+		   	</tr>
+    	</c:if>
 	</table>
 </form>
 </div>

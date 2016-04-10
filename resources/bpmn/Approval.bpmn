@@ -2,7 +2,11 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
   <process id="ApprovalTaskInfo" name="任务审批" isExecutable="true">
     <startEvent id="startevent1" name="Start" activiti:initiator="startUser"></startEvent>
-    <userTask id="approval" name="秘书长审批"></userTask>
+    <userTask id="approval" name="秘书长审批">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${userTaskService}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
     <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="approval"></sequenceFlow>
     <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow2" sourceRef="approval" targetRef="exclusivegateway1"></sequenceFlow>
@@ -50,14 +54,14 @@
         <omgdi:waypoint x="360.0" y="278.0"></omgdi:waypoint>
         <omgdi:waypoint x="420.0" y="277.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="14.0" width="100.0" x="369.0" y="258.0"></omgdc:Bounds>
+          <omgdc:Bounds height="14.0" width="24.0" x="369.0" y="258.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
         <omgdi:waypoint x="340.0" y="258.0"></omgdi:waypoint>
         <omgdi:waypoint x="340.0" y="185.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="14.0" width="100.0" x="340.0" y="211.0"></omgdc:Bounds>
+          <omgdc:Bounds height="14.0" width="36.0" x="340.0" y="211.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">

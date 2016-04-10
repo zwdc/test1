@@ -14,7 +14,7 @@ var group_datagrid;
 $(function() {
 	//数据列表
     bpmn_datagrid = $('#bpmn_datagrid').datagrid({
-        url: ctx+"/bpmn/listBpmn",
+        url: ctx+"/userTask/getList",
         width : 'auto',
 		height :  fixHeight(0.91),
 		pagination:true,
@@ -63,7 +63,7 @@ function loadSingle(){
 			async: false,
 			cache: false,
 			type: "POST",
-			url: ctx+"/bpmn/loadSingleBpmn",
+			url: ctx+"/userTask/loadSingleBpmn",
 			data: {processDefinitionId : row.id},
 			success: function (data) {
 				$.messager.progress("close");
@@ -99,7 +99,7 @@ function initialization(){
 				async: false,
 				cache: false,
 				type: "POST",
-				url: ctx+"/bpmn/initialization",
+				url: ctx+"/userTask/initialization",
 				data: {},
 				success: function (data) {
 					$.messager.progress("close");
@@ -211,7 +211,7 @@ function outputData( obj, index, dataLength ){
 //初始化表单
 function formInit_bpmn( procDefKey ) {
     model_form = $('#model_form').form({
-    	url: ctx+"/bpmn/setupTask?procDefKey="+procDefKey,
+    	url: ctx+"/userTask/setupTask?procDefKey="+procDefKey,
         onSubmit: function (param) {
             $.messager.progress({
                 title: '提示信息！',
@@ -287,7 +287,7 @@ function setAuthor(){
 			async: false,
 			cache: false,
 			type: "POST", 
-			url: ctx+"/bpmn/listUserTask",
+			url: ctx+"/userTask/listUserTask",
 			data: {procDefKey: row.key},
 			success: function (data) {
 				if(data.length == 0){
@@ -309,7 +309,7 @@ function setAuthor(){
 					}
 					//显示model
 					initModelTable(row.key);
-//					$("#model_form").attr("action",ctx+"/bpmn/setPermission?procDefKey="+row.key);
+//					$("#model_form").attr("action",ctx+"/userTask/setPermission?procDefKey="+row.key);
 				}
 			}
 		});
