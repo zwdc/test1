@@ -38,6 +38,7 @@ import com.hdc.service.ITaskInfoService;
 import com.hdc.service.IUserService;
 import com.hdc.util.BeanUtils;
 import com.hdc.util.Constants;
+import com.hdc.util.Constants.ApprovalStatus;
 import com.hdc.util.Constants.TaskInfoStatus;
 import com.hdc.util.UserUtil;
 import com.hdc.util.upload.FileUploadUtils;
@@ -194,6 +195,7 @@ public class TaskInfoController {
 		Integer id = taskInfo.getId();
 		try {
 			if(BeanUtils.isBlank(id)) {
+				taskInfo.setStatus(ApprovalStatus.WAITING_FOR_APPROVAL.toString());
 				Serializable taskInfoId = this.taskInfoService.doAdd(taskInfo);
 				message.setData(taskInfoId.toString());
 				message.setMessage("添加成功！");
