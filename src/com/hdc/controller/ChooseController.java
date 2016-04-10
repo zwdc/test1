@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,15 +33,13 @@ public class ChooseController {
 	/**
 	 * 跳转到选择页面
 	 * @param taskDefKey
-	 * @param model
 	 * @return
 	 * @throws Exception
 	 */
 	@RequestMapping("/toChooseGroup")
-	public ModelAndView toChooseGroup(@RequestParam("multiSelect") boolean multiSelect, @RequestParam("key") String key, Model model) throws Exception{
+	public ModelAndView toChooseGroup(@RequestParam("taskDefKey") String taskDefKey) throws Exception{
 		ModelAndView mv = new ModelAndView("choose/group/choose_group");
-		mv.addObject("key", key);
-		mv.addObject("multiSelect", multiSelect);
+		mv.addObject("taskDefKey", taskDefKey);
 		return mv;
 	}
 	

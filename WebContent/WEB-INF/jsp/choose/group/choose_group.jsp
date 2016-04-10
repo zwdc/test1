@@ -7,14 +7,11 @@
 	<meta http-equiv="pragma" content="no-cache"/>
 	<meta http-equiv="cache-control" content="no-cache"/>
 	<meta http-equiv="expires" content="0"/>    
-	<title>选择用户组</title>
+	<title>选择部门</title>
 </head>
 
 <body>
-	<input type="hidden" id="multiSelect" value="${multiSelect }"/>
-	<input type="hidden" id="key" value="${key }"/>
-	<table id="group_datagrid" title="用户组列表"></table>
-    
+	<input type="hidden" id="taskDefKey" value="${taskDefKey }"/>
+	<table id="group_datagrid" title="候选部门列表"></table>
 </body>
-
 </html>
