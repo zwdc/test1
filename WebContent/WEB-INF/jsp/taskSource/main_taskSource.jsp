@@ -35,11 +35,10 @@
 <form id="taskSourceForm" method="post" encType="multipart/form-data">
     <input type="hidden" name="id" value="${source.id }">
     <input type="hidden" name="isDelete" value="${source.isDelete }">
-    <input type="hidden" name="createUserId" value="${source.createUserId }">
+    <input type="hidden" name="createUserId" value="${source.createUser.id}">
     <input type="hidden" name="createDate" value="<fmt:formatDate value='${source.createDate }' type='both'/>">
     <input type="hidden" name="fileName" id="fileName" value = "${source.fileName }"> <!-- id="fileName"不能删 -->
 	<input type="hidden" name="filePath" value = "${source.filePath }"> 
-	<input type="hidden" name="uploadDate" value = "<fmt:formatDate value='${source.uploadDate }' type='both'/>">
     <table class="table table-bordered table-hover">
 	  	<tr class="bg-primary">
 	  		<td colspan="4" align="center">任务来源</td>

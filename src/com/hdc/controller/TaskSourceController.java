@@ -185,6 +185,20 @@ public class TaskSourceController {
 		mv.addObject("source", taskSource);
 		return mv;
 	}
+	/**
+	 * 删除
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/delete/{id}")
+	@ResponseBody
+	public Message delete(@PathVariable("id") Integer id) throws Exception {
+		Message message = new Message();
+		this.taskSourceService.doDelete(id);
+		message.setMessage("删除成功！");
+		return message;
+	}
 	
 	/**
 	 * 获取下拉列表
