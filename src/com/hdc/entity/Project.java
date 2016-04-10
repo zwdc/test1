@@ -46,6 +46,10 @@ public class Project extends BaseEntity implements Serializable {
     private Group group;			//承办单位
 	
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="user_id")
+	private User user;				//承办人(签收用)
+	
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="task_info")
 	private TaskInfo taskInfo;		//任务
 	
@@ -154,6 +158,14 @@ public class Project extends BaseEntity implements Serializable {
 
 	public void setRefuseReason(String refuseReason) {
 		this.refuseReason = refuseReason;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 }
