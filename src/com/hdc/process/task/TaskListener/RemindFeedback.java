@@ -45,7 +45,7 @@ public class RemindFeedback implements TaskListener {
 //				taskInfo.setActTaskId(delegateTask.getId());
 				this.taskInfoService.doUpdate(taskInfo);
 				ProcessTask processTask = new ProcessTask();
-				processTask.setUser_name("系统管理");
+				/*processTask.setUser_name("系统管理");
 				//processTask.setUser_id(user.getId());
 				processTask.setBusinessType(BusinessType.IMPORTANT_FILE.toString());	//业务类型：重要文件
 				processTask.setBusinessKey(taskInfo.getId());
@@ -54,7 +54,7 @@ public class RemindFeedback implements TaskListener {
 				processTask.setTitle("您有将要到期尚未反馈的督察信息");
 				processTask.setUrl("/feedback/toMain?taskInfoId="+taskInfo.getId());
 				//processTask.setBusinessForm(BusinessForm.QT_FILE.toString());			//业务表单：省政府文件
-				processTask.setBusinessOperation(OperationType.ADD.toString());
+				processTask.setBusinessOperation(OperationType.ADD.toString());*/
 				Serializable id = this.processTaskService.doAdd(processTask);
 				delegateTask.setVariable("processTask", processTask);
 				//推送消息

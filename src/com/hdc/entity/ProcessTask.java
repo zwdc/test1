@@ -32,23 +32,26 @@ public class ProcessTask extends BaseEntity implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID", length = 10, nullable = false, unique = true)
+	@Column(name = "id", length = 10, nullable = false, unique = true)
 	private Integer id;
 	
-	@Column(name = "USER_ID", length = 5)
-	private Integer user_id;			//申请人id
+	@Column(name = "apply_user_id", length = 5)
+	private Integer applyUserId;			//申请人id
 	
-	@Column(name = "USER_NAME", length = 50)
-	private String user_name;			//申请人姓名
+	@Column(name = "apply_user_name", length = 50)
+	private String applyUserName;			//申请人姓名
 	
-	@Column(name = "TITLE", length = 500)
+	@Column(name = "title", length = 500)
 	private String title;				//申请标题
 	
-	@Column(name = "URL", length = 300)
+	@Column(name = "url", length = 300)
 	private String url;					//待处理任务的url
 	
-	@Column(name = "BUSINESS_TYPE", length = 50)
-	private String businessType;		//业务类型（1重要文件、2重要会议、3政府工作报告、4领导批示）
+	@Column(name = "task_info_type", length = 150)
+	private String taskInfoType;
+	
+	/*@Column(name = "BUSINESS_TYPE", length = 50)
+	private String businessType;		//业务类型 从
 	
 	@Column(name = "BUSINESS_FORM", length = 50)
 	private String businessForm;		//业务表单类型(1国务院文件、省政府文件、市政府文件. 2会议下分类 3工作报告分类...) {@see Constants - BusinessForm}
@@ -56,31 +59,31 @@ public class ProcessTask extends BaseEntity implements Serializable {
 	@Column(name = "BUSINESS_OPERATION", length = 50)
 	private String businessOperation;	//业务类型操作（添加、修改、审批）	
 	
-	@Column(name = "BUSINESS_KEY", length = 15)
+	@Column(name = "business_key", length = 15)
 	private Integer businessKey;		//业务id
+*/	
+	@Column(name = "task_info_id", length = 10)
+	private Integer taskInfoId;			//任务id
 	
-	@Column(name = "PROJECT_ID", length = 15)
-	private Long projectId;				//项目id（以后应该会用到，根据项目id查出所有的流程）
+	@Column(name = "project_id", length = 10)
+	private Integer projectId;			//项目id（以后应该会用到，根据项目id查出所有的流程）
 	
-	@Column(name = "PROJECT_NAME", length = 50)
-	private String projectName;			//项目名称
+	@Column(name = "task_id", length = 64)
+	private String taskId;				//任务id（activiti task id）
 	
-	@Column(name = "TASK_ID", length = 64)
-	private String taskId;				//任务id
-	
-	@Column(name = "EXECUTION_ID", length = 64)
+	@Column(name = "execution_id", length = 64)
 	private String executionId;			//执行流id
 	
-	@Column(name = "PROC_INST_ID", length = 64)
+	@Column(name = "pro_inst_id", length = 64)
 	private String processInstanceId;//流程实例id
 	
-	@Column(name = "TASK_NAME", length = 300)
+	@Column(name = "task_name", length = 300)
 	private String taskName;
 	
-	@Column(name = "ASSIGN", length = 5)
+	@Column(name = "assign", length = 5)
 	private String assign;				//任务处理人
 	
-	@Column(name = "OWNER", length = 5)
+	@Column(name = "owner", length = 5)
 	private String owner;				//任务执行人
 	
 	@Transient
@@ -110,7 +113,7 @@ public class ProcessTask extends BaseEntity implements Serializable {
     }
     
     public ProcessTask(Integer userId, String taskId) {
-    	this.user_id = userId;
+    	this.applyUserId = userId;
     	this.taskId = taskId;
     }
 
@@ -122,20 +125,28 @@ public class ProcessTask extends BaseEntity implements Serializable {
 		this.id = id;
 	}
     
-	public Integer getUser_id() {
-		return user_id;
+	public Integer getApplyUserId() {
+		return applyUserId;
 	}
 
-	public void setUser_id(Integer user_id) {
-		this.user_id = user_id;
+	public void setApplyUserId(Integer applyUserId) {
+		this.applyUserId = applyUserId;
 	}
 
-	public String getUser_name() {
-		return user_name;
+	public String getApplyUserName() {
+		return applyUserName;
 	}
 
-	public void setUser_name(String user_name) {
-		this.user_name = user_name;
+	public void setApplyUserName(String applyUserName) {
+		this.applyUserName = applyUserName;
+	}
+
+	public String getTaskInfoType() {
+		return taskInfoType;
+	}
+
+	public void setTaskInfoType(String taskInfoType) {
+		this.taskInfoType = taskInfoType;
 	}
 
 	public String getTitle() {
@@ -154,39 +165,6 @@ public class ProcessTask extends BaseEntity implements Serializable {
 		this.url = url;
 	}
 
-	public String getBusinessType() {
-		return businessType;
-	}
-
-	public void setBusinessType(String businessType) {
-		this.businessType = businessType;
-	}
-
-	public String getProjectName() {
-		return projectName;
-	}
-
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
-	
-	public String getBusinessOperation() {
-		return businessOperation;
-	}
-
-	public void setBusinessOperation(String businessOperation) {
-		this.businessOperation = businessOperation;
-	}
-
-	public Integer getBusinessKey() {
-		return businessKey;
-	}
-
-	public void setBusinessKey(Integer businessKey) {
-		this.businessKey = businessKey;
-	}
-
-	
 	public String getAssign() {
 		return assign;
 	}
@@ -287,28 +265,28 @@ public class ProcessTask extends BaseEntity implements Serializable {
 		this.executionId = executionId;
 	}
 
-	public Long getProjectId() {
-		return projectId;
-	}
-
-	public void setProjectId(Long projectId) {
-		this.projectId = projectId;
-	}
-
-	public String getBusinessForm() {
-		return businessForm;
-	}
-
-	public void setBusinessForm(String businessForm) {
-		this.businessForm = businessForm;
-	}
-
 	public HistoricTaskInstance getHistoricTaskInstance() {
 		return historicTaskInstance;
 	}
 
 	public void setHistoricTaskInstance(HistoricTaskInstance historicTaskInstance) {
 		this.historicTaskInstance = historicTaskInstance;
+	}
+
+	public Integer getTaskInfoId() {
+		return taskInfoId;
+	}
+
+	public void setTaskInfoId(Integer taskInfoId) {
+		this.taskInfoId = taskInfoId;
+	}
+
+	public Integer getProjectId() {
+		return projectId;
+	}
+
+	public void setProjectId(Integer projectId) {
+		this.projectId = projectId;
 	}
 
 }

@@ -86,6 +86,17 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 	public void doStartProcess(TaskInfo taskInfo) throws Exception {
 		taskInfo.setStatus(ApprovalStatus.PENDING.toString());
 		this.baseService.update(taskInfo);
+		
+		//给用户提示任务
+		User user = UserUtil.getUserFromSession();
+		ProcessTask processTask = new ProcessTask();
+		processTask.setTitle("任务录入完成，需要审批!");
+		processTask.setUrl("/taskInfo/toApproval?taskInfoId="+taskInfo.getId().toString());
+		processTask.setTaskInfoType(taskInfo.getTaskSource().getTaskInfoType().getName());		//任务类型
+		processTask.setApplyUserId(user.getId());
+		processTask.setApplyUserName(user.getName());
+		
+		
 		//初始化流程参数
 		Map<String, Object> vars = new HashMap<String, Object>();
 		vars.put("taskInfoId", taskInfo.getId().toString());
@@ -111,7 +122,7 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 		this.baseService.update(taskInfo);
 		
 		User user = UserUtil.getUserFromSession();
-		ProcessTask processTask = new ProcessTask();
+		/*ProcessTask processTask = new ProcessTask();
 		processTask.setUser_name(user.getName());
 		processTask.setUser_id(user.getId());
 		processTask.setBusinessType(BusinessType.IMPORTANT_FILE.toString());	//业务类型：重要文件
@@ -124,7 +135,7 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 		Serializable processTaskId = this.processTaskService.doAdd(processTask);
 		//初始化任务参数
 		Map<String, Object> vars = new HashMap<String, Object>();
-		vars.put("processTaskId", processTaskId.toString());
+		vars.put("processTaskId", processTaskId.toString());*/
 //		this.processService.complete(taskInfo.getActTaskId(), null, vars);		//完成“办理中” 节点任务
 		
 	}
