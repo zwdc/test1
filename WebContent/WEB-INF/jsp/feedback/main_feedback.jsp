@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-<script type="text/javascript" src="${ctx}/kindeditor/kindeditor-min.js"></script>
+
 <script type="text/javascript" src="${ctx}/js/kindeditor.js"></script>
 <script type="text/javascript">
 	$(function() {
@@ -16,9 +16,20 @@
 					borderColor: '#666'
 				});
 			}
-		});
+		});	 
+		var count = 0; 
+		 $("#filefield").click(function(){  
+			var input = $("<input class='easyui-filebox' type='text' name='file' data-options=\""+"prompt:'请选择文件...'\""+" style='width: 40%;height: 25px;'>");  	
+			var button = $("<input type='button' class='easyui-linkbutton' value='移除 '></div>");  
+			var pre=$("<div>").append(button).append(input);		
+			$("#fileZone").append(pre);
+			$.parser.parse(pre);
+			  button.click(function() {  
+				  pre.remove();
+		     });
+			 
+	});  
 	});
-	
 	function submitForm(obj, taskId) {
 		$('#feedback_form').form('submit', {
 		 	url: ctx+"/feedback/saveOrUpdate",
@@ -65,39 +76,38 @@
 		</tr>
 		<tr>
 			<td class="text-right">起草人:</td>
-			<td><input type="text" name="originalPerson" class="easyui-textbox"
+			<td><input type="text" name="feedback.createUser.id" class="easyui-textbox"
 				value="${user.name }" data-option="prompt:'起草人'"
-				required="required" readonly="readonly" ></td>
+				required="required" ></td>
 			<td class="text-right">牵头部门:</td>
-			<td colspan="1"><input type="text" name="ManagerName"
+			<td colspan="1"><input type="text" name="feedback.project.group.name"
 				class="easyui-textbox" value="${feedback.project.group.name }"
-				data-option="prompt:'牵头部门'"  required="required" readonly="readonly">
+				data-option="prompt:'牵头部门'"  required="required" >
 			</td>
 			<td class="text-right">反馈时限:</td>
-			<td><input name="feedbaceEndDateString" class="easyui-textbox"
-				data-options="prompt:'反馈时限',editable:false"
-				value="<fmt:formatDate value='${feedback.feedbackEndDate }' type='both'/>" required="required" readonly="readonly"></td>
-			
+			<td><input name="feedback.feedbackEndDate" class="easyui-datetimebox"
+				data-options="prompt:'反馈时限'"
+				value="<fmt:formatDate value='${feedback.feedbackEndDate }' type='both'/>" required="required" ></td>	
 		</tr>
 		
 		<tr>
 			<td class="text-right">记录状态:</td>
-			<td><input type="text" name="statusString" class="easyui-textbox"
-				value="${(feedback.status eq 'FEEDBACKING' ) ? '反馈中' : ((feedback_noTaskId.status eq 'RETURNED') ? '已退回' : '已采用') }" data-option="prompt:'来源名称'"
-				 required="required" readonly="readonly"></td>
+			<td><input type="text" name="status" class="easyui-textbox"
+				value="${(feedback.status eq 'FEEDBACKING' ) ? '反馈中' : ((feedback.status eq 'RETURNED') ? '已退回' : '已采用') }" data-option="prompt:'来源名称'"
+				 required="required" ></td>
 			<td class="text-right">是否延期:</td>
-			<td><input type="text" name="delayCountString" class="easyui-textbox"
+			<td><input type="text" name="delayCount" class="easyui-textbox"
 				value="${feedback.delayCount>0?'延期':'未延期' }" data-option="prompt:'来源名称'"
-				 required="required" readonly="readonly"></td>
+				 required="required" ></td>
 			<td class="text-right">反馈开始时间:</td>
-			<td ><input name="feedbackStartDateString" class="easyui-textbox"
-				data-options="prompt:'反馈开始时间',editable:false"
-				 value="<fmt:formatDate value='${feedback.feedbackStartDate }' type='both'/>" required="required" readonly="readonly"></td>
+			<td ><input name="feedback.feedbackStartDate" class="easyui-datetimebox"
+				data-options="prompt:'反馈开始时间'"
+				 value="<fmt:formatDate value='${feedback.feedbackStartDate}' type='both'/>" required="required" ></td>
 		</tr>
 		<tr>
 			<td class="text-right">阶段工作计划:</td>
 			<td colspan="5"><textarea class="easyui-kindeditor"
-					data-options="readonlyMode: true" name="workPlanString" rows="3">${feedback.workPlan }</textarea>
+					data-options="readonlyMode: false" name="workPlan" rows="3">${feedback.workPlan }</textarea>
 			</td>
 		</tr>
 		<tr>
@@ -118,25 +128,13 @@
 		</tr>
 		<tr>
 	  		<td class="text-right">佐证材料上传:</td>
-	  		<td colspan="3">
-		    	<input class="easyui-filebox" type="text" id="file" name="file" data-options="prompt:'请选择文件...'" style="width: 65%;height: 25px;">
-		    	<c:if test="${feedback.id != null }">
-		    		<small><abbr id="title"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></abbr></small>
-		    	</c:if>
+	  		<td colspan="5">
+	  		    <a id="filefield" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加附件</a> 
+	  		    <div id="fileZone"> </div> 	    	
 	  		</td>
 	  	</tr>
-		<c:if test="${feedback.id != null }">
-		  	<tr>
-		  		<td class="text-right">佐证材料下载：</td>
-		   		<td>
-		   			<c:if test="${feedback.fileName != null }">
-		   				<a id="download" title="点击下载" href="${ctx }/taskSource/downloadFile?id=${source.id}"><span class="glyphicon glyphicon-download-alt"></span>${source.fileName }</a>
-		   			</c:if>
-		   		</td>
-		   		<td class="text-right">上传时间:</td>
-		   		<td>${source.uploadDate }</td>
-		   	</tr>
-    	</c:if>
+    	
 	</table>
+    
 </form>
 </div>

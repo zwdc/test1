@@ -47,7 +47,7 @@ public class TaskInfoListener implements TaskListener {
 				processTask.setProcessInstanceId(delegateTask.getProcessInstanceId());
 				this.processTaskService.doUpdate(processTask);
 				delegateTask.setVariable("processTask", processTask);
-				delegateTask.setVariable("businessForm", processTask.getBusinessForm());
+				//delegateTask.setVariable("businessForm", processTask.getBusinessForm());
 				delegateTask.setVariable("title", processTask.getTitle());
 			}
 		} catch (Exception e) {

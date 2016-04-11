@@ -55,7 +55,7 @@
 		items : [
 				'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
 				'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
-				'insertunorderedlist'],
+				'insertunorderedlist','file'],
 		afterCreate: function() {
             this.sync();
         },

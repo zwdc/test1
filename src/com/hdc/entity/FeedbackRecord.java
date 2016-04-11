@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -46,7 +47,7 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 	@JoinColumn(name="project_id")
 	private Project project;
 	
-	@OneToMany(mappedBy = "fdRecord",fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "fdRecord",fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
 	private Set<FeedbackAtt> fdaList;
 	
 	@Column(name = "work_plan", length = 2000)

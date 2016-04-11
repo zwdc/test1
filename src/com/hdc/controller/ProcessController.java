@@ -155,7 +155,7 @@ public class ProcessController {
 				default:
 					break;
 			}*/
-			map.put("user_name", base.getUser_name());
+			/*map.put("user_name", base.getUser_name());
 			map.put("title", base.getTitle());
 			map.put("url", base.getUrl());
 			map.put("businessKey", base.getBusinessKey());
@@ -164,7 +164,7 @@ public class ProcessController {
 			map.put("taskId", base.getTaskId());
 			map.put("taskName", base.getTaskName());
 			map.put("projectName", base.getProjectName());
-			map.put("createTime", base.getTaskCreateDate());
+			map.put("createTime", base.getTaskCreateDate());*/
 			String assign = base.getAssign();
 			if(StringUtils.isNotBlank(assign)){
 				User u = this.userService.getUserById(new Integer(assign));
@@ -258,7 +258,7 @@ public class ProcessController {
 					default:
 						break;
 				}*/
-				map.put("user_name", base.getUser_name());
+				/*map.put("user_name", base.getUser_name());
 				map.put("title", base.getTitle());
 				map.put("url", base.getUrl());
 				map.put("businessKey", base.getBusinessKey());
@@ -267,7 +267,7 @@ public class ProcessController {
 				map.put("taskId", base.getTaskId());
 				map.put("taskName", base.getTaskName());
 				map.put("projectName", base.getProjectName());
-				map.put("createTime", base.getTaskCreateDate());
+				map.put("createTime", base.getTaskCreateDate());*/
 				String assign = base.getAssign();
 				if(StringUtils.isNotBlank(assign)){
 					User u = this.userService.getUserById(new Integer(assign));
@@ -470,8 +470,8 @@ public class ProcessController {
     	List<ProcessTask> processList = this.processService.findFinishedProcessInstances(p);
     	for(ProcessTask base : processList){
     		Map<String, Object> map=new HashMap<String, Object>();
-    		map.put("businessType", base.getBusinessType());
-    		map.put("user_name", base.getUser_name());
+    		/*map.put("businessType", base.getBusinessType());
+    		map.put("user_name", base.getUser_name());*/
     		map.put("title", base.getTitle());
 //    		map.put("startTime", base.getHistoricProcessInstance().getStartTime());
 //    		map.put("endTime", base.getHistoricProcessInstance().getEndTime());

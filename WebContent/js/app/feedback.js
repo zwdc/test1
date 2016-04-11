@@ -88,7 +88,7 @@ function fixWidth(percent) {
 
 //初始化表单
 function formInit(row) {
-	feedback_form = $('#fbFrequencyForm').form({
+	feedback_form = $('#feedback_form').form({
         url: ctx+"/feedback/saveOrUpdate",
         onSubmit: function () {
 	        $.messager.progress({
@@ -98,14 +98,7 @@ function formInit(row) {
 	        var isValid = $(this).form('validate');
 	        if (!isValid) {
 	            $.messager.progress('close');
-	        } else {
-	        	var type = $("input[name='type']:checked").val();
-	        	if(typeof(type) == "undefined") {
-	        		$.messager.progress('close');
-	        		$.messager.alert('温馨提示','至少选择一种反馈类型！','info');
-	        		return false;
-	        	}
-	        }
+	        } 
 	        return isValid;
 	    },
 	    success: function (data) {

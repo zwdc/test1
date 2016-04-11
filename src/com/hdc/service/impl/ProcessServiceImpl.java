@@ -113,7 +113,7 @@ public class ProcessServiceImpl implements IProcessService{
 		
 		int[] pageParams = page.getPageParams(totalSum);
 		//查询代办
-		List<Task> tasks;
+		/*List<Task> tasks;
 		boolean flag=processTask!=null&&((processTask.getProjectName()!=null&&!processTask.getProjectName().trim().equals(""))||(processTask.getTitle()!=null&&!processTask.getTitle().trim().equals(""))||(processTask.getBusinessForm()!=null&&!processTask.getBusinessForm().trim().equals("")));
 		if(flag){
 			if(processTask.getBusinessForm()!=null&&!processTask.getBusinessForm().trim().equals("")){
@@ -123,8 +123,9 @@ public class ProcessServiceImpl implements IProcessService{
 			}
 		}else{
 			tasks = taskQuery.orderByTaskCreateTime().desc().listPage(pageParams[0], pageParams[1]);
-		}
-		List<ProcessTask> taskList = getUserTaskList(tasks);
+		}*/
+		//List<ProcessTask> taskList = getUserTaskList(tasks);
+		List<ProcessTask> taskList = null;
 		return taskList;
     } 
 
