@@ -84,7 +84,7 @@ public class ProcessController {
      * 跳转待办任务、已完成任务页面
      * @return
      */
-    @RequestMapping(value = "/userTaskList")
+    @RequestMapping(value = "/todoTaskList")
     public String userTaskList(){
     	return "task/list_task";
     }
@@ -99,63 +99,14 @@ public class ProcessController {
 	 */
 	@RequestMapping(value = "/todoTask")
 	@ResponseBody
-	public Datagrid<Object> todoTask(Parameter param,ProcessTask processTask) throws Exception{
+	public Datagrid<ProcessTask> todoTask(Parameter param) throws Exception{
 		User user = UserUtil.getUserFromSession();
-		Page<ProcessTask> p = new Page<ProcessTask>(param.getPage(), param.getRows());
-		List<ProcessTask> taskList = this.processService.findTodoTask(user, p, processTask);
-		List<Object> jsonList=new ArrayList<Object>(); 
+		Page<ProcessTask> page = new Page<ProcessTask>(param.getPage(), param.getRows());
+		List<ProcessTask> taskList = this.processService.findTodoTask(user.getId().toString(), page);
+		/*		List<Object> jsonList=new ArrayList<Object>(); 
 		for(ProcessTask base : taskList){
 			Map<String, Object> map = new HashMap<String, Object>();
-			
-/*			switch (BusinessType.getValue(base.getBusinessType())) {
-				case SALES:
-					map.put("business_type", "销售");
-					break;
-				case PROCUREMENT:
-					map.put("business_type", "采购");
-					break;
-				default:
-					break;
-			}*/
-			
-			/*switch (BusinessForm.getValue(base.getBusinessForm())) {
-				case PROJECT:
-					map.put("business_form", "立项表");
-					break;
-				case SALES:
-					map.put("business_form", "销售审批表");
-					break;
-				case SALES_CONTRACT:
-					map.put("business_form", "销售合同");
-					break;
-				case PROCUREMENT_CONTRACT:
-					map.put("business_form", "采购合同");
-					break;
-				case OTHER_CONTRACT:
-					map.put("business_form", "其他待审批文件");
-					break;
-				case PAYMENT:
-					map.put("business_form", "付款");
-					break;
-				case OUTBOUND:
-					map.put("business_form", "出库单");
-					break;
-				case INBOUND:
-					map.put("business_form", "入库单");
-					break;
-				case PROCUREMENT_TUNHUO:
-					map.put("business_form", "囤货采购审批表");
-					break;
-				case PROCUREMENT_BUHUO:
-					map.put("business_form", "补货采购审批表");
-					break;
-				case INVOICE:
-					map.put("business_form", "开票");
-					break;
-				default:
-					break;
-			}*/
-			/*map.put("user_name", base.getUser_name());
+			map.put("user_name", base.getUser_name());
 			map.put("title", base.getTitle());
 			map.put("url", base.getUrl());
 			map.put("businessKey", base.getBusinessKey());
@@ -164,7 +115,7 @@ public class ProcessController {
 			map.put("taskId", base.getTaskId());
 			map.put("taskName", base.getTaskName());
 			map.put("projectName", base.getProjectName());
-			map.put("createTime", base.getTaskCreateDate());*/
+			map.put("createTime", base.getTaskCreateDate());
 			String assign = base.getAssign();
 			if(StringUtils.isNotBlank(assign)){
 				User u = this.userService.getUserById(new Integer(assign));
@@ -187,113 +138,10 @@ public class ProcessController {
 			map.put("version", base.getVersion());
 			
 			jsonList.add(map);
-		}
-		return new Datagrid<Object>(p.getTotal(), jsonList);
+		}*/
+		return new Datagrid<ProcessTask>(page.getTotal(), taskList);
 	}
     
-    /**
-	 * 根据procInstId查询待办任务
-	 * @param session
-	 * @param redirectAttributes
-	 * @param model
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/todoTaskByProcInstId")
-	@ResponseBody
-	public Datagrid<Object> todoTaskByProcInstId(Parameter param,@RequestParam(value = "procInstId", required = false) String procInstId) throws Exception{
-		User user = UserUtil.getUserFromSession();
-		Page<ProcessTask> p = new Page<ProcessTask>(param.getPage(), param.getRows());
-		List<ProcessTask> taskList = this.processService.findTodoTask(user, p,null);
-		List<Object> jsonList=new ArrayList<Object>(); 
-		for(ProcessTask base : taskList){
-			if(base.getProcessInstanceId().trim().equals(procInstId)){
-				Map<String, Object> map = new HashMap<String, Object>();
-				
-				/*switch (BusinessType.getValue(base.getBusinessType())) {
-					case SALES:
-						map.put("business_type", "销售");
-						break;
-					case PROCUREMENT:
-						map.put("business_type", "采购");
-						break;
-					default:
-						break;
-				}*/
-				
-				/*switch (BusinessForm.getValue(base.getBusinessForm())) {
-					case PROJECT:
-						map.put("business_form", "立项表");
-						break;
-					case SALES:
-						map.put("business_form", "销售审批表");
-						break;
-					case SALES_CONTRACT:
-						map.put("business_form", "销售合同");
-						break;
-					case PROCUREMENT_CONTRACT:
-						map.put("business_form", "采购合同");
-						break;
-					case OTHER_CONTRACT:
-						map.put("business_form", "其他待审批文件");
-						break;
-					case PAYMENT:
-						map.put("business_form", "付款");
-						break;
-					case OUTBOUND:
-						map.put("business_form", "出库单");
-						break;
-					case INBOUND:
-						map.put("business_form", "入库单");
-						break;
-					case PROCUREMENT_TUNHUO:
-						map.put("business_form", "囤货采购审批表");
-						break;
-					case PROCUREMENT_BUHUO:
-						map.put("business_form", "补货采购审批表");
-						break;
-					case INVOICE:
-						map.put("business_form", "开票");
-						break;
-					default:
-						break;
-				}*/
-				/*map.put("user_name", base.getUser_name());
-				map.put("title", base.getTitle());
-				map.put("url", base.getUrl());
-				map.put("businessKey", base.getBusinessKey());
-				map.put("businessForm", base.getBusinessForm());	//待办任务时，根据此字段去执行controller中的方法
-				map.put("businessOperation", base.getBusinessOperation());
-				map.put("taskId", base.getTaskId());
-				map.put("taskName", base.getTaskName());
-				map.put("projectName", base.getProjectName());
-				map.put("createTime", base.getTaskCreateDate());*/
-				String assign = base.getAssign();
-				if(StringUtils.isNotBlank(assign)){
-					User u = this.userService.getUserById(new Integer(assign));
-					assign = u.getName();
-				}
-				String owner = base.getOwner();
-				if(StringUtils.isNotBlank(owner)){
-					User u = this.userService.getUserById(new Integer(owner));
-					owner = u.getName();
-				}
-				
-				map.put("assign", assign);
-				map.put("owner", owner);
-				map.put("executionId", base.getExecutionId());
-				map.put("taskDefinitionKey", base.getTaskDefinitionKey());
-				map.put("processInstanceId", base.getProcessInstanceId());
-				map.put("processDefinitionId", base.getProcessDefinitionId());
-				map.put("processDefinitionKey", base.getProcessDefinitionKey());	//任务跳转用
-				map.put("supended", base.getSupended());
-				map.put("version", base.getVersion());
-				
-				jsonList.add(map);
-			}
-		}
-		return new Datagrid<Object>(p.getTotal(), jsonList);
-	}
 	
 	@RequestMapping(value = "/endTask")
 	@ResponseBody

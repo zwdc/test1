@@ -16,6 +16,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.hdc.util.Constants.BusinessForm;
+
 /**
  * 评论
  * @author ZML
@@ -35,45 +37,35 @@ public class Comments implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "ID", length = 5, nullable = false, unique = true)
+	@Column(name = "id", length = 5, nullable = false, unique = true)
 	private Integer id;
 	
-	@Column(name = "USER_ID", length = 5)
+	@Column(name = "user_id", length = 5)
 	private String userId;		//评论人id
 	
-	@Column(name = "USER_NAME", length = 50)
+	@Column(name = "user_name", length = 50)
 	private String userName;	// 评论人
 	
-	@Column(name = "CONTENT", length = 1000)
+	@Column(name = "content", length = 1000)
 	private String content;		// 评论内容
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@Column(name = "TIME")
+	@Column(name = "time")
 	private Date time;			// 评论时间
 	
-	@Column(name = "BUSINESS_KEY", length = 15)
-	private Long businessKey;			//业务id
+	@Column(name = "businessKey", length = 10)
+	private Integer businessKey;		//业务id
 	
-	@Column(name="BUSINESS_TYPE", length = 50)
-	private String businessType; 		//业务类型
-	
-	@Column(name = "BUSINESS_FORM", length = 50)
-	private String businessForm;	//业务表单类型（立项表、销售审批表、采购审批表、合同、开票、出库单等）,区分业务表单类型
-	
-	@Column(name = "PROC_INST_ID", length = 64)
-	private String processInstanceId;	//流程实例id
+	/**
+	 * @see BusinessForm
+	 */
+	@Column(name="business_form", length = 20)
+	private String businessForm; 		//业务表单
 	
 	public Comments() {
 		
 	}
-	
-	public Comments(Long businessKey, String businessType, String businessForm) {
-		this.businessKey = businessKey;
-		this.businessType = businessType;
-		this.businessForm = businessForm;
-	}
-	
 	
 	public String getUserName() {
 		return userName;
@@ -93,17 +85,11 @@ public class Comments implements Serializable {
 	public void setTime(Date time) {
 		this.time = time;
 	}
-	public Long getBusinessKey() {
+	public Integer getBusinessKey() {
 		return businessKey;
 	}
-	public void setBusinessKey(Long businessKey) {
+	public void setBusinessKey(Integer businessKey) {
 		this.businessKey = businessKey;
-	}
-	public String getBusinessForm() {
-		return businessForm;
-	}
-	public void setBusinessForm(String businessForm) {
-		this.businessForm = businessForm;
 	}
 	public Integer getId() {
 		return id;
@@ -111,17 +97,11 @@ public class Comments implements Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public String getProcessInstanceId() {
-		return processInstanceId;
+	public String getBusinessForm() {
+		return businessForm;
 	}
-	public void setProcessInstanceId(String processInstanceId) {
-		this.processInstanceId = processInstanceId;
-	}
-	public String getBusinessType() {
-		return businessType;
-	}
-	public void setBusinessType(String businessType) {
-		this.businessType = businessType;
+	public void setBusinessForm(String businessForm) {
+		this.businessForm = businessForm;
 	}
 	public String getUserId() {
 		return userId;

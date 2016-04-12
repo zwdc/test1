@@ -10,7 +10,9 @@
 	})
 </script>
 <div class="easyui-layout">
-    <table id="sales" class="table table-bordered table-hover table-condensed">
+<form id="form" action="${ctx }/taskInfo/approval" method="post">
+    <input type="hidden" value="${taskInfo.id }" name="taskInfoId">
+    <table id="taskInfo" class="table table-bordered table-hover table-condensed">
   		<tr class="bg-primary">
 			<td colspan="4" align="center">任务信息</td>
 		</tr>
@@ -61,9 +63,12 @@
 		<tr>
 			<td colspan="4">备注:<textarea class="easyui-kindeditor" id="remark" rows="3" >${taskInfo.remark }</textarea></td>
 		</tr>
+		<tr>
+	  		<td colspan="4">
+	  			<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;审批意见:
+	  			<textarea class="easyui-kindeditor" name="comment" rows="3"></textarea>
+	  		</td>
+	  	</tr>
   	</table>
-</div>
-<div id="task_btn">
-	<a href="#" class="easyui-linkbutton">Save</a>
-	<a href="#" class="easyui-linkbutton">Close</a>
+</form>
 </div>

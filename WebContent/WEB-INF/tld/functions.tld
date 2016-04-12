@@ -11,56 +11,36 @@
   	<function>
         <description>获取审批状态</description>
         <name>approvalStatus</name>
-        <function-class>com.wizsharing.util.Functions</function-class>
+        <function-class>com.hdc.util.Functions</function-class>
         <function-signature>java.lang.String approvalStatus(java.lang.String)</function-signature>
     </function>
     
     <function>
         <description>获取审批状态(审批成功和审批中 返回true, 待审批、审批失败、需要重新审批返回false)</description>
         <name>statusPermission</name>
-        <function-class>com.wizsharing.util.Functions</function-class>
+        <function-class>com.hdc.util.Functions</function-class>
         <function-signature>java.lang.Boolean statusPermission(java.lang.String)</function-signature>
     </function>
     
     <function>
         <description>获取审批状态(返回class样式)</description>
         <name>statusClass</name>
-        <function-class>com.wizsharing.util.Functions</function-class>
+        <function-class>com.hdc.util.Functions</function-class>
         <function-signature>java.lang.String statusClass(java.lang.String)</function-signature>
     </function>
     
     <function>
         <description>获取业务表单类型</description>
         <name>businessForm</name>
-        <function-class>com.wizsharing.util.Functions</function-class>
+        <function-class>com.hdc.util.Functions</function-class>
         <function-signature>java.lang.String businessForm(java.lang.String)</function-signature>
     </function>
     
     <function>
-        <description>获取产品配件类型</description>
-        <name>productPartType</name>
-        <function-class>com.wizsharing.util.Functions</function-class>
-        <function-signature>java.lang.String productPartType(java.lang.Integer)</function-signature>
+        <description>获取急缓程度</description>
+        <name>getUrgencyType</name>
+        <function-class>com.hdc.util.Functions</function-class>
+        <function-signature>java.lang.String getUrgencyType(java.lang.Integer)</function-signature>
     </function>
     
-    <function>
-        <description>获取招投标类型</description>
-        <name>btType</name>
-        <function-class>com.wizsharing.util.Functions</function-class>
-        <function-signature>java.lang.String btType(java.lang.Integer)</function-signature>
-    </function>
-    
-    <function>
-        <description>获取合作伙伴公司类型</description>
-        <name>partnerCType</name>
-        <function-class>com.wizsharing.util.Functions</function-class>
-        <function-signature>java.lang.String partnerCType(java.lang.Integer)</function-signature>
-    </function>
-    
-    <function>
-        <description>获取订单状态</description>
-        <name>orderStatus</name>
-        <function-class>com.wizsharing.util.Functions</function-class>
-        <function-signature>java.lang.String orderStatus(java.lang.String)</function-signature>
-    </function>
 </taglib>

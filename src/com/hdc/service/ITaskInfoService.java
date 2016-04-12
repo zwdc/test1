@@ -56,6 +56,17 @@ public interface ITaskInfoService {
 	public void doStartProcess(TaskInfo taskInfo) throws Exception;
 	
 	/**
+	 * 审批
+	 * @param salesId
+	 * @param isPass
+	 * @param taskId
+	 * @param processInstanceId
+	 * @param comment
+	 * @throws Exception
+	 */
+	public void doApproval(Integer salesId, boolean isPass, String taskId, String comment) throws Exception;
+	
+	/**
 	 * 签收任务
 	 * @param taskInfo
 	 * @throws Exception

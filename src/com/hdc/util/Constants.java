@@ -197,10 +197,11 @@ public class Constants {
 	}
 	
 	/**
-	 * 业务表单类型(省政府文件、国务院文件、其他文件   2会议下分类 3工作报告分类....)
+	 * 业务表单类型(任务表单(TaskInfo)、任务交班表(Project)、任务反馈表(Feedback))
+	 * 用途：审批评论时，来标记此评论所属类型
 	 */
 	public enum  BusinessForm {
-		GWY_FILE("GWY_FILE"), SZF_FILE("SZF_FILE"), QT_FILE("QT_FILE");
+		TASK_FORM("TASK_FORM"), PROJECT_FORM("PROJECT_FORM"), FEEDBACK_FORM("FEEDBACK_FORM");
 		private final String value;
 		
 		private BusinessForm(String value) {
@@ -215,14 +216,14 @@ public class Constants {
 		public static BusinessForm getValue( String value ) {
 			BusinessForm bf = null;
 			switch (value) {
-			case "GWY_FILE":
-				bf = GWY_FILE;
+			case "TASK_FORM":
+				bf = TASK_FORM;
 				break;
-			case "SZF_FILE":
-				bf = SZF_FILE;
+			case "PROJECT_FORM":
+				bf = PROJECT_FORM;
 				break;
-			case "QT_FILE":
-				bf = QT_FILE;
+			case "FEEDBACK_FORM":
+				bf = FEEDBACK_FORM;
 				break;
 			default:
 				break;

@@ -48,7 +48,10 @@ public class ProcessTask extends BaseEntity implements Serializable {
 	private String url;					//待处理任务的url
 	
 	@Column(name = "task_info_type", length = 150)
-	private String taskInfoType;
+	private String taskInfoType;		//任务类型
+	
+	@Column(name = "task_title", length = 200)
+	private String taskTitle;			//任务标题
 	
 	/*@Column(name = "BUSINESS_TYPE", length = 50)
 	private String businessType;		//业务类型 从
@@ -287,6 +290,14 @@ public class ProcessTask extends BaseEntity implements Serializable {
 
 	public void setProjectId(Integer projectId) {
 		this.projectId = projectId;
+	}
+
+	public String getTaskTitle() {
+		return taskTitle;
+	}
+
+	public void setTaskTitle(String taskTitle) {
+		this.taskTitle = taskTitle;
 	}
 
 }
