@@ -75,6 +75,19 @@ public class TaskInfoController {
 		return mv;
 	}
 	
+	/**
+	 * 跳转到审批不通过的修改页面
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping("/toModify")
+	public ModelAndView toModify(@RequestParam("id") Integer id) throws Exception {
+		ModelAndView mv = new ModelAndView("taskInfo/modify_taskInfo");
+		TaskInfo taskInfo = this.taskInfoService.findById(id);
+		mv.addObject("taskInfo", taskInfo);
+		return mv;
+	}
+	
 	@RequestMapping("/toChooseGroup")
 	public String toChooseGroup() {
 		return "taskInfo/choose_group";

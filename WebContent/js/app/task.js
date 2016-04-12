@@ -41,7 +41,7 @@ function showToDoTask(map){
 	todoTask_datagrid = $("#todoTask").datagrid({
         url: _url,
         width : 'auto',
-		height :  fixHeight(0.77),
+		height :  fixHeight(0.8),
 		pagination:true,
 		rownumbers:true,
 		border:false,
@@ -189,6 +189,7 @@ function handleTask() {
     	} else {
     		task_dialog = $('<div/>').dialog({
     			title : "任务信息",
+    			href: ctx+row.url,
     			top: 20,
     			width : fixWidth(0.8),
     			height : 'auto',
@@ -196,11 +197,13 @@ function handleTask() {
     			minimizable: true,
     			maximizable: true,
     			onLoad: function () {
-    				formInit();
+    				//formInit();
+    				$("#taskId").val(row.taskId);	//根据taskId完成任务
     			},
 	            onClose: function () {
 	            	task_dialog.dialog('destroy');
-	            },
+	            }
+	            /*,
 	            buttons:[
 				          {
 				        	  text: '通过',
@@ -249,7 +252,7 @@ function handleTask() {
 				        		  todoTask_datagrid.datagrid('reload');//重新加载列表数据
 				        	  }
 				          }
-	    			]
+	    			]*/
     		});
         }
     } else {

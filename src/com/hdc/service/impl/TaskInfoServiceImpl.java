@@ -139,19 +139,22 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 	@Override
 	public void doApproval(Integer taskInfoId, boolean isPass, String taskId, String comment) throws Exception {
 		User user = UserUtil.getUserFromSession();
+		Map<String, Object> variables = new HashMap<String, Object>();
 		TaskInfo taskInfo = this.findById(taskInfoId);
 		if(isPass) {
 			taskInfo.setStatus(ApprovalStatus.APPROVAL_SUCCESS.toString()); //审批成功
 		} else {
 			taskInfo.setStatus(ApprovalStatus.APPROVAL_FAILED.toString()); //审批失败
 			ProcessTask processTask = new ProcessTask();
+			processTask.setTaskTitle(taskInfo.getTitle());
 			processTask.setApplyUserId(user.getId());
 			processTask.setApplyUserName(user.getName());
 			processTask.setTaskInfoId(taskInfo.getId());
 			processTask.setTaskInfoType(taskInfo.getTaskSource().getTaskInfoType().getName());
 			processTask.setTitle("任务审批不通过，请修改后重新审批！");
-			processTask.setUrl("/taskInfo/toApproval?taskInfoId="+taskInfo.getId().toString());
-			this.processTaskService.doAdd(processTask);
+			processTask.setUrl("/taskInfo/toModify?id="+taskInfo.getId().toString());
+			Serializable id = this.processTaskService.doAdd(processTask);
+			variables.put("processTaskId", id);
 		}
 		// 评论
 		Comments comments = new Comments();
@@ -161,7 +164,6 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 		comments.setBusinessKey(taskInfoId);
 		comments.setBusinessForm(BusinessForm.TASK_FORM.toString());
 		
-		Map<String, Object> variables = new HashMap<String, Object>();
 		variables.put("isPass", isPass);
 		this.processService.complete(taskId, comments, variables);
 	}

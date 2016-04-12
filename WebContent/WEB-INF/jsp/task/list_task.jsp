@@ -20,7 +20,7 @@
 	
 	<script type="text/javascript" src="${ctx}/kindeditor/kindeditor-min.js"></script>
   	<script type="text/javascript" src="${ctx}/js/kindeditor.js"></script>
-	<script type="text/javascript" src="${ctx}/js/app/choose/project/choose_project.js"></script>
+	<%-- <script type="text/javascript" src="${ctx}/js/app/choose/project/choose_project.js"></script> --%>
   </head>
   <body>
 	 <div class="well well-small" style="margin-left: 5px;margin-top: 5px;">

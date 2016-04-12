@@ -8,10 +8,40 @@
 		$("#assistantGroup").kindeditor({readonlyMode: true});
 		$("#remark").kindeditor({readonlyMode: true});
 	})
+	
+	function submit(status) {
+		$('#form').form('submit', {
+			onSubmit: function (param) {
+	            $.messager.progress({
+	                title: '提示信息！',
+	                text: '数据处理中，请稍后....'
+	            });
+		    	param.isPass = status;	//提交的参数
+	        },
+	        success: function (result) {
+	            $.messager.progress('close');
+	            var json = $.parseJSON(result);
+	            if (json.status) {
+	            	task_dialog.dialog('destroy');//销毁对话框
+	            	todoTask_datagrid.datagrid('reload');//重新加载列表数据
+	            } 
+	            $.messager.show({
+					title : json.title,
+					msg : json.message,
+					timeout : 1000 * 2
+				});
+	        }
+		});
+	}
+	
+	function closeDialog() {
+		task_dialog.dialog('destroy');
+	}
 </script>
 <div class="easyui-layout">
 <form id="form" action="${ctx }/taskInfo/approval" method="post">
-    <input type="hidden" value="${taskInfo.id }" name="taskInfoId">
+    <input name="taskInfoId" value="${taskInfo.id }"  type="hidden">
+    <input id="taskId" name="taskId" type="hidden">
     <table id="taskInfo" class="table table-bordered table-hover table-condensed">
   		<tr class="bg-primary">
 			<td colspan="4" align="center">任务信息</td>
@@ -71,4 +101,10 @@
 	  	</tr>
   	</table>
 </form>
+<hr style="margin-top: -5px ">
+<div class="pull-right" style="margin: -15px 5px 5px 0px">
+ 	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="submit(true);" data-options="iconCls:'icon-ok'">同意</a>
+	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="submit(false);" data-options="iconCls:'icon-remove'">不同意</a>
+	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="closeDialog();" data-options="iconCls:'icon-cancel'">关闭</a>
+</div>
 </div>

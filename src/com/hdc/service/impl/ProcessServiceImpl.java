@@ -219,8 +219,14 @@ public class ProcessServiceImpl implements IProcessService{
             	processTask.setTaskName(task.getName());
             	processTask.setTaskCreateDate(task.getCreateTime());
             	processTask.setTaskDefinitionKey(task.getTaskDefinitionKey());
-            	processTask.setAssign(task.getAssignee());
-            	processTask.setOwner(task.getOwner());
+            	if(StringUtils.isNotBlank(task.getAssignee())) {
+            		User user = this.userService.getUserById(new Integer(task.getAssignee()));
+            		processTask.setAssign(user.getName());
+            	}
+            	if(StringUtils.isNotBlank(task.getOwner())) {
+            		User user = this.userService.getUserById(new Integer(task.getOwner()));
+            		processTask.setOwner(user.getName());
+            	}
             	ProcessDefinition processDefinition = getProcessDefinitionById(processInstance.getProcessDefinitionId());
             	processTask.setProcessDefinitionKey(processDefinition.getKey());
             	processTask.setSupended(processInstance.isSuspended());
