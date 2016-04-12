@@ -4,7 +4,8 @@
     <startEvent id="startevent1" name="Start" activiti:initiator="startUser"></startEvent>
     <userTask id="approval" name="秘书长审批">
       <extensionElements>
-        <activiti:taskListener event="create" delegateExpression="${userTaskService}"></activiti:taskListener>
+        <activiti:taskListener event="create" delegateExpression="${userTaskListener}"></activiti:taskListener>
+        <activiti:taskListener event="create" delegateExpression="${processTaskListener}"></activiti:taskListener>
       </extensionElements>
     </userTask>
     <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="approval"></sequenceFlow>
@@ -14,7 +15,11 @@
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isPass}]]></conditionExpression>
     </sequenceFlow>
     <serviceTask id="createTask" name="生成项目表和反馈表" activiti:delegateExpression="${createTaskService}"></serviceTask>
-    <userTask id="updateTask" name="修改任务信息" activiti:assignee="${startUser}"></userTask>
+    <userTask id="updateTask" name="修改任务信息" activiti:assignee="${startUser}">
+      <extensionElements>
+        <activiti:taskListener event="create" delegateExpression="${processTaskListener}"></activiti:taskListener>
+      </extensionElements>
+    </userTask>
     <sequenceFlow id="flow4" name="不同意" sourceRef="exclusivegateway1" targetRef="updateTask">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!isPass}]]></conditionExpression>
     </sequenceFlow>

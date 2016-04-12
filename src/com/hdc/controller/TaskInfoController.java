@@ -1,20 +1,12 @@
 package com.hdc.controller;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.fileupload.FileUploadBase.FileSizeLimitExceededException;
+import org.activiti.engine.ActivitiException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hdc.entity.Datagrid;
@@ -35,14 +26,10 @@ import com.hdc.entity.TaskInfo;
 import com.hdc.entity.User;
 import com.hdc.service.IGroupService;
 import com.hdc.service.ITaskInfoService;
-import com.hdc.service.IUserService;
 import com.hdc.util.BeanUtils;
-import com.hdc.util.Constants;
 import com.hdc.util.Constants.ApprovalStatus;
 import com.hdc.util.Constants.TaskInfoStatus;
 import com.hdc.util.UserUtil;
-import com.hdc.util.upload.FileUploadUtils;
-import com.hdc.util.upload.exception.InvalidExtensionException;
 import com.uwantsoft.goeasy.client.goeasyclient.GoEasy;
 import com.uwantsoft.goeasy.client.goeasyclient.listener.GoEasyError;
 import com.uwantsoft.goeasy.client.goeasyclient.listener.PublishListener;
@@ -224,12 +211,63 @@ public class TaskInfoController {
     	try {
     		this.taskInfoService.doStartProcess(taskInfo);
     		message.setMessage("操作成功！");
-		} catch (Exception e) {
+		} catch (ActivitiException e) {
+			message.setStatus(Boolean.FALSE);
+            if (e.getMessage().indexOf("no processes deployed with key") != -1) {
+            	message.setMessage("没有部署流程，请联系管理员在[流程定义]中部署相应流程文件！");
+            } else {
+            	message.setMessage("启动流程失败，系统内部错误！");
+            }
+            throw e;
+        } catch (Exception e) {
 			message.setStatus(Boolean.FALSE);
 			message.setMessage("操作失败！");
 			throw e;
 		}
     	return message;
+    }
+    
+    /**
+     * 跳转到反馈页面
+     * @param taskInfoId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/toApproval")
+    public ModelAndView toApproval(@RequestParam(value = "taskInfoId", required = false) Integer taskInfoId) throws Exception {
+    	ModelAndView mv = new ModelAndView("taskInfo/approval_taskInfo");
+    	TaskInfo taskInfo = this.taskInfoService.findById(taskInfoId);
+    	mv.addObject("taskInfo", taskInfo);
+    	return mv;
+    }
+    
+    /**
+     * 审批操作
+     * @param taskInfoId
+     * @param isPass
+     * @param taskId
+     * @param processInstanceId
+     * @param comment
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/approval")
+	@ResponseBody
+	public Message approval(
+			@RequestParam("taskInfoId") Integer taskInfoId, 
+			@RequestParam("isPass") boolean isPass,
+			@RequestParam("taskId") String taskId, 
+			@RequestParam("comment") String comment)
+					throws Exception {
+		Message message = new Message();
+		try {
+			this.taskInfoService.doApproval(taskInfoId, isPass, taskId, comment);
+			message.setMessage("审批完成！");
+		} catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("审批失败！");
+		}
+		return message;
     }
     
     /**
@@ -302,45 +340,7 @@ public class TaskInfoController {
 		return mv;
 	}
     
-    public static int dayForWeek(String pTime) throws Exception {
-    	  DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    	  Calendar c = Calendar.getInstance();
-    	  c.setTime(format.parse(pTime));
-    	  int dayForWeek = 0;
-    	  if(c.get(Calendar.DAY_OF_WEEK) == 1){
-    	   dayForWeek = 7;
-    	  }else{
-    	   dayForWeek = c.get(Calendar.DAY_OF_WEEK) - 1;
-    	  }
-    	  return dayForWeek;
-	 }
-    
     public static void main(String[] args) throws Exception {
-		System.out.println("当前日期是星期几："+dayForWeek("2016-03-06"));
-		
-		//一个月有几天
-		java.util.Calendar cal = java.util.Calendar.getInstance();
-		int maxDay = cal.getActualMaximum(java.util.Calendar.DAY_OF_MONTH);
-		System.out.println("本月有多少天："+maxDay);
-		
-		Calendar c = Calendar.getInstance();
-  	    System.out.println("今天是这个月的第几个星期几："+c.get(Calendar.DAY_OF_WEEK_IN_MONTH));
-  	    System.out.println("本月的第几周："+c.get(Calendar.WEEK_OF_MONTH));	
-  	    
-  	    DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-  	    Date beginDate = format.parse("2016-03-02 15:27:30");
-  	    Date endDate = format.parse("2016-03-08 11:27:30");
-  	    long beginTime = beginDate.getTime(); 
-  	    long endTime = endDate.getTime(); 
-  	    long betweenDays = (long)((beginTime - endTime) / (1000 * 60 * 60 *24) + 0.5); 
-  	    System.out.println("相差天数："+betweenDays);
-  	    
-  	    GregorianCalendar gc=new GregorianCalendar(); 
-  	    gc.setTime(beginDate); 
-  	    gc.add(3, 1);	//加一周
-  	    //gc.set(gc.get(Calendar.YEAR),gc.get(Calendar.MONTH),gc.get(Calendar.DATE));
-  	    System.out.println("日期计算："+format.format(gc.getTime()));
-  	    
   	    //测试推送
   	    GoEasy goEasy = new GoEasy("0cf326d6-621b-495a-991e-a7681bcccf6a");
 		goEasy.publish("zwdc_user_1", "您有将要到期尚未反馈的督察信息", new PublishListener(){

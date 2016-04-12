@@ -37,21 +37,11 @@
 		<table>
 			<tr>
 				<td style="padding-left:2px">
-					<shiro:hasPermission name="handleTask">
-						<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="handleTask();">办理</a>
-					</shiro:hasPermission>
-					<shiro:hasPermission name="claimTask">
-						<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="claimTask();">签收</a>
-					</shiro:hasPermission>
-					<shiro:hasPermission name="transferTask">
-						<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="transferTask();">转办</a>
-					</shiro:hasPermission>
-					<shiro:hasPermission name="delegateTask">
-						<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="delegateTask();">委派</a>
-					</shiro:hasPermission>
-					<shiro:hasPermission name="jumpTask"> <!-- 此功能只有审批人员才可以看到 -->
-						<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="jumpTask();">跳转</a>
-					</shiro:hasPermission>
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="handleTask();">办理</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="claimTask();">签收</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="transferTask();">转办</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="delegateTask();">委派</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="jumpTask();">跳转</a>
 				</td>
 				<td style="padding-left:2px;width:100px"></td>
 				<td style="padding-left:2px" class="text-right">
@@ -78,14 +68,16 @@
 			</tr>
 		</table>
 	 </div>
-	 <div id="tabs" class="easyui-tabs">
+	 <!-- <div id="tabs" class="easyui-tabs">
 		<div title="待办任务" closable="true" data-options="selected:true" style="padding:5 0 0 0;">
 			<table id="todoTask" title="待办任务列表"></table>
 		</div>
 		<div title="已完成的任务" closable="true" style="padding:5 0 0 0;">
 			<table id="endTask" title="已完成任务"></table>
 		</div>
-	</div>
+	</div> -->
+	
+	<table id="todoTask" title="待办任务列表"></table>
 	
 	<div id="task" class="easyui-dialog" closed="true">
 		<form id="taskForm" style="margin: 10px 10px" method="post">

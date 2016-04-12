@@ -53,6 +53,16 @@ $(function(){
 								return "<span class='text-primary'>申请办结</span>";
 							case "FINISHED":
 								return "<span class='text-muted'>已办结</span>";
+							case "APPROVAL_SUCCESS":
+								return "<span class='text-success'>审批通过</span>";
+							case "APPROVAL_FAILED":
+								return "<span class='text-danger'>审批失败</span>";
+							case "WAITING_FOR_APPROVAL":
+								return "<span class='text-warning'>待申请审批</span>";
+							case "PENDING":
+								return "<span class='text-primary'>审批中</span>";
+							case "REAPPROVAL":
+								return "<span class='text-danger'>需要重新审批</span>";
 							default:
 								return "";
 						  }
@@ -287,20 +297,22 @@ function showDetails(row) {
         minimizable: true,
         maximizable: true,
         href: ctx+"/taskInfo/details/"+row.id,
-        buttons: [
-            {
-                text: '关闭',
-                iconCls: 'icon-cancel',
-                handler: function () {
-                	taskInfo_dialog.dialog('destroy');
-                }
-            }
-        ],
+        buttons: "#task_btn",
         onClose: function () {
         	taskInfo_dialog.dialog('destroy');
         }
     });
 }
+
+/*buttons: [
+          {
+              text: '关闭',
+              iconCls: 'icon-cancel',
+              handler: function () {
+              	taskInfo_dialog.dialog('destroy');
+              }
+          }
+      ],*/
 
 function publishMessage() {
 	var goEasy = new GoEasy({

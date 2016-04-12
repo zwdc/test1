@@ -51,6 +51,7 @@ import com.hdc.process.task.TaskCommand.RevokeTaskCmd;
 import com.hdc.process.task.TaskCommand.StartActivityCmd;
 import com.hdc.service.ICommentsService;
 import com.hdc.service.IProcessService;
+import com.hdc.service.IProcessTaskService;
 import com.hdc.service.IUserService;
 import com.hdc.util.BeanUtils;
 import com.hdc.util.UserUtil;
@@ -99,6 +100,9 @@ public class ProcessServiceImpl implements IProcessService{
 	@Autowired
 	private ICommentsService commentsService;
 	
+	@Autowired
+	private IProcessTaskService processTaskService;
+	
     /**
      * 用户查询代办任务
      * @param user
@@ -106,15 +110,15 @@ public class ProcessServiceImpl implements IProcessService{
      * @return
      */
 	@Override
-    public List<ProcessTask> findTodoTask(User user, Page<ProcessTask> page, ProcessTask processTask) throws Exception{
+    public List<ProcessTask> findTodoTask(String userId, Page<ProcessTask> page) throws Exception{
 		//taskCandidateOrAssigned查询某个人的待办任务，包含已签收、候选任务<候选人范围和候选组范围>
- 		TaskQuery taskQuery = this.taskService.createTaskQuery().taskCandidateOrAssigned(user.getId().toString());
+ 		TaskQuery taskQuery = this.taskService.createTaskQuery().taskCandidateOrAssigned(userId);
 		Integer totalSum = taskQuery.list().size();
 		
 		int[] pageParams = page.getPageParams(totalSum);
 		//查询代办
-		/*List<Task> tasks;
-		boolean flag=processTask!=null&&((processTask.getProjectName()!=null&&!processTask.getProjectName().trim().equals(""))||(processTask.getTitle()!=null&&!processTask.getTitle().trim().equals(""))||(processTask.getBusinessForm()!=null&&!processTask.getBusinessForm().trim().equals("")));
+		List<Task> tasks = taskQuery.orderByTaskCreateTime().desc().listPage(pageParams[0], pageParams[1]);
+/*		boolean flag=processTask!=null&&((processTask.getProjectName()!=null&&!processTask.getProjectName().trim().equals(""))||(processTask.getTitle()!=null&&!processTask.getTitle().trim().equals(""))||(processTask.getBusinessForm()!=null&&!processTask.getBusinessForm().trim().equals("")));
 		if(flag){
 			if(processTask.getBusinessForm()!=null&&!processTask.getBusinessForm().trim().equals("")){
 				tasks = taskQuery.processVariableValueLike("projectName", "%"+processTask.getProjectName()+"%").processVariableValueLike("title", "%"+processTask.getTitle()+"%").processVariableValueEquals("businessForm", processTask.getBusinessForm()).orderByTaskCreateTime().desc().listPage(pageParams[0], pageParams[1]);
@@ -124,8 +128,7 @@ public class ProcessServiceImpl implements IProcessService{
 		}else{
 			tasks = taskQuery.orderByTaskCreateTime().desc().listPage(pageParams[0], pageParams[1]);
 		}*/
-		//List<ProcessTask> taskList = getUserTaskList(tasks);
-		List<ProcessTask> taskList = null;
+		List<ProcessTask> taskList = getUserTaskList(tasks);
 		return taskList;
     } 
 
@@ -206,22 +209,24 @@ public class ProcessServiceImpl implements IProcessService{
             	//如果有挂起的流程则continue
             	continue;
             }
-            ProcessTask base = (ProcessTask) getVariableByExecutionId(executionId, "processTask");
-            base.setTaskId(task.getId());
-            base.setTaskName(task.getName());
-            base.setTaskCreateDate(task.getCreateTime());
-            base.setTaskDefinitionKey(task.getTaskDefinitionKey());
-            base.setAssign(task.getAssignee());
-            base.setOwner(task.getOwner());
-            base.setExecutionId(executionId);
-            base.setProcessDefinitionId(processInstance.getProcessDefinitionId());
-            base.setProcessInstanceId(processInstanceId);
-            ProcessDefinition processDefinition = getProcessDefinitionById(processInstance.getProcessDefinitionId());
-            base.setProcessDefinitionKey(processDefinition.getKey());
-            base.setSupended(processInstance.isSuspended());
-            base.setVersion(processDefinition.getVersion());
-            
-            taskList.add(base);
+            String processTaskId = (String) getVariableByExecutionId(executionId, "processTaskId");
+            if(StringUtils.isNotBlank(processTaskId)) {
+            	ProcessTask processTask = this.processTaskService.findById(new Integer(processTaskId));
+            	/*processTask.setTaskId(task.getId());
+            	processTask.setExecutionId(executionId);
+            	processTask.setProcessInstanceId(processInstanceId);*/
+            	processTask.setProcessDefinitionId(processInstance.getProcessDefinitionId());
+            	processTask.setTaskName(task.getName());
+            	processTask.setTaskCreateDate(task.getCreateTime());
+            	processTask.setTaskDefinitionKey(task.getTaskDefinitionKey());
+            	processTask.setAssign(task.getAssignee());
+            	processTask.setOwner(task.getOwner());
+            	ProcessDefinition processDefinition = getProcessDefinitionById(processInstance.getProcessDefinitionId());
+            	processTask.setProcessDefinitionKey(processDefinition.getKey());
+            	processTask.setSupended(processInstance.isSuspended());
+            	processTask.setVersion(processDefinition.getVersion());
+            	taskList.add(processTask);
+            }
         }
     	return taskList;
     }
