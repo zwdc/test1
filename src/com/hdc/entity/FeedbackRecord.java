@@ -2,6 +2,7 @@ package com.hdc.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -48,7 +49,7 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 	private Project project;
 	
 	@OneToMany(mappedBy = "fdRecord",fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
-	private Set<FeedbackAtt> fdaList;
+	private Set<FeedbackAtt> fdaList=new HashSet<FeedbackAtt>();
 	
 	@Column(name = "work_plan", length = 2000)
 	private String workPlan;				//阶段工作计划
@@ -87,10 +88,10 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 	private String suggestion;				//督导意见
 	
 	@Column(name = "status", length = 30)
-	private String status;					//反馈情况（反馈中、已退回、已采用）
+	private String status;					//反馈情况（反馈中 RUNNING、已退回 FAIL、已采用 SUCCESS）
 	
 	@Column(name = "refuse_count", length = 2)
-	private Integer refuseCount;			//拒绝次数
+	private Integer refuseCount;			//退回次数
 	
 	@Column(name = "warning_level", length = 2)
 	private Integer warningLevel;			//预警级别

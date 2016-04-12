@@ -19,7 +19,7 @@ $(function() {
 		striped:true,
         columns : [
              [
-			  {field: 'feedbackStartDate', title: '反馈时间', width: fixWidth(0.2), align: 'center', halign: 'center', sortable: true,
+			  {field: 'feedbackStartDate', title: '反馈期间', width: fixWidth(0.2), align: 'center', halign: 'center', sortable: true,
 					  formatter:function(value,row){
 						  return moment(value).format("MM月DD日")+"-"+moment(row.feedbackEndDate).format("MM月DD日");
 					  }
@@ -41,18 +41,18 @@ $(function() {
               },
               {field: 'status', title: '状态', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true,
             	  formatter:function(value){
-            		  if (value=="ACCEPT") {           			
+            		  if (value=="SUCCESS") {           			
                       	return "采用";
-                      }else if(value=="RETURNED"){
+                      }else if(value=="FAIL"){
                     	  return "退回"; 
                       }else{
                     	  return "反馈中"; 
                       }
             	  },
             	  styler:function(value){
-            		  if (value=="ACCEPT") {           			
+            		  if (value=="SUCCESS") {           			
                           return 'background-color:green;color:white';
-                        }else if(value=="RETURNED"){
+                        }else if(value=="FAIL"){
                       	  return 'background-color:orange;color:white';; 
                         }
               	  }

@@ -15,7 +15,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.junit.Ignore;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 反馈附件
@@ -35,7 +38,8 @@ public class FeedbackAtt implements Serializable{
 	@Column(name = "id", length = 10, nullable = false, unique = true)
 	private Integer id;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
 	@JoinColumn(name="feedback_record_id")
 	private FeedbackRecord fdRecord;
 	

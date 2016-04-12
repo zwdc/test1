@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -73,8 +74,18 @@ public class FeedbackController {
 	@RequestMapping("/getList")
 	@ResponseBody
 	public Datagrid<FeedbackRecord> getList(Parameter param) throws Exception {
-		Page<FeedbackRecord> page = new Page<FeedbackRecord>(param.getPage(), param.getRows());
+		Page<FeedbackRecord> page = new Page<FeedbackRecord>(param.getPage(), param.getRows());		
 		this.feedbackService.getListPage(param, page);
+//		List<FeedbackRecord> list=page.getResult();
+//		for(int i=0;i<list.size();i++){
+//			FeedbackRecord fbr=new FeedbackRecord();
+//			Set<FeedbackAtt> fdal=fbr.getFdaList();
+//			Iterator<FeedbackAtt> it=fdal.iterator();
+//			while(it.hasNext()){
+//				System.out.println(it.next().getName());
+//			}	
+//			fbr.setFdaList(null);
+//		}
 		return new Datagrid<FeedbackRecord>(page.getTotal(),page.getResult());
 	}
 	
@@ -120,10 +131,7 @@ public class FeedbackController {
 		Message message = new Message();
 		Integer id = feedback.getId();
 		try {
-			if(file.length==0){
-				this.feedbackService.doCompleteTask(feedback, taskId, null, request);
-				message.setMessage("无佐证材料，操作成功!");
-			}else{
+			if(file.length!=0){				
 				Set<FeedbackAtt> fbaList=new HashSet<FeedbackAtt>();
 				for(int i=0;i<file.length;i++){
 					try {
@@ -132,6 +140,7 @@ public class FeedbackController {
 						fba.setUrl(filePath);
 						fba.setName(file[i].getOriginalFilename());;
 						fba.setUploadDate(new Date());
+						//子类把主类加一下，子类中才会有主类的ID外键；
 						fba.setFdRecord(feedback);
 						fbaList.add(fba);
 					} catch (Exception e) {
@@ -146,22 +155,24 @@ public class FeedbackController {
 						}
 					}	
 				}
-			feedback.setFdaList(fbaList);
+				feedback.setFdaList(fbaList);
+			}else{				
+				//this.feedbackService.doCompleteTask(feedback, taskId, null, request);
+			}
 			if(id == null) {
 				this.feedbackService.doAdd(feedback);
-				message.setMessage("添加成功！");
+				message.setMessage("上传了"+file.length+"个材料，添加成功！");
 			} else {
 				this.feedbackService.doUpdate(feedback);
 				message.setData(id);
 				message.setMessage("修改成功！");
 			}
-			message.setMessage("上传了"+file.length+"个材料，操作成功!");
-			}			
 		} catch (Exception e) {
 			message.setStatus(Boolean.FALSE);
 			message.setMessage("操作失败!");
 			throw e;
 		}
+		
 		return message;
 	}
 	  private String getFileMB(long byteFile){  

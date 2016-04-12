@@ -87,13 +87,13 @@
 			<td class="text-right">反馈时限:</td>
 			<td><input name="feedback.feedbackEndDate" class="easyui-datetimebox"
 				data-options="prompt:'反馈时限'"
-				value="<fmt:formatDate value='${feedback.feedbackEndDate }' type='both'/>" required="required" ></td>	
+				value="<fmt:formatDate value='${feedback.feedbackEndDate}' type='both'/>" required="required" ></td>	
 		</tr>
 		
 		<tr>
 			<td class="text-right">记录状态:</td>
 			<td><input type="text" name="status" class="easyui-textbox"
-				value="${(feedback.status eq 'FEEDBACKING' ) ? '反馈中' : ((feedback.status eq 'RETURNED') ? '已退回' : '已采用') }" data-option="prompt:'来源名称'"
+				value="${(feedback.status eq 'RUNNING' ) ? '反馈中' : ((feedback.status eq 'FAIL') ? '已退回' : '已采用') }" data-option="prompt:'来源名称'"
 				 required="required" ></td>
 			<td class="text-right">是否延期:</td>
 			<td><input type="text" name="delayCount" class="easyui-textbox"

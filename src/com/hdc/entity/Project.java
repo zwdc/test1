@@ -78,7 +78,7 @@ public class Project extends BaseEntity implements Serializable {
 	private Date claimDate;			//项目签收时间
 	
 	@Column(name = "refuse_reason", length = 2000)
-	private String refuseReason;	//拒绝原因
+	private String refuseReason;	//拒签原因
 
 	public Integer getId() {
 		return id;
