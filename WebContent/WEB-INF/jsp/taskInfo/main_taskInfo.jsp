@@ -274,7 +274,7 @@
 		<tr>
 			<td class="text-right">备注:</td>
 			<td colspan="3">
-				<textarea name="remark" class="easyui-kindeditor" rows="3" cols="80" style="width: 100%">${taskInfo.assistantGroup }</textarea>
+				<textarea name="remark" class="easyui-kindeditor" rows="3" cols="80" style="width: 100%">${taskInfo.remark }</textarea>
 			</td>
 		</tr>
 	</table>
