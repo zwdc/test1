@@ -107,7 +107,7 @@
 		<tr>
 			<td class="text-right">阶段工作计划:</td>
 			<td colspan="5"><textarea class="easyui-kindeditor"
-					data-options="readonlyMode: false" name="workPlan" rows="3">${feedback.workPlan }</textarea>
+					data-options="readonlyMode: false,prompt:'阶段工作计划'" name="workPlan" rows="3">${feedback.workPlan }</textarea>
 			</td>
 		</tr>
 		<tr>
