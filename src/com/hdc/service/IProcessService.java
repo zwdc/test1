@@ -31,7 +31,7 @@ public interface IProcessService {
 	 * @param page
 	 * @throws Exception
 	 */
-	public List<ProcessTask> findTodoTask(User user, Page<ProcessTask> page, ProcessTask processTask) throws Exception;
+	public List<ProcessTask> findTodoTask(String userId, Page<ProcessTask> page) throws Exception;
 	
     /**
      * 签收任务

@@ -6,6 +6,8 @@ var todoTask_datagrid;
 var endTask_datagrid;
 var task_form;
 
+var task_dialog;
+
 //委派
 var delegate_dialog;
 var user_dialog;
@@ -15,18 +17,6 @@ var transfer_dialog;
 
 $(function() {
 	showToDoTask();
-	
-	$('#tabs').tabs({
-	    border:false,
-	    onSelect:function(title,index){
-	        if(index == 0){
-	        	showToDoTask();
-	        }else if(index == 1){
-	        	showEndTask();
-	        }
-	    }
-	});
-
 });
 
 //修正宽高
@@ -68,10 +58,10 @@ function showToDoTask(map){
 						}
 					}
 				},
-                {field : 'projectName',title : '项目名称',width : fixWidth(0.2),align : 'center'},
-                {field : 'business_form',title : '表单类型',width : fixWidth(0.1),align : 'center'},
+                {field : 'taskTitle',title : '任务标题',width : fixWidth(0.2),align : 'center'},
+                {field : 'taskInfoType',title : '任务类型',width : fixWidth(0.1),align : 'center'},
                 {field : 'user_name',title : '申请人',width : fixWidth(0.05),align : 'center'},                
-                {field : 'title',title : '标题',width : fixWidth(0.2),align : 'center'},
+                {field : 'title',title : '任务描述',width : fixWidth(0.2),align : 'center'},
                 {field : 'taskName',title : '当前节点',width : fixWidth(0.1),align : 'center',
                 	formatter:function(value, row){
                 		return "<a class='trace' onclick=\"graphTrace('"+row.processInstanceId+"')\" id='diagram' href='javascript:void(0)' title='see'>"+value+"</a>";
@@ -108,7 +98,7 @@ function showToDoTask(map){
 
 
 //已完成的任务列表
-function showEndTask(){
+/*function showEndTask(){
 	endTask_datagrid = $("#endTask").datagrid({
         url: ctx+"/process/endTask",
         width : 'auto',
@@ -142,7 +132,7 @@ function showEndTask(){
                 },
                 {field : 'deleteReason',title : '流程结束原因',width : fixWidth(0.1),align : 'center',
                 	formatter:function(value,row){
-                		/** The reason why this task was deleted {'completed' | 'deleted' | any other user defined string }. */
+                		*//** The reason why this task was deleted {'completed' | 'deleted' | any other user defined string }. *//*
                 		//本系统中涉及到jump、revoke（跳转、回退）
                 		return value;
                 	}
@@ -158,7 +148,7 @@ function showEndTask(){
 		]
 	});
 	
-}
+}*/
 
 //初始化审批表单
 function formInit() {
@@ -190,8 +180,87 @@ function formInit() {
     });
 }
 
+
+function handleTask() {
+	var row = todoTask_datagrid.datagrid('getSelected');
+    if (row) {
+    	if(row.assign == null){
+    		$.messager.alert("提示", "此任务您还没有签收，请【签收】任务后再处理任务！");
+    	} else {
+    		task_dialog = $('<div/>').dialog({
+    			title : "任务信息",
+    			top: 20,
+    			width : fixWidth(0.8),
+    			height : 'auto',
+    			modal: true,
+    			minimizable: true,
+    			maximizable: true,
+    			onLoad: function () {
+    				formInit();
+    			},
+	            onClose: function () {
+	            	task_dialog.dialog('destroy');
+	            },
+	            buttons:[
+				          {
+				        	  text: '通过',
+				        	  iconCls: 'icon-ok',
+				        	  id: 'pass',
+				        	  handler: function () {
+				        		  $("#pass").linkbutton("disable");
+				        		  $("#noPass").linkbutton("disable");
+				        		  task_form.form('submit', {
+									    onSubmit: function(param){
+									    	$.messager.progress({
+								                title: '提示信息！',
+								                text: '数据处理中，请稍后....'
+								            });
+									    	param.taskId = row.taskId;							//完成任务时用
+									    	param.isPass = true;
+									    }
+								  });
+				        	  }
+				          },
+				          {
+				        	  text: '不通过',
+				        	  iconCls: 'icon-remove',
+				        	  id: 'noPass',
+				        	  handler: function () {
+				        		  $("#pass").linkbutton("disable");
+				        		  $("#noPass").linkbutton("disable");
+				        		  
+				        		  task_form.form('submit', {
+									    onSubmit: function(param){
+									    	$.messager.progress({
+								                title: '提示信息！',
+								                text: '数据处理中，请稍后....'
+								            });
+									    	param.taskId = row.taskId;							//完成任务时用
+									    	param.isPass = false;
+									    }
+								  });
+				        	  }
+				          },
+				          {
+				        	  text: '关闭',
+				        	  iconCls: 'icon-cancel',
+				        	  handler: function () {
+				        		  audit_dialog.dialog('destroy');
+				        		  todoTask_datagrid.datagrid('reload');//重新加载列表数据
+				        	  }
+				          }
+	    			]
+    		});
+        }
+    } else {
+        $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
+    }
+}
+
+
+
 //办理任务
-function handleTask(){
+function handleTask1(){
 	var row = todoTask_datagrid.datagrid('getSelected');
     if (row) {
     	if(row.assign == null){

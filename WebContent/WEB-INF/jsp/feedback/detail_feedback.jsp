@@ -87,13 +87,13 @@
 			<td class="text-right">反馈时限:</td>
 			<td><input name="feedback.feedbackEndDate" class="easyui-datetimebox"
 				data-options="prompt:'反馈时限'"
-				value="<fmt:formatDate value='${feedback.feedbackEndDate}' type='both'/>" required="required" ></td>	
+				value="<fmt:formatDate value='${feedback.feedbackEndDate }' type='both'/>" required="required" ></td>	
 		</tr>
 		
 		<tr>
 			<td class="text-right">记录状态:</td>
 			<td><input type="text" name="status" class="easyui-textbox"
-				value="${(feedback.status eq 'RUNNING' ) ? '反馈中' : ((feedback.status eq 'FAIL') ? '已退回' : '已采用') }" data-option="prompt:'来源名称'"
+				value="${(feedback.status eq 'FEEDBACKING' ) ? '反馈中' : ((feedback.status eq 'RETURNED') ? '已退回' : '已采用') }" data-option="prompt:'来源名称'"
 				 required="required" ></td>
 			<td class="text-right">是否延期:</td>
 			<td><input type="text" name="delayCount" class="easyui-textbox"
@@ -126,28 +126,25 @@
 			<td colspan="5"><textarea class="easyui-kindeditor"
 					name="solutions" rows="3">${feedback.solutions }</textarea></td>
 		</tr>
-		<c:choose>
-		<c:when test="${feedback==null}">
-			<tr>
-		  		<td class="text-right">佐证材料上传:</td>
-		  		<td colspan="5">
-		  		    <a id="filefield" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加附件</a> 
-		  		    <div id="fileZone"> </div>    	
-		  		</td>
-		  	</tr>
-		</c:when>
-		<c:otherwise>
-			<tr>
-		  		<td>附件材料：</td>
-		   		<td colspan="5">
-			   		 <c:forEach items="${feedback.fdaList}" var="fda"> 
-			   		        上传时间:${fda.uploadDate } - 
-			   		   <a id="download" title="点击下载" href="${ctx }/taskSource/downloadFile?id=${fda.id}"><span class="glyphicon glyphicon-download-alt"></span>${fda.name }</a>
-			   		 </c:forEach> 
-		   		</td>
-		   	</tr>	   
-		</c:otherwise>
-		</c:choose>  	   	
-	</table>    
+		<tr>
+	  		<td class="text-right">佐证材料上传:</td>
+	  		<td colspan="5">
+	  		    <a id="filefield" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加附件</a> 
+	  		    <div id="fileZone"> </div> 	    	
+	  		</td>
+	  	</tr>
+	  	<tr>
+	  		<td class="text-right">反馈材料审核:</td>
+	  		<td colspan="1">
+	  		    	
+	  		</td>
+	  		<td colspan="4">
+	  		    	<textarea class="easyui-kindeditor"
+					name="suggestion" rows="3">${feedback.suggestion }</textarea>
+	  		</td>
+	  	</tr>
+    	
+	</table>
+    
 </form>
 </div>

@@ -239,7 +239,7 @@
 		</tr>
 		<tr>
 			<td class="text-right">开始时间:</td>
-			<td><input id="createTaskDate" name="createTaskDate" class="easyui-datetimebox" data-options="prompt:'选择立项时间',editable:false" value="${taskInfo.createTaskDate }" required="required"></td>
+			<td><input id="createTaskDate" name="createTaskDate" class="easyui-datetimebox" data-options="prompt:'选择开始时间',editable:false" value="${taskInfo.createTaskDate }" required="required"></td>
 			<td class="text-right">办结时限:</td>
 			<td><input id="endTaskDate" name="endTaskDate" class="easyui-datetimebox" data-options="prompt:'选择半截时间',editable:false" value="${taskInfo.endTaskDate }" required="required"></td>
 		</tr>

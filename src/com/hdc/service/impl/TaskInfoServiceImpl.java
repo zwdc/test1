@@ -1,40 +1,29 @@
 package com.hdc.service.impl;
 
 import java.io.Serializable;
-import java.text.DateFormatSymbols;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.activiti.engine.TaskService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hdc.entity.FeedbackFrequency;
-import com.hdc.entity.FeedbackRecord;
-import com.hdc.entity.Group;
+import com.hdc.entity.Comments;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.ProcessTask;
-import com.hdc.entity.Project;
 import com.hdc.entity.TaskInfo;
+import com.hdc.entity.TaskSource;
 import com.hdc.entity.User;
 import com.hdc.service.IBaseService;
-import com.hdc.service.IFeedbackFrequencyService;
 import com.hdc.service.IFeedbackRecordService;
 import com.hdc.service.IProcessService;
 import com.hdc.service.IProcessTaskService;
-import com.hdc.service.IProjectService;
 import com.hdc.service.ITaskInfoService;
+import com.hdc.service.ITaskSourceService;
 import com.hdc.util.Constants.ApprovalStatus;
-import com.hdc.util.Constants.BusinessType;
-import com.hdc.util.Constants.OperationType;
+import com.hdc.util.Constants.BusinessForm;
 import com.hdc.util.Constants.TaskInfoStatus;
 import com.hdc.util.UserUtil;
 
@@ -52,6 +41,9 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 	
     @Autowired
     private TaskService taskService;
+    
+    @Autowired
+    private ITaskSourceService taskResourceService;
     
 	@Autowired
 	private IProcessTaskService processTaskService;
@@ -90,18 +82,22 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 		//给用户提示任务
 		User user = UserUtil.getUserFromSession();
 		ProcessTask processTask = new ProcessTask();
+		processTask.setTaskTitle(taskInfo.getTitle());
 		processTask.setTitle("任务录入完成，需要审批!");
 		processTask.setUrl("/taskInfo/toApproval?taskInfoId="+taskInfo.getId().toString());
-		processTask.setTaskInfoType(taskInfo.getTaskSource().getTaskInfoType().getName());		//任务类型
+		TaskSource taskResource = this.taskResourceService.findById(taskInfo.getTaskSource().getId());
+		processTask.setTaskInfoType(taskResource.getTaskInfoType().getName());		//任务类型
+		processTask.setTaskInfoId(taskInfo.getId());
 		processTask.setApplyUserId(user.getId());
 		processTask.setApplyUserName(user.getName());
-		
+		Serializable processTaskId = this.processTaskService.doAdd(processTask);
 		
 		//初始化流程参数
 		Map<String, Object> vars = new HashMap<String, Object>();
 		vars.put("taskInfoId", taskInfo.getId().toString());
+		vars.put("processTaskId", processTaskId.toString());
 		//启动审批流程
-		String processInstanceId = this.processService.startApproval("ApprovalTaskInfo", taskInfo.getId().toString(), vars);	
+		this.processService.startApproval("ApprovalTaskInfo", taskInfo.getId().toString(), vars);	
 	}
 	
 	@Override
@@ -139,39 +135,35 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 //		this.processService.complete(taskInfo.getActTaskId(), null, vars);		//完成“办理中” 节点任务
 		
 	}
-	
-	public static void main(String[] args) throws ParseException {
-		Calendar c_begin = new GregorianCalendar();
-	     Calendar c_end = new GregorianCalendar();
-	     DateFormatSymbols dfs = new DateFormatSymbols();
-	     String[] weeks = dfs.getWeekdays();
-	     c_begin.set(2016, 3, 06); //Calendar的月从0-11，所以4月是3.
-	     c_end.set(2016, 11, 22); //Calendar的月从0-11，所以5月是4.
-	     //c_begin.set(2016, 3, 2, 0, 0, 0);
-	     int count = 1;
-	     //c_end.add(Calendar.MONTH, -1);  //结束日期下滚一天是为了包含最后一天
-	     
-	     while(c_begin.before(c_end)){
-	       System.out.println("第"+count+"周  日期："+new java.sql.Date(c_begin.getTime().getTime()).toString()+","+weeks[c_begin.get(Calendar.DAY_OF_WEEK)]+"---"+c_begin.get(Calendar.DAY_OF_WEEK)+" -- "+c_begin.get(Calendar.MONTH));
-	 
-	      if(c_begin.get(Calendar.DAY_OF_WEEK)==Calendar.SUNDAY){
-	          count++;
-	      }
-	      c_begin.add(Calendar.DAY_OF_YEAR, 1);
-	     }
-	     
-	     /*Date d1 = new SimpleDateFormat("yyyy-MM-dd").parse("2016-1-22");
-	     Date d2 = new SimpleDateFormat("yyyy-MM-dd").parse("2016-9-30");
-	     Calendar c1 = new GregorianCalendar();
-	     Calendar c2 = new GregorianCalendar();
-	     c1.setTime(d1);
-	     c2.setTime(d2);
-	     //c2.add(Calendar.MONTH, 1);
-	     while(c1.before(c2)){
-	    	 System.out.println(c1.get(Calendar.YEAR)+"-"+(c1.get(Calendar.MONTH)+1)+"--"+(c1.get(Calendar.MONTH)+1));
-	    	 c1.add(Calendar.MONTH, 1);
-	     }
-	     System.out.println(c2.get(Calendar.DAY_OF_MONTH)+"-"+c2.get(Calendar.MONTH));*/
+
+	@Override
+	public void doApproval(Integer taskInfoId, boolean isPass, String taskId, String comment) throws Exception {
+		User user = UserUtil.getUserFromSession();
+		TaskInfo taskInfo = this.findById(taskInfoId);
+		if(isPass) {
+			taskInfo.setStatus(ApprovalStatus.APPROVAL_SUCCESS.toString()); //审批成功
+		} else {
+			taskInfo.setStatus(ApprovalStatus.APPROVAL_FAILED.toString()); //审批失败
+			ProcessTask processTask = new ProcessTask();
+			processTask.setApplyUserId(user.getId());
+			processTask.setApplyUserName(user.getName());
+			processTask.setTaskInfoId(taskInfo.getId());
+			processTask.setTaskInfoType(taskInfo.getTaskSource().getTaskInfoType().getName());
+			processTask.setTitle("任务审批不通过，请修改后重新审批！");
+			processTask.setUrl("/taskInfo/toApproval?taskInfoId="+taskInfo.getId().toString());
+			this.processTaskService.doAdd(processTask);
+		}
+		// 评论
+		Comments comments = new Comments();
+		comments.setUserId(user.getId().toString());
+		comments.setUserName(user.getName());
+		comments.setContent(comment);
+		comments.setBusinessKey(taskInfoId);
+		comments.setBusinessForm(BusinessForm.TASK_FORM.toString());
+		
+		Map<String, Object> variables = new HashMap<String, Object>();
+		variables.put("isPass", isPass);
+		this.processService.complete(taskId, comments, variables);
 	}
 
 }

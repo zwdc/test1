@@ -76,16 +76,6 @@ public class FeedbackController {
 	public Datagrid<FeedbackRecord> getList(Parameter param) throws Exception {
 		Page<FeedbackRecord> page = new Page<FeedbackRecord>(param.getPage(), param.getRows());		
 		this.feedbackService.getListPage(param, page);
-//		List<FeedbackRecord> list=page.getResult();
-//		for(int i=0;i<list.size();i++){
-//			FeedbackRecord fbr=new FeedbackRecord();
-//			Set<FeedbackAtt> fdal=fbr.getFdaList();
-//			Iterator<FeedbackAtt> it=fdal.iterator();
-//			while(it.hasNext()){
-//				System.out.println(it.next().getName());
-//			}	
-//			fbr.setFdaList(null);
-//		}
 		return new Datagrid<FeedbackRecord>(page.getTotal(),page.getResult());
 	}
 	
@@ -98,18 +88,21 @@ public class FeedbackController {
 	 */
 	@RequestMapping("/toMain")
 	public ModelAndView toMain(
-				@RequestParam(value = "id", required = false) Integer id, 
-				@RequestParam(value = "taskInfoId", required = false) Integer taskInfoId) throws Exception {
-		ModelAndView mv = new ModelAndView("feedback/main_feedback");
-		FeedbackRecord feedback = new FeedbackRecord();
-		if(id != null) {
-			feedback = this.feedbackService.findById(id);
-		}
-		if(taskInfoId != null) {
-			TaskInfo taskInfo = this.taskInfoService.findById(taskInfoId);
-//			feedback.setTaskInfo(taskInfo);
-		}
-		mv.addObject("feedback", feedback);
+		     	@RequestParam(value = "action", required = false) String action,
+				@RequestParam(value = "id", required = false) Integer id) throws Exception {
+		ModelAndView mv = null;
+		if("edit".equals(action)){
+			mv = new ModelAndView("feedback/main_feedback");			
+		}else if("check".equals(action)){
+			mv = new ModelAndView("feedback/check_feedback");			
+		}else if("detail".equals(action)){
+			mv = new ModelAndView("feedback/details_feedback");			
+		}else if("add".equals(action)){
+			mv = new ModelAndView("feedback/main_feedback");
+		}	
+		if(id!=null){
+			mv.addObject("feedback", this.feedbackService.findById(id));
+		}		
 		return mv;
 	}
 	
@@ -125,7 +118,6 @@ public class FeedbackController {
 	@ResponseBody
 	public Message saveOrUpdate(
 				FeedbackRecord feedback, 
-				@RequestParam(value = "taskId", required = false) String taskId,
 				@RequestParam("file") MultipartFile[] file,
 				HttpServletRequest request) throws Exception {
 		Message message = new Message();
@@ -188,7 +180,7 @@ public class FeedbackController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/detailsTab/{taskInfoId}")
+	@RequestMapping("/details/{taskInfoId}")
 	public ModelAndView detailsTab(@PathVariable("taskInfoId") Integer id) throws Exception {
 		ModelAndView mv = new ModelAndView("feedback/list_feedback");
 		List<FeedbackRecord> list = this.feedbackService.findByTaskId(id);
