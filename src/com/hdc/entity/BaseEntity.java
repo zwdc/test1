@@ -12,6 +12,8 @@ import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * 普通基类
  * @author ZML
@@ -20,12 +22,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 @MappedSuperclass
 public class BaseEntity {
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="create_user_id")
+	@JsonIgnore
 	private User createUser;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="update_user_id")
+	@JsonIgnore
 	private User updateUser;
 	
 	@Temporal(TemporalType.TIMESTAMP)

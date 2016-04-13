@@ -19,6 +19,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * 任务来源
  * @author ZML
@@ -65,8 +67,9 @@ public class TaskSource extends BaseEntity implements Serializable {
 	@Column(name = "leader_comments", length = 2000)
 	private String leaderComments;	//领导批示
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="type_id")
+	@JsonIgnore
 	private TaskInfoType taskInfoType;	//任务类型
 
 	public Integer getId() {
