@@ -271,6 +271,7 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 	}
 	
 	//获取数据权限
+	@Override
 	public StringBuffer getDataSetPermission() throws Exception{
 		StringBuffer sb = new StringBuffer(); 
 		User user = UserUtil.getUserFromSession();

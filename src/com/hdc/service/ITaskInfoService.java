@@ -67,14 +67,6 @@ public interface ITaskInfoService {
 	public void doApproval(Integer salesId, boolean isPass, String taskId, String comment) throws Exception;
 	
 	/**
-	 * 签收任务
-	 * @param taskInfo
-	 * @throws Exception
-	 */
-	public void doClaimTask(TaskInfo taskInfo) throws Exception;
-	
-	
-	/**
 	 * 完成任务
 	 * @param taskInfo
 	 * @param taskId

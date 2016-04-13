@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>任务列表</title>
+    <title>任务交办列表</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
@@ -12,7 +12,7 @@
 	<meta http-equiv="description" content="This is my page">
 	<script type="text/javascript" src="${ctx}/kindeditor/kindeditor-min.js"></script>
   	<script type="text/javascript" src="${ctx}/js/kindeditor.js"></script>
-	<script type="text/javascript" src="${ctx}/js/app/taskInfo.js?_=${sysInitTime}"></script>
+	<script type="text/javascript" src="${ctx}/js/app/project.js?_=${sysInitTime}"></script>
   </head>
   <body>
 	<div id="toolbar" style="padding:2px 0">
@@ -35,10 +35,10 @@
 		</table>
 	</div>
 	<div id="searchMenu" style="display: none;">
-		<div data-options="name:'title'">任务标题</div>
-		<div data-options="name:'createTaskDate'">任务开始日期</div>
-		<div data-options="name:'endTaskDate'">任务结束时限</div>
+		<div data-options="name:'invoiceType'">发票类型</div>
+		<div data-options="name:'receiveInvoiceName'">收票公司名称</div>
+		<div data-options="name:'currentPrice'">本次开票金额</div>
 	</div>
-	<table id="taskInfo_datagrid" title="任务列表"></table>
+	<table id="taskInfo_datagrid" title="任务"></table>
   </body>
 </html>

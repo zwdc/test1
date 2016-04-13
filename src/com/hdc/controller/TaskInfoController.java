@@ -28,8 +28,6 @@ import com.hdc.service.IGroupService;
 import com.hdc.service.ITaskInfoService;
 import com.hdc.util.BeanUtils;
 import com.hdc.util.Constants.ApprovalStatus;
-import com.hdc.util.Constants.TaskInfoStatus;
-import com.hdc.util.UserUtil;
 import com.uwantsoft.goeasy.client.goeasyclient.GoEasy;
 import com.uwantsoft.goeasy.client.goeasyclient.listener.GoEasyError;
 import com.uwantsoft.goeasy.client.goeasyclient.listener.PublishListener;
@@ -123,18 +121,9 @@ public class TaskInfoController {
 	 */
 	@RequestMapping("/getList")
 	@ResponseBody
-	public Datagrid<Object> getList(
-				Parameter param, 
-				@RequestParam(value = "status", required = false) String status,
-				@RequestParam(value = "taskType", required = false) Integer taskType) throws Exception{
+	public Datagrid<Object> getList(Parameter param) throws Exception{
 		Page<TaskInfo> page = new Page<TaskInfo>(param.getPage(), param.getRows());
 		Map<String, Object> m = new HashMap<String, Object>();
-		if(StringUtils.isNotBlank(status)) {
-			m.put("status", status);
-		}
-		if(taskType != null) {
-			m.put("taskType", taskType);
-		}		
 		List<TaskInfo> list = this.taskInfoService.getListPage(param, page, m);
 		List<Object> jsonList=new ArrayList<Object>(); 
 		for(TaskInfo task : list) {
@@ -320,46 +309,10 @@ public class TaskInfoController {
    		return mv;
    	}
        
-    /**
-     * 签收
-     * @return
-     * @throws Exception 
-     */
-    @RequestMapping("/claim/{id}")
-    @ResponseBody
-    public Message claim(@PathVariable("id") Integer id) throws Exception{
-    	Message message = new Message();
-    	TaskInfo taskInfo = this.taskInfoService.findById(id);
-    	taskInfo.setStatus(TaskInfoStatus.IN_HANDLING.toString());
-//    	taskInfo.setClaimDate(new Date());
-    	this.taskInfoService.doClaimTask(taskInfo);
-    	message.setMessage("签收成功！");
-    	return message;
-    }
-    
-    /**
-     * 拒绝签收
-     * @param id
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping("/refuse/{id}")
-    @ResponseBody
-    public Message refuseClaim(@PathVariable("id") Integer id) throws Exception {
-    	Message message = new Message();
-    	User user = UserUtil.getUserFromSession();
-    	TaskInfo taskInfo = this.taskInfoService.findById(id);
-    	taskInfo.setStatus(TaskInfoStatus.REFUSE_CLAIM.toString());
-    	message.setMessage("操作成功！");
-    	return message;
-    }
-    
-    
-    
     public static void main(String[] args) throws Exception {
  	    //测试推送
  	    GoEasy goEasy = new GoEasy("0cf326d6-621b-495a-991e-a7681bcccf6a");
-	goEasy.publish("zwdc_user_1", "您有将要到期尚未反馈的督察信息", new PublishListener(){
+ 	    goEasy.publish("zwdc_user_1", "您有将要到期尚未反馈的督察信息", new PublishListener(){
 		@Override
 		public void onSuccess() {
 			System.out.println("消息发布成功。");
