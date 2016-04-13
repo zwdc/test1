@@ -100,6 +100,6 @@ public interface IBaseService<T> {
 	 * @return
 	 * @throws Exception
 	 */
-	//public StringBuffer getDataSetPermission() throws Exception;
+	public StringBuffer getDataSetPermission() throws Exception;
 	
 }

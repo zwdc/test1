@@ -2,10 +2,33 @@ package com.hdc.service;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
+import com.hdc.entity.Page;
+import com.hdc.entity.Parameter;
 import com.hdc.entity.Project;
 
 public interface IProjectService {
+	
+	/**
+	 * 获取分页数据
+	 * @param param
+	 * @param page
+	 * @param map
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Project> getListPage(Parameter param, Page<Project> page, Map<String, Object> map) throws Exception;
+	
+	/**
+	 * 针对办理中或已签收的查询
+	 * @param param
+	 * @param page
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Map<String, Object>> getHProject(Parameter param, Page<Map<String, Object>> page) throws Exception;
+	
 	/**
 	 * 通过id获取Project
 	 * @param id

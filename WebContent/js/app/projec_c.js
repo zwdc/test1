@@ -1,19 +1,19 @@
 /**
- * 督察处发布任务
+ * 办理人 待签收列表
  */
-var taskInfo_datagrid;
-var taskInfo_form;
-var taskInfo_dialog;
+var project_datagrid;
+var project_form;
+var project_dialog;
 $(function(){
-	taskInfo_datagrid=$('#taskInfo_datagrid').datagrid({
-		url:ctx+"/taskInfo/getList",	//路径访问后台方法获取数据
-		width:'auto',					//宽度自适应
-		height:fixHeight(1),			//高度自适应
-		pagination:true,				//显示底部分页栏
-		rownumbers:true,				//显示行号
-		border:false,					//边框
-		singleSelect:true,				//只允许选中一行
-		striped:true,					//隔行变色
+	project_datagrid=$('#project_datagrid').datagrid({
+		url:ctx+"/project/getList?type=1",	
+		width:'auto',					
+		height:fixHeight(1),			
+		pagination:true,				
+		rownumbers:true,				
+		border:false,					
+		singleSelect:true,				
+		striped:true,					
 		columns:[
 		    [
 		     	{field:'title',title:'任务标题',width:fixWidth(0.2),align:'left',halign:'center'},
@@ -83,7 +83,7 @@ $(function(){
 		searcher:function(value,name){
 			var str="{\"searchName\":\""+name+"\",\"searchValue\":\""+value+"\"}";
 			var obj=eval('('+str+')');
-			taskInfo_datagrid.datagrid('reload',obj);
+			project_datagrid.datagrid('reload',obj);
 		}
 	});
 });
@@ -93,7 +93,7 @@ function searchRemove(curr) {
 } 
 //高级查询
 function gradeSearch() {
-	jqueryUtil.gradeSearch(taskInfo_datagrid, "#invoiceSearch", "/invoice/invoiceSearch");
+	jqueryUtil.gradeSearch(project_datagrid, "#invoiceSearch", "/invoice/invoiceSearch");
 }
 
 //修正宽高
@@ -108,7 +108,7 @@ function fixWidth(percent) {
 
 //初始化表单
 function formInit(row) {
-	 taskInfo_form = $('#taskInfo_form').form({
+	 project_form = $('#project_form').form({
 		 	url: ctx+"/taskInfo/saveOrUpdate",
 	        onSubmit: function () {
 		        $.messager.progress({
@@ -125,8 +125,8 @@ function formInit(row) {
 	            $.messager.progress('close');
 	            var json = $.parseJSON(data);
 	            if (json.status) {
-	            	taskInfo_dialog.dialog("refresh",ctx+"/taskInfo/toMain?id="+json.data);
-	            	taskInfo_datagrid.datagrid('reload');//重新加载列表数据
+	            	project_dialog.dialog("refresh",ctx+"/taskInfo/toMain?id="+json.data);
+	            	project_datagrid.datagrid('reload');//重新加载列表数据
 	            } 
 	            $.messager.show({
 					title : json.title,
@@ -145,7 +145,7 @@ function showTaskInfo(row) {
 		_url = ctx+"/taskInfo/toMain?id="+row.id;
 		
 	}
-	taskInfo_dialog = $('<div/>').dialog({
+	project_dialog = $('<div/>').dialog({
     	title : "任务信息",
     	top: 20,
 		width : fixWidth(0.8),
@@ -168,7 +168,7 @@ function showTaskInfo(row) {
                 iconCls: 'icon-save',
                 id: 'save',
                 handler: function () {
-                	taskInfo_form.submit();
+                	project_form.submit();
                 }
             },
             {
@@ -178,7 +178,7 @@ function showTaskInfo(row) {
             	handler: function () {
                 	$.messager.confirm('确认提示！','确认提交表单进入任务办理流程吗？',function(result){
                 		if(result){
-                			taskInfo_form.form('submit',{
+                			project_form.form('submit',{
     	            		 	url: ctx+"/taskInfo/approvalTask",
     	            	        onSubmit: function () {
     	            		        $.messager.progress({
@@ -198,8 +198,8 @@ function showTaskInfo(row) {
     	            	            $.messager.progress('close');
     	            	            var json = $.parseJSON(data);
     	            	            if (json.status) {
-    	            	            	taskInfo_dialog.dialog('destroy');//销毁对话框
-    	            	            	taskInfo_datagrid.datagrid('reload');//重新加载列表数据
+    	            	            	project_dialog.dialog('destroy');//销毁对话框
+    	            	            	project_datagrid.datagrid('reload');//重新加载列表数据
     	            	            } 
     	            	            $.messager.show({
     	            					title : json.title,
@@ -216,7 +216,7 @@ function showTaskInfo(row) {
                 text: '重置',
                 iconCls: 'icon-reload',
                 handler: function () {
-                	taskInfo_form.form('clear');
+                	project_form.form('clear');
                 }
             },
             {
@@ -224,21 +224,21 @@ function showTaskInfo(row) {
                 iconCls: 'icon-cancel',
                 handler: function () {
                 	KindEditor.remove('#remark');
-                	taskInfo_dialog.dialog('destroy');
-                	taskInfo_datagrid.datagrid('reload');
+                	project_dialog.dialog('destroy');
+                	project_datagrid.datagrid('reload');
                 }
             }
         ],
         onClose: function () {
-        	taskInfo_dialog.dialog('destroy');
-        	taskInfo_datagrid.datagrid('reload');
+        	project_dialog.dialog('destroy');
+        	project_datagrid.datagrid('reload');
         }
     });
 }
 //编辑
 function edit() {
     //选中的行（第一次选择的行）
-    var row = taskInfo_datagrid.datagrid('getSelected');
+    var row = project_datagrid.datagrid('getSelected');
     if (row) {
         showTaskInfo(row);
     } else {
@@ -247,7 +247,7 @@ function edit() {
 }
 
 function del() {
-    var row = taskInfo_datagrid.datagrid('getSelected');
+    var row = project_datagrid.datagrid('getSelected');
     if (row) {
         $.messager.confirm('确认提示！', '您确定要删除选中的数据?', function (result) {
             if (result) {
@@ -261,7 +261,7 @@ function del() {
                     data: {},
                     success: function (data) {
                         if (data.status) {
-                        	taskInfo_datagrid.datagrid('load');
+                        	project_datagrid.datagrid('load');
                         }
                         $.messager.show({
         					title : data.title,
@@ -278,7 +278,7 @@ function del() {
 }
 
 function details(){
-    var row = taskInfo_datagrid.datagrid('getSelected');
+    var row = project_datagrid.datagrid('getSelected');
     if (row) {
     	showDetails(row);
     } else {
@@ -288,7 +288,7 @@ function details(){
 
 function showDetails(row) {
     //弹出对话窗口
-	taskInfo_dialog = $('<div/>').dialog({
+	project_dialog = $('<div/>').dialog({
     	title : "任务详情",
 		top: 20,
 		width : fixWidth(0.8),
@@ -299,7 +299,7 @@ function showDetails(row) {
         href: ctx+"/taskInfo/details/"+row.id,
         buttons: "#task_btn",
         onClose: function () {
-        	taskInfo_dialog.dialog('destroy');
+        	project_dialog.dialog('destroy');
         }
     });
 }
@@ -309,7 +309,7 @@ function showDetails(row) {
               text: '关闭',
               iconCls: 'icon-cancel',
               handler: function () {
-              	taskInfo_dialog.dialog('destroy');
+              	project_dialog.dialog('destroy');
               }
           }
       ],*/

@@ -22,7 +22,7 @@ import com.hdc.service.IFeedbackRecordService;
 import com.hdc.service.IProjectService;
 import com.hdc.service.ITaskInfoService;
 import com.hdc.util.Constants.ApprovalStatus;
-import com.hdc.util.Constants.TaskInfoStatus;
+import com.hdc.util.Constants.ProjectStatus;
 
 /**
  * 根据taskInfoId生成项目表和反馈表
@@ -49,7 +49,7 @@ public class CreateTaskService implements JavaDelegate {
 	public void execute(DelegateExecution execution) throws Exception {
 		String taskInfoId = (String) execution.getVariable("taskInfoId");
 		TaskInfo taskInfo = this.taskInfoService.findById(new Integer(taskInfoId));
-		taskInfo.setStatus(TaskInfoStatus.WAIT_FOR_CLAIM.toString());
+		taskInfo.setStatus(ProjectStatus.WAIT_FOR_CLAIM.toString());
 		this.doAddHostGroup(taskInfo);
 		this.doAddFeedback(taskInfo);
 	}

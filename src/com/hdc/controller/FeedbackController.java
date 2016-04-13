@@ -75,7 +75,21 @@ public class FeedbackController {
 	@ResponseBody
 	public Datagrid<FeedbackRecord> getList(Parameter param) throws Exception {
 		Page<FeedbackRecord> page = new Page<FeedbackRecord>(param.getPage(), param.getRows());		
-		this.feedbackService.getListPage(param, page);
+		List<FeedbackRecord> fbList=this.feedbackService.getListPage(param, page);
+		List<Object> jsonList=new ArrayList<Object>(); 
+		for(FeedbackRecord fb:fbList){
+			Map<String, Object> map=new HashMap<String, Object>();
+			map.put("id", fb.getId());
+			map.put("warningLevel", fb.getWarningLevel());
+			map.put("feedbackStartDate", fb.getFeedbackStartDate());
+			map.put("feedbackEndDate", fb.getFeedbackEndDate());
+			map.put("groupName", fb.getProject().getGroup().getName());
+			map.put("feedbackDate", fb.getFeedbackDate());
+			map.put("status", fb.getStatus());
+			map.put("refuseCount", fb.getRefuseCount());
+			map.put("delayCount", fb.getDelayCount());
+			jsonList.add(map);
+		}
 		return new Datagrid<FeedbackRecord>(page.getTotal(),page.getResult());
 	}
 	

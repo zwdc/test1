@@ -24,7 +24,6 @@ import com.hdc.service.ITaskInfoService;
 import com.hdc.service.ITaskSourceService;
 import com.hdc.util.Constants.ApprovalStatus;
 import com.hdc.util.Constants.BusinessForm;
-import com.hdc.util.Constants.TaskInfoStatus;
 import com.hdc.util.UserUtil;
 
 @Service
@@ -100,16 +99,6 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 		this.processService.startApproval("ApprovalTaskInfo", taskInfo.getId().toString(), vars);	
 	}
 	
-	@Override
-	public void doClaimTask(TaskInfo taskInfo) throws Exception {
-		Map<String, Object> variables = new HashMap<String, Object>();
-		variables.put("claim", true);
-		
-//		this.processService.complete(taskInfo.getActTaskId(), null, variables);
-		this.baseService.update(taskInfo);
-		
-	}
-
 	@Override
 	public void doCompleteTask(TaskInfo taskInfo, String taskId) throws Exception {
 		//给秘书长提示代办任务

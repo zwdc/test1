@@ -89,8 +89,7 @@
 		<tr>
 			<td class="text-right">记录状态:</td>
 			<td><input type="text" name="status" class="easyui-textbox"
-				value="RUNNING" data-option="prompt:'记录状态'"
-				 required="required" ></td>
+				value="" data-option="prompt:'记录状态'"></td>
 			<td class="text-right">是否延期:</td>
 			<td><input type="text" name="delayCount" class="easyui-textbox"
 				value="0" data-option="prompt:'来源名称'"
