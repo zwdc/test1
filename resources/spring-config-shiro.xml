@@ -155,6 +155,7 @@
              	/js/**=anon
             	/css/**=anon
                 /extend/**=anon 
+                /file-store/**=anon 
                 /** = user,forceLogout,kickout
             </value>
         </property>
