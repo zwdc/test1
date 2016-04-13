@@ -82,15 +82,15 @@ public class Constants {
 		}
 	}
 	/**
-	 * 任务状态 待签收、拒签收、办理中、申请办结、已办结
+	 * 任务状态 待签收、拒签收、办理中、申请办结中、已办结
 	 * @author ZML
 	 *
 	 */
-	public enum TaskInfoStatus {
+	public enum ProjectStatus {
 		WAIT_FOR_CLAIM("WAIT_FOR_CLAIM"),REFUSE_CLAIM("REFUSE_CLAIM"), IN_HANDLING("IN_HANDLING"), APPLY_FINISHED("APPLY_FINISHED"), FINISHED("FINISHED");
 		
 		private final String value;
-		private TaskInfoStatus(String value) {
+		private ProjectStatus(String value) {
 			this.value = value;
 		}
 		
@@ -99,8 +99,8 @@ public class Constants {
             return this.value;
         }
 		
-		public static TaskInfoStatus getValue(String value) {
-			TaskInfoStatus tis = null;
+		public static ProjectStatus getValue(String value) {
+			ProjectStatus tis = null;
 			switch(value) {
 				case "WAIT_FOR_CLAIM":
 					tis = WAIT_FOR_CLAIM;
