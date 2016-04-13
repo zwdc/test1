@@ -19,6 +19,9 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hdc.util.Constants.ProjectStatus;
+
 /**
  * 项目表(具体到哪个单位)
  * @author zhao
@@ -41,18 +44,24 @@ public class Project extends BaseEntity implements Serializable {
 	@Column(name = "id", length = 10, nullable = false, unique = true)
 	private Integer id;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="group_id")
+	@JsonIgnore
     private Group group;			//承办单位
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="user_id")
+	@JsonIgnore
 	private User user;				//承办人(签收用)
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="task_info")
+	@JsonIgnore
 	private TaskInfo taskInfo;		//任务
 	
+	/**
+	 * @see ProjectStatus
+	 */
 	@Column(name = "status", length = 30)
 	private String status;			//项目状态
 	
