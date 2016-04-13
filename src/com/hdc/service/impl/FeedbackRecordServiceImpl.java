@@ -102,5 +102,11 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 		}
 		
 	}
+	
+	@Override
+	public void doDelete(Integer id) throws Exception {
+		String hql = "update FeedbackRecord set isDelete = 1 where id = " + id.toString();
+		this.baseService.executeHql(hql);
+	}
 
 }

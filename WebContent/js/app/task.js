@@ -76,7 +76,7 @@ function showToDoTask(map){
                 		}
 					}
                 },  
-                {field : 'createTime',title : '任务创建时间',width : fixWidth(0.1),align : 'center',
+                {field : 'createDate',title : '任务创建时间',width : fixWidth(0.1),align : 'center',
 					formatter:function(value,row){
 						return moment(value).format("YYYY-MM-DD HH:mm:ss");
 					}

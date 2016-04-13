@@ -97,6 +97,8 @@ public class FeedbackController {
 			mv = new ModelAndView("feedback/check_feedback");			
 		}else if("detail".equals(action)){
 			mv = new ModelAndView("feedback/details_feedback");			
+		}else if("feedback".equals(action)){
+			mv = new ModelAndView("feedback/do_feedback");			
 		}else if("add".equals(action)){
 			mv = new ModelAndView("feedback/main_feedback");
 		}	
@@ -118,23 +120,27 @@ public class FeedbackController {
 	@ResponseBody
 	public Message saveOrUpdate(
 				FeedbackRecord feedback, 
-				@RequestParam("file") MultipartFile[] file,
+				@RequestParam(value = "file", required = false) MultipartFile[] file,
 				HttpServletRequest request) throws Exception {
 		Message message = new Message();
+		int count=0;//上传文件计数
 		Integer id = feedback.getId();
 		try {
-			if(file.length!=0){				
+			if(file!=null){				
 				Set<FeedbackAtt> fbaList=new HashSet<FeedbackAtt>();
 				for(int i=0;i<file.length;i++){
 					try {
-						String filePath = FileUploadUtils.upload(request, file[i], Constants.FILE_PATH);
-						FeedbackAtt fba=new FeedbackAtt();
-						fba.setUrl(filePath);
-						fba.setName(file[i].getOriginalFilename());;
-						fba.setUploadDate(new Date());
-						//子类把主类加一下，子类中才会有主类的ID外键；
-						fba.setFdRecord(feedback);
-						fbaList.add(fba);
+						if(!file[i].isEmpty()){
+							String filePath = FileUploadUtils.upload(request, file[i], Constants.FILE_PATH);
+							FeedbackAtt fba=new FeedbackAtt();
+							fba.setUrl(filePath);
+							fba.setName(file[i].getOriginalFilename());;
+							fba.setUploadDate(new Date());
+							//子类把主类加一下，子类中才会有主类的ID外键；
+							fba.setFdRecord(feedback);
+							fbaList.add(fba);
+							count++;
+						}	
 					} catch (Exception e) {
 						message.setStatus(Boolean.FALSE);
 						message.setTitle("操作失败！");
@@ -153,7 +159,7 @@ public class FeedbackController {
 			}
 			if(id == null) {
 				this.feedbackService.doAdd(feedback);
-				message.setMessage("上传了"+file.length+"个材料，添加成功！");
+				message.setMessage("上传了"+count+"个材料，添加成功！");
 			} else {
 				this.feedbackService.doUpdate(feedback);
 				message.setData(id);
@@ -173,6 +179,20 @@ public class FeedbackController {
 	        long mb=1024*1024;  
 	        return ""+byteFile/mb+"MB";  
 	    } 
+	  /**
+		 * 删除
+		 * @param id
+		 * @return
+		 * @throws Exception
+		 */
+		@RequestMapping("/delete/{id}")
+		@ResponseBody
+		public Message delete(@PathVariable("id") Integer id) throws Exception {
+			Message message = new Message();
+			this.feedbackService.doDelete(id);
+			message.setMessage("删除成功！");
+			return message;
+		}
 	    
 	/**
 	 * 查看taskInfoId下的所有反馈信息

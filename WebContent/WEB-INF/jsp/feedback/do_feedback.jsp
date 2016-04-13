@@ -3,10 +3,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-<link rel="stylesheet" href="${ctx}/css/mediabox.css" type="text/css" />
+
 <script type="text/javascript" src="${ctx}/js/kindeditor.js"></script>
-<script type="text/javascript" src="${ctx}/js/mootools-core.js"></script>
-<script type="text/javascript" src="${ctx}/js/mediabox.js"></script>
 <script type="text/javascript">
 	$(function() {
 		$('#download').tooltip({
@@ -67,89 +65,87 @@
 </script>
 <div class="easyui-layout">
 <form id="feedback_form" method="post" encType="multipart/form-data">
-	<input type="hidden" id="feedbackId" name="id" value="${feedback.id }">${feedback.id }
-	<table class="table table-bordered" style="width: 100%;">
+	<input type="hidden" id="feedbackId" name="id" value="${feedback.id }">
+	<input type="hidden" name="createUser.id" value="${feedback.createUser.id }">
+    <input type="hidden" name="createDate" value="<fmt:formatDate value='${feedback.createDate }' type='both'/>">
+    <input type="hidden" name="isDelete" value="${feedback.isDelete }">
+    <input type="hidden" name="status" value="${feedback.status }">
+	<table class="table table-bordered table-hover" style="width: 100%;">
 		<tr class="bg-primary">
-			<td colspan="6" align="center">反馈信息审核</td>
+			<td colspan="6" align="center">填报反馈信息</td>
 		</tr>
 		<tr>
 			<td class="text-right">起草人:</td>
-			<td><input type="text" class="easyui-textbox"
-				value="${user.name}" data-option="prompt:'起草人'" disabled="disabled"></td>
+			<td><input type="text" name="feedback.createUser.id" class="easyui-textbox"
+				value="${user.name }" data-option="prompt:'起草人'" disabled="disabled"></td>
 			<td class="text-right">牵头部门:</td>
-			<td colspan="1"><input type="text" class="easyui-textbox" 
-			    value="${feedback.project.group.name }"
-				data-option="prompt:'牵头部门'"  disabled="disabled" >
-			</td>
+			<td colspan="1"><input type="text" name="feedback.project.group.name"
+				class="easyui-textbox" value="${feedback.project.group.name }"
+				data-option="prompt:'牵头部门'" disabled="disabled"></td>
 			<td class="text-right">反馈时限:</td>
-			<td><input class="easyui-datetimebox"
-				data-options="prompt:'反馈时限'" disabled="disabled"
-				value="<fmt:formatDate value='${feedback.feedbackEndDate }' type='both'/>"></td>	
+			<td><input name="feedback.feedbackEndDate" class="easyui-datetimebox"
+				data-options="prompt:'反馈时限'"
+				value="<fmt:formatDate value='${feedback.feedbackEndDate}' type='both'/>" disabled="disabled"></td>	
 		</tr>
 		
 		<tr>
 			<td class="text-right">记录状态:</td>
-			<td><input type="text" class="easyui-textbox"
-				value="${(feedback.status eq 'FEEDBACKING' ) ? '反馈中' : ((feedback.status eq 'RETURNED') ? '已退回' : '已采用') }" data-option="prompt:'来源名称'"
-				 disabled="disabled"></td>
+			<td><input type="text" name="status" class="easyui-textbox"
+				value="${(feedback.status eq 'RUNNING' ) ? '反馈中' : ((feedback.status eq 'FAIL') ? '已退回' : '已采用') }" data-option="prompt:'来源名称'"
+				disabled="disabled"></td>
 			<td class="text-right">是否延期:</td>
-			<td><input type="text" class="easyui-textbox"
+			<td><input type="text" name="delayCount" class="easyui-textbox"
 				value="${feedback.delayCount>0?'延期':'未延期' }" data-option="prompt:'来源名称'"
-				 disabled="disabled" ></td>
+				disabled="disabled"></td>
 			<td class="text-right">反馈开始时间:</td>
-			<td ><input class="easyui-datetimebox"
-				data-options="prompt:'反馈开始时间'" disabled="disabled"
-				 value="<fmt:formatDate value='${feedback.feedbackStartDate}' type='both'/>"></td>
+			<td ><input name="feedback.feedbackStartDate" class="easyui-datetimebox"
+				data-options="prompt:'反馈开始时间'"
+				 value="<fmt:formatDate value='${feedback.feedbackStartDate}' type='both'/>" disabled="disabled"></td>
 		</tr>
 		<tr>
 			<td class="text-right">阶段工作计划:</td>
-			<td colspan="5"><textarea class="easyui-kindeditor" 
-					data-options="readonlyMode:true"  rows="3">${feedback.workPlan }</textarea>
+			<td colspan="5"><textarea class="easyui-kindeditor"
+					data-options="readonlyMode:true,prompt:'阶段工作计划'" name="workPlan" rows="3">${feedback.workPlan }</textarea>
 			</td>
 		</tr>
 		<tr>
 			<td class="text-right">落实情况:</td>
 			<td colspan="5"><textarea class="easyui-kindeditor"
-				data-options="readonlyMode:true" 	 rows="3">${feedback.situation }</textarea></td>
+					name="situation" rows="3"  required="required" >${feedback.situation }</textarea></td>
 		</tr>
 		
 		<tr>
 			<td class="text-right">存在问题/困难:</td>
 			<td colspan="5"><textarea class="easyui-kindeditor"
-				data-options="readonlyMode:true" 	rows="3">${feedback.problems }</textarea></td>
+					name="problems" rows="3">${feedback.problems }</textarea></td>
 		</tr>
 		<tr>
 			<td class="text-right">解决措施/建议:</td>
 			<td colspan="5"><textarea class="easyui-kindeditor"
-				data-options="readonlyMode:true" rows="3">${feedback.solutions }</textarea></td>
+					name="solutions" rows="3">${feedback.solutions }</textarea></td>
 		</tr>
-        <tr>
-		  		<td class="text-right">附件材料：</td>
-		   		<td colspan="5" style="8px">
-		   		     <c:forEach items="${feedback.fdaList}" var="fda"> 
-					 <div class="layout_default">
-    					<p class="info"><span class="date"></span> <span class="author"></span></p>
-    					<div class="image_container"> <a href="${ctx }${fda.url}" rel="lightbox[ostec]"> 
-    						<img src="${ctx }${fda.url}"> </a> </div>
-  					</div>
-					 </c:forEach> 
-
+		<c:choose>
+		<c:when test="${feedback==null}">
+			<tr>
+		  		<td class="text-right">佐证材料上传:</td>
+		  		<td colspan="5">
+		  		    <a id="filefield" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加附件</a> 
+		  		    <div id="fileZone"> </div>    	
+		  		</td>
+		  	</tr>
+		</c:when>
+		<c:otherwise>
+			<tr>
+		  		<td>附件材料：</td>
+		   		<td colspan="5">
+			   		 <c:forEach items="${feedback.fdaList}" var="fda"> 
+			   		        上传时间:${fda.uploadDate } - 
+			   		   <a id="download" title="点击下载" href="${ctx }/taskSource/downloadFile?id=${fda.id}"><span class="glyphicon glyphicon-download-alt"></span>${fda.name }</a>
+			   		 </c:forEach> 
 		   		</td>
 		   	</tr>	   
-	  	<tr>
-	  		<td class="text-right">反馈材料审核:</td>
-	  		<td colspan="5">
-	  		   <div class="">
-	  		    <pre><input type="radio" class="easyui-radio" name="status" value="SUCCESS" checked="checked" />采用   /  <input type="radio" class="easyui-radio" name="status" value="FAIL"/>退回</pre>
-	  		   </div>
-	  		   <div>
-	  		   <textarea class="easyui-kindeditor"
-					data-options="prompt:'反馈开始时间'" name="suggestion" rows="3" required="required"></textarea>	   
-	  		   </div>	  		    
-	  		</td>
-	  	</tr>
-    	
-	</table>
-    
+		</c:otherwise>
+		</c:choose>  	   	
+	</table>    
 </form>
 </div>

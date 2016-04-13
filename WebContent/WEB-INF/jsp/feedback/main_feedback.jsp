@@ -65,27 +65,23 @@
 </script>
 <div class="easyui-layout">
 <form id="feedback_form" method="post" encType="multipart/form-data">
-	<input type="hidden" id="feedbackId" name="id" value="${feedback.id }">
-	<input type="hidden" name="createUser.id" value="${feedback.createUser.id }">
-    <input type="hidden" name="createDate" value="<fmt:formatDate value='${feedback.createDate }' type='both'/>">
-    <input type="hidden" name="isDelete" value="${feedback.isDelete }">
-    <input type="hidden" name="status" value="${feedback.status }">
-	<table class="table table-bordered table-hover" style="width: 100%;">
+    <input type="hidden" id="feedback" name="project.id" value="1">
+	<table class="table table-bordered" style="width: 100%;">
 		<tr class="bg-primary">
-			<td colspan="6" align="center">反馈信息</td>
+			<td colspan="6" align="center">添加反馈信息</td>
 		</tr>
 		<tr>
 			<td class="text-right">起草人:</td>
-			<td><input type="text" name="feedback.createUser.id" class="easyui-textbox"
-				value="${user.name }" data-option="prompt:'起草人'"
+			<td><input type="text" name="createUser.id" class="easyui-textbox"
+				value="${user.id}" data-option="prompt:'起草人'"
 				required="required" ></td>
 			<td class="text-right">牵头部门:</td>
-			<td colspan="1"><input type="text" name="feedback.project.group.name"
-				class="easyui-textbox" value="${feedback.project.group.name }"
+			<td colspan="1"><input type="text" name="project.group.id"
+				class="easyui-textbox" value="1"
 				data-option="prompt:'牵头部门'"  required="required" >
 			</td>
 			<td class="text-right">反馈时限:</td>
-			<td><input name="feedback.feedbackEndDate" class="easyui-datetimebox"
+			<td><input name="feedbackEndDate" class="easyui-datetimebox"
 				data-options="prompt:'反馈时限'"
 				value="<fmt:formatDate value='${feedback.feedbackEndDate}' type='both'/>" required="required" ></td>	
 		</tr>
@@ -93,14 +89,14 @@
 		<tr>
 			<td class="text-right">记录状态:</td>
 			<td><input type="text" name="status" class="easyui-textbox"
-				value="${(feedback.status eq 'RUNNING' ) ? '反馈中' : ((feedback.status eq 'FAIL') ? '已退回' : '已采用') }" data-option="prompt:'来源名称'"
+				value="RUNNING" data-option="prompt:'记录状态'"
 				 required="required" ></td>
 			<td class="text-right">是否延期:</td>
 			<td><input type="text" name="delayCount" class="easyui-textbox"
-				value="${feedback.delayCount>0?'延期':'未延期' }" data-option="prompt:'来源名称'"
+				value="0" data-option="prompt:'来源名称'"
 				 required="required" ></td>
 			<td class="text-right">反馈开始时间:</td>
-			<td ><input name="feedback.feedbackStartDate" class="easyui-datetimebox"
+			<td ><input name="feedbackStartDate" class="easyui-datetimebox"
 				data-options="prompt:'反馈开始时间'"
 				 value="<fmt:formatDate value='${feedback.feedbackStartDate}' type='both'/>" required="required" ></td>
 		</tr>
@@ -110,28 +106,13 @@
 					data-options="readonlyMode: false,prompt:'阶段工作计划'" name="workPlan" rows="3">${feedback.workPlan }</textarea>
 			</td>
 		</tr>
-		<tr>
-			<td class="text-right">落实情况:</td>
-			<td colspan="5"><textarea class="easyui-kindeditor"
-					name="situation" rows="3">${feedback.situation }</textarea></td>
-		</tr>
-		
-		<tr>
-			<td class="text-right">存在问题/困难:</td>
-			<td colspan="5"><textarea class="easyui-kindeditor"
-					name="problems" rows="3">${feedback.problems }</textarea></td>
-		</tr>
-		<tr>
-			<td class="text-right">解决措施/建议:</td>
-			<td colspan="5"><textarea class="easyui-kindeditor"
-					name="solutions" rows="3">${feedback.solutions }</textarea></td>
-		</tr>
 		<c:choose>
 		<c:when test="${feedback==null}">
 			<tr>
 		  		<td class="text-right">佐证材料上传:</td>
 		  		<td colspan="5">
 		  		    <a id="filefield" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加附件</a> 
+		  		    <input class='easyui-filebox' type='hidden' name='file'>
 		  		    <div id="fileZone"> </div>    	
 		  		</td>
 		  	</tr>
@@ -142,7 +123,7 @@
 		   		<td colspan="5">
 			   		 <c:forEach items="${feedback.fdaList}" var="fda"> 
 			   		        上传时间:${fda.uploadDate } - 
-			   		   <a id="download" title="点击下载" href="${ctx }/taskSource/downloadFile?id=${fda.id}"><span class="glyphicon glyphicon-download-alt"></span>${fda.name }</a>
+			   		   <a id="download" title="点击下载" href="${ctx}${fda.url}"><span class="glyphicon glyphicon-download-alt"></span>${fda.name }</a>
 			   		 </c:forEach> 
 		   		</td>
 		   	</tr>	   

@@ -75,6 +75,14 @@ public interface IFeedbackRecordService {
 	 */
 	public List<FeedbackRecord> findByDate(Date beginDate, Date endDate) throws Exception;
 	
+	
+	/**
+	 * 删除
+	 * @param id
+	 * @throws Exception
+	 */
+	public void doDelete(Integer id) throws Exception;
+	
 	/**
 	 * 保存反馈 完成任务
 	 * @param feedback

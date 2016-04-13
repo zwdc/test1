@@ -44,11 +44,11 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 	@Column(name = "id", length = 10, nullable = false, unique = true)
 	private Integer id;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="project_id")
 	private Project project;
 	
-	@OneToMany(mappedBy = "fdRecord",fetch = FetchType.EAGER,cascade = {CascadeType.ALL})
+	@OneToMany(mappedBy = "fdRecord",fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
 	private Set<FeedbackAtt> fdaList=new HashSet<FeedbackAtt>();
 	
 	@Column(name = "work_plan", length = 2000)

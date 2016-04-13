@@ -284,6 +284,43 @@ public class TaskInfoController {
     }
     
     /**
+     * 完成任务
+     * @param taskInfo
+     * @param taskId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/completeTask")
+    @ResponseBody
+    public Message completeTask(TaskInfo taskInfo, @RequestParam(value = "taskId", required = false) String taskId) throws Exception {
+    	Message message = new Message();
+    	try {
+    		this.taskInfoService.doCompleteTask(taskInfo, taskId);
+    		message.setMessage("申请成功！");
+		} catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("申请失败!");
+			throw e;
+		}
+    	return message;
+    }
+    
+    /**
+   	 * 详情页面
+   	 * 
+   	 * @param id
+   	 * @return
+   	 * @throws Exception
+   	 */
+   	@RequestMapping(value = "/details/{id}")
+   	public ModelAndView details(@PathVariable("id") Integer id) throws Exception {
+   		ModelAndView mv = new ModelAndView("taskInfo/details_taskInfo");
+   		TaskInfo taskInfo = this.taskInfoService.findById(id);
+   		mv.addObject("taskInfo", taskInfo);
+   		return mv;
+   	}
+       
+    /**
      * 签收
      * @return
      * @throws Exception 
@@ -317,56 +354,22 @@ public class TaskInfoController {
     	return message;
     }
     
-    /**
-     * 申请办结
-     * @param taskInfoId
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping("/applyForEnd/{taskInfoId}")
-    @ResponseBody
-    public Message applyForEnd(@PathVariable("taskInfoId") Integer id) throws Exception {
-    	Message message = new Message();
-    	try {
-    		this.taskInfoService.doCompleteTask(id);
-    		message.setMessage("申请成功！");
-		} catch (Exception e) {
-			message.setStatus(Boolean.FALSE);
-			message.setMessage("申请失败!");
-			throw e;
-		}
-    	return message;
-    }
     
-    /**
-	 * 详情页面
-	 * 
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/details/{id}")
-	public ModelAndView details(@PathVariable("id") Integer id) throws Exception {
-		ModelAndView mv = new ModelAndView("taskInfo/details_taskInfo");
-		TaskInfo taskInfo = this.taskInfoService.findById(id);
-		mv.addObject("taskInfo", taskInfo);
-		return mv;
-	}
     
     public static void main(String[] args) throws Exception {
-  	    //测试推送
-  	    GoEasy goEasy = new GoEasy("0cf326d6-621b-495a-991e-a7681bcccf6a");
-		goEasy.publish("zwdc_user_1", "您有将要到期尚未反馈的督察信息", new PublishListener(){
-			@Override
-			public void onSuccess() {
-				System.out.println("消息发布成功。");
-			}
-			@Override
-			public void onFailed(GoEasyError error) {
-				System.out.println("消息发布失败, 错误编码：" + error.getCode() + " 错误信息： " +
-						error.getContent());
-			}
-		});
-  	    
-    }
+ 	    //测试推送
+ 	    GoEasy goEasy = new GoEasy("0cf326d6-621b-495a-991e-a7681bcccf6a");
+	goEasy.publish("zwdc_user_1", "您有将要到期尚未反馈的督察信息", new PublishListener(){
+		@Override
+		public void onSuccess() {
+			System.out.println("消息发布成功。");
+		}
+		@Override
+		public void onFailed(GoEasyError error) {
+			System.out.println("消息发布失败, 错误编码：" + error.getCode() + " 错误信息： " +
+					error.getContent());
+		}
+	});
+ 	    
+   }
 }
