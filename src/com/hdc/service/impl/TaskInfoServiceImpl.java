@@ -111,28 +111,25 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 	}
 
 	@Override
-	public void doCompleteTask(Integer id) throws Exception {
-		//给督察处提示代办任务
-		TaskInfo taskInfo = this.findById(id);
-		taskInfo.setStatus(TaskInfoStatus.APPLY_FINISHED.toString());
+	public void doCompleteTask(TaskInfo taskInfo, String taskId) throws Exception {
+		//给秘书长提示代办任务
+		taskInfo.setStatus(ApprovalStatus.PENDING.toString());
 		this.baseService.update(taskInfo);
+		Map<String, Object> variables = new HashMap<String, Object>();
 		
 		User user = UserUtil.getUserFromSession();
-		/*ProcessTask processTask = new ProcessTask();
-		processTask.setUser_name(user.getName());
-		processTask.setUser_id(user.getId());
-		processTask.setBusinessType(BusinessType.IMPORTANT_FILE.toString());	//业务类型：重要文件
-		processTask.setBusinessKey(id);
-		//processTask.setTaskId(taskInfo.getActTaskId());  //不用设置，跳转到下一节点时会根据listener自动赋值
-		processTask.setTitle("任务《"+taskInfo.getTitle()+"》申请办结！");
-		processTask.setUrl("/taskInfo/toApproval?id="+id);
-		//processTask.setBusinessForm(BusinessForm.QT_FILE.toString());			//业务表单：省政府文件
-		processTask.setBusinessOperation(OperationType.APPROVAL.toString());
+		ProcessTask processTask = new ProcessTask();
+		processTask.setTaskTitle(taskInfo.getTitle());
+		processTask.setApplyUserId(user.getId());
+		processTask.setApplyUserName(user.getName());
+		processTask.setTaskInfoId(taskInfo.getId());
+		processTask.setTaskInfoType(taskInfo.getTaskSource().getTaskInfoType().getName());
+		processTask.setTitle("任务修改完成！需要重新审批!");
+		processTask.setUrl("/taskInfo/toApproval?taskInfoId="+taskInfo.getId().toString());
 		Serializable processTaskId = this.processTaskService.doAdd(processTask);
 		//初始化任务参数
-		Map<String, Object> vars = new HashMap<String, Object>();
-		vars.put("processTaskId", processTaskId.toString());*/
-//		this.processService.complete(taskInfo.getActTaskId(), null, vars);		//完成“办理中” 节点任务
+		variables.put("processTaskId", processTaskId.toString());
+		this.processService.complete(taskId, null, variables);
 		
 	}
 
