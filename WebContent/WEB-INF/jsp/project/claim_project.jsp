@@ -33,6 +33,7 @@
 	
 	var editIndex = undefined;
 	function endEditing(){
+		debugger;
 		if (editIndex == undefined){return true}
 		if ($('#workPlanDatagrid').datagrid('validateRow', editIndex)){
 			$('#workPlanDatagrid').datagrid('endEdit', editIndex);
@@ -42,12 +43,35 @@
 			return false;
 		}
 	}
+	
 	function onClickCell(index, field){
+		debugger;
 		if (endEditing()){
 			$('#workPlanDatagrid').datagrid('selectRow', index)
 					.datagrid('editCell', {index:index,field:field});
 			editIndex = index;
 		}
+	}
+	
+	function onAfterEdit(index, field, changes){
+		debugger;
+		console.dir(index, field, changes.workPlan);
+		
+        $.ajax({
+    		async: false,
+    		cache: false,
+            url: ctx + '/project/workPlan/'+changes.id,
+            type: 'post',
+            dataType: 'json',
+            data: {workPlan: changes.workPlan},
+            success: function (data) {
+                $.messager.show({
+					title : data.title,
+					msg : data.message,
+					timeout : 1000 * 2
+				});
+            }
+        });
 	}
 </script>
 <div class="easyui-layout">
@@ -103,12 +127,12 @@
 			<td colspan="4">备注:<textarea class="easyui-kindeditor" id="remark" rows="3" >${taskInfo.remark }</textarea></td>
 		</tr>
 		<tr>
-			<td colspan="4">拟办意见:<textarea class="easyui-kindeditor" name="suggestion" rows="3" >${taskInfo.suggestion }</textarea></td>
+			<td colspan="4">拟办意见:<textarea class="easyui-kindeditor" name="suggestion" rows="3" >${suggestion }</textarea></td>
 		</tr>
 		<tr>
 			<td class="text-right">阶段性计划:</td>
 			<td colspan="3">
-				<table id="workPlanDatagrid" class="easyui-datagrid" data-options="url:'${ctx }/feedback/getFeedbackByProject?projectId=${projectId }',fitColumns:true,rownumbers:true,border:true,onClickCell:onClickCell">
+				<table id="workPlanDatagrid" class="easyui-datagrid" data-options="url:'${ctx }/feedback/getFeedbackByProject?projectId=${projectId }',fitColumns:true,rownumbers:true,border:true,onClickCell:onClickCell,onAfterEdit:onAfterEdit">
 				    <thead>
 						<tr>
 							<th data-options="field:'id',hidden:true">ID</th>

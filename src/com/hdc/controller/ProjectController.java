@@ -69,13 +69,15 @@ public class ProjectController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/toClaim")
-	public ModelAndView toClaim(
-				@RequestParam("taskInfoId") Integer taskInfoId,
-				@RequestParam("projectId") Integer projectId) throws Exception {
+	public ModelAndView toClaim(@RequestParam("projectId") Integer projectId) throws Exception {
 		ModelAndView mv = new ModelAndView("project/claim_project");
-		TaskInfo taskInfo = this.taskInfoService.findById(taskInfoId);
-		mv.addObject("taskInfo", taskInfo);
-		mv.addObject("projectId", projectId);
+		Project project = this.projectService.findById(projectId);
+		if(project != null) {
+			//TaskInfo taskInfo = this.taskInfoService.findById(project.getTaskInfo().getId());
+			mv.addObject("taskInfo", project.getTaskInfo());
+			mv.addObject("projectId", projectId);
+			mv.addObject("suggestion", project.getSuggestion());
+		}
 		return mv;
 	}
 	
@@ -126,4 +128,9 @@ public class ProjectController {
 		}
 		return new Datagrid<Object>(page.getTotal(), jsonList);
 	}
+	
+	//应该卸载feedbackController方法中
+	/*@RequestMapping("/workPlan/{projectId}")
+	public Message workPlan(@PathVariable("projectId") Integer projectId, @RequestParam("workPlan") String workPlan) {
+	}*/
 }

@@ -115,7 +115,7 @@ function claim() {
         	modal: true,
         	minimizable: true,
         	maximizable: true,
-        	href: ctx+"/project/toClaim?taskInfoId="+row.taskInfoId+"&projectId="+row.id,
+        	href: ctx+"/project/toClaim?projectId="+row.id,
         	onLoad: function () {
         		formInit(row);
         	},
@@ -167,13 +167,6 @@ function claim() {
         	        				  });
         	        			  }
         	        		  });
-        	        	  }
-        	          },
-        	          {
-        	        	  text: '拒签收',
-        	        	  iconCls: 'icon-remove',
-        	        	  handler: function () {
-        	        		  project_form.form('clear');
         	        	  }
         	          },
         	          {
