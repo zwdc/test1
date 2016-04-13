@@ -23,6 +23,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * 反馈表
  * @author zhao
@@ -46,9 +48,11 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="project_id")
+	@JsonIgnore
 	private Project project;
 	
 	@OneToMany(mappedBy = "fdRecord",fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
+	@JsonIgnore
 	private Set<FeedbackAtt> fdaList=new HashSet<FeedbackAtt>();
 	
 	@Column(name = "work_plan", length = 2000)

@@ -103,16 +103,16 @@
 			<td colspan="4">备注:<textarea class="easyui-kindeditor" id="remark" rows="3" >${taskInfo.remark }</textarea></td>
 		</tr>
 		<tr>
-			<td colspan="4">备注:<textarea class="easyui-kindeditor" id="remark" rows="3" >${taskInfo.remark }</textarea></td>
+			<td colspan="4">拟办意见:<textarea class="easyui-kindeditor" name="suggestion" rows="3" >${taskInfo.suggestion }</textarea></td>
 		</tr>
 		<tr>
 			<td class="text-right">阶段性计划:</td>
 			<td colspan="3">
-				<table id="workPlanDatagrid" class="easyui-datagrid" data-options="url:'${ctx }/feedback/',fitColumns:true,rownumbers:true,border:true,onClickCell:onClickCell">
+				<table id="workPlanDatagrid" class="easyui-datagrid" data-options="url:'${ctx }/feedback/getFeedbackByProject?projectId=${projectId }',fitColumns:true,rownumbers:true,border:true,onClickCell:onClickCell">
 				    <thead>
 						<tr>
-							<th data-options="field:'groupId',hidden:true">ID</th>
-							<th data-options="field:'groupName'" width="40%">阶段日期</th>
+							<th data-options="field:'id',hidden:true">ID</th>
+							<th data-options="field:'workPlanDate'" width="40%">阶段日期</th>
 							<th data-options="field:'workPlan',editor:'text'" width="50%">阶段计划</th>
 						</tr>
 				    </thead>

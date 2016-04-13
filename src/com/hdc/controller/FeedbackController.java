@@ -1,32 +1,24 @@
 package com.hdc.controller;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileUploadBase.FileSizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hdc.entity.Datagrid;
@@ -35,7 +27,6 @@ import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
-import com.hdc.entity.TaskInfo;
 import com.hdc.service.IFeedbackRecordService;
 import com.hdc.service.ITaskInfoService;
 import com.hdc.util.Constants;
@@ -221,5 +212,29 @@ public class FeedbackController {
 		mv.addObject("list", list);		
 		return mv;
 	} 
+	
+	/**
+	 * 根据projectId查询反馈列表
+	 * @param projectId
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getFeedbackByProject")
+	@ResponseBody
+	public List<Map<String, Object>> getList(@RequestParam("projectId") Integer projectId) throws Exception {
+		List<FeedbackRecord> list = this.feedbackService.findByProjectId(projectId);
+		List<Map<String, Object>> jsonList = new ArrayList<Map<String, Object>>();
+		for(FeedbackRecord feedback : list) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String feedbackStartDate = sf.format(feedback.getFeedbackStartDate());
+			String feedbackEndDate = sf.format(feedback.getFeedbackEndDate());
+			map.put("id", feedback.getId());
+			map.put("workPlanDate", feedbackStartDate+" - "+feedbackEndDate);
+			map.put("workPlan", feedback.getWorkPlan());
+			jsonList.add(map);
+		}
+		return jsonList;
+	}
 	
 }

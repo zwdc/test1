@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.hdc.entity.FeedbackFrequency;
 import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
@@ -74,6 +73,14 @@ public interface IFeedbackRecordService {
 	 * @throws Exception
 	 */
 	public List<FeedbackRecord> findByDate(Date beginDate, Date endDate) throws Exception;
+	
+	/**
+	 * 根据项目表查询
+	 * @param projectId
+	 * @return
+	 * @throws Exception
+	 */
+	public List<FeedbackRecord> findByProjectId(Integer projectId) throws Exception;
 	
 	
 	/**

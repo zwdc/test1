@@ -69,10 +69,13 @@ public class ProjectController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/toClaim")
-	public ModelAndView toClaim(@RequestParam("taskInfoId") Integer taskInfoId) throws Exception {
+	public ModelAndView toClaim(
+				@RequestParam("taskInfoId") Integer taskInfoId,
+				@RequestParam("projectId") Integer projectId) throws Exception {
 		ModelAndView mv = new ModelAndView("project/claim_project");
 		TaskInfo taskInfo = this.taskInfoService.findById(taskInfoId);
 		mv.addObject("taskInfo", taskInfo);
+		mv.addObject("projectId", projectId);
 		return mv;
 	}
 	

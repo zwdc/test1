@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.hdc.entity.FeedbackFrequency;
 import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
@@ -21,9 +20,7 @@ import com.hdc.service.IBaseService;
 import com.hdc.service.IFeedbackRecordService;
 import com.hdc.service.IProcessService;
 import com.hdc.util.BeanUtils;
-import com.hdc.util.Constants;
 import com.hdc.util.Constants.FeedbackStatus;
-import com.hdc.util.upload.FileUploadUtils;
 
 @Service
 public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
@@ -107,6 +104,13 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 	public void doDelete(Integer id) throws Exception {
 		String hql = "update FeedbackRecord set isDelete = 1 where id = " + id.toString();
 		this.baseService.executeHql(hql);
+	}
+
+	@Override
+	public List<FeedbackRecord> findByProjectId(Integer projectId)
+			throws Exception {
+		String hql = "from FeedbackRecord where project.id = " + projectId +" order by createDate ASC";
+		return this.baseService.find(hql);
 	}
 
 }

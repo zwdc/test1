@@ -115,7 +115,7 @@ function claim() {
         	modal: true,
         	minimizable: true,
         	maximizable: true,
-        	href: ctx+"/project/toClaim?taskInfoId="+row.taskInfoId,
+        	href: ctx+"/project/toClaim?taskInfoId="+row.taskInfoId+"&projectId="+row.id,
         	onLoad: function () {
         		formInit(row);
         	},
