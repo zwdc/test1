@@ -19,7 +19,6 @@ import com.hdc.entity.Project;
 import com.hdc.entity.TaskInfo;
 import com.hdc.entity.User;
 import com.hdc.service.IProjectService;
-import com.hdc.service.ITaskInfoService;
 import com.hdc.util.Constants.ProjectStatus;
 import com.hdc.util.UserUtil;
 
@@ -34,9 +33,6 @@ public class ProjectController {
 
 	@Autowired
 	private IProjectService projectService;
-	
-	@Autowired
-	private ITaskInfoService taskInfoService;
 	
 	
 	/**
@@ -129,8 +125,4 @@ public class ProjectController {
 		return new Datagrid<Object>(page.getTotal(), jsonList);
 	}
 	
-	//应该卸载feedbackController方法中
-	/*@RequestMapping("/workPlan/{projectId}")
-	public Message workPlan(@PathVariable("projectId") Integer projectId, @RequestParam("workPlan") String workPlan) {
-	}*/
 }

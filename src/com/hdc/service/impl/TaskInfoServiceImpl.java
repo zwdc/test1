@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.activiti.engine.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,6 @@ import com.hdc.entity.TaskInfo;
 import com.hdc.entity.TaskSource;
 import com.hdc.entity.User;
 import com.hdc.service.IBaseService;
-import com.hdc.service.IFeedbackRecordService;
 import com.hdc.service.IProcessService;
 import com.hdc.service.IProcessTaskService;
 import com.hdc.service.ITaskInfoService;
@@ -33,14 +31,8 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 	private IBaseService<TaskInfo> baseService;
 	
 	@Autowired
-	private IFeedbackRecordService feedbackService;
-	
-	@Autowired
 	private IProcessService processService;
 	
-    @Autowired
-    private TaskService taskService;
-    
     @Autowired
     private ITaskSourceService taskResourceService;
     
@@ -112,7 +104,8 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 		processTask.setApplyUserId(user.getId());
 		processTask.setApplyUserName(user.getName());
 		processTask.setTaskInfoId(taskInfo.getId());
-		processTask.setTaskInfoType(taskInfo.getTaskSource().getTaskInfoType().getName());
+		TaskSource taskSource = this.taskResourceService.findById(taskInfo.getTaskSource().getId());
+		processTask.setTaskInfoType(taskSource.getTaskInfoType().getName());
 		processTask.setTitle("任务修改完成！需要重新审批!");
 		processTask.setUrl("/taskInfo/toApproval?taskInfoId="+taskInfo.getId().toString());
 		Serializable processTaskId = this.processTaskService.doAdd(processTask);

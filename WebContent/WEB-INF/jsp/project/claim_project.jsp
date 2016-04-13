@@ -7,7 +7,6 @@
 	$(function(){
 		$("#assistantGroup").kindeditor({readonlyMode: true});
 		$("#remark").kindeditor({readonlyMode: true});
-		
 		//行编辑扩展（单元格编辑）
 		$.extend($.fn.datagrid.methods, {
 			editCell: function(jq,param){
@@ -53,25 +52,34 @@
 		}
 	}
 	
+	//结束编辑后保存
 	function onAfterEdit(index, field, changes){
 		debugger;
-		console.dir(index, field, changes.workPlan);
-		
         $.ajax({
     		async: false,
     		cache: false,
-            url: ctx + '/project/workPlan/'+changes.id,
+            url: ctx + '/feedback/workPlan/'+field.id,
             type: 'post',
             dataType: 'json',
             data: {workPlan: changes.workPlan},
-            success: function (data) {
-                $.messager.show({
-					title : data.title,
-					msg : data.message,
-					timeout : 1000 * 2
-				});
+            success: function (result) {
+            	if(0 != result.data) {
+	                $.messager.show({
+						title : result.title,
+						msg : result.message,
+						timeout : 1000 * 2
+					});
+            	}
             }
         });
+	}
+	
+	function endEdit(){
+		debugger;
+		if ($('#workPlanDatagrid').datagrid('validateRow', editIndex)){
+			$('#workPlanDatagrid').datagrid('endEdit', editIndex);
+			editIndex = undefined;
+		}
 	}
 </script>
 <div class="easyui-layout">
@@ -132,7 +140,7 @@
 		<tr>
 			<td class="text-right">阶段性计划:</td>
 			<td colspan="3">
-				<table id="workPlanDatagrid" class="easyui-datagrid" data-options="url:'${ctx }/feedback/getFeedbackByProject?projectId=${projectId }',fitColumns:true,rownumbers:true,border:true,onClickCell:onClickCell,onAfterEdit:onAfterEdit">
+				<table id="workPlanDatagrid" class="easyui-datagrid" data-options="url:'${ctx }/feedback/getFeedbackByProject?projectId=${projectId }',fitColumns:true,rownumbers:true,border:true,toolbar:'#tb',onClickCell:onClickCell,onAfterEdit:onAfterEdit">
 				    <thead>
 						<tr>
 							<th data-options="field:'id',hidden:true">ID</th>
@@ -144,4 +152,7 @@
 			</td>
 		</tr>
   	</table>
+</div>
+<div id="tb" style="height:auto">
+	<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="endEdit();">结束编辑</a>
 </div>

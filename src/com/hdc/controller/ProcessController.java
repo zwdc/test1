@@ -52,8 +52,6 @@ import com.hdc.entity.User;
 import com.hdc.service.IProcessService;
 import com.hdc.service.IUserService;
 import com.hdc.util.Constants;
-import com.hdc.util.Constants.BusinessForm;
-import com.hdc.util.Constants.BusinessType;
 import com.hdc.util.ProcessDefinitionCache;
 import com.hdc.util.UserUtil;
 import com.hdc.util.WorkflowUtils;

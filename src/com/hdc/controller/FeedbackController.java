@@ -28,7 +28,6 @@ import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.service.IFeedbackRecordService;
-import com.hdc.service.ITaskInfoService;
 import com.hdc.util.Constants;
 import com.hdc.util.upload.FileUploadUtils;
 import com.hdc.util.upload.exception.InvalidExtensionException;
@@ -44,9 +43,6 @@ public class FeedbackController {
 
 	@Autowired
 	private IFeedbackRecordService feedbackService;
-	
-	@Autowired
-	private ITaskInfoService taskInfoService;
 	
 	/**
 	 * 跳转列表页面
@@ -237,4 +233,30 @@ public class FeedbackController {
 		return jsonList;
 	}
 	
+	/**
+	 * 添加阶段性任务计划
+	 * @param feedbackId
+	 * @param workPlan
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/workPlan/{feedbackId}")
+	@ResponseBody
+	public Message workPlan(@PathVariable("feedbackId") Integer feedbackId, @RequestParam(value = "workPlan", required = false) String workPlan) throws Exception {
+		Message message = new Message();
+		try {
+			if(workPlan != null) {
+				FeedbackRecord feedback = this.feedbackService.findById(feedbackId);
+				feedback.setWorkPlan(workPlan);
+				this.feedbackService.doUpdate(feedback);
+				message.setMessage("修改成功！");
+			} else {
+				message.setData(0);
+			}
+		} catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("修改失败！");
+		}
+		return message;
+	}
 }
