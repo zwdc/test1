@@ -21,7 +21,6 @@ import com.hdc.service.IFeedbackFrequencyService;
 import com.hdc.service.IFeedbackRecordService;
 import com.hdc.service.IProjectService;
 import com.hdc.service.ITaskInfoService;
-import com.hdc.util.Constants.ApprovalStatus;
 import com.hdc.util.Constants.ProjectStatus;
 
 /**
@@ -67,7 +66,7 @@ public class CreateTaskService implements JavaDelegate {
 				Project project = new Project();
 				project.setGroup(new Group(new Integer(groupId)));
 				project.setTaskInfo(taskInfo);
-				project.setStatus(ApprovalStatus.PENDING.toString());
+				project.setStatus(ProjectStatus.WAIT_FOR_CLAIM.toString());
 				this.projectService.doAdd(project);
 			}
 		}

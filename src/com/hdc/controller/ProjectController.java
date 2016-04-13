@@ -9,14 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.hdc.entity.Datagrid;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.Project;
 import com.hdc.entity.TaskInfo;
+import com.hdc.entity.User;
 import com.hdc.service.IProjectService;
+import com.hdc.service.ITaskInfoService;
 import com.hdc.util.Constants.ProjectStatus;
+import com.hdc.util.UserUtil;
 
 /**
  * 任务交办管理器
@@ -29,6 +34,9 @@ public class ProjectController {
 
 	@Autowired
 	private IProjectService projectService;
+	
+	@Autowired
+	private ITaskInfoService taskInfoService;
 	
 	
 	/**
@@ -54,10 +62,34 @@ public class ProjectController {
 		return null;
 	}
 	
+	/**
+	 * 跳转签收页面
+	 * @param taskInfoId
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/toClaim")
+	public ModelAndView toClaim(@RequestParam("taskInfoId") Integer taskInfoId) throws Exception {
+		ModelAndView mv = new ModelAndView("project/claim_project");
+		TaskInfo taskInfo = this.taskInfoService.findById(taskInfoId);
+		mv.addObject("taskInfo", taskInfo);
+		return mv;
+	}
+	
+	/**
+	 * 根据type获取不同数据
+	 * @param param
+	 * @param type
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping("/getList")
+	@ResponseBody
 	public Datagrid<Object> getList(Parameter param, @RequestParam("type") Integer type) throws Exception {
 		Page<Project> page = new Page<Project>(param.getPage(), param.getRows());
+		User user = UserUtil.getUserFromSession();
 		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("group.id", user.getGroup().getId());
 		if(type == 1) {
 			//待签收
 			map.put("status", ProjectStatus.WAIT_FOR_CLAIM.toString());
@@ -77,10 +109,16 @@ public class ProjectController {
 			Map<String, Object> m=new HashMap<String, Object>();
 			TaskInfo taskInfo = project.getTaskInfo();
 			m.put("id", project.getId());
+			m.put("taskInfoId", taskInfo.getId());
 			m.put("taskTitle", taskInfo.getTitle());
+			m.put("urgency", taskInfo.getUrgency());
 			m.put("sourceName", taskInfo.getTaskSource().getName());
 			m.put("hostGroup", project.getGroup().getName());
-			m.put("hostUser", project.getUser().getName());
+			if(project.getUser() != null) {
+				m.put("hostUser", project.getUser().getName());
+			}
+			m.put("endTaskDate", taskInfo.getEndTaskDate());
+			m.put("fbFrequencyName", taskInfo.getFbFrequency().getName());
 			jsonList.add(m);
 		}
 		return new Datagrid<Object>(page.getTotal(), jsonList);

@@ -33,9 +33,9 @@
 		</table>
 	</div>
 	<div id="searchMenu" style="display: none;">
-		<div data-options="name:'invoiceType'">发票类型</div>
-		<div data-options="name:'receiveInvoiceName'">收票公司名称</div>
-		<div data-options="name:'currentPrice'">本次开票金额</div>
+		<div data-options="name:'title'">任务名称</div>
+		<div data-options="name:'receiveInvoiceName'">任务来源</div>
+		<div data-options="name:'currentPrice'">急缓程度</div>
 	</div>
 	<table id="project_datagrid" title="任务交办列表"></table>
   </body>

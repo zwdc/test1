@@ -297,22 +297,20 @@ function showDetails(row) {
         minimizable: true,
         maximizable: true,
         href: ctx+"/taskInfo/details/"+row.id,
-        buttons: "#task_btn",
+        buttons: [
+          {
+              text: '关闭',
+              iconCls: 'icon-cancel',
+              handler: function () {
+            	  taskInfo_dialog.dialog('destroy');
+              }
+          }
+        ],
         onClose: function () {
         	taskInfo_dialog.dialog('destroy');
         }
     });
 }
-
-/*buttons: [
-          {
-              text: '关闭',
-              iconCls: 'icon-cancel',
-              handler: function () {
-              	taskInfo_dialog.dialog('destroy');
-              }
-          }
-      ],*/
 
 function publishMessage() {
 	var goEasy = new GoEasy({
