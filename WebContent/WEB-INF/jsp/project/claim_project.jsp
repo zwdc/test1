@@ -83,6 +83,7 @@
 	}
 </script>
 <div class="easyui-layout">
+<form id="project_form" method="post">
     <table id="sales" class="table table-bordered table-hover table-condensed">
   		<tr class="bg-primary">
 			<td colspan="4" align="center">任务信息</td>
@@ -152,6 +153,7 @@
 			</td>
 		</tr>
   	</table>
+</form>
 </div>
 <div id="tb" style="height:auto">
 	<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="endEdit();">结束编辑</a>

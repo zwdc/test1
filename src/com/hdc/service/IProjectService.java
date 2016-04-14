@@ -52,6 +52,14 @@ public interface IProjectService {
 	public void doUpdate(Project project) throws Exception;
 	
 	/**
+	 * 签收(线程安全)
+	 * @param projectId
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean doClaimProject(String projectId) throws Exception;
+	
+	/**
 	 * 删除
 	 * @param id
 	 * @throws Exception

@@ -12,8 +12,10 @@ import com.hdc.dao.IJdbcDao;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.Project;
+import com.hdc.entity.User;
 import com.hdc.service.IBaseService;
 import com.hdc.service.IProjectService;
+import com.hdc.util.UserUtil;
 
 @Service
 public class ProjectServiceImpl implements IProjectService {
@@ -115,6 +117,20 @@ public class ProjectServiceImpl implements IProjectService {
         this.jdbcDao.find(sb.toString(), null, page);
         
 		return null;
+	}
+
+	@Override
+	public synchronized boolean doClaimProject(String projectId) throws Exception {
+		User user = UserUtil.getUserFromSession();
+		String hql1 = "from Project where isDelete = 0 and id = "+projectId+" and user.id is null";
+		Integer count = this.baseService.executeHql(hql1);
+		if(count > 0) {
+			String hql2 = "update Project set user.id = " + user.getId() + " where id = " + projectId;
+			this.baseService.executeHql(hql2);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

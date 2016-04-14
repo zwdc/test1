@@ -7,14 +7,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hdc.entity.Datagrid;
+import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.Project;
@@ -126,6 +129,29 @@ public class ProjectController {
 		}
 		return new Datagrid<Object>(page.getTotal(), jsonList);
 	}
+	
+	/**
+	 * 签收任务交办表
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping("/claimProject/{projectId}")
+	@ResponseBody
+	public Message claimProject(@PathVariable("projectId") String projectId) throws Exception {
+		Message message = new Message();
+		try {
+			if(StringUtils.isNotBlank(projectId)) {
+				this.projectService.doClaimProject(projectId);
+			}
+			message.setMessage("签收成功！");
+		} catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("签收失败！");
+			throw e;
+		}
+		return message;
+	}
+	
 	
 	public static void main(String[] args) {
 		LinkedList<Integer> list = new LinkedList<Integer>();

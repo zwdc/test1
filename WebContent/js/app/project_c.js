@@ -28,6 +28,7 @@ $(function(){
 				},
 		     	{field:'taskTitle',title:'任务标题',width:fixWidth(0.2),align:'left',halign:'center'},
 		     	{field:'sourceName',title:'任务来源',width:fixWidth(0.2),align:'center'},
+		     	{field:'hostUser',title:'办理人',width:fixWidth(0.1),align:'center'},
 		     	{field:'endTaskDate',title:'办结时限',width:fixWidth(0.1),align:'center',sortable:true,
 		     		formatter:function(value,row){
 		     			return moment(value).format("YYYY-MM-DD HH:mm:ss");
@@ -103,8 +104,30 @@ function formInit(row) {
 	    });
 }
 
-
+//签收
 function claim() {
+	var row = project_datagrid.datagrid('getSelected');
+    if (row) {
+    	$.ajax({
+            url: ctx + '/project/claimProject/'+row.id,
+            type: 'post',
+            dataType: 'json',
+            success: function (data) {
+                if (data.status) {
+                	project_datagrid.datagrid('load');
+                }
+                $.messager.show({
+					title : data.title,
+					msg : data.message,
+					timeout : 1000 * 2
+				});
+            }
+        });
+    }
+}
+
+//办理
+function handle() {
 	var row = project_datagrid.datagrid('getSelected');
     if (row) {
         project_dialog = $('<div/>').dialog({
