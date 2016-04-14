@@ -57,12 +57,6 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 		StringBuffer sb = new StringBuffer();  
         sb.append("select a from ").append(tableSimpleName).append(" a where a.isDelete=0");  
         
-		/*if(dataSetPermission) {
-        	//获取数据权限
-        	sb.append(" left join User u with u.id = a.createUserId where a.isDelete=0 ").append(this.getDataSetPermission());	
-        } else{
-        	sb.append(" where a.isDelete=0 ");        	
-        }*/
         if(dataSetPermission) {
         	sb.append(this.getDataSetPermission());
         }
@@ -141,13 +135,6 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 		StringBuffer sb = new StringBuffer();  
         sb.append("select count(*) from ").append(tableSimpleName).append(" a where a.isDelete=0");
 
-		/*if(dataSetPermission) {
-        	//获取数据权限
-        	sb.append(" left join User u with u.id = a.createUserId where a.isDelete=0 ").append(this.getDataSetPermission());	
-        } else{
-        	sb.append(" where a.isDelete=0 ");        	
-        }*/
-        
         if(dataSetPermission) {
         	sb.append(this.getDataSetPermission());
         }

@@ -23,11 +23,12 @@ public interface IProjectService {
 	/**
 	 * 针对办理中或已签收的查询
 	 * @param param
+	 * @param type
 	 * @param page
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Map<String, Object>> getHProject(Parameter param, Page<Map<String, Object>> page) throws Exception;
+	public List<Map<String, Object>> getProjectList(Parameter param, Integer type, Page<Map<String, Object>> page) throws Exception;
 	
 	/**
 	 * 通过id获取Project

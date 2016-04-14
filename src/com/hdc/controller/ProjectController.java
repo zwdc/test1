@@ -92,24 +92,12 @@ public class ProjectController {
 	@RequestMapping("/getList")
 	@ResponseBody
 	public Datagrid<Object> getList(Parameter param, @RequestParam("type") Integer type) throws Exception {
-		Page<Project> page = new Page<Project>(param.getPage(), param.getRows());
-		User user = UserUtil.getUserFromSession();
+		Page<Map<String, Object>> page = new Page<Map<String, Object>>(param.getPage(), param.getRows());
+		List<Object> jsonList=new ArrayList<Object>(); 
+		/*User user = UserUtil.getUserFromSession();
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("group.id", user.getGroup().getId());
-		if(type == 1) {
-			//待签收
-			map.put("status", ProjectStatus.WAIT_FOR_CLAIM.toString());
-		} else if(type == 2) {
-			//办理中
-			map.put("status", ProjectStatus.IN_HANDLING.toString());
-		} else if(type == 3) {
-			//已办结
-			map.put("status", ProjectStatus.APPLY_FINISHED.toString());
-		} else if(type == 4) {
-			//已办结
-			map.put("status", ProjectStatus.FINISHED.toString());
-		}
-		List<Object> jsonList=new ArrayList<Object>(); 
+		map.put("user.id", "is null");
 		List<Project> list = this.projectService.getListPage(param, page, map);
 		for(Project project : list) {
 			Map<String, Object> m=new HashMap<String, Object>();
@@ -126,6 +114,12 @@ public class ProjectController {
 			m.put("endTaskDate", taskInfo.getEndTaskDate());
 			m.put("fbFrequencyName", taskInfo.getFbFrequency().getName());
 			jsonList.add(m);
+		}*/
+		
+		List<Map<String, Object>> list = this.projectService.getProjectList(param, type, page);
+		for(Map<String, Object> map : list) {
+			Map<String, Object> m=new HashMap<String, Object>();
+			System.out.println(map.get("group_name")+" -- "+map.get("source_name"));
 		}
 		return new Datagrid<Object>(page.getTotal(), jsonList);
 	}
@@ -141,9 +135,13 @@ public class ProjectController {
 		Message message = new Message();
 		try {
 			if(StringUtils.isNotBlank(projectId)) {
-				this.projectService.doClaimProject(projectId);
+				Boolean flag = this.projectService.doClaimProject(projectId);
+				if(flag) {
+					message.setMessage("签收成功！");
+				} else {
+					message.setMessage("该任务已被其他人签收！");
+				}
 			}
-			message.setMessage("签收成功！");
 		} catch (Exception e) {
 			message.setStatus(Boolean.FALSE);
 			message.setMessage("签收失败！");
@@ -152,28 +150,4 @@ public class ProjectController {
 		return message;
 	}
 	
-	
-	public static void main(String[] args) {
-		LinkedList<Integer> list = new LinkedList<Integer>();
-		for(int i=0;i<10;i++){
-			list.add(i);
-		}
-		list.set(2, 99);
-		System.out.println(list.get(2));
-		
-		List<Integer> list2 = new ArrayList<Integer>();
-		for(int i=0;i<10;i++){
-			list2.add(i);
-		}
-		list2.set(3, 989);
-		System.out.println(list2.get(3));
-		
-		Hashtable<Integer, String> table = new Hashtable<Integer, String>();
-		HashMap<Integer, String> map =new HashMap<Integer, String>();
-		HashMap m = new HashMap<>();
-		m.put(null, 123);
-		m.put(null, 345);
-		System.out.println(m.get(null));
-		System.out.println();
-	}
 }
