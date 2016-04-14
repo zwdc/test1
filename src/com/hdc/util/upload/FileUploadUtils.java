@@ -110,9 +110,7 @@ public class FileUploadUtils {
         assertAllowed(file, allowedExtension, maxSize);
         //提取文件名
         String filename = extractFilename(file, baseDir);
-
         File desc = getAbsoluteFile(extractUploadDir(request), filename);
-
         //上传
         file.transferTo(desc);
         return filename;
@@ -136,7 +134,8 @@ public class FileUploadUtils {
 
     public static final String extractFilename(MultipartFile file, String baseDir)
             throws UnsupportedEncodingException {
-        String filename = file.getOriginalFilename();
+        //String filename = file.getOriginalFilename();
+    	String filename=String.valueOf(System.currentTimeMillis());
         int slashIndex = filename.indexOf("/");
         if (slashIndex >= 0) {
 //            filename = filename.substring(slashIndex + 1);

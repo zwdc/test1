@@ -63,6 +63,19 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 	public void doUpdate(FeedbackRecord feedback) throws Exception {
 		this.baseService.update(feedback);
 	}
+	
+//	@Override
+//	public void doUpdate(FeedbackRecord feedback) throws Exception {
+//		String situation=feedback.getSituation();
+//		String problem=feedback.getProblems();
+//		String hql="Update FeedbackRecord fbr set "
+//				+ "fbr.situation=:situation,"
+//				+ "fbr.problem=:problem"
+//				+ "fbr.solutions=:solutions"
+//				+ "fbr.fdaList=:fdaList"
+//				+ "where fbr.id=:id";
+//		this.baseService.executeHql(hql, params);
+//	}
 
 	@Override
 	public List<FeedbackRecord> findByDate(Date beginDate, Date endDate)

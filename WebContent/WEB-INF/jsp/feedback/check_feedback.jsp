@@ -3,10 +3,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-<link rel="stylesheet" href="${ctx}/css/mediabox.css" type="text/css" />
 <script type="text/javascript" src="${ctx}/js/kindeditor.js"></script>
-<script type="text/javascript" src="${ctx}/js/mootools-core.js"></script>
-<script type="text/javascript" src="${ctx}/js/mediabox.js"></script>
+
 <script type="text/javascript">
 	$(function() {
 		$('#download').tooltip({
@@ -19,18 +17,6 @@
 				});
 			}
 		});	 
-		var count = 0; 
-		 $("#filefield").click(function(){  
-			var input = $("<input class='easyui-filebox' type='text' name='file' data-options=\""+"prompt:'请选择文件...'\""+" style='width: 40%;height: 25px;'>");  	
-			var button = $("<input type='button' class='easyui-linkbutton' value='移除 '></div>");  
-			var pre=$("<div>").append(button).append(input);		
-			$("#fileZone").append(pre);
-			$.parser.parse(pre);
-			  button.click(function() {  
-				  pre.remove();
-		     });
-			 
-	});  
 	});
 	function submitForm(obj, taskId) {
 		$('#feedback_form').form('submit', {
@@ -67,7 +53,7 @@
 </script>
 <div class="easyui-layout">
 <form id="feedback_form" method="post" encType="multipart/form-data">
-	<input type="hidden" id="feedbackId" name="id" value="${feedback.id }">${feedback.id }
+	<input type="hidden" id="feedbackId" name="id" value="${feedback.id }">
 	<table class="table table-bordered" style="width: 100%;">
 		<tr class="bg-primary">
 			<td colspan="6" align="center">反馈信息审核</td>

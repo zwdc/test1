@@ -138,7 +138,7 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 		// 评论
 		Comments comments = new Comments();
 		comments.setUserId(user.getId().toString());
-		comments.setUserName(user.getName());
+		comments.setUserName(user.getName()); 
 		comments.setContent(comment);
 		comments.setBusinessKey(taskInfoId);
 		comments.setBusinessForm(BusinessForm.TASK_FORM.toString());

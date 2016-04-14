@@ -44,18 +44,18 @@ public class FeedbackAtt implements Serializable{
 	private FeedbackRecord fdRecord;
 	
 	@Column(name = "name", length = 50)
-	private String name;
+	private String name;//文件名
 	
 	@Column(name = "url", length = 200)
-	private String url;
+	private String url;//保存地址
 	
 	@Column(name = "type", length = 10)
-	private String type;
+	private String type;//文件类型
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@Column(name = "upload_date")
-	private Date uploadDate ;				//上传时间
+	private Date uploadDate ;//上传时间
 	
 	public Integer getId() {
 		return id;

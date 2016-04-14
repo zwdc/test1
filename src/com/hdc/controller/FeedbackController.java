@@ -1,5 +1,6 @@
 package com.hdc.controller;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,8 +28,10 @@ import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
+import com.hdc.entity.User;
 import com.hdc.service.IFeedbackRecordService;
 import com.hdc.util.Constants;
+import com.hdc.util.UserUtil;
 import com.hdc.util.upload.FileUploadUtils;
 import com.hdc.util.upload.exception.InvalidExtensionException;
 /**
@@ -64,10 +67,20 @@ public class FeedbackController {
 		Page<FeedbackRecord> page = new Page<FeedbackRecord>(param.getPage(), param.getRows());		
 		List<FeedbackRecord> fbList=this.feedbackService.getListPage(param, page);
 		List<Object> jsonList=new ArrayList<Object>(); 
+		int fbWL=0;
+		Date currentDate=new Date();
 		for(FeedbackRecord fb:fbList){
 			Map<String, Object> map=new HashMap<String, Object>();
 			map.put("id", fb.getId());
-			map.put("warningLevel", fb.getWarningLevel());
+			
+			if(currentDate.before(fb.getFeedbackStartDate())){
+				fbWL=0;//未到反馈期
+			}else if(currentDate.after(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
+				fbWL=2;//红色警告
+			}else if(currentDate.after(fb.getFeedbackStartDate())&&currentDate.before(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
+				fbWL=1;//黄色警告
+			}
+			map.put("warningLevel", fbWL);
 			map.put("feedbackStartDate", fb.getFeedbackStartDate());
 			map.put("feedbackEndDate", fb.getFeedbackEndDate());
 			map.put("groupName", fb.getProject().getGroup().getName());
@@ -109,18 +122,50 @@ public class FeedbackController {
 		}		
 		return mv;
 	}
-	
 	/**
-	 * 添加或修改
+	 * 实施反馈
+	 * @param feedback
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/checkFeedback")
+	@ResponseBody
+	public Message checkFeedback(
+				FeedbackRecord feedback, 
+				HttpServletRequest request) throws Exception {
+		Message message = new Message();
+		Integer id = feedback.getId();
+		try {
+			if(id == null) {
+				message.setMessage("获取反馈对象失败");
+			} else {
+				FeedbackRecord fbr=this.feedbackService.findById(id);
+			    fbr.setStatus(feedback.getStatus()); //获取反馈状态，（反馈中 RUNNING、已退回 FAIL、已采用 SUCCESS）
+			    fbr.setSuggestion(feedback.getSuggestion());//获取建议意见
+			    this.feedbackService.doUpdate(fbr);
+				message.setData(id);
+				message.setMessage("审核完成！");
+			}
+		} catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("操作失败!");
+			throw e;
+		}
+		
+		return message;
+	}
+	/**
+	 * 实施反馈
 	 * @param feedback
 	 * @param file
 	 * @param request
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/saveOrUpdate")
+	@RequestMapping("/saveFeedback")
 	@ResponseBody
-	public Message saveOrUpdate(
+	public Message saveFeedback(
 				FeedbackRecord feedback, 
 				@RequestParam(value = "file", required = false) MultipartFile[] file,
 				HttpServletRequest request) throws Exception {
@@ -133,7 +178,11 @@ public class FeedbackController {
 				for(int i=0;i<file.length;i++){
 					try {
 						if(!file[i].isEmpty()){
-							String filePath = FileUploadUtils.upload(request, file[i], Constants.FILE_PATH);
+							String filePath = FileUploadUtils.upload(request, file[i], 
+									Constants.FILE_PATH+"/"
+											+feedback.getProject().getGroup().getId()
+											+File.separator+feedback.getProject().getId()
+											+File.separator+id);
 							FeedbackAtt fba=new FeedbackAtt();
 							fba.setUrl(filePath);
 							fba.setName(file[i].getOriginalFilename());;
@@ -160,12 +209,16 @@ public class FeedbackController {
 				//this.feedbackService.doCompleteTask(feedback, taskId, null, request);
 			}
 			if(id == null) {
-				this.feedbackService.doAdd(feedback);
-				message.setMessage("上传了"+count+"个材料，添加成功！");
+				message.setMessage("获取反馈对象失败");
 			} else {
-				this.feedbackService.doUpdate(feedback);
+				FeedbackRecord fbr=this.feedbackService.findById(id);
+			    fbr.setSolutions(feedback.getSituation());
+			    fbr.setProblems(feedback.getProblems());
+			    fbr.setSituation(feedback.getSituation());
+			    fbr.setFdaList(feedback.getFdaList());
+				this.feedbackService.doUpdate(fbr);
 				message.setData(id);
-				message.setMessage("修改成功！");
+				message.setMessage("反馈成功！");
 			}
 		} catch (Exception e) {
 			message.setStatus(Boolean.FALSE);
@@ -175,12 +228,47 @@ public class FeedbackController {
 		
 		return message;
 	}
-	  private String getFileMB(long byteFile){  
-	        if(byteFile==0)  
-	           return "0MB";  
-	        long mb=1024*1024;  
-	        return ""+byteFile/mb+"MB";  
-	    } 
+	/**
+	 * 添加或修改
+	 * @param feedback
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/saveOrUpdate")
+	@ResponseBody
+	public Message saveOrUpdate(
+				FeedbackRecord feedback, 
+				HttpServletRequest request) throws Exception {
+		Message message = new Message();
+		Integer id = feedback.getId();
+		try {
+			if(id == null) {
+				this.feedbackService.doAdd(feedback);
+				message.setMessage("添加成功！");
+			} else {
+				this.feedbackService.doUpdate(feedback);;
+				message.setData(id);
+				message.setMessage("反馈成功！");
+			}
+		} catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("操作失败!");
+			throw e;
+		}
+		
+		return message;
+	}
+    
+	
+	
+	
+	private String getFileMB(long byteFile){  
+	   if(byteFile==0)  
+	       return "0MB";  
+	   long mb=1024*1024;  
+	   return ""+byteFile/mb+"MB";  
+	} 
 	  /**
 		 * 删除
 		 * @param id

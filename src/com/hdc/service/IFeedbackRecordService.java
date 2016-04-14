@@ -3,6 +3,7 @@ package com.hdc.service;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -54,7 +55,7 @@ public interface IFeedbackRecordService {
 	 * @param id
 	 * @return
 	 * @throws Exception
-	 */
+	 */	
 	public FeedbackRecord findById(Integer id) throws Exception;
 	
 	/**

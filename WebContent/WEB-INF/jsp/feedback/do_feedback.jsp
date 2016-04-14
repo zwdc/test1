@@ -3,7 +3,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
-
 <script type="text/javascript" src="${ctx}/js/kindeditor.js"></script>
 <script type="text/javascript">
 	$(function() {
@@ -66,21 +65,16 @@
 <div class="easyui-layout">
 <form id="feedback_form" method="post" encType="multipart/form-data">
 	<input type="hidden" id="feedbackId" name="id" value="${feedback.id }">
-	<input type="hidden" name="createUser.id" value="${feedback.createUser.id }">
-    <input type="hidden" name="createDate" value="<fmt:formatDate value='${feedback.createDate }' type='both'/>">
-    <input type="hidden" name="isDelete" value="${feedback.isDelete }">
-    <input type="hidden" name="status" value="${feedback.status }">
 	<table class="table table-bordered table-hover" style="width: 100%;">
 		<tr class="bg-primary">
 			<td colspan="6" align="center">填报反馈信息</td>
 		</tr>
 		<tr>
 			<td class="text-right">起草人:</td>
-			<td><input type="text" name="feedback.createUser.id" class="easyui-textbox"
+			<td><input type="text" class="easyui-textbox"
 				value="${user.name }" data-option="prompt:'起草人'" disabled="disabled"></td>
 			<td class="text-right">牵头部门:</td>
-			<td colspan="1"><input type="text" name="feedback.project.group.name"
-				class="easyui-textbox" value="${feedback.project.group.name }"
+			<td colspan="1"><input type="text" class="easyui-textbox" value="${feedback.project.group.name }"
 				data-option="prompt:'牵头部门'" disabled="disabled"></td>
 			<td class="text-right">反馈时限:</td>
 			<td><input name="feedback.feedbackEndDate" class="easyui-datetimebox"
@@ -105,7 +99,7 @@
 		<tr>
 			<td class="text-right">阶段工作计划:</td>
 			<td colspan="5"><textarea class="easyui-kindeditor"
-					data-options="readonlyMode:true,prompt:'阶段工作计划'" name="workPlan" rows="3">${feedback.workPlan }</textarea>
+					data-options="readonlyMode:true,prompt:'阶段工作计划'" rows="3">${feedback.workPlan }</textarea>
 			</td>
 		</tr>
 		<tr>
@@ -124,28 +118,14 @@
 			<td colspan="5"><textarea class="easyui-kindeditor"
 					name="solutions" rows="3">${feedback.solutions }</textarea></td>
 		</tr>
-		<c:choose>
-		<c:when test="${feedback==null}">
-			<tr>
+		<tr>
 		  		<td class="text-right">佐证材料上传:</td>
 		  		<td colspan="5">
 		  		    <a id="filefield" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加附件</a> 
+		  		    <input class='easyui-filebox' type='hidden' name='file'>
 		  		    <div id="fileZone"> </div>    	
 		  		</td>
-		  	</tr>
-		</c:when>
-		<c:otherwise>
-			<tr>
-		  		<td>附件材料：</td>
-		   		<td colspan="5">
-			   		 <c:forEach items="${feedback.fdaList}" var="fda"> 
-			   		        上传时间:${fda.uploadDate } - 
-			   		   <a id="download" title="点击下载" href="${ctx }/taskSource/downloadFile?id=${fda.id}"><span class="glyphicon glyphicon-download-alt"></span>${fda.name }</a>
-			   		 </c:forEach> 
-		   		</td>
-		   	</tr>	   
-		</c:otherwise>
-		</c:choose>  	   	
+		</tr>   	
 	</table>    
 </form>
 </div>

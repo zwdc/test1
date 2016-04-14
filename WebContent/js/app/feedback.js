@@ -21,14 +21,12 @@ $(function() {
              [
               {field: 'warningLevel', title: '预警', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true,
             	  formatter:function(value){
-            		  if (value=="0") {           			
-                      	return "无色";
-                      }else if(value=="FAIL"){
-                    	  return "红色"; 
-                      }else if(value=="RUNNING"){
-                    	  return "黄色"; 
+            		  if (value=="1") {           			
+                      	return "<img style=\"height: 15px;width: 15px;\" src=\"../images/yellow.png\"/>";
+                      }else if(value=="2"){
+                    	  return "<img style=\"height: 15px;width: 15px;\" src=\"../images/red.png\"/>"; 
                       }else{
-                    	  return "绿色";
+                    	  return "无色"; 
                       }
             	  }
 			},
@@ -98,9 +96,9 @@ function fixWidth(percent) {
 }
 
 //初始化表单
-function formInit(row) {
+function formInit(row,url) {
 	feedback_form = $('#feedback_form').form({
-        url: ctx+"/feedback/saveOrUpdate",
+        url: url,
         onSubmit: function () {
 	        $.messager.progress({
 	            title: '提示信息！',
@@ -143,7 +141,7 @@ function check(){
 	        maximizable: true,
 	        href: ctx+"/feedback/toMain?action=check&id="+row.id,
 	        onLoad: function () {
-	            formInit(row);
+	            formInit(row,ctx+"/feedback/checkFeedback");
 	        },
 	        buttons: [
 	            {
@@ -190,7 +188,7 @@ function feedback(){
 	        maximizable: true,
 	        href: ctx+"/feedback/toMain?action=feedback&id="+row.id,
 	        onLoad: function () {
-	            formInit(row);
+	            formInit(row,ctx+"/feedback/saveFeedback");
 	        },
 	        buttons: [
 	            {
@@ -237,7 +235,7 @@ function edit() {
 	        maximizable: true,
 	        href: ctx+"/feedback/toMain?action=edit&id="+row.id,
 	        onLoad: function () {
-	            formInit(row);
+	            formInit(row,ctx+"/feedback/saveOrUpdate");
 	        },
 	        buttons: [
 	            {
@@ -284,17 +282,17 @@ function details(){
 	        maximizable: true,
 	        href: ctx+"/feedback/toMain?action=detail&id="+row.id,
 	        onLoad: function () {
-	            formInit(row);
+	            formInit(row,ctx+"/feedback/detail");
 	        },
 	        buttons: [
-	            {
-	                text: '关闭',
-	                iconCls: 'icon-cancel',
-	                handler: function () {
-	                	source_dialog.dialog('destroy');
-	                }
-	            }
-	        ],
+	  	          {
+	  	                text: '关闭',
+	  	                iconCls: 'icon-cancel',
+	  	                handler: function () {
+	  	                	feedback_dialog.dialog('destroy');
+	  	                }
+	  	            }
+	  	        ],
 	        onClose: function () {
 	        	source_dialog.dialog('destroy');
 	        }
@@ -315,7 +313,7 @@ function add(){
         maximizable: true,
         href: ctx+"/feedback/toMain?action=add",
         onLoad: function () {
-            formInit(null);
+            formInit(null,ctx+"/feedback/saveOrUpdate");
         },
         buttons: [
             {

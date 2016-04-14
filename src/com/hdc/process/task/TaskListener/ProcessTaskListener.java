@@ -10,7 +10,7 @@ import com.hdc.entity.ProcessTask;
 import com.hdc.service.IProcessTaskService;
 
 /**
- * 动态更新事项表(TaskInfo)中的 actTaskId
+ * 动态更新事项表(ProcessTask)中的 taskId等信息
  * @author ZML
  *
  */
