@@ -64,6 +64,8 @@ public class FeedbackController {
 		Page<FeedbackRecord> page = new Page<FeedbackRecord>(param.getPage(), param.getRows());		
 		List<FeedbackRecord> fbList=this.feedbackService.getListPage(param, page);
 		List<Object> jsonList=new ArrayList<Object>(); 
+		int fbWL=0;
+		Date currentDate=new Date();
 		for(FeedbackRecord fb:fbList){
 			Map<String, Object> map=new HashMap<String, Object>();
 			map.put("id", fb.getId());
