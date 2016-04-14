@@ -2,6 +2,8 @@ package com.hdc.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -125,4 +127,27 @@ public class ProjectController {
 		return new Datagrid<Object>(page.getTotal(), jsonList);
 	}
 	
+	public static void main(String[] args) {
+		LinkedList<Integer> list = new LinkedList<Integer>();
+		for(int i=0;i<10;i++){
+			list.add(i);
+		}
+		list.set(2, 99);
+		System.out.println(list.get(2));
+		
+		List<Integer> list2 = new ArrayList<Integer>();
+		for(int i=0;i<10;i++){
+			list2.add(i);
+		}
+		list2.set(3, 989);
+		System.out.println(list2.get(3));
+		
+		Hashtable<Integer, String> table = new Hashtable<Integer, String>();
+		HashMap<Integer, String> map =new HashMap<Integer, String>();
+		HashMap m = new HashMap<>();
+		m.put(null, 123);
+		m.put(null, 345);
+		System.out.println(m.get(null));
+		System.out.println();
+	}
 }

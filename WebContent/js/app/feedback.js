@@ -19,21 +19,26 @@ $(function() {
 		striped:true,
         columns : [
              [
+              {field: 'warningLevel', title: '预警', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true,
+            	  formatter:function(value){
+            		  if (value=="0") {           			
+                      	return "无色";
+                      }else if(value=="FAIL"){
+                    	  return "红色"; 
+                      }else if(value=="RUNNING"){
+                    	  return "黄色"; 
+                      }else{
+                    	  return "绿色";
+                      }
+            	  }
+			},
 			  {field: 'feedbackStartDate', title: '反馈期间', width: fixWidth(0.2), align: 'center', halign: 'center', sortable: true,
 					  formatter:function(value,row){
 						  return moment(value).format("MM月DD日")+"-"+moment(row.feedbackEndDate).format("MM月DD日");
 					  }
 				},
-              {field: 'project', title: '牵头单位', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true,
-					formatter:function(value,row,index){
-	            		  return row.project.group.name;
-					}
-              },
-              {field: 'createUser', title: '填报人', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true,
-            	  formatter:function(value,row,index){
-            		  return value.name;
-				}
-              },
+              {field: 'groupName', title: '牵头单位', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
+              {field: 'createUser', title: '填报人', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
               {field: 'feedbackDate', title: '反馈时间', width: fixWidth(0.2), align: 'center', halign: 'center', sortable: true,
             	  formatter:function(value,row){
             		  if(value==null){
@@ -65,7 +70,7 @@ $(function() {
               	  }
               },
               
-              {field: 'isDelay', title: '是否延期', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true},
+              {field: 'delayCount', title: '延期次数', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true},
               {field: 'refuseCount', title: '退回次数', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true}  
         ]
              ],

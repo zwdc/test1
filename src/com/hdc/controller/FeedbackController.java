@@ -60,7 +60,7 @@ public class FeedbackController {
 	 */
 	@RequestMapping("/getList")
 	@ResponseBody
-	public Datagrid<FeedbackRecord> getList(Parameter param) throws Exception {
+	public Datagrid<Object> getList(Parameter param) throws Exception {
 		Page<FeedbackRecord> page = new Page<FeedbackRecord>(param.getPage(), param.getRows());		
 		List<FeedbackRecord> fbList=this.feedbackService.getListPage(param, page);
 		List<Object> jsonList=new ArrayList<Object>(); 
@@ -71,13 +71,14 @@ public class FeedbackController {
 			map.put("feedbackStartDate", fb.getFeedbackStartDate());
 			map.put("feedbackEndDate", fb.getFeedbackEndDate());
 			map.put("groupName", fb.getProject().getGroup().getName());
+			map.put("createUser", fb.getCreateUser().getName());
 			map.put("feedbackDate", fb.getFeedbackDate());
 			map.put("status", fb.getStatus());
 			map.put("refuseCount", fb.getRefuseCount());
 			map.put("delayCount", fb.getDelayCount());
 			jsonList.add(map);
 		}
-		return new Datagrid<FeedbackRecord>(page.getTotal(),page.getResult());
+		return new Datagrid<Object>(page.getTotal(),jsonList);
 	}
 	
 	/**
