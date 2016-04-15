@@ -76,7 +76,7 @@ function fixWidth(percent) {
 //初始化表单
 function formInit(row) {
 	 project_form = $('#project_form').form({
-		 	url: ctx+"/project/saveOrUpdate",
+		 	url: ctx+"/project/update",
 	        onSubmit: function () {
 		        $.messager.progress({
 		            title: '提示信息！',
@@ -92,7 +92,7 @@ function formInit(row) {
 	            $.messager.progress('close');
 	            var json = $.parseJSON(data);
 	            if (json.status) {
-	            	project_dialog.dialog("refresh",ctx+"/project/toMain?id="+json.data);
+	            	project_dialog.dialog("refresh",ctx+"/project/toClaim?projectId="+json.data);
 	            	project_datagrid.datagrid('reload');//重新加载列表数据
 	            } 
 	            $.messager.show({
@@ -108,105 +108,113 @@ function formInit(row) {
 function claim() {
 	var row = project_datagrid.datagrid('getSelected');
     if (row) {
-    	$.ajax({
-            url: ctx + '/project/claimProject/'+row.id,
-            type: 'post',
-            dataType: 'json',
-            success: function (data) {
-                if (data.status) {
-                	project_datagrid.datagrid('load');
-                }
-                $.messager.show({
-					title : data.title,
-					msg : data.message,
-					timeout : 1000 * 2
-				});
-            }
-        });
+    	if(row.hostUser != null){
+    		$.messager.alert("提示", "您已经签收此任务，根据任务状态进行【审批】任务！");
+    	}else{
+    		$.ajax({
+    			url: ctx + '/project/claimProject/'+row.id,
+    			type: 'post',
+    			dataType: 'json',
+    			success: function (data) {
+    				if (data.status) {
+    					project_datagrid.datagrid('load');
+    				}
+    				$.messager.show({
+    					title : data.title,
+    					msg : data.message,
+    					timeout : 1000 * 2
+    				});
+    			}
+    		});
+    	}
     }
 }
 
-//办理
-function handle() {
+//申请审批
+function approval() {
 	var row = project_datagrid.datagrid('getSelected');
     if (row) {
-        project_dialog = $('<div/>').dialog({
-        	title : "任务交办信息",
-        	top: 20,
-        	width : fixWidth(0.8),
-        	height : 'auto',
-        	modal: true,
-        	minimizable: true,
-        	maximizable: true,
-        	href: ctx+"/project/toClaim?projectId="+row.id,
-        	onLoad: function () {
-        		formInit(row);
-        	},
-        	buttons: [
-        	          {
-        	        	  text: '暂存',
-        	        	  iconCls: 'icon-save',
-        	        	  id: 'save',
-        	        	  handler: function () {
-        	        		  project_form.submit();
-        	        	  }
-        	          },
-        	          {
-        	        	  text: '签收并审批',
-        	        	  iconCls: 'icon-ok',
-        	        	  id: 'ok',
-        	        	  handler: function () {
-        	        		  $.messager.confirm('确认提示！','确认提交表单进入任务办理流程吗？',function(result){
-        	        			  if(result){
-        	        				  project_form.form('submit',{
-        	        					  url: ctx+"/project/approvalTask",
-        	        					  onSubmit: function () {
-        	        						  $.messager.progress({
-        	        							  title: '提示信息！',
-        	        							  text: '数据处理中，请稍后....'
-        	        						  });
-        	        						  var isValid = $(this).form('validate');
-        	        						  if (!isValid) {
-        	        							  $.messager.progress('close');
-        	        						  } else {
-        	        							  $("#save").linkbutton("disable");
-        	        							  $("#ok").linkbutton("disable");
-        	        						  }
-        	        						  return isValid;
-        	        					  },
-        	        					  success: function (data) {
-        	        						  $.messager.progress('close');
-        	        						  var json = $.parseJSON(data);
-        	        						  if (json.status) {
-        	        							  project_dialog.dialog('destroy');//销毁对话框
-        	        							  project_datagrid.datagrid('reload');//重新加载列表数据
-        	        						  } 
-        	        						  $.messager.show({
-        	        							  title : json.title,
-        	        							  msg : json.message,
-        	        							  timeout : 1000 * 2
-        	        						  });
-        	        					  }
-        	        				  });
-        	        			  }
-        	        		  });
-        	        	  }
-        	          },
-        	          {
-        	        	  text: '关闭',
-        	        	  iconCls: 'icon-cancel',
-        	        	  handler: function () {
-        	        		  KindEditor.remove('#remark');
-        	        		  project_dialog.dialog('destroy');
-        	        		  project_datagrid.datagrid('reload');
-        	        	  }
-        	          }
-        	          ],
-        	          onClose: function () {
-        	        	  project_dialog.dialog('destroy');
-        	        	  project_datagrid.datagrid('reload');
-        	          }
-        });
+    	if(row.hostUser == null){
+    		$.messager.alert("提示", "此任务您还没有签收，请【签收】任务后再处理任务！");
+    	} else {
+    		project_dialog = $('<div/>').dialog({
+    			title : "任务交办信息",
+    			top: 20,
+    			width : fixWidth(0.8),
+    			height : 'auto',
+    			modal: true,
+    			minimizable: true,
+    			maximizable: true,
+    			href: ctx+"/project/toClaim?projectId="+row.id,
+    			onLoad: function () {
+    				formInit(row);
+    			},
+    			buttons: [
+    			          {
+    			        	  text: '暂存',
+    			        	  iconCls: 'icon-save',
+    			        	  id: 'save',
+    			        	  handler: function () {
+    			        		  project_form.submit();
+    			        	  }
+    			          },
+    			          {
+    			        	  text: '申请审批',
+    			        	  iconCls: 'icon-ok',
+    			        	  id: 'ok',
+    			        	  handler: function () {
+    			        		  $.messager.confirm('确认提示！','确认提交表单进入审批流程吗？',function(result){
+    			        			  if(result){
+    			        				  project_form.form('submit',{
+    			        					  url: ctx+"/project/approvalProject",
+    			        					  onSubmit: function () {
+    			        						  $.messager.progress({
+    			        							  title: '提示信息！',
+    			        							  text: '数据处理中，请稍后....'
+    			        						  });
+    			        						  var isValid = $(this).form('validate');
+    			        						  if (!isValid) {
+    			        							  $.messager.progress('close');
+    			        						  } else {
+    			        							  $("#save").linkbutton("disable");
+    			        							  $("#ok").linkbutton("disable");
+    			        						  }
+    			        						  return isValid;
+    			        					  },
+    			        					  success: function (data) {
+    			        						  $.messager.progress('close');
+    			        						  var json = $.parseJSON(data);
+    			        						  if (json.status) {
+    			        							  project_dialog.dialog('destroy');//销毁对话框
+    			        							  project_datagrid.datagrid('reload');//重新加载列表数据
+    			        						  } 
+    			        						  $.messager.show({
+    			        							  title : json.title,
+    			        							  msg : json.message,
+    			        							  timeout : 1000 * 2
+    			        						  });
+    			        					  }
+    			        				  });
+    			        			  }
+    			        		  });
+    			        	  }
+    			          },
+    			          {
+    			        	  text: '关闭',
+    			        	  iconCls: 'icon-cancel',
+    			        	  handler: function () {
+    			        		  KindEditor.remove('#remark');
+    			        		  project_dialog.dialog('destroy');
+    			        		  project_datagrid.datagrid('reload');
+    			        	  }
+    			          }
+    			          ],
+    			          onClose: function () {
+    			        	  project_dialog.dialog('destroy');
+    			        	  project_datagrid.datagrid('reload');
+    			          }
+    		});
+    	}
     } else {
         $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
     }

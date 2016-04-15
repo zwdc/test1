@@ -53,6 +53,14 @@ public interface IProjectService {
 	public void doUpdate(Project project) throws Exception;
 	
 	/**
+	 * 更新拟办意见
+	 * @param projectId
+	 * @param suggestion
+	 * @throws Exception
+	 */
+	public void doUpdateById(String projectId, String suggestion) throws Exception;
+	
+	/**
 	 * 签收(线程安全)
 	 * @param projectId
 	 * @return

@@ -84,9 +84,10 @@
 </script>
 <div class="easyui-layout">
 <form id="project_form" method="post">
-    <table id="sales" class="table table-bordered table-hover table-condensed">
+	<input name="projectId" value="${projectId }" type="hidden">
+    <table class="table table-bordered table-hover table-condensed">
   		<tr class="bg-primary">
-			<td colspan="4" align="center">任务信息</td>
+			<td colspan="4" align="center">任务交办信息</td>
 		</tr>
 		<tr>
 			<td class="text-right">任务标题:</td>

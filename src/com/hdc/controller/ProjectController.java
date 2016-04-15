@@ -2,8 +2,6 @@ package com.hdc.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,11 +19,7 @@ import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.Project;
-import com.hdc.entity.TaskInfo;
-import com.hdc.entity.User;
 import com.hdc.service.IProjectService;
-import com.hdc.util.Constants.ProjectStatus;
-import com.hdc.util.UserUtil;
 
 /**
  * 任务交办管理器
@@ -83,6 +77,28 @@ public class ProjectController {
 	}
 	
 	/**
+	 * 更新操作
+	 * @param project
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping("/update")
+	@ResponseBody
+	public Message update(@RequestParam("projectId") String projectId, @RequestParam("suggestion") String suggestion) throws Exception {
+		Message message = new Message();
+		try {
+			this.projectService.doUpdateById(projectId, suggestion);
+			message.setMessage("更新成功！");
+			message.setData(projectId);
+		} catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("更新失败！");
+			throw e;
+		}
+		return message;
+	}
+	
+	/**
 	 * 根据type获取不同数据
 	 * @param param
 	 * @param type
@@ -119,7 +135,16 @@ public class ProjectController {
 		List<Map<String, Object>> list = this.projectService.getProjectList(param, type, page);
 		for(Map<String, Object> map : list) {
 			Map<String, Object> m=new HashMap<String, Object>();
-			System.out.println(map.get("group_name")+" -- "+map.get("source_name"));
+			m.put("id", map.get("ID"));
+			m.put("taskInfoId", map.get("TASK_ID"));
+			m.put("taskTitle", map.get("TITLE"));
+			m.put("urgency", map.get("URGENCY"));
+			m.put("sourceName", map.get("SOURCE_NAME"));
+			m.put("hostGroup", map.get("GROUP_NAME"));
+			m.put("hostUser", map.get("USER_NAME"));
+			m.put("endTaskDate", map.get("END_TASK_DATE"));
+			m.put("fbFrequencyName", map.get("FREQUENCY_NAME"));
+			jsonList.add(m);
 		}
 		return new Datagrid<Object>(page.getTotal(), jsonList);
 	}

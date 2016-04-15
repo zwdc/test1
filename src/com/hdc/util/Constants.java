@@ -82,12 +82,12 @@ public class Constants {
 		}
 	}
 	/**
-	 * 任务状态 待签收、拒签收、办理中、申请办结中、已办结
+	 * 任务状态 待签收、已签收、拒签收、办理中、申请办结中、已办结
 	 * @author ZML
 	 *
 	 */
 	public enum ProjectStatus {
-		WAIT_FOR_CLAIM("WAIT_FOR_CLAIM"),REFUSE_CLAIM("REFUSE_CLAIM"), IN_HANDLING("IN_HANDLING"), APPLY_FINISHED("APPLY_FINISHED"), FINISHED("FINISHED");
+		WAIT_FOR_CLAIM("WAIT_FOR_CLAIM"), CLAIMED("CLAIMED"), REFUSE_CLAIM("REFUSE_CLAIM"), IN_HANDLING("IN_HANDLING"), APPLY_FINISHED("APPLY_FINISHED"), FINISHED("FINISHED");
 		
 		private final String value;
 		private ProjectStatus(String value) {
@@ -104,6 +104,9 @@ public class Constants {
 			switch(value) {
 				case "WAIT_FOR_CLAIM":
 					tis = WAIT_FOR_CLAIM;
+					break;
+				case "CLAIMED":
+					tis = CLAIMED;
 					break;
 				case "REFUSE_CLAIM":
 					tis = REFUSE_CLAIM;
