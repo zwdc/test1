@@ -55,7 +55,7 @@ public class Project extends BaseEntity implements Serializable {
 	private User user;				//承办人(签收用)
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="task_info")
+	@JoinColumn(name="task_info_id")
 	@JsonIgnore
 	private TaskInfo taskInfo;		//任务
 	

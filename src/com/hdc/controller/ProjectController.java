@@ -2,27 +2,24 @@ package com.hdc.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.hdc.entity.Datagrid;
+import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.Project;
-import com.hdc.entity.TaskInfo;
-import com.hdc.entity.User;
 import com.hdc.service.IProjectService;
-import com.hdc.util.Constants.ProjectStatus;
-import com.hdc.util.UserUtil;
 
 /**
  * 任务交办管理器
@@ -80,6 +77,28 @@ public class ProjectController {
 	}
 	
 	/**
+	 * 更新操作
+	 * @param project
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping("/update")
+	@ResponseBody
+	public Message update(@RequestParam("projectId") String projectId, @RequestParam("suggestion") String suggestion) throws Exception {
+		Message message = new Message();
+		try {
+			this.projectService.doUpdateById(projectId, suggestion);
+			message.setMessage("更新成功！");
+			message.setData(projectId);
+		} catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("更新失败！");
+			throw e;
+		}
+		return message;
+	}
+	
+	/**
 	 * 根据type获取不同数据
 	 * @param param
 	 * @param type
@@ -89,24 +108,12 @@ public class ProjectController {
 	@RequestMapping("/getList")
 	@ResponseBody
 	public Datagrid<Object> getList(Parameter param, @RequestParam("type") Integer type) throws Exception {
-		Page<Project> page = new Page<Project>(param.getPage(), param.getRows());
-		User user = UserUtil.getUserFromSession();
+		Page<Map<String, Object>> page = new Page<Map<String, Object>>(param.getPage(), param.getRows());
+		List<Object> jsonList=new ArrayList<Object>(); 
+		/*User user = UserUtil.getUserFromSession();
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("group.id", user.getGroup().getId());
-		if(type == 1) {
-			//待签收
-			map.put("status", ProjectStatus.WAIT_FOR_CLAIM.toString());
-		} else if(type == 2) {
-			//办理中
-			map.put("status", ProjectStatus.IN_HANDLING.toString());
-		} else if(type == 3) {
-			//已办结
-			map.put("status", ProjectStatus.APPLY_FINISHED.toString());
-		} else if(type == 4) {
-			//已办结
-			map.put("status", ProjectStatus.FINISHED.toString());
-		}
-		List<Object> jsonList=new ArrayList<Object>(); 
+		map.put("user.id", "is null");
 		List<Project> list = this.projectService.getListPage(param, page, map);
 		for(Project project : list) {
 			Map<String, Object> m=new HashMap<String, Object>();
@@ -123,31 +130,49 @@ public class ProjectController {
 			m.put("endTaskDate", taskInfo.getEndTaskDate());
 			m.put("fbFrequencyName", taskInfo.getFbFrequency().getName());
 			jsonList.add(m);
+		}*/
+		
+		List<Map<String, Object>> list = this.projectService.getProjectList(param, type, page);
+		for(Map<String, Object> map : list) {
+			Map<String, Object> m=new HashMap<String, Object>();
+			m.put("id", map.get("ID"));
+			m.put("taskInfoId", map.get("TASK_ID"));
+			m.put("taskTitle", map.get("TITLE"));
+			m.put("urgency", map.get("URGENCY"));
+			m.put("sourceName", map.get("SOURCE_NAME"));
+			m.put("hostGroup", map.get("GROUP_NAME"));
+			m.put("hostUser", map.get("USER_NAME"));
+			m.put("endTaskDate", map.get("END_TASK_DATE"));
+			m.put("fbFrequencyName", map.get("FREQUENCY_NAME"));
+			jsonList.add(m);
 		}
 		return new Datagrid<Object>(page.getTotal(), jsonList);
 	}
 	
-	public static void main(String[] args) {
-		LinkedList<Integer> list = new LinkedList<Integer>();
-		for(int i=0;i<10;i++){
-			list.add(i);
+	/**
+	 * 签收任务交办表
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping("/claimProject/{projectId}")
+	@ResponseBody
+	public Message claimProject(@PathVariable("projectId") String projectId) throws Exception {
+		Message message = new Message();
+		try {
+			if(StringUtils.isNotBlank(projectId)) {
+				Boolean flag = this.projectService.doClaimProject(projectId);
+				if(flag) {
+					message.setMessage("签收成功！");
+				} else {
+					message.setMessage("该任务已被其他人签收！");
+				}
+			}
+		} catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("签收失败！");
+			throw e;
 		}
-		list.set(2, 99);
-		System.out.println(list.get(2));
-		
-		List<Integer> list2 = new ArrayList<Integer>();
-		for(int i=0;i<10;i++){
-			list2.add(i);
-		}
-		list2.set(3, 989);
-		System.out.println(list2.get(3));
-		
-		Hashtable<Integer, String> table = new Hashtable<Integer, String>();
-		HashMap<Integer, String> map =new HashMap<Integer, String>();
-		HashMap m = new HashMap<>();
-		m.put(null, 123);
-		m.put(null, 345);
-		System.out.println(m.get(null));
-		System.out.println();
+		return message;
 	}
+	
 }

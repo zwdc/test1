@@ -83,9 +83,11 @@
 	}
 </script>
 <div class="easyui-layout">
-    <table id="sales" class="table table-bordered table-hover table-condensed">
+<form id="project_form" method="post">
+	<input name="projectId" value="${projectId }" type="hidden">
+    <table class="table table-bordered table-hover table-condensed">
   		<tr class="bg-primary">
-			<td colspan="4" align="center">任务信息</td>
+			<td colspan="4" align="center">任务交办信息</td>
 		</tr>
 		<tr>
 			<td class="text-right">任务标题:</td>
@@ -152,6 +154,7 @@
 			</td>
 		</tr>
   	</table>
+</form>
 </div>
 <div id="tb" style="height:auto">
 	<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="endEdit();">结束编辑</a>
