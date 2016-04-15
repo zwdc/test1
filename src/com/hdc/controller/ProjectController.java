@@ -175,4 +175,11 @@ public class ProjectController {
 		return message;
 	}
 	
+	@RequestMapping("/callApproval")
+	@ResponseBody
+	public Message callApproval(@RequestParam("projectId") Integer projectId, @RequestParam("suggestion") String suggestion) {
+		Message message = new Message();
+		return message;
+	}
+	
 }

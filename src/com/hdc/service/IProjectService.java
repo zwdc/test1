@@ -69,6 +69,14 @@ public interface IProjectService {
 	public boolean doClaimProject(String projectId) throws Exception;
 	
 	/**
+	 * 申请审批
+	 * @param projectId
+	 * @param suggestion
+	 * @throws Exception
+	 */
+	public void doStartProcess(Integer projectId, String suggestion) throws Exception;
+	
+	/**
 	 * 删除
 	 * @param id
 	 * @throws Exception

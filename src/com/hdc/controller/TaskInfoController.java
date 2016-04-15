@@ -206,9 +206,9 @@ public class TaskInfoController {
      * @return
      * @throws Exception
      */
-    @RequestMapping("/approvalTask")
+    @RequestMapping("/callApproval")
     @ResponseBody
-    public Message approvalTask(TaskInfo taskInfo) throws Exception {
+    public Message callApproval(TaskInfo taskInfo) throws Exception {
     	Message message = new Message();
     	try {
     		this.taskInfoService.doStartProcess(taskInfo);
