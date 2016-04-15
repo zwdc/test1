@@ -223,7 +223,6 @@ function showTaskInfo(row) {
                 text: '关闭',
                 iconCls: 'icon-cancel',
                 handler: function () {
-                	KindEditor.remove('#remark');
                 	taskInfo_dialog.dialog('destroy');
                 	taskInfo_datagrid.datagrid('reload');
                 }

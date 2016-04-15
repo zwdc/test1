@@ -43,6 +43,8 @@ $(function(){
 								return "<span class='text-danger'>拒绝签收</span>";
 							case "WAIT_FOR_CLAIM":
 								return "<span class='text-warning'>待签收</span>";
+							case "CLAIMED":
+								return "<span class='text-success'>已签收</span>";
 							case "APPLY_FINISHED":
 								return "<span class='text-primary'>申请办结</span>";
 							case "APPROVAL_SUCCESS":
@@ -170,7 +172,7 @@ function approval() {
     			modal: true,
     			minimizable: true,
     			maximizable: true,
-    			href: ctx+"/project/toClaim?projectId="+row.ID,
+    			href: ctx+"/project/toProject/claim?projectId="+row.ID,
     			onLoad: function () {
     				formInit(row);
     			},
@@ -238,6 +240,94 @@ function approval() {
     			        	  project_dialog.dialog('destroy');
     			        	  project_datagrid.datagrid('reload');
     			          }
+    		});
+    	}
+    } else {
+        $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
+    }
+}
+
+//拒签收
+function refuse() {
+	var row = project_datagrid.datagrid('getSelected');
+    if (row) {
+    	if(row.USER_NAME == null){
+    		$.messager.alert("提示", "此任务您还没有签收，请【签收】任务后再处理任务！");
+    	} else {
+    		project_dialog = $('<div/>').dialog({
+    			title : "拒绝原因",
+    			top: 20,
+    			width : fixWidth(0.8),
+    			height : 'auto',
+    			modal: true,
+    			minimizable: true,
+    			maximizable: true,
+    			href: ctx+"/project/toRefuse",
+    			onLoad: function () {
+    				$("#projectId").val(row.ID);
+    			},
+    			buttons: [
+		          {
+		        	  text: '拒绝签收',
+		        	  iconCls: 'icon-remove',
+		        	  id: 'save',
+		        	  handler: function () {
+		        		  $('#refuse_form').form('submit',{
+        					  url: ctx+"/project/refuse",
+        					  onSubmit: function () {
+        						  $.messager.progress({
+        							  title: '提示信息！',
+        							  text: '数据处理中，请稍后....'
+        						  });
+        						  var isValid = $(this).form('validate');
+        						  if (!isValid) {
+        							  $.messager.progress('close');
+        						  } else {
+        							  if($("#refuseReason").val() == "") {
+        								  $.messager.alert("提示", "请填写拒绝原因！");
+        								  return false;
+        							  }
+        							  $("#save").linkbutton("disable");
+        							  $("#ok").linkbutton("disable");
+        						  }
+        						  return isValid;
+        					  },
+        					  success: function (data) {
+        						  $.messager.progress('close');
+        						  var json = $.parseJSON(data);
+        						  if (json.status) {
+        							  project_dialog.dialog('destroy');//销毁对话框
+        							  project_datagrid.datagrid('reload');//重新加载列表数据
+        						  } 
+        						  $.messager.show({
+        							  title : json.title,
+        							  msg : json.message,
+        							  timeout : 1000 * 2
+        						  });
+        					  }
+        				  });
+		        	 }
+		          },
+		          {
+	                  text: '重置',
+	                  iconCls: 'icon-reload',
+	                  handler: function () {
+	                	  taskInfo_form.form('clear');
+	                  }
+	              },
+		          {
+		        	  text: '关闭',
+		        	  iconCls: 'icon-cancel',
+		        	  handler: function () {
+		        		  project_dialog.dialog('destroy');
+		        		  project_datagrid.datagrid('reload');
+		        	  }
+		          }
+		          ],
+	            onClose: function () {
+	        	    project_dialog.dialog('destroy');
+	        	    project_datagrid.datagrid('reload');
+	            }
     		});
     	}
     } else {

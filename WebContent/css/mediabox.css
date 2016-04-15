@@ -1,4 +1,3 @@
-*{padding:0; margin:0}
 #mbOverlay { position:fixed; z-index:9998; top:0; left:0; width:100%; height:100%; background-color:#000; cursor:pointer; }
 #mbOverlay.mbOverlayFF { background:transparent url(80.png) repeat; }
 #mbOverlay.mbOverlayIE { position:absolute; }

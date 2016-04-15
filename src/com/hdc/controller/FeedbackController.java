@@ -172,21 +172,30 @@ public class FeedbackController {
 		Message message = new Message();
 		int count=0;//上传文件计数
 		Integer id = feedback.getId();
+		Set<FeedbackAtt> fbaList=new HashSet<FeedbackAtt>();
+		FeedbackRecord fbr=this.feedbackService.findById(id);
+		String path1=fbr.getProject().getGroup().getId().toString();
+		String path2=fbr.getProject().getId().toString();
+		if(path1==null || path2==null){
+			message.setMessage("上传路径错误，上传失败");
+			return message;
+		}
 		try {
-			if(file!=null){				
-				Set<FeedbackAtt> fbaList=new HashSet<FeedbackAtt>();
+			if(file!=null){							
 				for(int i=0;i<file.length;i++){
 					try {
 						if(!file[i].isEmpty()){
 							String filePath = FileUploadUtils.upload(request, file[i], 
-									Constants.FILE_PATH+"/"
-											+feedback.getProject().getGroup().getId()
-											+File.separator+feedback.getProject().getId()
+									Constants.FILE_PATH
+									        +File.separator+path1
+											+File.separator+path2
 											+File.separator+id);
 							FeedbackAtt fba=new FeedbackAtt();
+							String[] fileExName=file[i].getOriginalFilename().split("\\.");
 							fba.setUrl(filePath);
 							fba.setName(file[i].getOriginalFilename());;
 							fba.setUploadDate(new Date());
+							fba.setType(fileExName[fileExName.length-1]);
 							//子类把主类加一下，子类中才会有主类的ID外键；
 							fba.setFdRecord(feedback);
 							fbaList.add(fba);
@@ -204,21 +213,20 @@ public class FeedbackController {
 						}
 					}	
 				}
-				feedback.setFdaList(fbaList);
 			}else{				
 				//this.feedbackService.doCompleteTask(feedback, taskId, null, request);
 			}
 			if(id == null) {
 				message.setMessage("获取反馈对象失败");
 			} else {
-				FeedbackRecord fbr=this.feedbackService.findById(id);
+			
 			    fbr.setSolutions(feedback.getSituation());
 			    fbr.setProblems(feedback.getProblems());
 			    fbr.setSituation(feedback.getSituation());
-			    fbr.setFdaList(feedback.getFdaList());
+			    fbr.setFdaList(fbaList);
 				this.feedbackService.doUpdate(fbr);
 				message.setData(id);
-				message.setMessage("反馈成功！");
+				message.setMessage("上传了"+count+"附件，反馈成功！");
 			}
 		} catch (Exception e) {
 			message.setStatus(Boolean.FALSE);

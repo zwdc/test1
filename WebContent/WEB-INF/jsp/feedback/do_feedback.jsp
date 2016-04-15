@@ -119,12 +119,12 @@
 					name="solutions" rows="3">${feedback.solutions }</textarea></td>
 		</tr>
 		<tr>
-		  		<td class="text-right">佐证材料上传:</td>
-		  		<td colspan="5">
-		  		    <a id="filefield" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加附件</a> 
-		  		    <input class='easyui-filebox' type='hidden' name='file'>
-		  		    <div id="fileZone"> </div>    	
-		  		</td>
+		  	<td class="text-right">佐证材料上传:</td>
+		  	<td colspan="5">
+		  		  <a id="filefield" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加附件</a> 
+		  		   <input class='easyui-filebox' type='hidden' name='file'>
+		  		   <div id="fileZone"> </div>    	
+		   </td>
 		</tr>   	
 	</table>    
 </form>

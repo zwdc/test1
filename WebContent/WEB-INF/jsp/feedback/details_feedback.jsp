@@ -5,7 +5,9 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <script type="text/javascript" src="${ctx}/js/kindeditor.js"></script>
 
+
 <script type="text/javascript">
+	
 	$(function() {
 		$('#download').tooltip({
 			position: 'right',
@@ -18,6 +20,24 @@
 			}
 		});	 
 	});
+	function showPic(e,sUrl){ 
+		var x,y; 
+       x = e.clientX; 
+        y = e.clientY; 
+        alert(x);
+        document.getElementById("Layer1").style.left = x+2+'px'; 
+        document.getElementById("Layer1").style.top = y+2+'px'; 
+        document.getElementById("Layer1").innerHTML = "<img border='0' src=\"" + sUrl + "\">"; 
+        document.getElementById("Layer1").style.display = ""; 
+        } 
+
+     function hiddenPic(){ 
+
+    	 $("#Layer1")[0].innerHTML = ""; 
+
+    	 $("#Layer1")[0].style.display = "none"; 
+
+    } 
 	function submitForm(obj, taskId) {
 		$('#feedback_form').form('submit', {
 		 	url: ctx+"/feedback/saveOrUpdate",
@@ -52,6 +72,7 @@
 	}
 </script>
 <div class="easyui-layout">
+ 
 <form id="feedback_form" method="post" encType="multipart/form-data">
 	<input type="hidden" id="feedbackId" name="id" value="${feedback.id }">
 	<table class="table table-bordered" style="width: 100%;">
@@ -111,15 +132,16 @@
 		</tr>
         <tr>
 		  		<td class="text-right">附件材料：</td>
-		   		<td colspan="5" style="8px">
+		   		<td colspan="5" style="8px">		   
 		   		     <c:forEach items="${feedback.fdaList}" var="fda"> 
-					 <div class="layout_default">
-    					<p class="info"><span class="date"></span> <span class="author"></span></p>
-    					<div class="image_container"> <a href="${ctx }${fda.url}" rel="lightbox[ostec]"> 
-    						<img src="${ctx }${fda.url}"> </a> </div>
-  					</div>
+		   		     		<div>
+    					    <a href="${ctx }${fda.url}" target=blank> 
+    						<pre><img src="${ctx }/images/icon/${fda.type}.gif" title="" onmousemove="showPic(event,'http://avatar.profile.csdn.net/D/8/D/2_dean8828.jpg');" onmouseout="hiddenPic();">${fda.uploadDate} - ${fda.name}</pre> 
+  					        </a>
+  					        </div>
+							
 					 </c:forEach> 
-
+					 <div id="Layer1" style="display:none; position: absolute; z-index: 100; background-color:black">sdfsdf</div>
 		   		</td>
 		   	</tr>	   
 	  	<tr>
@@ -143,6 +165,6 @@
 	  	</tr>
     	
 	</table>
-    
+   
 </form>
 </div>
