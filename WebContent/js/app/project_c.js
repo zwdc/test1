@@ -16,7 +16,7 @@ $(function(){
 		striped:true,					
 		columns:[
 		    [
-			{	field:'urgency',title:'急缓程度',width:fixWidth(0.1),align:'center',sortable:true,
+		     	{field:'URGENCY',title:'急缓程度',width:fixWidth(0.1),align:'center',sortable:true,
 					formatter:function(value,row){
 					  switch (value) {
 					  	case 0: return "特提";
@@ -26,15 +26,40 @@ $(function(){
 					  } 
 				 }
 				},
-		     	{field:'taskTitle',title:'任务标题',width:fixWidth(0.2),align:'left',halign:'center'},
-		     	{field:'sourceName',title:'任务来源',width:fixWidth(0.2),align:'center'},
-		     	{field:'hostUser',title:'办理人',width:fixWidth(0.1),align:'center'},
-		     	{field:'endTaskDate',title:'办结时限',width:fixWidth(0.1),align:'center',sortable:true,
+		     	{field:'TITLE',title:'任务标题',width:fixWidth(0.2),align:'left',halign:'center'},
+		     	{field:'SOURCE_NAME',title:'任务来源',width:fixWidth(0.2),align:'center'},
+		     	{field:'GROUP_NAME',title:'承办单位',width:fixWidth(0.1),align:'center'},
+		     	{field:'USER_NAME',title:'办理人',width:fixWidth(0.1),align:'center'},
+		     	{field:'END_TASK_DATE',title:'办结时限',width:fixWidth(0.1),align:'center',sortable:true,
 		     		formatter:function(value,row){
 		     			return moment(value).format("YYYY-MM-DD HH:mm:ss");
 		     		}
 		     	},
-		     	{field:'fbFrequencyName',title:'反馈频度',width:fixWidth(0.1),align:'center'}
+		     	{field:'FREQUENCY_NAME',title:'反馈频度',width:fixWidth(0.1),align:'center'},
+		     	{field: 'STATUS',title: '状态',width:fixWidth(0.1),align:'center', halign:'center',sortable:true,
+	            	  formatter:function(value, row){
+	            		  switch (value) {
+							case "REFUSE_CLAIM":
+								return "<span class='text-danger'>拒绝签收</span>";
+							case "WAIT_FOR_CLAIM":
+								return "<span class='text-warning'>待签收</span>";
+							case "APPLY_FINISHED":
+								return "<span class='text-primary'>申请办结</span>";
+							case "APPROVAL_SUCCESS":
+								return "<span class='text-success'>审批通过</span>";
+							case "APPROVAL_FAILED":
+								return "<span class='text-danger'>审批失败</span>";
+							case "WAITING_FOR_APPROVAL":
+								return "<span class='text-warning'>待申请审批</span>";
+							case "PENDING":
+								return "<span class='text-primary'>审批中</span>";
+							case "REAPPROVAL":
+								return "<span class='text-danger'>需要重新审批</span>";
+							default:
+								return "";
+						  }
+	    			  }
+	              }
 		    ]
 		],
         onDblClickRow: function(index, row) {
@@ -92,7 +117,7 @@ function formInit(row) {
 	            $.messager.progress('close');
 	            var json = $.parseJSON(data);
 	            if (json.status) {
-	            	project_dialog.dialog("refresh",ctx+"/project/toClaim?projectId="+json.data);
+	            	project_dialog.dialog("refresh",ctx+"/project/toProject/claim?projectId="+json.data);
 	            	project_datagrid.datagrid('reload');//重新加载列表数据
 	            } 
 	            $.messager.show({
@@ -108,11 +133,11 @@ function formInit(row) {
 function claim() {
 	var row = project_datagrid.datagrid('getSelected');
     if (row) {
-    	if(row.hostUser != null){
+    	if(row.USER_NAME != null){
     		$.messager.alert("提示", "您已经签收此任务，根据任务状态进行【审批】任务！");
     	}else{
     		$.ajax({
-    			url: ctx + '/project/claimProject/'+row.id,
+    			url: ctx + '/project/claimProject/'+row.ID,
     			type: 'post',
     			dataType: 'json',
     			success: function (data) {
@@ -134,7 +159,7 @@ function claim() {
 function approval() {
 	var row = project_datagrid.datagrid('getSelected');
     if (row) {
-    	if(row.hostUser == null){
+    	if(row.USER_NAME == null){
     		$.messager.alert("提示", "此任务您还没有签收，请【签收】任务后再处理任务！");
     	} else {
     		project_dialog = $('<div/>').dialog({
@@ -145,7 +170,7 @@ function approval() {
     			modal: true,
     			minimizable: true,
     			maximizable: true,
-    			href: ctx+"/project/toClaim?projectId="+row.id,
+    			href: ctx+"/project/toClaim?projectId="+row.ID,
     			onLoad: function () {
     				formInit(row);
     			},
@@ -166,7 +191,7 @@ function approval() {
     			        		  $.messager.confirm('确认提示！','确认提交表单进入审批流程吗？',function(result){
     			        			  if(result){
     			        				  project_form.form('submit',{
-    			        					  url: ctx+"/project/approvalProject",
+    			        					  url: ctx+"/project/callApproval",
     			        					  onSubmit: function () {
     			        						  $.messager.progress({
     			        							  title: '提示信息！',
@@ -220,37 +245,6 @@ function approval() {
     }
 }
 
-function del() {
-    var row = project_datagrid.datagrid('getSelected');
-    if (row) {
-        $.messager.confirm('确认提示！', '您确定要删除选中的数据?', function (result) {
-            if (result) {
-                var id = row.id;
-                $.ajax({
-            		async: false,
-            		cache: false,
-                    url: ctx + '/project/delete/'+id,
-                    type: 'post',
-                    dataType: 'json',
-                    data: {},
-                    success: function (data) {
-                        if (data.status) {
-                        	project_datagrid.datagrid('load');
-                        }
-                        $.messager.show({
-        					title : data.title,
-        					msg : data.message,
-        					timeout : 1000 * 2
-        				});
-                    }
-                });
-            }
-        });
-    } else {
-    	$.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
-    }
-}
-
 function details(){
     var row = project_datagrid.datagrid('getSelected');
     if (row) {
@@ -269,7 +263,7 @@ function showDetails(row) {
         modal: true,
         minimizable: true,
         maximizable: true,
-        href: ctx+"/project/details/"+row.id,
+        href: ctx+"/project/details/"+row.ID,
         buttons: [
           {
               text: '关闭',
@@ -282,21 +276,5 @@ function showDetails(row) {
         onClose: function () {
         	project_dialog.dialog('destroy');
         }
-    });
-}
-
-function publishMessage() {
-	var goEasy = new GoEasy({
-        appkey: '0cf326d6-621b-495a-991e-a7681bcccf6a'
-    });
-	goEasy.publish({
-        channel: 'zwdc_user_1',
-        message: '2',
-        onSuccess:function(){
-        	alert("消息发布成功。");
-    	},
-    	onFailed: function (error) {
-    		alert("消息发送失败，错误编码："+error.code+" 错误信息："+error.content);
-    	}
     });
 }

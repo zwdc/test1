@@ -142,34 +142,6 @@ public class TaskInfoController {
 		return new Datagrid<Object>(page.getTotal(), jsonList);
 	}
 	
-	/*private String getUserName(String userIds) throws NumberFormatException, Exception {
-		if( null == userIds ){
-			return "" ;
-		} else {
-			String[] ids = userIds.split(",");
-			String names = "";
-			for(String id : ids){
-				User user = this.userService.getUserById(new Integer(id));
-				names += user.getName()+",";
-			}
-			return names.substring(0, names.length()-1);
-		}
-	}
-	
-	private String getGroupName(String groupIds) throws Exception {
-		if( null == groupIds ){
-			return "" ;
-		} else {
-			String[] ids = groupIds.split(",");
-			String names = "";
-			for(String id : ids) {
-				Group group = this.groupService.getGroupById(new Integer(id));
-				names += group.getName()+",";
-			}
-			return names.substring(0, names.length()-1);
-		}
-	}*/
- 	
 	/**
 	 * 添加或修改
 	 * @param taskInfo

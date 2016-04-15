@@ -7,15 +7,16 @@
 	$(function(){
 		$("#assistantGroup").kindeditor({readonlyMode: true});
 		$("#remark").kindeditor({readonlyMode: true});
+		$("#suggestion").kindeditor({readonlyMode: true});
 	})
 </script>
 <div class="easyui-layout">
-<form id="form" action="${ctx }/taskInfo/approval" method="post">
-    <input name="taskInfoId" value="${taskInfo.id }"  type="hidden">
-    <input id="taskId" name="taskId" type="hidden">
-    <table id="taskInfo" class="table table-bordered table-hover table-condensed">
+<form id="form" action="${ctx }/project/approval" method="post">
+	<input name="projectId" value="${projectId }" type="hidden">
+	<input id="taskId" name="taskId" type="hidden">
+    <table class="table table-bordered table-hover table-condensed">
   		<tr class="bg-primary">
-			<td colspan="4" align="center">任务信息</td>
+			<td colspan="4" align="center">任务交办信息</td>
 		</tr>
 		<tr>
 			<td class="text-right">任务标题:</td>
@@ -63,6 +64,23 @@
 		</tr>
 		<tr>
 			<td colspan="4">备注:<textarea class="easyui-kindeditor" id="remark" rows="3" >${taskInfo.remark }</textarea></td>
+		</tr>
+		<tr>
+			<td colspan="4">拟办意见:<textarea class="easyui-kindeditor" id="suggestion" rows="3" >${suggestion }</textarea></td>
+		</tr>
+		<tr>
+			<td class="text-right">阶段性计划:</td>
+			<td colspan="3">
+				<table id="workPlanDatagrid" class="easyui-datagrid" data-options="url:'${ctx }/feedback/getFeedbackByProject?projectId=${projectId }',fitColumns:true,rownumbers:true,border:true">
+				    <thead>
+						<tr>
+							<th data-options="field:'id',hidden:true">ID</th>
+							<th data-options="field:'workPlanDate'" width="40%">阶段日期</th>
+							<th data-options="field:'workPlan',editor:'text'" width="50%">阶段计划</th>
+						</tr>
+				    </thead>
+				</table>
+			</td>
 		</tr>
 		<tr>
 	  		<td colspan="4">

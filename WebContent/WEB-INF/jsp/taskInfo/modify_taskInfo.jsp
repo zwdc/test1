@@ -216,8 +216,7 @@
 		        $.messager.progress('close');
 		        var json = $.parseJSON(result);
 		        if (json.status) {
-		        	var salesId = json.data;
-		        	task_dialog.dialog("refresh",ctx+"/taskInfo/toModify?id="+salesId);
+		        	task_dialog.dialog("refresh",ctx+"/taskInfo/toModify?id="+json.data);
 		        } 
 		        $.messager.show({
 					title : json.title,

@@ -1,10 +1,9 @@
 package com.hdc.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.activiti.engine.ActivitiException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,22 +57,27 @@ public class ProjectController {
 	}
 	
 	/**
-	 * 跳转签收页面
-	 * @param taskInfoId
+	 * 根据type判断页面 签收页面、审批页面、修改页面
 	 * @return
-	 * @throws Exception
+	 * @throws Exception 
 	 */
-	@RequestMapping("/toClaim")
-	public ModelAndView toClaim(@RequestParam("projectId") Integer projectId) throws Exception {
-		ModelAndView mv = new ModelAndView("project/claim_project");
-		Project project = this.projectService.findById(projectId);
-		if(project != null) {
-			//TaskInfo taskInfo = this.taskInfoService.findById(project.getTaskInfo().getId());
+	@RequestMapping("/toProject/{type}")
+	public ModelAndView toProject(@PathVariable("type") String type, @RequestParam("projectId") Integer projectId) throws Exception {
+		ModelAndView mv = new ModelAndView();
+		if("modify".equals(type)) {
+			mv.setViewName("project/modify_project");
+		} else if("claim".equals(type)) {
+			mv.setViewName("project/claim_project");
+		} else if("approval".equals(type)) {
+			mv.setViewName("project/approval_project");
+		}
+    	Project project = this.projectService.findById(projectId);
+    	if(project != null) {
 			mv.addObject("taskInfo", project.getTaskInfo());
 			mv.addObject("projectId", projectId);
 			mv.addObject("suggestion", project.getSuggestion());
 		}
-		return mv;
+    	return mv;
 	}
 	
 	/**
@@ -107,46 +111,10 @@ public class ProjectController {
 	 */
 	@RequestMapping("/getList")
 	@ResponseBody
-	public Datagrid<Object> getList(Parameter param, @RequestParam("type") Integer type) throws Exception {
+	public Datagrid<Map<String, Object>> getList(Parameter param, @RequestParam("type") Integer type) throws Exception {
 		Page<Map<String, Object>> page = new Page<Map<String, Object>>(param.getPage(), param.getRows());
-		List<Object> jsonList=new ArrayList<Object>(); 
-		/*User user = UserUtil.getUserFromSession();
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("group.id", user.getGroup().getId());
-		map.put("user.id", "is null");
-		List<Project> list = this.projectService.getListPage(param, page, map);
-		for(Project project : list) {
-			Map<String, Object> m=new HashMap<String, Object>();
-			TaskInfo taskInfo = project.getTaskInfo();
-			m.put("id", project.getId());
-			m.put("taskInfoId", taskInfo.getId());
-			m.put("taskTitle", taskInfo.getTitle());
-			m.put("urgency", taskInfo.getUrgency());
-			m.put("sourceName", taskInfo.getTaskSource().getName());
-			m.put("hostGroup", project.getGroup().getName());
-			if(project.getUser() != null) {
-				m.put("hostUser", project.getUser().getName());
-			}
-			m.put("endTaskDate", taskInfo.getEndTaskDate());
-			m.put("fbFrequencyName", taskInfo.getFbFrequency().getName());
-			jsonList.add(m);
-		}*/
-		
 		List<Map<String, Object>> list = this.projectService.getProjectList(param, type, page);
-		for(Map<String, Object> map : list) {
-			Map<String, Object> m=new HashMap<String, Object>();
-			m.put("id", map.get("ID"));
-			m.put("taskInfoId", map.get("TASK_ID"));
-			m.put("taskTitle", map.get("TITLE"));
-			m.put("urgency", map.get("URGENCY"));
-			m.put("sourceName", map.get("SOURCE_NAME"));
-			m.put("hostGroup", map.get("GROUP_NAME"));
-			m.put("hostUser", map.get("USER_NAME"));
-			m.put("endTaskDate", map.get("END_TASK_DATE"));
-			m.put("fbFrequencyName", map.get("FREQUENCY_NAME"));
-			jsonList.add(m);
-		}
-		return new Datagrid<Object>(page.getTotal(), jsonList);
+		return new Datagrid<Map<String, Object>>(page.getTotal(), list);
 	}
 	
 	/**
@@ -177,9 +145,79 @@ public class ProjectController {
 	
 	@RequestMapping("/callApproval")
 	@ResponseBody
-	public Message callApproval(@RequestParam("projectId") Integer projectId, @RequestParam("suggestion") String suggestion) {
+	public Message callApproval(@RequestParam("projectId") Integer projectId, @RequestParam("suggestion") String suggestion) throws Exception {
 		Message message = new Message();
+		try {
+			this.projectService.doStartProcess(projectId, suggestion);
+			message.setMessage("操作成功！");
+		} catch (ActivitiException e) {
+			message.setStatus(Boolean.FALSE);
+            if (e.getMessage().indexOf("no processes deployed with key") != -1) {
+            	message.setMessage("没有部署流程，请联系管理员在[流程定义]中部署相应流程文件！");
+            } else {
+            	message.setMessage("启动流程失败，系统内部错误！");
+            }
+            throw e;
+        } catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("操作失败！");
+			throw e;
+		}
 		return message;
 	}
+	
+    /**
+     * 审批
+     * @param projectId
+     * @param isPass
+     * @param taskId
+     * @param comment
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/approval")
+   	@ResponseBody
+   	public Message approval(
+   			@RequestParam("projectId") Integer projectId, 
+   			@RequestParam("isPass") boolean isPass,
+   			@RequestParam("taskId") String taskId, 
+   			@RequestParam("comment") String comment)
+   					throws Exception {
+   		Message message = new Message();
+   		try {
+   			this.projectService.doApproval(projectId, isPass, taskId, comment);
+   			message.setMessage("审批完成！");
+   		} catch (Exception e) {
+   			message.setStatus(Boolean.FALSE);
+   			message.setMessage("审批失败！");
+   		}
+   		return message;
+   }
+    
+   /**
+    * 完成任务
+    * @param projectId
+    * @param suggestion
+    * @param taskId
+    * @return
+    * @throws Exception
+    */
+    @RequestMapping("/completeTask")
+    @ResponseBody
+    public Message completeTask(
+    			@RequestParam("projectId") Integer projectId, 
+    			@RequestParam("suggestion") String suggestion, 
+    			@RequestParam(value = "taskId", required = false) String taskId) throws Exception {
+    	Message message = new Message();
+    	try {
+    		this.projectService.doCompleteTask(projectId, suggestion, taskId);
+    		message.setMessage("申请成功！");
+		} catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("申请失败!");
+			throw e;
+		}
+    	return message;
+    }
 	
 }

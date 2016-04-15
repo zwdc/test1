@@ -112,7 +112,6 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 		//初始化任务参数
 		variables.put("processTaskId", processTaskId.toString());
 		this.processService.complete(taskId, null, variables);
-		
 	}
 
 	@Override

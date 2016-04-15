@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hdc.dao.IJdbcDao;
+import com.hdc.entity.Comments;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.ProcessTask;
@@ -24,6 +25,8 @@ import com.hdc.service.IProcessTaskService;
 import com.hdc.service.IProjectService;
 import com.hdc.service.ITaskSourceService;
 import com.hdc.util.Constants.ApprovalStatus;
+import com.hdc.util.Constants.BusinessForm;
+import com.hdc.util.Constants.ProjectStatus;
 import com.hdc.util.UserUtil;
 
 @Service
@@ -85,7 +88,7 @@ public class ProjectServiceImpl implements IProjectService {
 		Map<String, Object> paramMap = new HashMap<String, Object>();
 		paramMap.put("groupId", user.getGroup().getId());
 		paramMap.put("userId", user.getId());
-		sb.append("select a.id, g.name group_name, u.user_name user_name, t.id task_id, t.title, t.urgency, s.name source_name, t.end_task_date, fb.name frequency_name from project a ");
+		sb.append("select a.id, g.name group_name, u.user_name user_name, t.id task_id, t.title, t.urgency, s.name source_name, t.end_task_date, fb.name frequency_name, a.status from project a ");
 		sb.append("left join groups g on (g.group_id = a.group_id) ");
 		sb.append("left join users u on (u.user_id = a.user_id) ");
 		sb.append("left join task_info t on (t.id = a.task_info_id and t.is_delete = 0) ");
@@ -188,19 +191,19 @@ public class ProjectServiceImpl implements IProjectService {
 	@Override
 	public void doStartProcess(Integer projectId, String suggestion)
 			throws Exception {
-		String hql = "update Project set suggestion = '" + suggestion + "',status = 'PENDING' where id = " + projectId;
-		this.baseService.executeHql(hql);
-		
+/*		String hql = "update Project set suggestion = '" + suggestion + "',status = 'PENDING' where id = " + projectId;
+		this.baseService.executeHql(hql);*/
 		Project  project = this.findById(projectId);
 		project.setSuggestion(suggestion);
 		project.setStatus(ApprovalStatus.PENDING.toString());
+		this.doUpdate(project);
 		TaskInfo taskInfo = project.getTaskInfo();
 		//给用户提示任务
 		User user = UserUtil.getUserFromSession();
 		ProcessTask processTask = new ProcessTask();
 		processTask.setTaskTitle(taskInfo.getTitle());
 		processTask.setTitle("任务交办表需要审批!");
-		processTask.setUrl("/project/toApproval?projectId="+projectId.toString());
+		processTask.setUrl("/project/toProject/approval?projectId="+projectId.toString());
 		TaskSource taskResource = this.taskResourceService.findById(taskInfo.getTaskSource().getId());
 		processTask.setTaskInfoType(taskResource.getTaskInfoType().getName());		//任务类型
 		processTask.setTaskInfoId(taskInfo.getId());
@@ -212,7 +215,68 @@ public class ProjectServiceImpl implements IProjectService {
 		Map<String, Object> vars = new HashMap<String, Object>();
 		vars.put("processTaskId", processTaskId.toString());
 		//启动审批流程
-		this.processService.startApproval("ApprovalProject", taskInfo.getId().toString(), vars);	
+		this.processService.startApproval("ApprovalProject", projectId.toString(), vars);	
+		
+	}
+
+	@Override
+	public void doApproval(Integer projectId, boolean isPass, String taskId, String comment) throws Exception {
+		User user = UserUtil.getUserFromSession();
+		Map<String, Object> variables = new HashMap<String, Object>();
+		Project project = this.findById(projectId);
+		if(isPass) {
+			project.setStatus(ProjectStatus.IN_HANDLING.toString()); 	  //办理中
+		} else {
+			project.setStatus(ApprovalStatus.APPROVAL_FAILED.toString()); //审批失败
+			TaskInfo taskInfo = project.getTaskInfo();
+			ProcessTask processTask = new ProcessTask();
+			processTask.setTaskTitle(taskInfo.getTitle());
+			processTask.setApplyUserId(user.getId());
+			processTask.setApplyUserName(user.getName());
+			processTask.setTaskInfoId(taskInfo.getId());
+			processTask.setTaskInfoType(taskInfo.getTaskSource().getTaskInfoType().getName());
+			processTask.setTitle("任务交办表审批不通过，请修改后重新审批！");
+			processTask.setUrl("/project/toProject/modify?projectId="+projectId.toString());
+			Serializable processTaskId = this.processTaskService.doAdd(processTask);
+			variables.put("processTaskId", processTaskId.toString());
+		}
+		// 评论
+		Comments comments = new Comments();
+		comments.setUserId(user.getId().toString());
+		comments.setUserName(user.getName()); 
+		comments.setContent(comment);
+		comments.setBusinessKey(projectId);
+		comments.setBusinessForm(BusinessForm.PROJECT_FORM.toString());
+		
+		variables.put("isPass", isPass);
+		this.processService.complete(taskId, comments, variables);
+		
+	}
+
+	@Override
+	public void doCompleteTask(Integer projectId, String suggestion, String taskId) throws Exception {
+		//给秘书长提示代办任务
+		Project  project = this.findById(projectId);
+		project.setSuggestion(suggestion);
+		project.setStatus(ApprovalStatus.PENDING.toString());
+		this.doUpdate(project);
+		TaskInfo taskInfo = project.getTaskInfo();
+		Map<String, Object> variables = new HashMap<String, Object>();
+		
+		User user = UserUtil.getUserFromSession();
+		ProcessTask processTask = new ProcessTask();
+		processTask.setTaskTitle(taskInfo.getTitle());
+		processTask.setApplyUserId(user.getId());
+		processTask.setApplyUserName(user.getName());
+		processTask.setTaskInfoId(taskInfo.getId());
+		TaskSource taskSource = this.taskResourceService.findById(taskInfo.getTaskSource().getId());
+		processTask.setTaskInfoType(taskSource.getTaskInfoType().getName());
+		processTask.setTitle("任务修改完成！需要重新审批!");
+		processTask.setUrl("/project/toProject/approval?projectId="+projectId.toString());
+		Serializable processTaskId = this.processTaskService.doAdd(processTask);
+		//初始化任务参数
+		variables.put("processTaskId", processTaskId.toString());
+		this.processService.complete(taskId, null, variables);
 		
 	}
 

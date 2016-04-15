@@ -151,7 +151,7 @@ function showToDoTask(map){
 }*/
 
 //初始化审批表单
-function formInit() {
+/*function formInit() {
 	task_form = $('#form').form({
         onSubmit: function () {
             $.messager.progress({
@@ -178,9 +178,38 @@ function formInit() {
 			});
         }
     });
+}*/
+
+function submit(status) {
+	$('#form').form('submit', {
+		onSubmit: function (param) {
+            $.messager.progress({
+                title: '提示信息！',
+                text: '数据处理中，请稍后....'
+            });
+	    	param.isPass = status;	//提交的参数
+        },
+        success: function (result) {
+            $.messager.progress('close');
+            var json = $.parseJSON(result);
+            if (json.status) {
+            	task_dialog.dialog('destroy');//销毁对话框
+            	todoTask_datagrid.datagrid('reload');//重新加载列表数据
+            } 
+            $.messager.show({
+				title : json.title,
+				msg : json.message,
+				timeout : 1000 * 2
+			});
+        }
+	});
 }
 
+function closeDialog() {
+	task_dialog.dialog('destroy');
+}
 
+//办理
 function handleTask() {
 	var row = todoTask_datagrid.datagrid('getSelected');
     if (row) {
@@ -197,430 +226,13 @@ function handleTask() {
     			minimizable: true,
     			maximizable: true,
     			onLoad: function () {
-    				//formInit();
     				$("#taskId").val(row.taskId);	//根据taskId完成任务
     			},
 	            onClose: function () {
 	            	task_dialog.dialog('destroy');
 	            }
-	            /*,
-	            buttons:[
-				          {
-				        	  text: '通过',
-				        	  iconCls: 'icon-ok',
-				        	  id: 'pass',
-				        	  handler: function () {
-				        		  $("#pass").linkbutton("disable");
-				        		  $("#noPass").linkbutton("disable");
-				        		  task_form.form('submit', {
-									    onSubmit: function(param){
-									    	$.messager.progress({
-								                title: '提示信息！',
-								                text: '数据处理中，请稍后....'
-								            });
-									    	param.taskId = row.taskId;							//完成任务时用
-									    	param.isPass = true;
-									    }
-								  });
-				        	  }
-				          },
-				          {
-				        	  text: '不通过',
-				        	  iconCls: 'icon-remove',
-				        	  id: 'noPass',
-				        	  handler: function () {
-				        		  $("#pass").linkbutton("disable");
-				        		  $("#noPass").linkbutton("disable");
-				        		  
-				        		  task_form.form('submit', {
-									    onSubmit: function(param){
-									    	$.messager.progress({
-								                title: '提示信息！',
-								                text: '数据处理中，请稍后....'
-								            });
-									    	param.taskId = row.taskId;							//完成任务时用
-									    	param.isPass = false;
-									    }
-								  });
-				        	  }
-				          },
-				          {
-				        	  text: '关闭',
-				        	  iconCls: 'icon-cancel',
-				        	  handler: function () {
-				        		  audit_dialog.dialog('destroy');
-				        		  todoTask_datagrid.datagrid('reload');//重新加载列表数据
-				        	  }
-				          }
-	    			]*/
     		});
         }
-    } else {
-        $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
-    }
-}
-
-
-
-//办理任务
-function handleTask1(){
-	var row = todoTask_datagrid.datagrid('getSelected');
-    if (row) {
-    	if(row.assign == null){
-    		$.messager.alert("提示", "此任务您还没有签收，请【签收】任务后再处理任务！");
-    	} else {
-    		//弹出对话窗口
-    		audit_dialog = $('<div/>').dialog({
-    			title : "任务信息",
-    			top: 20,
-    			width : fixWidth(0.8),
-    			height : 'auto',
-    			modal: true,
-    			minimizable: true,
-    			maximizable: true,
-    			onLoad: function () {
-    				formInit();
-    				$("#processInstanceId").val(row.processInstanceId);
-    				$("#detailsRemark").kindeditor({readonlyMode : true});
-    			},
-	            onClose: function () {
-	        	    audit_dialog.dialog('destroy');
-	            }
-    		});
-    		
-    		if(row.businessOperation == "ADD" || row.businessOperation == "MODIFY") {
-    			alert(ctx+row.url); 
-    			audit_dialog.dialog({
-    				href: ctx+row.url,
-    				onClose: function(){
-    					audit_dialog.dialog('destroy');
-                  	  todoTask_datagrid.datagrid('reload');
-    				},
-    		        buttons: [
-		                  {
-		                      text: '暂存',
-		                      iconCls: 'icon-save',
-		                      id: 'save',
-		                      handler: function () {
-		                    	  saveTemporary(row);
-		                      }
-		                  },
-		                  {
-		                	  text: '提交任务',
-		                	  iconCls: 'icon-ok',
-		                	  id: 'ok',
-		                	  handler: function () {
-		                		  $.messager.confirm('提示！', '您确定要完成此项任务吗?', function (result) {
-		                			  if(result) {
-		                				  $("#save").linkbutton("disable");
-		                				  $("#ok").linkbutton("disable");
-		                				  completeTask(row);
-		                			  }
-		                		  });
-		                      }
-		                  },
-		                  {
-		                      text: '重置',
-		                      iconCls: 'icon-reload',
-		                      handler: function () {
-		                      	task_form.form('clear');
-		                      }
-		                  },
-		                  {
-		                      text: '关闭',
-		                      iconCls: 'icon-cancel',
-		                      handler: function () {
-		                    	  audit_dialog.dialog('destroy');
-		                    	  todoTask_datagrid.datagrid('reload');//重新加载列表数据
-		                      }
-		                  }
-		            ]
-    			});
-    		} else if (row.businessOperation == "UPLOAD") {
-    			alert(ctx+row.url); 
-    			audit_dialog.dialog({
-    				href: ctx+row.url,
-	            	onLoad: function () {
-    		            formInit();
-    		            $("#processInstanceId").val(row.processInstanceId);
-    		            var fileName = $("#fileName").val();
-    		            if(fileName == '' || fileName == null) {
-    		            	$("#ok").linkbutton("disable");	  //还没上传文件时是不准许完成任务的
-    		            	$('#ok').tooltip({
-    							position: 'top',
-    							content: '<span style="color:#fff">请先上传合同文件</span>',
-    							onShow: function(){
-    								$(this).tooltip('tip').css({
-    									backgroundColor: '#666',
-    									borderColor: '#565656'
-    								});
-    							}
-    						});
-    		            } else {
-    		            	$("#ok").linkbutton("enable");
-    		            }
-    		        },
-    		        onClose: function(){
-    					audit_dialog.dialog('destroy');
-                  	  	todoTask_datagrid.datagrid('reload');
-    				},
-    		        buttons: [
-		                  {
-		                      text: '暂存',
-		                      iconCls: 'icon-save',
-		                      id: 'save',
-		                      handler: function () {
-		                    	  $("#ok").linkbutton("enable");
-		                    	  saveTemporary(row);
-		                      }
-		                  },
-		                  {
-		                	  text: '提交任务',
-		                	  iconCls: 'icon-ok',
-		                	  id: 'ok',
-		                	  handler: function () {
-		                		  $.messager.confirm('提示！', '您确定要完成此项任务吗?', function (result) {
-		                			  if(result) {
-		                				  $("#save").linkbutton("disable");
-		                				  $("#ok").linkbutton("disable");
-		                				  /*task_form.form('submit', {
-											    url: ctx+"/"+row.businessForm.toLowerCase()+"/completeTask",	//规定所有controller中完成任务的方法名必须为completeTask
-											    onSubmit: function(param){
-											    	param.taskId = row.taskId;							//完成任务时用
-											    }
-										  });*/
-		                				  
-		                				  //此处提供了两种思路，直接写在此提交任务中提交表单。另一种是写在具体业务的添加页面上，在此处调用。
-		                				  //第二种方法松耦合
-		                				  completeTask(row);
-		                			  }
-		                		  });
-		                      }
-		                  },
-		                  {
-		                      text: '重置',
-		                      iconCls: 'icon-reload',
-		                      handler: function () {
-		                      	task_form.form('clear');
-		                      }
-		                  },
-		                  {
-		                      text: '关闭',
-		                      iconCls: 'icon-cancel',
-		                      handler: function () {
-		                    	  audit_dialog.dialog('destroy');
-		                    	  todoTask_datagrid.datagrid('reload');//重新加载列表数据
-		                      }
-		                  }
-		            ]
-    			});
-    		} else if (row.businessOperation == "APPROVAL") {
-    			audit_dialog.dialog({
-    				href: ctx+row.url+"&processInstanceId="+row.processInstanceId, //processInstanceId获取评论
-	    			buttons:[
-				          {
-				        	  text: '通过',
-				        	  iconCls: 'icon-ok',
-				        	  id: 'pass',
-				        	  handler: function () {
-				        		  $("#pass").linkbutton("disable");
-				        		  $("#noPass").linkbutton("disable");
-				        		  task_form.form('submit', {
-									    onSubmit: function(param){
-									    	$.messager.progress({
-								                title: '提示信息！',
-								                text: '数据处理中，请稍后....'
-								            });
-									    	param.taskId = row.taskId;							//完成任务时用
-									    	param.processInstanceId = row.processInstanceId;	//完成任务时用
-									    	param.executionId = row.executionId;
-									    	param.isPass = true;
-									    }
-								  });
-				        	  }
-				          },
-				          {
-				        	  text: '不通过',
-				        	  iconCls: 'icon-remove',
-				        	  id: 'noPass',
-				        	  handler: function () {
-				        		  $("#pass").linkbutton("disable");
-				        		  $("#noPass").linkbutton("disable");
-				        		  
-				        		  task_form.form('submit', {
-									    onSubmit: function(param){
-									    	$.messager.progress({
-								                title: '提示信息！',
-								                text: '数据处理中，请稍后....'
-								            });
-									    	param.taskId = row.taskId;							//完成任务时用
-									    	param.processInstanceId = row.processInstanceId;	//完成任务时用
-									    	param.executionId = row.executionId;
-									    	param.isPass = false;
-									    }
-								  });
-				        	  }
-				          },
-				          {
-				        	  text: '关闭',
-				        	  iconCls: 'icon-cancel',
-				        	  handler: function () {
-				        		  audit_dialog.dialog('destroy');
-				        		  todoTask_datagrid.datagrid('reload');//重新加载列表数据
-				        	  }
-				          }
-	    			]
-    			});
-    		} else if (row.businessOperation == "PRINT") {
-    			audit_dialog.dialog({
-    				href: ctx+row.url+"&processInstanceId="+row.processInstanceId, //processInstanceId获取评论
-	    			buttons:[
-	    			      {
-	    			    	  text: '确认付款',
-	    			    	  iconCls: 'icon-save',
-	    			    	  id: 'save',
-	    			    	  handler: function (){
-	    			    		  saveTemporary(row);
-	    			    	  }
-	    			      },
-				          {
-				        	  text: '退回',
-				        	  iconCls: 'icon-remove',
-				        	  id: 'noPass',
-				        	  handler: function () {
-				        		  $("#pass").linkbutton("disable");
-				        		  $("#noPass").linkbutton("disable");
-				        		  task_form.form('submit', {
-									    onSubmit: function(param){
-									    	$.messager.progress({
-								                title: '提示信息！',
-								                text: '数据处理中，请稍后....'
-								            });
-									    	param.taskId = row.taskId;							//完成任务时用
-									    	param.processInstanceId = row.processInstanceId;	//完成任务时用
-									    	param.executionId = row.executionId;
-									    	param.isPass = false;
-									    }
-								  });
-				        	  }
-				          },
-				          {
-				        	  text: '完成任务',
-				        	  iconCls: 'icon-ok',
-				        	  id: 'pass',
-				        	  handler: function () {
-				        		  $("#pass").linkbutton("disable");
-				        		  $("#noPass").linkbutton("disable");
-				        		  task_form.form('submit', {
-									    onSubmit: function(param){
-									    	$.messager.progress({
-								                title: '提示信息！',
-								                text: '数据处理中，请稍后....'
-								            });
-									    	param.taskId = row.taskId;							//完成任务时用
-									    	param.processInstanceId = row.processInstanceId;	//完成任务时用
-									    	param.executionId = row.executionId;
-									    	param.isPass = true;
-									    }
-								  });
-				        	  }
-				          },
-				          {
-				        	  id:'print',
-						      text: '打印',
-						      iconCls: 'icon-print',
-						      handler: function () {
-						    	print();
-						      }
-				          },
-				          {
-				        	  text: '关闭',
-				        	  iconCls: 'icon-cancel',
-				        	  handler: function () {
-				        		  audit_dialog.dialog('destroy');
-				        		  todoTask_datagrid.datagrid('reload');//重新加载列表数据
-				        	  }
-				          }
-	    			]
-    			});
-    		} else if (row.businessOperation == "IN_BOUND") {
-    			audit_dialog.dialog({
-    				href: ctx+row.url,
-    				onLoad: function () {
-    					var inboundId = $("#inboundId").val();
-    					if(inboundId == '' || inboundId == null) {
-    		            	$("#ok").linkbutton("disable");	  //还没保存入库信息
-    		            	$("#ok").tooltip({
-    							position: 'top',
-    							content: '<span style="color:#fff">请先保存入库基本信息</span>',
-    							onShow: function(){
-    								$(this).tooltip('tip').css({
-    									backgroundColor: '#666',
-    									borderColor: '#565656'
-    								});
-    							}
-    						});
-    		            } else {
-    		            	$("#ok").linkbutton("enable");
-    		            	$("#ok").tooltip('destroy');
-    		            }
-    				},
-    				onClose: function(){
-    					audit_dialog.dialog('destroy');
-                  	    todoTask_datagrid.datagrid('reload');
-    				},
-    		        buttons: [
-						   {
-							    text: '暂存',
-							    iconCls: 'icon-save',
-							    id: 'save',
-							    handler: function () {
-							  	  saveTemporary(row);
-							    }
-						   },
-		                  {
-		                      text: '确认入库',
-		                      iconCls: 'icon-save',
-		                      id: 'ok',
-		                      handler: function () {
-		                    	  completeTask(row);
-		                      }
-		                  },
-		                  {
-		                      text: '关闭',
-		                      iconCls: 'icon-cancel',
-		                      handler: function () {
-		                    	  audit_dialog.dialog('destroy');
-		                    	  todoTask_datagrid.datagrid('reload');//重新加载列表数据
-		                      }
-		                  }
-		            ]
-    			});
-    		}else if (row.businessOperation == "STAMP") {
-    			audit_dialog.dialog({
-    				href: ctx+row.url+"&processInstanceId="+row.processInstanceId, //processInstanceId获取评论
-	    			buttons:[
-	    			      {
-	    			    	  text: '确认盖章',
-	    			    	  iconCls: 'icon-save',
-	    			    	  id: 'save',
-	    			    	  handler: function (){
-	    			    		  completeTask(row);
-	    			    	  }
-	    			      },
-				          {
-				        	  text: '关闭',
-				        	  iconCls: 'icon-cancel',
-				        	  handler: function () {
-				        		  audit_dialog.dialog('destroy');
-				        		  todoTask_datagrid.datagrid('reload');//重新加载列表数据
-				        	  }
-				          }
-	    			]
-    			});
-    		}
-    		
-    	}
     } else {
         $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
     }

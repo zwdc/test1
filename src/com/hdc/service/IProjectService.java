@@ -31,6 +31,17 @@ public interface IProjectService {
 	public List<Map<String, Object>> getProjectList(Parameter param, Integer type, Page<Map<String, Object>> page) throws Exception;
 	
 	/**
+	 * 审批
+	 * @param salesId
+	 * @param isPass
+	 * @param taskId
+	 * @param processInstanceId
+	 * @param comment
+	 * @throws Exception
+	 */
+	public void doApproval(Integer projectId, boolean isPass, String taskId, String comment) throws Exception;
+	
+	/**
 	 * 通过id获取Project
 	 * @param id
 	 * @return
@@ -75,6 +86,15 @@ public interface IProjectService {
 	 * @throws Exception
 	 */
 	public void doStartProcess(Integer projectId, String suggestion) throws Exception;
+	
+	/**
+	 * 完成任务
+	 * @param projectId
+	 * @param suggestion
+	 * @param taskId
+	 * @throws Exception
+	 */
+	public void doCompleteTask(Integer projectId, String suggestion, String taskId) throws Exception;
 	
 	/**
 	 * 删除
