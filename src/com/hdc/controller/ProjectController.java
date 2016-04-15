@@ -219,5 +219,30 @@ public class ProjectController {
 		}
     	return message;
     }
+    
+    /**
+     * 跳转到拒签页面
+     * @return
+     */
+    @RequestMapping("/toRefuse")
+    @ResponseBody
+    public ModelAndView toRefuse() {
+    	ModelAndView mv = new ModelAndView("project/refuse_project");
+    	return mv;
+    }
+    
+    /**
+     * 拒签收
+     * @param projectId
+     * @param refuseReason
+     * @return
+     */
+    @RequestMapping("/refuse")
+    @ResponseBody
+    public Message refuse(@RequestParam("projectId") Integer projectId, @RequestParam("refuseReason") String refuseReason) {
+    	Message message = new Message();
+    	
+    	return message;
+    }
 	
 }
