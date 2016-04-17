@@ -161,7 +161,7 @@
  </head>
  <body class="easyui-layout">
 	<div data-options="region:'north',border:false" style="height:40px;background:#EEE;padding:10px;overflow: hidden;" href="${ctx }/north"></div>
-	<div data-options="region:'west',split:true,title:'主要菜单'" style="width:200px;">
+	<div data-options="region:'west',split:true,title:'主要菜单'" style="width:200px;background:#EEE;">
 		<div class="well well-small">
 			<shiro:lacksRole name="admin">
 				<span>用户功能</span>

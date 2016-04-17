@@ -244,8 +244,8 @@ function initModelTable( procDefKey ){
     //显示节点信息
 	model_dialog = $('#dialog-form').dialog({
     	top: ($(window).height()-450) * 0.5,
-        left: ($(window).width()-1450) * 0.5,
-		width : 1450,
+        left: ($(window).width()-650) * 0.5,
+		width : 650,
 		height : 'auto',
 		closed: false,
         modal: true,
