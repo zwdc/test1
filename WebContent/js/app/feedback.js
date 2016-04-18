@@ -37,7 +37,7 @@ $(function() {
 				},
               {field: 'groupName', title: '牵头单位', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
               {field: 'createUser', title: '填报人', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
-              {field: 'feedbackDate', title: '反馈时间', width: fixWidth(0.2), align: 'center', halign: 'center', sortable: true,
+              {field: 'feedbackDate', title: '反馈时间', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true,
             	  formatter:function(value,row){
             		  if(value==null){
             			  return "--"
@@ -71,8 +71,7 @@ $(function() {
               {field: 'delayCount', title: '延期次数', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true},
               {field: 'refuseCount', title: '退回次数', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true}  
         ]
-             ],
-        toolbar: "#toolbar"
+             ]
     });
     
 	$("#searchbox").searchbox({ 
@@ -222,7 +221,7 @@ function feedback(){
     }
 }
 //编辑
-function edit() {
+function editFeedback() {
     var row = feedback_datagrid.datagrid('getSelected');
     if (row) {
     	feedback_dialog = $('<div/>').dialog({
@@ -269,7 +268,7 @@ function edit() {
     }
 }
 //查看反馈详情
-function details(){
+function detailsFeedback(){
     var row = feedback_datagrid.datagrid('getSelected');
     if (row) {
     	feedback_dialog = $('<div/>').dialog({
@@ -302,7 +301,7 @@ function details(){
     }
 }
 //添加
-function add(){
+function addFeedback(){
 	feedback_dialog = $('<div/>').dialog({
     	title : "反馈信息添加",
 		top: 20,
@@ -346,7 +345,7 @@ function add(){
 
 
 //删除
-function del() {
+function delFeedback() {
     var row = feedback_datagrid.datagrid('getSelected');
     if (row) {
         $.messager.confirm('确认提示！', '您确定要删除选中的数据?', function (result) {

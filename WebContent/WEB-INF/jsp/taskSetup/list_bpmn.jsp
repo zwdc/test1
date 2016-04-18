@@ -43,6 +43,9 @@
 				<p>
 					请选择各个节点需要审批的<span class="label-info"><strong>人员</strong></span>、<span class="label-info"><strong>候选人</strong></span>和<span class="label-info"><strong>候选组</strong></span>
 				</p>
+				<p>第一个就是，这个任务由谁处理，不用签收了，直接就办理。</p>
+			<p>第二个 是 可以从不同的部门随便选人，组成候选用户，然后谁签收了，这个任务就归谁了。</p>
+			<p>第三个，选一个部门，部门里的人 都能看见任务，但是只有一个人能签收，签收后，其他人就看不见任务了。由签收人处理。这个 和 第二个是一个意思。</p>
 			</div>
 		</div>
 		<form id="model_form" class="form-inline" method="post">

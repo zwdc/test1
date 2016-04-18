@@ -12,6 +12,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.activiti.engine.ActivitiException;
 import org.apache.commons.fileupload.FileUploadBase.FileSizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +29,7 @@ import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
+import com.hdc.entity.TaskInfo;
 import com.hdc.entity.User;
 import com.hdc.service.IFeedbackRecordService;
 import com.hdc.util.Constants;
@@ -356,4 +358,96 @@ public class FeedbackController {
 		}
 		return message;
 	}
+	   /**
+     * 申请反馈审核，可以通过也可以不通过。
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/callApproval")
+    @ResponseBody
+    public Message callApproval(TaskInfo taskInfo) throws Exception {
+    	Message message = new Message();
+    	try {
+    		this.taskInfoService.doStartProcess(taskInfo);
+    		message.setMessage("操作成功！");
+		} catch (ActivitiException e) {
+			message.setStatus(Boolean.FALSE);
+            if (e.getMessage().indexOf("no processes deployed with key") != -1) {
+            	message.setMessage("没有部署流程，请联系管理员在[流程定义]中部署相应流程文件！");
+            } else {
+            	message.setMessage("启动流程失败，系统内部错误！");
+            }
+            throw e;
+        } catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("操作失败！");
+			throw e;
+		}
+    	return message;
+    }
+    
+    /**
+     * 跳转到反馈页面
+     * @param taskInfoId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/toApproval")
+    public ModelAndView toApproval(@RequestParam(value = "taskInfoId", required = false) Integer taskInfoId) throws Exception {
+    	ModelAndView mv = new ModelAndView("taskInfo/approval_taskInfo");
+    	TaskInfo taskInfo = this.taskInfoService.findById(taskInfoId);
+    	mv.addObject("taskInfo", taskInfo);
+    	return mv;
+    }
+    
+    /**
+     * 审批操作
+     * @param taskInfoId
+     * @param isPass
+     * @param taskId
+     * @param processInstanceId
+     * @param comment
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/approval")
+	@ResponseBody
+	public Message approval(
+			@RequestParam("taskInfoId") Integer taskInfoId, 
+			@RequestParam("isPass") boolean isPass,
+			@RequestParam("taskId") String taskId, 
+			@RequestParam("comment") String comment)
+					throws Exception {
+		Message message = new Message();
+		try {
+			this.taskInfoService.doApproval(taskInfoId, isPass, taskId, comment);
+			message.setMessage("审批完成！");
+		} catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("审批失败！");
+		}
+		return message;
+    }
+    
+    /**
+     * 完成任务
+     * @param taskInfo
+     * @param taskId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/completeTask")
+    @ResponseBody
+    public Message completeTask(TaskInfo taskInfo, @RequestParam(value = "taskId", required = false) String taskId) throws Exception {
+    	Message message = new Message();
+    	try {
+    		this.taskInfoService.doCompleteTask(taskInfo, taskId);
+    		message.setMessage("申请成功！");
+		} catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("申请失败!");
+			throw e;
+		}
+    	return message;
+    }
 }

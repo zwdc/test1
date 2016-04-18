@@ -163,13 +163,14 @@ public class GroupController {
 			if(StringUtils.isNotBlank(groupId)) {
 				Map<String, Object> map = new HashMap<String, Object>();
 				Group group = this.groupService.getGroupById(new Integer(groupId));
-				String userNames = "";
+				int i=0;
 				for(User user : group.getUser()) {
-					userNames += user.getName();
+					map.put("userNames"+i, user.getName());
+					map.put("linkway"+i, user.getPasswd());
+					i++;
 				}
 				map.put("groupId", group.getId());
-				map.put("groupName", group.getName());
-				map.put("userNames", userNames);
+				map.put("groupName", group.getName());				
 				jsonList.add(map);
 			}
 		}
