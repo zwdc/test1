@@ -121,7 +121,7 @@
 	var group_datagrid, group_dialog;
 	function chooseHostGroup() {
 		group_dialog = $('<div/>').dialog({
-	    	title : "选择候选单位",
+	    	title : "选择承办单位",
 			top: 20,
 			width : 1000,
 			height : 400,
