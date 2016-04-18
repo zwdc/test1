@@ -42,6 +42,18 @@ public interface IProjectService {
 	public void doApproval(Integer projectId, boolean isPass, String taskId, String comment) throws Exception;
 	
 	/**
+	 * 审批拒绝签收
+	 * @param projectId
+	 * @param oldGroupId
+	 * @param groupId
+	 * @param isPass
+	 * @param taskId
+	 * @param comment
+	 * @throws Exception
+	 */
+	public void doApprovalRefuse(Integer projectId, Integer oldGroupId, Integer groupId, boolean isPass, String taskId, String comment) throws Exception;
+	
+	/**
 	 * 通过id获取Project
 	 * @param id
 	 * @return
@@ -96,7 +108,7 @@ public interface IProjectService {
 	public void doStartProcess(Integer projectId, String suggestion) throws Exception;
 	
 	/**
-	 * 
+	 * 拒签收审批
 	 * @param projectId
 	 * @param reason
 	 * @throws Exception

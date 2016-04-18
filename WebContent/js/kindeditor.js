@@ -2,7 +2,9 @@
  * Easyui KindEditor的扩展.
  * 需要在jquery.easyui.min.js和kindeditor-min.js之后导入.
  * 使用 1.class="easyui-kindeditor"
- * 		2.$("#kindeditor").kindeditor({....});
+ * 	   2.$("#kindeditor").kindeditor({....});
+ *     3.var editor = KindEditor.create("#refuseReason");
+ *       console.dir(editor.isEmpty());
  **/
 (function ($, K) {
 	if (!K)

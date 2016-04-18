@@ -13,12 +13,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.hdc.entity.Comments;
 import com.hdc.entity.Datagrid;
 import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.Project;
+import com.hdc.service.ICommentsService;
 import com.hdc.service.IProjectService;
+import com.hdc.util.Constants.BusinessForm;
 
 /**
  * 任务交办管理器
@@ -31,6 +34,9 @@ public class ProjectController {
 
 	@Autowired
 	private IProjectService projectService;
+	
+	@Autowired
+	private ICommentsService commentsService;
 	
 	
 	/**
@@ -72,6 +78,13 @@ public class ProjectController {
 			mv.setViewName("project/approval_project");
 		} else if("details".equals(type)) {
 			mv.setViewName("project/details_project");
+		} else if("approval_refuse".equals(type)) {
+			mv.setViewName("project/approval_refuse_project");
+		} else if("change_failed".equals(type)) {
+			//拒签操作被驳回的操作
+			List<Comments> commentsList = this.commentsService.findComments(projectId, BusinessForm.PROJECT_FORM.toString());
+			mv.addObject("commentsList", commentsList);
+			mv.setViewName("change_failed_project");
 		}
     	Project project = this.projectService.findById(projectId);
     	if(project != null) {
@@ -193,7 +206,36 @@ public class ProjectController {
    			message.setMessage("审批失败！");
    		}
    		return message;
-   }
+    }
+    
+    /**
+     * 审批拒绝签收
+     * @param projectId
+     * @param oldGroupId	//旧的单位
+     * @param groupId		//新的单位
+     * @param isPass
+     * @param taskId
+     * @param comment
+     * @return
+     * @throws Exception
+     */
+    public Message approvalRefuse(
+    		@RequestParam("projectId") Integer projectId, 
+    		@RequestParam("oldHostGroup") Integer oldGroupId,
+    		@RequestParam("hostGroup") Integer groupId,
+   			@RequestParam("isPass") boolean isPass,
+   			@RequestParam("taskId") String taskId, 
+   			@RequestParam("comment") String comment) throws Exception {
+   		Message message = new Message();
+   		try {
+   			this.projectService.doApprovalRefuse(projectId, oldGroupId, groupId, isPass, taskId, comment);
+   			message.setMessage("审批完成！");
+   		} catch (Exception e) {
+   			message.setStatus(Boolean.FALSE);
+   			message.setMessage("审批失败！");
+   		}
+   		return message;
+    }
     
    /**
     * 完成任务
@@ -237,12 +279,28 @@ public class ProjectController {
      * @param projectId
      * @param refuseReason
      * @return
+     * @throws Exception 
      */
     @RequestMapping("/refuse")
     @ResponseBody
-    public Message refuse(@RequestParam("projectId") Integer projectId, @RequestParam("refuseReason") String refuseReason) {
+    public Message refuse(@RequestParam("projectId") Integer projectId, @RequestParam("refuseReason") String refuseReason) throws Exception {
     	Message message = new Message();
-    	
+    	try {
+			this.projectService.doRefuseProject(projectId, refuseReason);
+			message.setMessage("反馈成功！");
+		} catch (ActivitiException e) {
+			message.setStatus(Boolean.FALSE);
+            if (e.getMessage().indexOf("no processes deployed with key") != -1) {
+            	message.setMessage("没有部署流程，请联系管理员在[流程定义]中部署相应流程文件！");
+            } else {
+            	message.setMessage("启动流程失败，系统内部错误！");
+            }
+            throw e;
+        } catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("操作失败！");
+			throw e;
+		}
     	return message;
     }
     

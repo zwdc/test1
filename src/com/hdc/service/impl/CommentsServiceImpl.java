@@ -1,6 +1,7 @@
 package com.hdc.service.impl;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,12 @@ public class CommentsServiceImpl implements ICommentsService {
 	@Override
 	public Serializable doAdd(Comments comments) throws Exception {
 		return this.baseService.add(comments);
+	}
+
+	@Override
+	public List<Comments> findComments(Integer businessKey, String businessForm) throws Exception {
+		String hql = "from Comments where businessKey = " + businessKey +" and businessForm = '" + businessForm + "'";
+		return this.baseService.find(hql);
 	}
 
 }
