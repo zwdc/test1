@@ -8,46 +8,85 @@
 		$("#assistantGroup").kindeditor({readonlyMode: true});
 		$("#remark").kindeditor({readonlyMode: true});
 		$("#refuseReason").kindeditor({readonlyMode: true});
-		
-		var hostGroup = $('#hostGroupDatagrid').datagrid({
-			toolbar: [{
-				text:'添加牵头单位',
-				iconCls: 'icon-add',
-				handler: function(){
-					chooseHostGroup();
-				}
-			},'-',{
-				text:'删除单位',
-				iconCls: 'icon-remove',
-				handler: function(){
-					debugger;
-					var allCheckedRows = hostGroup.datagrid('getChecked');
-				    if (allCheckedRows.length > 0) {
-			            var checkedRowLength = allCheckedRows.length;
-			            for (var i = 0; i < checkedRowLength; i++) {
-			                var checkedRow = allCheckedRows[i];
-			                var checkedRowIndex = hostGroup.datagrid('getRowIndex', checkedRow);
-			                hostGroup.datagrid('deleteRow', checkedRowIndex);
-			            }
-			            //重新设置hostGroupId
-			            var groupIds = "";
-			            var rows = hostGroup.datagrid('getRows');
-			            if(rows.length > 0) {
-			            	for(var j = 0; j < rows.length; j++){
-			            		var row = rows[j];
-			            		groupIds += row.groupId + ',';
-			            	}
-			            	$("#hostGroupId").val(groupIds.substring(0, groupIds.length-1));
-			            } else {
-			            	$("#hostGroupId").val("");
-			            }
-				    } else {
-				    	$.messager.alert("提示", "您未勾选任何操作对象，请勾选一行数据！");
-				    }
-				}
-			}]
-		});
 	})
+	
+	function changeGroup() {
+		group_dialog = $('<div/>').dialog({
+	    	title : "选择承办单位",
+			top: 20,
+			width : 1000,
+			height : 400,
+	        modal: true,
+	        minimizable: true,
+	        maximizable: true,
+	        href: ctx+"/taskInfo/toChooseGroup",
+	        onLoad: function () {
+	            //显示候选组
+	            group_datagrid = $('#group_datagrid').datagrid({
+	                url: ctx+"/choose/chooseGroup",
+	                width : 'auto',
+	        		height :  $(this).height()-40,
+	        		pagination:true,
+	        		rownumbers:true,
+	        		border:false,
+	        		striped:true,
+	        		singleSelect:true,
+	                columns : [ 
+	                    [ 
+	                      {field:'ck', title : '#',width : ($(this).width() - 50) * 0.1,align : 'center',checkbox:true},
+	                      {field : 'name',title : '单位名称',width : ($(this).width() - 50) * 0.45,align : 'center'},
+	                      {field : 'type',title : '单位类型',width : ($(this).width() - 50) * 0.45,align : 'center'}
+	            	    ] 
+	                ]
+	            });
+	        },
+	        buttons: [
+	            {
+	                text: '保存',
+	                iconCls: 'icon-save',
+	                handler: function () {
+	                	selectGroups();
+	                	group_dialog.dialog('destroy');
+	                }
+	            },
+	            {
+	                text: '关闭',
+	                iconCls: 'icon-cancel',
+	                handler: function () {
+	                	group_dialog.dialog('destroy');
+	                }
+	            }
+	        ],
+	        onClose: function () {
+	        	group_dialog.dialog('destroy');
+	        }
+	    });
+	}
+	
+	function selectGroups() {
+		$("#hostGroupId").val("");	//清空id
+		//重新生成牵头单位
+		var rows = group_datagrid.datagrid('getChecked');
+		var groupIds = "";
+		$.each(rows, function(index, field) { 
+    		$.ajax({
+                url: ctx + '/taskInfo/getGroupUser/'+field.id,
+                type: 'post',
+                dataType: 'text',
+                success: function (data) {
+					$('#hostGroupDatagrid').datagrid('insertRow',{
+						row: {
+							groupId: field.id,
+							groupName: field.name,
+							userNames: data
+						}
+					});
+                }
+            });
+    		groupIds += field.id + ',';
+    	});
+		$("#hostGroupId").val(groupIds.substring(0, groupIds.length-1));
+	}
 </script>
 <div class="easyui-layout">
 <form id="form" action="${ctx }/project/approval" method="post">
@@ -101,6 +140,7 @@
 						</tr>
 				    </thead>
 				</table>
+				<input id="hostGroupId" name="hostGroup" value = "${taskInfo.hostGroup }" type="hidden"/>
 			</td>
 		</tr>
 		<tr>
@@ -117,6 +157,9 @@
 		</tr>
 		<tr>
 			<td colspan="4">拒签原因:<textarea class="easyui-kindeditor" id="refuseReason" rows="3" >${project.refuseReason }</textarea></td>
+		</tr>
+		<tr>
+			<td colspan="4"><a href="javascript:void(0);" class="easyui-linkbutton" onclick="changeGroup();" data-options="iconCls:'icon-ok'">替换此单位</a></td>
 		</tr>
 		<tr>
 	  		<td colspan="4">
