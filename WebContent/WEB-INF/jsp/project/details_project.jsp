@@ -11,9 +11,6 @@
 	})
 </script>
 <div class="easyui-layout">
-<form id="form" action="${ctx }/project/approval" method="post">
-	<input name="projectId" value="${project.id }" type="hidden">
-	<input id="taskId" name="taskId" type="hidden">
     <table class="table table-bordered table-hover table-condensed">
   		<tr class="bg-primary">
 			<td colspan="4" align="center">任务交办信息</td>
@@ -75,18 +72,5 @@
 				</table>
 			</td>
 		</tr>
-		<tr>
-	  		<td colspan="4">
-	  			<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;审批意见:
-	  			<textarea class="easyui-kindeditor" name="comment" rows="3"></textarea>
-	  		</td>
-	  	</tr>
   	</table>
-</form>
-<hr style="margin-top: -5px ">
-<div class="pull-right" style="margin: -15px 5px 5px 0px">
- 	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="submit(true);" data-options="iconCls:'icon-ok'">同意</a>
-	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="submit(false);" data-options="iconCls:'icon-remove'">不同意</a>
-	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="closeDialog();" data-options="iconCls:'icon-cancel'">关闭</a>
-</div>
 </div>

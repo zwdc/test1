@@ -7,7 +7,46 @@
 	$(function(){
 		$("#assistantGroup").kindeditor({readonlyMode: true});
 		$("#remark").kindeditor({readonlyMode: true});
-		$("#suggestion").kindeditor({readonlyMode: true});
+		$("#refuseReason").kindeditor({readonlyMode: true});
+		
+		var hostGroup = $('#hostGroupDatagrid').datagrid({
+			toolbar: [{
+				text:'添加牵头单位',
+				iconCls: 'icon-add',
+				handler: function(){
+					chooseHostGroup();
+				}
+			},'-',{
+				text:'删除单位',
+				iconCls: 'icon-remove',
+				handler: function(){
+					debugger;
+					var allCheckedRows = hostGroup.datagrid('getChecked');
+				    if (allCheckedRows.length > 0) {
+			            var checkedRowLength = allCheckedRows.length;
+			            for (var i = 0; i < checkedRowLength; i++) {
+			                var checkedRow = allCheckedRows[i];
+			                var checkedRowIndex = hostGroup.datagrid('getRowIndex', checkedRow);
+			                hostGroup.datagrid('deleteRow', checkedRowIndex);
+			            }
+			            //重新设置hostGroupId
+			            var groupIds = "";
+			            var rows = hostGroup.datagrid('getRows');
+			            if(rows.length > 0) {
+			            	for(var j = 0; j < rows.length; j++){
+			            		var row = rows[j];
+			            		groupIds += row.groupId + ',';
+			            	}
+			            	$("#hostGroupId").val(groupIds.substring(0, groupIds.length-1));
+			            } else {
+			            	$("#hostGroupId").val("");
+			            }
+				    } else {
+				    	$.messager.alert("提示", "您未勾选任何操作对象，请勾选一行数据！");
+				    }
+				}
+			}]
+		});
 	})
 </script>
 <div class="easyui-layout">
@@ -48,9 +87,21 @@
 		</tr>
 		<tr>
 			<td class="text-right">承办单位:</td>
-			<td>${project.group.name }</td>
-			<td class="text-right">承办人:</td>
-			<td>${project.user.name }</td>
+			<td colspan="3">
+				<table id="hostGroupDatagrid" class="easyui-datagrid" data-options="url:'${ctx }/group/getHostGroupList?groupIds=${taskInfo.hostGroup }',fitColumns:true,rownumbers:true,border:true">
+				    <thead>
+						<tr>
+							<th data-options="field:'ck',checkbox:true"></th>
+							<th data-options="field:'groupId',hidden:true">ID</th>
+							<th data-options="field:'groupName'" width="25%">牵头单位名称</th>
+							<th data-options="field:'userNames0'" width="15%">联系人A</th>
+							<th data-options="field:'linkway0'" width="20%">联系方式</th>
+							<th data-options="field:'userNames1'" width="15%">联系人B</th>
+							<th data-options="field:'linkway1'" width="20%">联系方式</th>
+						</tr>
+				    </thead>
+				</table>
+			</td>
 		</tr>
 		<tr>
 			<td colspan="4">责任单位:<textarea class="easyui-kindeditor" id="assistantGroup" rows="3" >${taskInfo.assistantGroup }</textarea></td>
@@ -59,21 +110,13 @@
 			<td colspan="4">备注:<textarea class="easyui-kindeditor" id="remark" rows="3" >${taskInfo.remark }</textarea></td>
 		</tr>
 		<tr>
-			<td colspan="4">拟办意见:<textarea class="easyui-kindeditor" id="suggestion" rows="3" >${project.suggestion }</textarea></td>
+			<td class="text-right">拒签单位:</td>
+			<td>${project.group.name }</td>
+			<td class="text-right">拒签人:</td>
+			<td>${project.refuseUser.name }</td>
 		</tr>
 		<tr>
-			<td class="text-right">阶段性计划:</td>
-			<td colspan="3">
-				<table id="workPlanDatagrid" class="easyui-datagrid" data-options="url:'${ctx }/feedback/getFeedbackByProject?projectId=${project.id }',fitColumns:true,rownumbers:true,border:true">
-				    <thead>
-						<tr>
-							<th data-options="field:'id',hidden:true">ID</th>
-							<th data-options="field:'workPlanDate'" width="40%">阶段日期</th>
-							<th data-options="field:'workPlan',editor:'text'" width="50%">阶段计划</th>
-						</tr>
-				    </thead>
-				</table>
-			</td>
+			<td colspan="4">拒签原因:<textarea class="easyui-kindeditor" id="refuseReason" rows="3" >${project.refuseReason }</textarea></td>
 		</tr>
 		<tr>
 	  		<td colspan="4">

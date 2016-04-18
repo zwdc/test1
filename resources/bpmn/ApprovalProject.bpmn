@@ -11,10 +11,6 @@
     <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="approval"></sequenceFlow>
     <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow2" sourceRef="approval" targetRef="exclusivegateway1"></sequenceFlow>
-    <endEvent id="endevent1" name="End"></endEvent>
-    <sequenceFlow id="flow3" name="同意" sourceRef="exclusivegateway1" targetRef="endevent1">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isPass}]]></conditionExpression>
-    </sequenceFlow>
     <userTask id="updateProject" name="修改项目信息" activiti:assignee="${startUser}">
       <extensionElements>
         <activiti:taskListener event="create" delegateExpression="${processTaskListener}"></activiti:taskListener>
@@ -24,6 +20,16 @@
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!isPass}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="flow5" name="重新审批" sourceRef="updateProject" targetRef="approval"></sequenceFlow>
+    <sequenceFlow id="flow6" name="同意" sourceRef="exclusivegateway1" targetRef="servicetask1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isPass}]]></conditionExpression>
+    </sequenceFlow>
+    <serviceTask id="servicetask1" name="检查项目状态" activiti:delegateExpression="${checkProjectStatus}"></serviceTask>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <sequenceFlow id="flow7" sourceRef="servicetask1" targetRef="endevent1"></sequenceFlow>
+    <textAnnotation id="textannotation1">
+      <text>检测此任务下的所有项目是否全部审核通过，如果全部通过则修改任务状态和项目状态为办理中</text>
+    </textAnnotation>
+    <association id="association1" sourceRef="textannotation1" targetRef="servicetask1"></association>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_ApprovalProject">
     <bpmndi:BPMNPlane bpmnElement="ApprovalProject" id="BPMNPlane_ApprovalProject">
@@ -36,11 +42,17 @@
       <bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
         <omgdc:Bounds height="40.0" width="40.0" x="330.0" y="248.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
-        <omgdc:Bounds height="35.0" width="35.0" x="450.0" y="251.0"></omgdc:Bounds>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="updateProject" id="BPMNShape_updateProject">
         <omgdc:Bounds height="55.0" width="105.0" x="298.0" y="120.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="servicetask1" id="BPMNShape_servicetask1">
+        <omgdc:Bounds height="55.0" width="105.0" x="427.0" y="241.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="590.0" y="251.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="textannotation1" id="BPMNShape_textannotation1">
+        <omgdc:Bounds height="51.0" width="221.0" x="390.0" y="360.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
         <omgdi:waypoint x="135.0" y="267.0"></omgdi:waypoint>
@@ -49,13 +61,6 @@
       <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
         <omgdi:waypoint x="285.0" y="267.0"></omgdi:waypoint>
         <omgdi:waypoint x="330.0" y="268.0"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
-        <omgdi:waypoint x="370.0" y="268.0"></omgdi:waypoint>
-        <omgdi:waypoint x="450.0" y="268.0"></omgdi:waypoint>
-        <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="14.0" width="24.0" x="384.0" y="250.0"></omgdc:Bounds>
-        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
         <omgdi:waypoint x="350.0" y="248.0"></omgdi:waypoint>
@@ -69,8 +74,23 @@
         <omgdi:waypoint x="232.0" y="147.0"></omgdi:waypoint>
         <omgdi:waypoint x="232.0" y="240.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="14.0" width="100.0" x="238.0" y="130.0"></omgdc:Bounds>
+          <omgdc:Bounds height="14.0" width="48.0" x="238.0" y="130.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="370.0" y="268.0"></omgdi:waypoint>
+        <omgdi:waypoint x="427.0" y="268.0"></omgdi:waypoint>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="14.0" width="100.0" x="379.0" y="250.0"></omgdc:Bounds>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">
+        <omgdi:waypoint x="532.0" y="268.0"></omgdi:waypoint>
+        <omgdi:waypoint x="590.0" y="268.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="association1" id="BPMNEdge_association1">
+        <omgdi:waypoint x="500.0" y="360.0"></omgdi:waypoint>
+        <omgdi:waypoint x="479.0" y="296.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

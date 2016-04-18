@@ -70,12 +70,13 @@ public class ProjectController {
 			mv.setViewName("project/claim_project");
 		} else if("approval".equals(type)) {
 			mv.setViewName("project/approval_project");
+		} else if("details".equals(type)) {
+			mv.setViewName("project/details_project");
 		}
     	Project project = this.projectService.findById(projectId);
     	if(project != null) {
 			mv.addObject("taskInfo", project.getTaskInfo());
-			mv.addObject("projectId", projectId);
-			mv.addObject("suggestion", project.getSuggestion());
+			mv.addObject("project", project);
 		}
     	return mv;
 	}
@@ -244,5 +245,6 @@ public class ProjectController {
     	
     	return message;
     }
+    
 	
 }

@@ -26,7 +26,6 @@ import com.hdc.service.IProjectService;
 import com.hdc.service.ITaskSourceService;
 import com.hdc.util.Constants.ApprovalStatus;
 import com.hdc.util.Constants.BusinessForm;
-import com.hdc.util.Constants.ProjectStatus;
 import com.hdc.util.UserUtil;
 
 @Service
@@ -70,7 +69,7 @@ public class ProjectServiceImpl implements IProjectService {
 
 	@Override
 	public List<Project> findByTaskInfo(Integer taskInfoId) throws Exception {
-		String hql = "from Project where taskInfo.id = " + taskInfoId.toString();
+		String hql = "from Project where taskInfo.id = " + taskInfoId.toString() + " and isDelete = 0";
 		return this.baseService.find(hql);
 	}
 
@@ -96,8 +95,8 @@ public class ProjectServiceImpl implements IProjectService {
 		sb.append("left join feedback_frequency fb on (fb.id = t.fb_frequency and fb.is_delete = 0) ");
 		
 		if(type == 1) {
-			//待签收/已签收/审批中
-			sb.append("where a.is_delete = 0 and (a.status = 'WAIT_FOR_CLAIM' or a.status = 'CLAIMED' or a.status = 'PENDING') and a.group_id = :groupId and (a.user_id = :userId or a.user_id is null)");
+			//待签收/已签收/审批中/审批通过/审批失败
+			sb.append("where a.is_delete = 0 and (a.status = 'WAIT_FOR_CLAIM' or a.status = 'CLAIMED' or a.status = 'PENDING' or a.status = 'APPROVAL_SUCCESS' or a.status = 'APPROVAL_FAILED') and a.group_id = :groupId and (a.user_id = :userId or a.user_id is null)");
 		} else if(type == 2) {
 			//办理中/申请办结
 			sb.append("where a.is_delete = 0 and (a.status = 'IN_HANDLING' or a.status = 'APPLY_FINISHED') and a.group_id = :groupId and a.user_id = :userId ");
@@ -213,6 +212,7 @@ public class ProjectServiceImpl implements IProjectService {
 		
 		//初始化流程参数
 		Map<String, Object> vars = new HashMap<String, Object>();
+		vars.put("taskInfoId", taskInfo.getId().toString());	//根据taskInfoId查询所有project,判断项目状态
 		vars.put("processTaskId", processTaskId.toString());
 		//启动审批流程
 		this.processService.startApproval("ApprovalProject", projectId.toString(), vars);	
@@ -225,7 +225,7 @@ public class ProjectServiceImpl implements IProjectService {
 		Map<String, Object> variables = new HashMap<String, Object>();
 		Project project = this.findById(projectId);
 		if(isPass) {
-			project.setStatus(ProjectStatus.IN_HANDLING.toString()); 	  //办理中
+			project.setStatus(ApprovalStatus.APPROVAL_SUCCESS.toString()); 	  //审批通过，所有班里人审批都通过才是办理中状态
 		} else {
 			project.setStatus(ApprovalStatus.APPROVAL_FAILED.toString()); //审批失败
 			TaskInfo taskInfo = project.getTaskInfo();
@@ -240,6 +240,7 @@ public class ProjectServiceImpl implements IProjectService {
 			Serializable processTaskId = this.processTaskService.doAdd(processTask);
 			variables.put("processTaskId", processTaskId.toString());
 		}
+		this.doUpdate(project);
 		// 评论
 		Comments comments = new Comments();
 		comments.setUserId(user.getId().toString());
@@ -271,12 +272,48 @@ public class ProjectServiceImpl implements IProjectService {
 		processTask.setTaskInfoId(taskInfo.getId());
 		TaskSource taskSource = this.taskResourceService.findById(taskInfo.getTaskSource().getId());
 		processTask.setTaskInfoType(taskSource.getTaskInfoType().getName());
-		processTask.setTitle("任务修改完成！需要重新审批!");
+		processTask.setTitle("任务交办表修改完成！需要重新审批!");
 		processTask.setUrl("/project/toProject/approval?projectId="+projectId.toString());
 		Serializable processTaskId = this.processTaskService.doAdd(processTask);
 		//初始化任务参数
 		variables.put("processTaskId", processTaskId.toString());
 		this.processService.complete(taskId, null, variables);
+		
+	}
+
+	@Override
+	public Integer doUpdateStatus(String taskInfoId) throws Exception {
+		String hql = "update Project set status = 'IN_HANDLING' where taskInfo.id = " + taskInfoId;
+		return this.baseService.executeHql(hql);
+	}
+
+	@Override
+	public void doRefuseProject(Integer projectId, String reason)
+			throws Exception {
+		Project  project = this.findById(projectId);
+		project.setRefuseReason(reason);
+		project.setStatus(ApprovalStatus.PENDING.toString());
+		this.doUpdate(project);
+		TaskInfo taskInfo = project.getTaskInfo();
+		//给用户提示任务
+		User user = UserUtil.getUserFromSession();
+		ProcessTask processTask = new ProcessTask();
+		processTask.setTaskTitle(taskInfo.getTitle());
+		processTask.setTitle("任务交办表拒签收申请!");
+		processTask.setUrl("/project/toProject/approval?projectId="+projectId.toString());
+		TaskSource taskResource = this.taskResourceService.findById(taskInfo.getTaskSource().getId());
+		processTask.setTaskInfoType(taskResource.getTaskInfoType().getName());		//任务类型
+		processTask.setTaskInfoId(taskInfo.getId());
+		processTask.setApplyUserId(user.getId());
+		processTask.setApplyUserName(user.getName());
+		Serializable processTaskId = this.processTaskService.doAdd(processTask);
+		
+		//初始化流程参数
+		Map<String, Object> vars = new HashMap<String, Object>();
+		vars.put("taskInfoId", taskInfo.getId().toString());	//根据taskInfoId查询所有project,判断项目状态
+		vars.put("processTaskId", processTaskId.toString());
+		//启动审批流程
+		this.processService.startApproval("RefuseClaim", projectId.toString(), vars);	
 		
 	}
 

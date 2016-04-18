@@ -84,7 +84,7 @@
 </script>
 <div class="easyui-layout">
 <form id="project_form" method="post">
-	<input name="projectId" value="${projectId }" type="hidden">
+	<input name="projectId" value="${project.id }" type="hidden">
     <table class="table table-bordered table-hover table-condensed">
   		<tr class="bg-primary">
 			<td colspan="4" align="center">任务交办信息</td>
@@ -118,17 +118,10 @@
 			<td colspan="2"></td>
 		</tr>
 		<tr>
-			<td class="text-right">牵头单位:</td>
-			<td colspan="3">
-				<table id="hostGroupDatagrid" class="easyui-datagrid" data-options="url:'${ctx }/group/getHostGroupList?groupIds=${taskInfo.hostGroup }',fitColumns:true,rownumbers:true,border:true,singleSelect:true">
-				    <thead>
-						<tr>
-							<th data-options="field:'groupName'" width="40%">牵头单位名称</th>
-							<th data-options="field:'userNames'" width="50%">联系人</th>
-						</tr>
-				    </thead>
-				</table>
-			</td>
+			<td class="text-right">承办单位:</td>
+			<td>${project.group.name }</td>
+			<td class="text-right">承办人:</td>
+			<td>${project.user.name }</td>
 		</tr>
 		<tr>
 			<td colspan="4">责任单位:<textarea class="easyui-kindeditor" id="assistantGroup" rows="3" >${taskInfo.assistantGroup }</textarea></td>
@@ -137,12 +130,12 @@
 			<td colspan="4">备注:<textarea class="easyui-kindeditor" id="remark" rows="3" >${taskInfo.remark }</textarea></td>
 		</tr>
 		<tr>
-			<td colspan="4">拟办意见:<textarea class="easyui-kindeditor" name="suggestion" rows="3" >${suggestion }</textarea></td>
+			<td colspan="4">拟办意见:<textarea class="easyui-kindeditor" name="suggestion" rows="3" >${project.suggestion }</textarea></td>
 		</tr>
 		<tr>
 			<td class="text-right">阶段性计划:</td>
 			<td colspan="3">
-				<table id="workPlanDatagrid" class="easyui-datagrid" data-options="url:'${ctx }/feedback/getFeedbackByProject?projectId=${projectId }',fitColumns:true,rownumbers:true,border:true,toolbar:'#tb',onClickCell:onClickCell,onAfterEdit:onAfterEdit">
+				<table id="workPlanDatagrid" class="easyui-datagrid" data-options="url:'${ctx }/feedback/getFeedbackByProject?projectId=${project.id }',fitColumns:true,rownumbers:true,border:true,toolbar:'#tb',onClickCell:onClickCell,onAfterEdit:onAfterEdit">
 				    <thead>
 						<tr>
 							<th data-options="field:'id',hidden:true">ID</th>

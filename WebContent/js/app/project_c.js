@@ -163,6 +163,8 @@ function approval() {
     if (row) {
     	if(row.USER_NAME == null){
     		$.messager.alert("提示", "此任务您还没有签收，请【签收】任务后再处理任务！");
+    	} else if(row.STATUS == 'APPROVAL_SUCCESS') {
+    		$.messager.alert("提示", "此任务交办表已经审批通过，请勿重复审批！");
     	} else {
     		project_dialog = $('<div/>').dialog({
     			title : "任务交办信息",
@@ -251,8 +253,8 @@ function approval() {
 function refuse() {
 	var row = project_datagrid.datagrid('getSelected');
     if (row) {
-    	if(row.USER_NAME == null){
-    		$.messager.alert("提示", "此任务您还没有签收，请【签收】任务后再处理任务！");
+    	if(row.USER_NAME != null){
+    		$.messager.alert("提示", "此任务已经签收，不能进行拒签收操作！");
     	} else {
     		project_dialog = $('<div/>').dialog({
     			title : "拒绝原因",
@@ -353,7 +355,7 @@ function showDetails(row) {
         modal: true,
         minimizable: true,
         maximizable: true,
-        href: ctx+"/project/details/"+row.ID,
+        href: ctx+"/project/toProject/details?projectId="+row.ID,
         buttons: [
           {
               text: '关闭',

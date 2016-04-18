@@ -55,6 +55,11 @@ public class Project extends BaseEntity implements Serializable {
 	private User user;				//承办人(签收用)
 	
 	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="refuse_user_id")
+	@JsonIgnore
+	private User refuseUser;		//拒签收用户
+	
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="task_info_id")
 	@JsonIgnore
 	private TaskInfo taskInfo;		//任务
@@ -175,6 +180,14 @@ public class Project extends BaseEntity implements Serializable {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public User getRefuseUser() {
+		return refuseUser;
+	}
+
+	public void setRefuseUser(User refuseUser) {
+		this.refuseUser = refuseUser;
 	}
 	
 }

@@ -42,6 +42,14 @@ public interface ITaskInfoService {
 	public void doUpdate(TaskInfo taskInfo) throws Exception;
 	
 	/**
+	 * 更改任务状态为-办理中
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	public Integer doUpdateStatus(String id) throws Exception;
+	
+	/**
 	 * 删除
 	 * @param id
 	 * @throws Exception

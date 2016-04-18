@@ -368,7 +368,7 @@ public class FeedbackController {
     public Message callApproval(TaskInfo taskInfo) throws Exception {
     	Message message = new Message();
     	try {
-    		this.taskInfoService.doStartProcess(taskInfo);
+    		//this.taskInfoService.doStartProcess(taskInfo);
     		message.setMessage("操作成功！");
 		} catch (ActivitiException e) {
 			message.setStatus(Boolean.FALSE);
@@ -395,8 +395,8 @@ public class FeedbackController {
     @RequestMapping("/toApproval")
     public ModelAndView toApproval(@RequestParam(value = "taskInfoId", required = false) Integer taskInfoId) throws Exception {
     	ModelAndView mv = new ModelAndView("taskInfo/approval_taskInfo");
-    	TaskInfo taskInfo = this.taskInfoService.findById(taskInfoId);
-    	mv.addObject("taskInfo", taskInfo);
+    	//TaskInfo taskInfo = this.taskInfoService.findById(taskInfoId);
+    	//mv.addObject("taskInfo", taskInfo);
     	return mv;
     }
     
@@ -420,7 +420,7 @@ public class FeedbackController {
 					throws Exception {
 		Message message = new Message();
 		try {
-			this.taskInfoService.doApproval(taskInfoId, isPass, taskId, comment);
+			//this.taskInfoService.doApproval(taskInfoId, isPass, taskId, comment);
 			message.setMessage("审批完成！");
 		} catch (Exception e) {
 			message.setStatus(Boolean.FALSE);
@@ -441,7 +441,7 @@ public class FeedbackController {
     public Message completeTask(TaskInfo taskInfo, @RequestParam(value = "taskId", required = false) String taskId) throws Exception {
     	Message message = new Message();
     	try {
-    		this.taskInfoService.doCompleteTask(taskInfo, taskId);
+    		//this.taskInfoService.doCompleteTask(taskInfo, taskId);
     		message.setMessage("申请成功！");
 		} catch (Exception e) {
 			message.setStatus(Boolean.FALSE);
