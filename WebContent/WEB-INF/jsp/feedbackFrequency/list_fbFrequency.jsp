@@ -20,12 +20,12 @@
 		<table>
 			<tr>
 				<td style="padding-left:2px">
-					<shiro:hasRole name="admin">
+					<%-- <shiro:hasRole name="admin,SUPERVISE"> --%>
 						<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="add();">添加</a>
 						<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="edit();">编辑</a>
 						<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="del();">删除</a>
 						<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="details();">详情</a>
-					</shiro:hasRole>
+					<%-- </shiro:hasRole> --%>
 				</td>
 				<td style="padding-left:5px">
 					<input id="searchbox" type="text"/>

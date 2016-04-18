@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.hdc.dao.IJdbcDao;
 import com.hdc.entity.Comments;
+import com.hdc.entity.Group;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.ProcessTask;
@@ -26,6 +27,7 @@ import com.hdc.service.IProjectService;
 import com.hdc.service.ITaskSourceService;
 import com.hdc.util.Constants.ApprovalStatus;
 import com.hdc.util.Constants.BusinessForm;
+import com.hdc.util.Constants.ProjectStatus;
 import com.hdc.util.UserUtil;
 
 @Service
@@ -236,7 +238,7 @@ public class ProjectServiceImpl implements IProjectService {
 			processTask.setTaskInfoId(taskInfo.getId());
 			processTask.setTaskInfoType(taskInfo.getTaskSource().getTaskInfoType().getName());
 			processTask.setTitle("任务交办表审批不通过，请修改后重新审批！");
-			processTask.setUrl("/project/toProject/modify?projectId="+projectId.toString());
+			processTask.setUrl("/project/toProject/change_failed?projectId="+projectId.toString());
 			Serializable processTaskId = this.processTaskService.doAdd(processTask);
 			variables.put("processTaskId", processTaskId.toString());
 		}
@@ -290,17 +292,18 @@ public class ProjectServiceImpl implements IProjectService {
 	@Override
 	public void doRefuseProject(Integer projectId, String reason)
 			throws Exception {
+		User user = UserUtil.getUserFromSession();
 		Project  project = this.findById(projectId);
 		project.setRefuseReason(reason);
 		project.setStatus(ApprovalStatus.PENDING.toString());
+		project.setRefuseUser(user);
 		this.doUpdate(project);
 		TaskInfo taskInfo = project.getTaskInfo();
 		//给用户提示任务
-		User user = UserUtil.getUserFromSession();
 		ProcessTask processTask = new ProcessTask();
 		processTask.setTaskTitle(taskInfo.getTitle());
-		processTask.setTitle("任务交办表拒签收申请!");
-		processTask.setUrl("/project/toProject/approval?projectId="+projectId.toString());
+		processTask.setTitle("任务交办表拒签收!");
+		processTask.setUrl("/project/toProject/approval_refuse?projectId="+projectId.toString());
 		TaskSource taskResource = this.taskResourceService.findById(taskInfo.getTaskSource().getId());
 		processTask.setTaskInfoType(taskResource.getTaskInfoType().getName());		//任务类型
 		processTask.setTaskInfoId(taskInfo.getId());
@@ -310,10 +313,62 @@ public class ProjectServiceImpl implements IProjectService {
 		
 		//初始化流程参数
 		Map<String, Object> vars = new HashMap<String, Object>();
-		vars.put("taskInfoId", taskInfo.getId().toString());	//根据taskInfoId查询所有project,判断项目状态
+		vars.put("censur", taskInfo.getCreateUser().getId().toString());	//督查室审批
 		vars.put("processTaskId", processTaskId.toString());
 		//启动审批流程
 		this.processService.startApproval("RefuseClaim", projectId.toString(), vars);	
+		
+	}
+
+	@Override
+	public void doApprovalRefuse(Integer projectId, Integer oldGroupId, Integer groupId, boolean isPass, String taskId, String comment) throws Exception {
+		User user = UserUtil.getUserFromSession();
+		Map<String, Object> variables = new HashMap<String, Object>();
+		Project project = this.findById(projectId);
+		if(isPass) {
+			project.setStatus(ProjectStatus.WAIT_FOR_CLAIM.toString()); 	//同意修改承办单位，新的单位待签收
+			project.setGroup(new Group(groupId));
+			project.setRefuseReason("");
+			project.setRefuseUser(null);
+			TaskInfo taskInfo = project.getTaskInfo();
+			String hostGroup = taskInfo.getHostGroup();
+			taskInfo.setHostGroup(hostGroup.replace(","+oldGroupId, ","+groupId));	//替换单位
+			//给秘书长提示审批 任务信息（因为承担单位有变化了）
+			ProcessTask processTask = new ProcessTask();
+			processTask.setTaskTitle(taskInfo.getTitle());
+			processTask.setApplyUserId(user.getId());
+			processTask.setApplyUserName(user.getName());
+			processTask.setTaskInfoId(taskInfo.getId());
+			processTask.setTaskInfoType(taskInfo.getTaskSource().getTaskInfoType().getName());
+			processTask.setTitle("主办单位发生改变，请重新审批！");
+			processTask.setUrl("/taskInfo/toApproval?taskInfoId="+taskInfo.getId());
+			Serializable processTaskId = this.processTaskService.doAdd(processTask);
+			variables.put("processTaskId", processTaskId.toString());
+		} else {
+			project.setStatus(ApprovalStatus.APPROVAL_FAILED.toString()); 	//不同意修改承办单位
+			TaskInfo taskInfo = project.getTaskInfo();
+			ProcessTask processTask = new ProcessTask();
+			processTask.setTaskTitle(taskInfo.getTitle());
+			processTask.setApplyUserId(user.getId());
+			processTask.setApplyUserName(user.getName());
+			processTask.setTaskInfoId(taskInfo.getId());
+			processTask.setTaskInfoType(taskInfo.getTaskSource().getTaskInfoType().getName());
+			processTask.setTitle("您拒绝签收的操作被驳回，查看驳回原因！");
+			processTask.setUrl("/project/toProject/details?projectId="+project.getId());
+			Serializable processTaskId = this.processTaskService.doAdd(processTask);
+			variables.put("processTaskId", processTaskId.toString());
+		}
+		this.doUpdate(project);
+		// 评论
+		Comments comments = new Comments();
+		comments.setUserId(user.getId().toString());
+		comments.setUserName(user.getName()); 
+		comments.setContent(comment);
+		comments.setBusinessKey(projectId);
+		comments.setBusinessForm(BusinessForm.PROJECT_FORM.toString());
+		
+		variables.put("isPass", isPass);
+		this.processService.complete(taskId, comments, variables);
 		
 	}
 

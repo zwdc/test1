@@ -8,6 +8,17 @@
 		$("#assistantGroup").kindeditor({readonlyMode: true});
 		$("#remark").kindeditor({readonlyMode: true});
 		$("#refuseReason").kindeditor({readonlyMode: true});
+		
+		$('#changeGroup').tooltip({
+			position: 'right',
+			content: '<span style="color:#fff">选择其他部门来替换此拒签部门！</span>',
+			onShow: function(){
+				$(this).tooltip('tip').css({
+					backgroundColor: '#666',
+					borderColor: '#666'
+				});
+			}
+		});
 	})
 	
 	function changeGroup() {
@@ -65,27 +76,11 @@
 	
 	function selectGroups() {
 		$("#hostGroupId").val("");	//清空id
+		$("#hostGroupName").text("");
 		//重新生成牵头单位
 		var rows = group_datagrid.datagrid('getChecked');
-		var groupIds = "";
-		$.each(rows, function(index, field) { 
-    		$.ajax({
-                url: ctx + '/taskInfo/getGroupUser/'+field.id,
-                type: 'post',
-                dataType: 'text',
-                success: function (data) {
-					$('#hostGroupDatagrid').datagrid('insertRow',{
-						row: {
-							groupId: field.id,
-							groupName: field.name,
-							userNames: data
-						}
-					});
-                }
-            });
-    		groupIds += field.id + ',';
-    	});
-		$("#hostGroupId").val(groupIds.substring(0, groupIds.length-1));
+		$("#hostGroupId").val(rows[0].id);
+		$("#hostGroupName").text(rows[0].name);
 	}
 </script>
 <div class="easyui-layout">
@@ -94,7 +89,7 @@
 	<input id="taskId" name="taskId" type="hidden">
     <table class="table table-bordered table-hover table-condensed">
   		<tr class="bg-primary">
-			<td colspan="4" align="center">任务交办信息</td>
+			<td colspan="4" align="center">任务信息</td>
 		</tr>
 		<tr>
 			<td class="text-right">任务标题:</td>
@@ -130,8 +125,6 @@
 				<table id="hostGroupDatagrid" class="easyui-datagrid" data-options="url:'${ctx }/group/getHostGroupList?groupIds=${taskInfo.hostGroup }',fitColumns:true,rownumbers:true,border:true">
 				    <thead>
 						<tr>
-							<th data-options="field:'ck',checkbox:true"></th>
-							<th data-options="field:'groupId',hidden:true">ID</th>
 							<th data-options="field:'groupName'" width="25%">牵头单位名称</th>
 							<th data-options="field:'userNames0'" width="15%">联系人A</th>
 							<th data-options="field:'linkway0'" width="20%">联系方式</th>
@@ -140,7 +133,6 @@
 						</tr>
 				    </thead>
 				</table>
-				<input id="hostGroupId" name="hostGroup" value = "${taskInfo.hostGroup }" type="hidden"/>
 			</td>
 		</tr>
 		<tr>
@@ -149,9 +141,15 @@
 		<tr>
 			<td colspan="4">备注:<textarea class="easyui-kindeditor" id="remark" rows="3" >${taskInfo.remark }</textarea></td>
 		</tr>
+		<tr class="bg-primary">
+			<td colspan="4" align="center">拒签交办表信息</td>
+		</tr>
 		<tr>
 			<td class="text-right">拒签单位:</td>
-			<td>${project.group.name }</td>
+			<td>
+				${project.group.name }
+				<input name="oldHostGroup" value="${project.group.id }" type="hidden"/>
+			</td>
 			<td class="text-right">拒签人:</td>
 			<td>${project.refuseUser.name }</td>
 		</tr>
@@ -159,7 +157,14 @@
 			<td colspan="4">拒签原因:<textarea class="easyui-kindeditor" id="refuseReason" rows="3" >${project.refuseReason }</textarea></td>
 		</tr>
 		<tr>
-			<td colspan="4"><a href="javascript:void(0);" class="easyui-linkbutton" onclick="changeGroup();" data-options="iconCls:'icon-ok'">替换此单位</a></td>
+			<td>
+				<a href="javascript:void(0);" class="easyui-linkbutton" onclick="changeGroup();" data-options="iconCls:'icon-reload'">替换</a>
+				<small><abbr id="changeGroup"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></abbr></small>
+				<input id="hostGroupId" name="hostGroup" type="hidden"/>
+			</td>
+			<td colspan="3">
+				替换后的单位：<span class="text-danger" id="hostGroupName"></span>
+			</td>
 		</tr>
 		<tr>
 	  		<td colspan="4">

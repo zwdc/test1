@@ -11,7 +11,7 @@
 	})
 </script>
 <div class="easyui-layout">
-<form id="form" action="${ctx }/project/approval" method="post">
+<form id="form" action="${ctx }/project/approvalRefuse" method="post">
 	<input name="projectId" value="${project.id }" type="hidden">
 	<input id="taskId" name="taskId" type="hidden">
     <table class="table table-bordered table-hover table-condensed">
