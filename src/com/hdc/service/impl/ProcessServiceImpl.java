@@ -206,8 +206,7 @@ public class ProcessServiceImpl implements IProcessService{
         	String executionId = task.getExecutionId();
             ProcessInstance processInstance = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).active().singleResult();
             if(BeanUtils.isBlank(processInstance)){
-            	//如果有挂起的流程则continue
-            	continue;
+            	continue;//如果有挂起的流程则continue
             }
             String processTaskId = (String) getVariableByExecutionId(executionId, "processTaskId");
             if(StringUtils.isNotBlank(processTaskId)) {
@@ -215,6 +214,7 @@ public class ProcessServiceImpl implements IProcessService{
             	/*processTask.setTaskId(task.getId());
             	processTask.setExecutionId(executionId);
             	processTask.setProcessInstanceId(processInstanceId);*/
+            	
             	processTask.setProcessDefinitionId(processInstance.getProcessDefinitionId());
             	processTask.setTaskName(task.getName());
             	processTask.setTaskCreateDate(task.getCreateTime());

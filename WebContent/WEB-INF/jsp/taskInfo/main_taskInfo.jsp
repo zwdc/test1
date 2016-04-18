@@ -222,8 +222,9 @@
 			<td colspan="4" align="center">任务信息</td>
 		</tr>
 		<tr>
-			<td class="text-right">任务标题:</td>
-			<td colspan="3"><input name="title" class="easyui-textbox" data-options="prompt:'填写任务标题'" value="${taskInfo.title }" required="required" type="text" style="width: 50%"></td>
+			<td class="text-right">任务内容:</td>
+			<td colspan="3"><textarea class="easyui-kindeditor" 
+					data-options="readonlyMode:false"  rows="2" required="required">${taskInfo.title }</textarea></td>
 		</tr>
 		<tr>
 			<td class="text-right">任务简称:</td>
