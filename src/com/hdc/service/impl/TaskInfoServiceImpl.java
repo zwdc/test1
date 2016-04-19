@@ -68,8 +68,7 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 	@Override
 	public void doStartProcess(TaskInfo taskInfo) throws Exception {
 		taskInfo.setStatus(ApprovalStatus.PENDING.toString());
-		this.baseService.update(taskInfo);
-		
+		this.baseService.update(taskInfo);		
 		//给用户提示任务
 		User user = UserUtil.getUserFromSession();
 		ProcessTask processTask = new ProcessTask();
@@ -96,8 +95,7 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 		//给秘书长提示代办任务
 		taskInfo.setStatus(ApprovalStatus.PENDING.toString());
 		this.baseService.update(taskInfo);
-		Map<String, Object> variables = new HashMap<String, Object>();
-		
+		Map<String, Object> variables = new HashMap<String, Object>();		
 		User user = UserUtil.getUserFromSession();
 		ProcessTask processTask = new ProcessTask();
 		processTask.setTaskTitle(taskInfo.getTitle());
@@ -140,8 +138,7 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 		comments.setUserName(user.getName()); 
 		comments.setContent(comment);
 		comments.setBusinessKey(taskInfoId);
-		comments.setBusinessForm(BusinessForm.TASK_FORM.toString());
-		
+		comments.setBusinessForm(BusinessForm.TASK_FORM.toString());		
 		variables.put("isPass", isPass);
 		this.processService.complete(taskId, comments, variables);
 	}

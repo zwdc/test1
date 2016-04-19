@@ -13,14 +13,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.hdc.entity.Comments;
 import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
+import com.hdc.entity.ProcessTask;
+import com.hdc.entity.TaskInfo;
+import com.hdc.entity.TaskSource;
+import com.hdc.entity.User;
 import com.hdc.service.IBaseService;
 import com.hdc.service.IFeedbackRecordService;
 import com.hdc.service.IProcessService;
+import com.hdc.service.IProcessTaskService;
+import com.hdc.service.ITaskSourceService;
 import com.hdc.util.BeanUtils;
+import com.hdc.util.Constants.ApprovalStatus;
+import com.hdc.util.Constants.BusinessForm;
 import com.hdc.util.Constants.FeedbackStatus;
+import com.hdc.util.UserUtil;
 
 @Service
 public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
@@ -30,6 +40,12 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 	
 	@Autowired
 	private IProcessService processService;
+	
+	@Autowired
+    private ITaskSourceService taskResourceService;
+    
+	@Autowired
+	private IProcessTaskService processTaskService;
 	
 	@Override
 	public List<FeedbackRecord> getListPage(Parameter param,
@@ -124,6 +140,89 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 			throws Exception {
 		String hql = "from FeedbackRecord where project.id = " + projectId +" order by createDate ASC";
 		return this.baseService.find(hql);
+	}
+
+	@Override
+	public void doStartProcess(FeedbackRecord feedback) throws Exception {
+		feedback.setStatus(FeedbackStatus.FEEDBACKING.toString());
+		this.baseService.update(feedback);
+		TaskInfo taskInfo=feedback.getProject().getTaskInfo();
+		//给用户提示任务
+		User user=UserUtil.getUserFromSession();
+		ProcessTask processTask=new ProcessTask();
+		processTask.setTaskTitle(taskInfo.getTitle());
+		processTask.setTitle("反馈已提交，需要审核");
+		processTask.setUrl("/feedback/toApproval?fbId="+feedback.getId().toString());
+		TaskSource taskResource = this.taskResourceService.findById(taskInfo.getTaskSource().getId());
+		processTask.setTaskInfoType(taskResource.getTaskInfoType().getName());		//任务类型
+		processTask.setTaskInfoId(taskInfo.getId());
+		processTask.setApplyUserId(user.getId());
+		processTask.setApplyUserName(user.getName());
+		Serializable processTaskId = this.processTaskService.doAdd(processTask);
+		
+		//初始化流程参数
+		Map<String, Object> vars = new HashMap<String, Object>();
+		vars.put("taskInfoId", taskInfo.getId().toString());
+		vars.put("processTaskId", processTaskId.toString());
+		//启动审批流程
+		this.processService.startApproval("ApprovalFeedback", taskInfo.getId().toString(), vars);	
+				
+	}
+
+	@Override
+	public void doApproval(Integer feedbackId, boolean isPass, String taskId, String comment) throws Exception {
+		User user = UserUtil.getUserFromSession();
+		Map<String, Object> variables = new HashMap<String, Object>();
+		FeedbackRecord fbr = this.findById(feedbackId);
+		if(isPass) {
+			fbr.setStatus(FeedbackStatus.ACCEPT.toString()); //审批成功
+		} else {
+			fbr.setStatus(FeedbackStatus.RETURNED.toString()); //审批失败
+			TaskInfo taskInfo=fbr.getProject().getTaskInfo();
+			ProcessTask processTask = new ProcessTask();
+			processTask.setTaskTitle(taskInfo.getTitle());
+			processTask.setApplyUserId(user.getId());
+			processTask.setApplyUserName(user.getName());
+			processTask.setTaskInfoId(taskInfo.getId());
+			processTask.setTaskInfoType(taskInfo.getTaskSource().getTaskInfoType().getName());
+			processTask.setTitle("反馈已被退回，请修改后重新提交！");
+			processTask.setUrl("/feedback/toMain?fbId="+fbr.getId().toString()+"&action=feedback");
+			Serializable id = this.processTaskService.doAdd(processTask);
+			variables.put("processTaskId", id);
+		}
+		// 评论,可记录每次审核意见
+		Comments comments = new Comments();
+		comments.setUserId(user.getId().toString());
+		comments.setUserName(user.getName()); 
+		comments.setContent(comment);
+		comments.setBusinessKey(feedbackId);
+		comments.setBusinessForm(BusinessForm.FEEDBACK_FORM.toString());
+	    variables.put("isPass", isPass);
+		this.processService.complete(taskId, comments, variables);
+	}
+
+	@Override
+	public void doCompleteTask(FeedbackRecord feedback, String taskId) throws Exception {
+		//给秘书长提示代办任务
+				feedback.setStatus(FeedbackStatus.FEEDBACKING.toString());
+				this.baseService.update(feedback);
+				TaskInfo taskInfo=feedback.getProject().getTaskInfo();
+				Map<String, Object> variables = new HashMap<String, Object>();		
+				User user = UserUtil.getUserFromSession();
+				ProcessTask processTask = new ProcessTask();
+				processTask.setTaskTitle(taskInfo.getTitle());
+				processTask.setApplyUserId(user.getId());
+				processTask.setApplyUserName(user.getName());
+				processTask.setTaskInfoId(taskInfo.getId());
+				TaskSource taskSource = this.taskResourceService.findById(taskInfo.getTaskSource().getId());
+				processTask.setTaskInfoType(taskSource.getTaskInfoType().getName());
+				processTask.setTitle("反馈修改完成！需要重新审批!");
+				processTask.setUrl("/feedback/toApproval?fbId="+feedback.getId().toString());
+				Serializable processTaskId = this.processTaskService.doAdd(processTask);
+				//初始化任务参数
+				variables.put("processTaskId", processTaskId.toString());
+				this.processService.complete(taskId, null, variables);
+		
 	}
 
 }

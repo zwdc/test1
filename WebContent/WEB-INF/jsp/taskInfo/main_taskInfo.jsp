@@ -224,7 +224,7 @@
 		<tr>
 			<td class="text-right">任务内容:</td>
 			<td colspan="3"><textarea class="easyui-kindeditor" 
-					data-options="readonlyMode:false"  rows="2" required="required">${taskInfo.title }</textarea></td>
+					data-options="readonlyMode:false" name="title" rows="2" required="required">${taskInfo.title }</textarea></td>
 		</tr>
 		<tr>
 			<td class="text-right">任务简称:</td>
@@ -269,13 +269,7 @@
 		<tr>
 			<td class="text-right">责任单位:</td>
 			<td colspan="3">
-				<textarea name="assistantGroup" rows="3" cols="80" style="width: 100%">${taskInfo.assistantGroup }</textarea>
-			</td>
-		</tr>
-		<tr>
-			<td class="text-right">备注:</td>
-			<td colspan="3">
-				<textarea name="remark" class="easyui-kindeditor" rows="3" cols="80" style="width: 100%">${taskInfo.remark }</textarea>
+				<textarea name="assistantGroup" rows="1" cols="80" style="width: 100%">${taskInfo.assistantGroup }</textarea>
 			</td>
 		</tr>
 	</table>

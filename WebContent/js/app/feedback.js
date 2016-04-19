@@ -178,7 +178,7 @@ function feedback(){
     var row = feedback_datagrid.datagrid('getSelected');
     if (row) {
     	feedback_dialog = $('<div/>').dialog({
-	    	title : "反馈进行",
+	    	title : "进行反馈",
 			top: 20,
 			width : fixWidth(0.9),
 			height : 'auto',
@@ -191,10 +191,51 @@ function feedback(){
 	        },
 	        buttons: [
 	            {
-	                text: '保存',
+	                text: '暂存',
 	                iconCls: 'icon-save',
 	                handler: function () {
 	                	feedback_form.submit();
+	                }
+	            },
+	            {
+	            	text: '申请审核',
+	            	iconCls: 'icon-ok',
+	            	id: 'ok',
+	            	handler: function () {
+	                	$.messager.confirm('确认提示！','确认提交表单进入反馈审核流程吗？',function(result){
+	                		if(result){
+	                			taskInfo_form.form('submit',{
+	    	            		 	url: ctx+"/feedback/callApproval",
+	    	            	        onSubmit: function () {
+	    	            		        $.messager.progress({
+	    	            		            title: '提示信息！',
+	    	            		            text: '数据处理中，请稍后....'
+	    	            		        });
+	    	            		        var isValid = $(this).form('validate');
+	    	            		        if (!isValid) {
+	    	            		            $.messager.progress('close');
+	    	            		        } else {
+	    	            		        	$("#save").linkbutton("disable");
+	    	            		        	$("#ok").linkbutton("disable");
+	    	            		        }
+	    	            		        return isValid;
+	    	            		    },
+	    	            		    success: function (data) {
+	    	            	            $.messager.progress('close');
+	    	            	            var json = $.parseJSON(data);
+	    	            	            if (json.status) {
+	    	            	            	taskInfo_dialog.dialog('destroy');//销毁对话框
+	    	            	            	taskInfo_datagrid.datagrid('reload');//重新加载列表数据
+	    	            	            } 
+	    	            	            $.messager.show({
+	    	            					title : json.title,
+	    	            					msg : json.message,
+	    	            					timeout : 1000 * 2
+	    	            				});
+	    	            	        }
+	    	            	    });
+	                		}
+	                	});
 	                }
 	            },
 	            {

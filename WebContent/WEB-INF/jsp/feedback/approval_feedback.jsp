@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<%@ taglib prefix="zwdc" uri="http://zwdc.com/zwdc/tags/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <script type="text/javascript" src="${ctx}/js/kindeditor.js"></script>
 
@@ -18,41 +18,10 @@
 			}
 		});	 
 	});
-	function submitForm(obj, taskId) {
-		$('#feedback_form').form('submit', {
-		 	url: ctx+"/feedback/saveOrUpdate",
-	        onSubmit: function () {
-	        	if(taskId != null) {
-		        	param.taskId = taskId;
-	        	}
-		        $.messager.progress({
-		            title: '提示信息！',
-		            text: '数据处理中，请稍后....'
-		        });
-		        var isValid = $(this).form('validate');
-		        if (!isValid) {
-		            $.messager.progress('close');
-		        }
-		        return isValid;
-		    },
-		    success: function (data) {
-	            $.messager.progress('close');
-	            var json = $.parseJSON(data);
-	            if (json.status) {
-	            	obj.dialog('destroy');
-	            } 
-	            $.messager.show({
-					title : json.title,
-					msg : json.message,
-					timeout : 1000 * 2
-				});
-	            
-	        }
-	    });
-	}
+
 </script>
 <div class="easyui-layout">
-<form id="feedback_form" method="post" encType="multipart/form-data">
+<form id="feedback_form" method="post" action="${ctx }/feedback/approval" encType="multipart/form-data">
 	<input type="hidden" id="feedbackId" name="id" value="${feedback.id }">
 	<table class="table table-bordered" style="width: 100%;">
 		<tr class="bg-primary">
@@ -123,19 +92,19 @@
 		   		</td>
 		   	</tr>	   
 	  	<tr>
-	  		<td class="text-right">反馈材料审核:</td>
-	  		<td colspan="5">
-	  		   <div class="">
-	  		    <pre><input type="radio" class="easyui-radio" name="status" value="SUCCESS" checked="checked" />采用   /  <input type="radio" class="easyui-radio" name="status" value="FAIL"/>退回</pre>
-	  		   </div>
-	  		   <div>
-	  		   <textarea class="easyui-kindeditor"
-					data-options="prompt:'反馈开始时间'" name="suggestion" rows="3" required="required"></textarea>	   
-	  		   </div>	  		    
+	  		<td colspan="6">
+	  			<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;审批意见:
+	  			<textarea class="easyui-kindeditor" name="comment" rows="3"></textarea>
 	  		</td>
 	  	</tr>
     	
 	</table>
     
 </form>
+<hr style="margin-top: -5px ">
+<div class="pull-right" style="margin: -15px 5px 5px 0px">
+ 	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="submit(true);" data-options="iconCls:'icon-ok'">同意</a>
+	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="submit(false);" data-options="iconCls:'icon-remove'">不同意</a>
+	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="closeDialog();" data-options="iconCls:'icon-cancel'">关闭</a>
+</div>
 </div>

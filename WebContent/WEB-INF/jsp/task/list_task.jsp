@@ -50,7 +50,7 @@
 					<span style="font-size:9px ">表单类型：</span>
 							<select id="businessForm" class="easyui-combobox" style="width:120px;" data-options="editable:false,panelHeight:'auto'">
 								<option selected value="">请选择</option>
-								<option value="PROJECT">立项表</option>
+								<!-- <option value="PROJECT">立项表</option>
 								<option value="SALES">销售审批表</option>
 								<option value="SALES_CONTRACT">销售合同</option>
 								<option value="PROCUREMENT_CONTRACT">采购合同</option>
@@ -60,7 +60,7 @@
 								<option value="INBOUND">入库单</option>
 								<option value="PROCUREMENT_TUNHUO">囤货采购审批表</option>
 								<option value="PROCUREMENT_BUHUO">补货采购审批表</option>
-								<option value="INVOICE">开票</option>
+								<option value="INVOICE">开票</option>-->
 							</select>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="selectMap();">搜索</a>

@@ -18,7 +18,7 @@
 			<td colspan="4" align="center">任务信息</td>
 		</tr>
 		<tr>
-			<td class="text-right">任务标题:</td>
+			<td class="text-right">任务内容:</td>
 			<td colspan="3">${taskInfo.title }</td>
 		</tr>
 		<tr>

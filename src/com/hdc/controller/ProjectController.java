@@ -53,9 +53,6 @@ public class ProjectController {
 			//办理中
 			return "project/list_h_project";
 		} else if(type == 3) {
-			//申请办结
-			return "project/list_ae_project";
-		} else if(type == 4) {
 			//已办结
 			return "project/list_e_project";
 		}

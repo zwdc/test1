@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
+import com.hdc.entity.TaskInfo;
 
 /**
  * 反馈接口
@@ -104,5 +105,30 @@ public interface IFeedbackRecordService {
 			@RequestParam(value = "taskId", required = false) String taskId,
 			@RequestParam("file") MultipartFile file,
 			HttpServletRequest request) throws Exception;
+	/**
+	 * 启动任务分配流程 
+	 * @param taskInfo
+	 * @throws Exception
+	 */
+	public void doStartProcess(FeedbackRecord feedback) throws Exception;
+	
+	/**
+	 * 审批
+	 * @param salesId
+	 * @param isPass
+	 * @param taskId
+	 * @param processInstanceId
+	 * @param comment
+	 * @throws Exception
+	 */
+	public void doApproval(Integer salesId, boolean isPass, String taskId, String comment) throws Exception;
+	
+	/**
+	 * 完成任务
+	 * @param taskInfo
+	 * @param taskId
+	 * @throws Exception
+	 */
+	public void doCompleteTask(FeedbackRecord feedback, String taskId) throws Exception;
 	
 }

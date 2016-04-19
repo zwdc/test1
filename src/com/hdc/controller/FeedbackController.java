@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.activiti.engine.ActivitiException;
 import org.apache.commons.fileupload.FileUploadBase.FileSizeLimitExceededException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -111,7 +112,7 @@ public class FeedbackController {
 		if("edit".equals(action)){
 			mv = new ModelAndView("feedback/main_feedback");			
 		}else if("check".equals(action)){
-			mv = new ModelAndView("feedback/check_feedback");			
+			mv = new ModelAndView("feedback/approval_feedback");			
 		}else if("detail".equals(action)){
 			mv = new ModelAndView("feedback/details_feedback");			
 		}else if("feedback".equals(action)){
@@ -125,7 +126,7 @@ public class FeedbackController {
 		return mv;
 	}
 	/**
-	 * 实施反馈
+	 * 审核反馈
 	 * @param feedback
 	 * @param request
 	 * @return
@@ -157,6 +158,34 @@ public class FeedbackController {
 		
 		return message;
 	}
+	 /**
+     * 审批反馈操作
+     * @param taskInfoId
+     * @param isPass
+     * @param taskId
+     * @param processInstanceId
+     * @param comment
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/approval")
+	@ResponseBody
+	public Message approval(
+			@RequestParam("feedbackId") Integer feedbackId, 
+			@RequestParam("isPass") boolean isPass,
+			@RequestParam("taskId") String taskId, 
+			@RequestParam("comment") String comment)
+					throws Exception {
+		Message message = new Message();
+		try {
+			this.feedbackService.doApproval(feedbackId, isPass, taskId, comment);
+			message.setMessage("操作成功！");
+		} catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("审批反馈时出错！");
+		}
+		return message;
+    }
 	/**
 	 * 实施反馈
 	 * @param feedback
@@ -358,17 +387,17 @@ public class FeedbackController {
 		}
 		return message;
 	}
-	   /**
-     * 申请反馈审核，可以通过也可以不通过。
+	/**
+     * 申请反馈审核，可以采用也可以退回。
      * @return
      * @throws Exception
      */
     @RequestMapping("/callApproval")
     @ResponseBody
-    public Message callApproval(TaskInfo taskInfo) throws Exception {
+    public Message callApproval(FeedbackRecord feedback) throws Exception {
     	Message message = new Message();
     	try {
-    		//this.taskInfoService.doStartProcess(taskInfo);
+    		this.feedbackService.doStartProcess(feedback);
     		message.setMessage("操作成功！");
 		} catch (ActivitiException e) {
 			message.setStatus(Boolean.FALSE);
@@ -393,41 +422,41 @@ public class FeedbackController {
      * @throws Exception
      */
     @RequestMapping("/toApproval")
-    public ModelAndView toApproval(@RequestParam(value = "taskInfoId", required = false) Integer taskInfoId) throws Exception {
-    	ModelAndView mv = new ModelAndView("taskInfo/approval_taskInfo");
-    	//TaskInfo taskInfo = this.taskInfoService.findById(taskInfoId);
-    	//mv.addObject("taskInfo", taskInfo);
+    public ModelAndView toApproval(@RequestParam(value = "feedbackId", required = false) Integer feedbackId) throws Exception {
+    	ModelAndView mv = new ModelAndView("feedback/approval_feedback");
+    	FeedbackRecord feedback = this.feedbackService.findById(feedbackId);
+    	mv.addObject("feedback", feedback);
     	return mv;
     }
     
-    /**
-     * 审批操作
-     * @param taskInfoId
-     * @param isPass
-     * @param taskId
-     * @param processInstanceId
-     * @param comment
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value = "/approval")
-	@ResponseBody
-	public Message approval(
-			@RequestParam("taskInfoId") Integer taskInfoId, 
-			@RequestParam("isPass") boolean isPass,
-			@RequestParam("taskId") String taskId, 
-			@RequestParam("comment") String comment)
-					throws Exception {
-		Message message = new Message();
-		try {
-			//this.taskInfoService.doApproval(taskInfoId, isPass, taskId, comment);
-			message.setMessage("审批完成！");
-		} catch (Exception e) {
-			message.setStatus(Boolean.FALSE);
-			message.setMessage("审批失败！");
-		}
-		return message;
-    }
+//    /**
+//	 * 签收任务交办表
+//	 * @return
+//	 * @throws Exception 
+//	 */
+//	@RequestMapping("/claimProject/{projectId}")
+//	@ResponseBody
+//	public Message claimProject(@PathVariable("projectId") String projectId) throws Exception {
+//		Message message = new Message();
+//		try {
+//			if(StringUtils.isNotBlank(projectId)) {
+//				Boolean flag = this.projectService.doClaimProject(projectId);
+//				if(flag) {
+//					message.setMessage("签收成功！");
+//				} else {
+//					message.setMessage("该任务已被其他人签收！");
+//				}
+//			}
+//		} catch (Exception e) {
+//			message.setStatus(Boolean.FALSE);
+//			message.setMessage("签收失败！");
+//			throw e;
+//		}
+//		return message;
+//	}
+	
+    
+   
     
     /**
      * 完成任务
@@ -438,14 +467,14 @@ public class FeedbackController {
      */
     @RequestMapping("/completeTask")
     @ResponseBody
-    public Message completeTask(TaskInfo taskInfo, @RequestParam(value = "taskId", required = false) String taskId) throws Exception {
+    public Message completeTask(FeedbackRecord feedback, @RequestParam(value = "feedbackId", required = false) String feedbackId) throws Exception {
     	Message message = new Message();
     	try {
-    		//this.taskInfoService.doCompleteTask(taskInfo, taskId);
-    		message.setMessage("申请成功！");
+    		this.feedbackService.doCompleteTask(feedback, feedbackId);
+    		message.setMessage("提交成功！");
 		} catch (Exception e) {
 			message.setStatus(Boolean.FALSE);
-			message.setMessage("申请失败!");
+			message.setMessage("提交失败!");
 			throw e;
 		}
     	return message;

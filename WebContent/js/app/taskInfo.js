@@ -16,8 +16,9 @@ $(function(){
 		striped:true,					//隔行变色
 		columns:[
 		    [
-		     	{field:'title',title:'任务标题',width:fixWidth(0.2),align:'left',halign:'center'},
-		     	{field:'info',title:'任务简称',width:fixWidth(0.2),align:'left',halign:'center'},
+		     
+		     	{field:'title',title:'任务内容',width:fixWidth(0.3),align:'left',halign:'center'},
+		     	{field:'info',title:'任务简称',width:fixWidth(0.1),align:'left',halign:'center'},
 		     	{field:'createTaskDate',title:'开始时间',width:fixWidth(0.1),align:'center',sortable:true,
 		     		formatter:function(value,row){
 	            		  return moment(value).format("YYYY-MM-DD HH:mm:ss");
@@ -30,7 +31,7 @@ $(function(){
 		     	},
 		     	{field:'fbFrequencyName',title:'反馈频度',width:fixWidth(0.1),align:'center'},
 		     	{field:'taskSourceName',title:'任务来源',width:fixWidth(0.1),align:'center'},
-		     	{field:'urgency',title:'急缓程度',width:fixWidth(0.1),align:'center',sortable:true,
+		     	{field:'urgency',title:'急缓程度',width:fixWidth(0.05),align:'center',sortable:true,
 		     		formatter:function(value,row){
 	            		  switch (value) {
 	            		  	case 0: return "特提";
