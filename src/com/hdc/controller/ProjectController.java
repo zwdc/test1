@@ -84,7 +84,7 @@ public class ProjectController {
 			//拒签操作被驳回的操作
 			List<Comments> commentsList = this.commentsService.findComments(projectId, BusinessForm.PROJECT_FORM.toString());
 			mv.addObject("commentsList", commentsList);
-			mv.setViewName("change_failed_project");
+			mv.setViewName("project/change_failed_project");
 		}
     	Project project = this.projectService.findById(projectId);
     	if(project != null) {
@@ -219,6 +219,8 @@ public class ProjectController {
      * @return
      * @throws Exception
      */
+    @RequestMapping("/approvalRefuse")
+    @ResponseBody
     public Message approvalRefuse(
     		@RequestParam("projectId") Integer projectId, 
     		@RequestParam("oldHostGroup") Integer oldGroupId,
@@ -299,6 +301,28 @@ public class ProjectController {
         } catch (Exception e) {
 			message.setStatus(Boolean.FALSE);
 			message.setMessage("操作失败！");
+			throw e;
+		}
+    	return message;
+    }
+    
+    /**
+     * 查看驳回申请时，点确认完成任务
+     * @param taskId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/completeApprovalFailed")
+    @ResponseBody
+    public Message completeApprovalFailed(
+			@RequestParam(value = "taskId", required = false) String taskId) throws Exception {
+    	Message message = new Message();
+    	try {
+    		this.projectService.doCompleteApprovalFailed(taskId);
+    		message.setMessage("已确认");
+		} catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("确认失败!");
 			throw e;
 		}
     	return message;

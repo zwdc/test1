@@ -98,7 +98,7 @@ public class ProjectServiceImpl implements IProjectService {
 		
 		if(type == 1) {
 			//待签收/已签收/审批中/审批通过/审批失败
-			sb.append("where a.is_delete = 0 and (a.status = 'WAIT_FOR_CLAIM' or a.status = 'CLAIMED' or a.status = 'PENDING' or a.status = 'APPROVAL_SUCCESS' or a.status = 'APPROVAL_FAILED') and a.group_id = :groupId and (a.user_id = :userId or a.user_id is null)");
+			sb.append("where a.is_delete = 0 and (a.status = 'WAIT_FOR_CLAIM' or a.status = 'CLAIMED' or a.status = 'PENDING' or a.status = 'APPROVAL_SUCCESS' or a.status = 'APPROVAL_FAILED' or a.status = 'REFUSE_FAILED') and a.group_id = :groupId and (a.user_id = :userId or a.user_id is null)");
 		} else if(type == 2) {
 			//办理中/申请办结
 			sb.append("where a.is_delete = 0 and (a.status = 'IN_HANDLING' or a.status = 'APPLY_FINISHED') and a.group_id = :groupId and a.user_id = :userId ");
@@ -238,7 +238,7 @@ public class ProjectServiceImpl implements IProjectService {
 			processTask.setTaskInfoId(taskInfo.getId());
 			processTask.setTaskInfoType(taskInfo.getTaskSource().getTaskInfoType().getName());
 			processTask.setTitle("任务交办表审批不通过，请修改后重新审批！");
-			processTask.setUrl("/project/toProject/change_failed?projectId="+projectId.toString());
+			processTask.setUrl("/project/toProject/modify?projectId="+projectId.toString());
 			Serializable processTaskId = this.processTaskService.doAdd(processTask);
 			variables.put("processTaskId", processTaskId.toString());
 		}
@@ -345,7 +345,7 @@ public class ProjectServiceImpl implements IProjectService {
 			Serializable processTaskId = this.processTaskService.doAdd(processTask);
 			variables.put("processTaskId", processTaskId.toString());
 		} else {
-			project.setStatus(ApprovalStatus.APPROVAL_FAILED.toString()); 	//不同意修改承办单位
+			project.setStatus(ApprovalStatus.REFUSE_FAILED.toString()); 	//不同意修改承办单位
 			TaskInfo taskInfo = project.getTaskInfo();
 			ProcessTask processTask = new ProcessTask();
 			processTask.setTaskTitle(taskInfo.getTitle());
@@ -354,7 +354,7 @@ public class ProjectServiceImpl implements IProjectService {
 			processTask.setTaskInfoId(taskInfo.getId());
 			processTask.setTaskInfoType(taskInfo.getTaskSource().getTaskInfoType().getName());
 			processTask.setTitle("您拒绝签收的操作被驳回，查看驳回原因！");
-			processTask.setUrl("/project/toProject/details?projectId="+project.getId());
+			processTask.setUrl("/project/toProject/change_failed?projectId="+project.getId());
 			Serializable processTaskId = this.processTaskService.doAdd(processTask);
 			variables.put("processTaskId", processTaskId.toString());
 		}
@@ -370,6 +370,11 @@ public class ProjectServiceImpl implements IProjectService {
 		variables.put("isPass", isPass);
 		this.processService.complete(taskId, comments, variables);
 		
+	}
+
+	@Override
+	public void doCompleteApprovalFailed(String taskId) throws Exception {
+		this.processService.complete(taskId, null, null);
 	}
 
 }

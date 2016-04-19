@@ -43,10 +43,10 @@ public class Constants {
     
 	/**
 	 * 审批状态枚举
-	 * 审批中、待审批、审批成功(通过)、审批失败(不通过)、通过后重新提交审批(发现业务表单填写错了，但是审批已经通过了)
+	 * 审批中、待审批、审批成功(通过)、拒签收失败、审批失败(不通过)、通过后重新提交审批(发现业务表单填写错了，但是审批已经通过了)
 	 */
 	public enum ApprovalStatus {
-		PENDING("PENDING"), WAITING_FOR_APPROVAL("WAITING_FOR_APPROVAL"), APPROVAL_SUCCESS("APPROVAL_SUCCESS"), APPROVAL_FAILED("APPROVAL_FAILED"), REAPPROVAL("REAPPROVAL") ;
+		PENDING("PENDING"), WAITING_FOR_APPROVAL("WAITING_FOR_APPROVAL"), APPROVAL_SUCCESS("APPROVAL_SUCCESS"), REFUSE_FAILED("REFUSE_FAILED"), APPROVAL_FAILED("APPROVAL_FAILED"), REAPPROVAL("REAPPROVAL") ;
 		private final String value;
 		private ApprovalStatus(String value) {
 			this.value = value;
@@ -68,6 +68,9 @@ public class Constants {
 					break;
 				case "APPROVAL_SUCCESS":
 					as = APPROVAL_SUCCESS;
+					break;
+				case "REFUSE_FAILED":
+					as = REFUSE_FAILED;
 					break;
 				case "APPROVAL_FAILED":
 					as = APPROVAL_FAILED;

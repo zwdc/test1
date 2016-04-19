@@ -51,6 +51,8 @@ $(function(){
 								return "<span class='text-success'>审批通过</span>";
 							case "APPROVAL_FAILED":
 								return "<span class='text-danger'>审批失败</span>";
+							case "REFUSE_FAILED":
+								return "<span class='text-primary'>拒签失败</span>";
 							case "WAITING_FOR_APPROVAL":
 								return "<span class='text-warning'>待申请审批</span>";
 							case "PENDING":

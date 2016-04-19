@@ -24,7 +24,6 @@
 	function changeGroup() {
 		group_dialog = $('<div/>').dialog({
 	    	title : "选择承办单位",
-			top: 20,
 			width : 1000,
 			height : 400,
 	        modal: true,
@@ -36,7 +35,7 @@
 	            group_datagrid = $('#group_datagrid').datagrid({
 	                url: ctx+"/choose/chooseGroup",
 	                width : 'auto',
-	        		height :  $(this).height()-40,
+	        		height :  $(this).height(),
 	        		pagination:true,
 	        		rownumbers:true,
 	        		border:false,
@@ -84,7 +83,7 @@
 	}
 </script>
 <div class="easyui-layout">
-<form id="form" action="${ctx }/project/approval" method="post">
+<form id="form" action="${ctx }/project/approvalRefuse" method="post">
 	<input name="projectId" value="${project.id }" type="hidden">
 	<input id="taskId" name="taskId" type="hidden">
     <table class="table table-bordered table-hover table-condensed">

@@ -125,6 +125,14 @@ public interface IProjectService {
 	public void doCompleteTask(Integer projectId, String suggestion, String taskId) throws Exception;
 	
 	/**
+	 * 查看驳回申请时，点确认完成任务
+	 * @param projectId
+	 * @param taskId
+	 * @throws Exception
+	 */
+	public void doCompleteApprovalFailed(String taskId) throws Exception;
+	
+	/**
 	 * 删除
 	 * @param id
 	 * @throws Exception
