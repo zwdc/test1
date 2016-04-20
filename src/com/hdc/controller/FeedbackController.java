@@ -126,7 +126,7 @@ public class FeedbackController {
 		return mv;
 	}
 	/**
-	 * 审核反馈
+	 * 审核反馈 -- 暂时没用了
 	 * @param feedback
 	 * @param request
 	 * @return
@@ -145,7 +145,7 @@ public class FeedbackController {
 			} else {
 				FeedbackRecord fbr=this.feedbackService.findById(id);
 			    fbr.setStatus(feedback.getStatus()); //获取反馈状态，（反馈中 RUNNING、已退回 FAIL、已采用 SUCCESS）
-			    fbr.setSuggestion(feedback.getSuggestion());//获取建议意见
+			    //fbr.setSuggestion(feedback.getSuggestion());//获取建议意见
 			    this.feedbackService.doUpdate(fbr);
 				message.setData(id);
 				message.setMessage("审核完成！");

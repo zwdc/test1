@@ -88,9 +88,9 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 	@Column(name = "task_schedule", length = 3)
 	private Integer taskSchedule;			//任务进度
 	
-	@Column(name = "suggestion", length = 1000)
+/*	@Column(name = "suggestion", length = 1000)
 	private String suggestion;				//督导意见
-	
+*/	
 	@Column(name = "status", length = 30)
 	private String status;					//反馈情况（反馈中 RUNNING、已退回 FAIL、已采用 SUCCESS）
 	
@@ -205,14 +205,6 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 
 	public void setTaskSchedule(Integer taskSchedule) {
 		this.taskSchedule = taskSchedule;
-	}
-
-	public String getSuggestion() {
-		return suggestion;
-	}
-
-	public void setSuggestion(String suggestion) {
-		this.suggestion = suggestion;
 	}
 
 	public String getStatus() {

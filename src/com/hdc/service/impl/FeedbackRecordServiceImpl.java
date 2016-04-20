@@ -27,7 +27,6 @@ import com.hdc.service.IProcessService;
 import com.hdc.service.IProcessTaskService;
 import com.hdc.service.ITaskSourceService;
 import com.hdc.util.BeanUtils;
-import com.hdc.util.Constants.ApprovalStatus;
 import com.hdc.util.Constants.BusinessForm;
 import com.hdc.util.Constants.FeedbackStatus;
 import com.hdc.util.UserUtil;
@@ -66,7 +65,7 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 
 	@Override
 	public List<FeedbackRecord> findByTaskId(Integer id) throws Exception {
-		String hql = "from FeedbackRecord where taskInfo.id = " + id +" order by createDate ASC";
+		String hql = "from FeedbackRecord where taskInfo.id = " + id +" and isDelete = 0 order by createDate ASC";
 		return this.baseService.find(hql);
 	}
 
@@ -143,7 +142,8 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 	}
 
 	@Override
-	public void doStartProcess(FeedbackRecord feedback) throws Exception {
+	public void doStartProcess(FeedbackRecord fb) throws Exception {
+		FeedbackRecord feedback = this.findById(fb.getId());
 		feedback.setStatus(FeedbackStatus.FEEDBACKING.toString());
 		this.baseService.update(feedback);
 		TaskInfo taskInfo=feedback.getProject().getTaskInfo();
@@ -151,8 +151,8 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 		User user=UserUtil.getUserFromSession();
 		ProcessTask processTask=new ProcessTask();
 		processTask.setTaskTitle(taskInfo.getTitle());
-		processTask.setTitle("反馈已提交，需要审核");
-		processTask.setUrl("/feedback/toApproval?fbId="+feedback.getId().toString());
+		processTask.setTitle("反馈已提交，等待审核！");
+		processTask.setUrl("/feedback/toApproval?feedbackId="+feedback.getId().toString());
 		TaskSource taskResource = this.taskResourceService.findById(taskInfo.getTaskSource().getId());
 		processTask.setTaskInfoType(taskResource.getTaskInfoType().getName());		//任务类型
 		processTask.setTaskInfoId(taskInfo.getId());
@@ -162,7 +162,8 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 		
 		//初始化流程参数
 		Map<String, Object> vars = new HashMap<String, Object>();
-		vars.put("taskInfoId", taskInfo.getId().toString());
+		vars.put("createTaskUser", taskInfo.getCreateUser().getId().toString());
+		vars.put("projectId", feedback.getProject().getId().toString());
 		vars.put("processTaskId", processTaskId.toString());
 		//启动审批流程
 		this.processService.startApproval("ApprovalFeedback", taskInfo.getId().toString(), vars);	

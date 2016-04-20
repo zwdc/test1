@@ -71,7 +71,8 @@ $(function() {
               {field: 'delayCount', title: '延期次数', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true},
               {field: 'refuseCount', title: '退回次数', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true}  
         ]
-             ]
+     ],
+     toolbar: "#toolbar"
     });
     
 	$("#searchbox").searchbox({ 

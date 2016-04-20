@@ -23,6 +23,7 @@
 <div class="easyui-layout">
 <form id="feedback_form" method="post" action="${ctx }/feedback/approval" encType="multipart/form-data">
 	<input type="hidden" id="feedbackId" name="id" value="${feedback.id }">
+	<input id="taskId" name="taskId" type="hidden">
 	<table class="table table-bordered" style="width: 100%;">
 		<tr class="bg-primary">
 			<td colspan="6" align="center">反馈信息审核</td>

@@ -65,6 +65,10 @@
 <div class="easyui-layout">
 <form id="feedback_form" method="post" encType="multipart/form-data">
 	<input type="hidden" id="feedbackId" name="id" value="${feedback.id }">
+	<%-- <input type="hidden" name="createUserId" value="${feedback.createUserId }"/>
+    <input type="hidden" name="createDate" value="<fmt:formatDate value='${feedback.createDate }' type='both'/>"/>
+    <input type="hidden" name="isDelete" value="${feedback.isDelete }"/>
+    <input type="hidden" name="status" value="${feedback.status }"/> --%>
 	<table class="table table-bordered table-hover" style="width: 100%;">
 		<tr class="bg-primary">
 			<td colspan="6" align="center">填报反馈信息</td>
