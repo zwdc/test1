@@ -3,7 +3,6 @@ package com.hdc.service;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
-import com.hdc.entity.TaskInfo;
 
 /**
  * 反馈接口
@@ -84,7 +82,13 @@ public interface IFeedbackRecordService {
 	 */
 	public List<FeedbackRecord> findByProjectId(Integer projectId) throws Exception;
 	
-	
+	/**
+	 * 查询所有状态不等于accept的
+	 * @param projectId
+	 * @return
+	 * @throws Exception
+	 */
+	public List<FeedbackRecord> findNoAccept(String projectId) throws Exception;
 	/**
 	 * 删除
 	 * @param id

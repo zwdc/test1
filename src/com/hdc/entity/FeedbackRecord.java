@@ -92,7 +92,7 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 	private String suggestion;				//督导意见
 */	
 	@Column(name = "status", length = 30)
-	private String status;					//反馈情况（反馈中 RUNNING、已退回 FAIL、已采用 SUCCESS）
+	private String status;					//反馈情况（反馈中 FEEDBACKING、已退回 RETURNED、已采用 ACCEPT）
 	
 	@Column(name = "refuse_count", length = 2)
 	private Integer refuseCount;			//退回次数

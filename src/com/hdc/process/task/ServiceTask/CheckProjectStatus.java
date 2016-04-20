@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.hdc.entity.Project;
 import com.hdc.service.IProjectService;
 import com.hdc.service.ITaskInfoService;
+import com.hdc.util.Constants.ProjectStatus;
 
 @Component
 public class CheckProjectStatus implements JavaDelegate {
@@ -35,7 +36,7 @@ public class CheckProjectStatus implements JavaDelegate {
 			}
 			if(flag) {
 				this.taskInfoService.doUpdateStatus(taskInfoId); //更改任务状体为办理中
-				this.projectService.doUpdateStatus(taskInfoId);  //更改此任务下所有项目表的状态为-办理中
+				this.projectService.doUpdateStatus(taskInfoId, ProjectStatus.IN_HANDLING.toString());  //更改此任务下所有项目表的状态为-办理中
 			}
 		}
 		

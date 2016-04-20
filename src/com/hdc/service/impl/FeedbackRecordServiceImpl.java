@@ -226,4 +226,10 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 		
 	}
 
+	@Override
+	public List<FeedbackRecord> findNoAccept(String projectId) throws Exception {
+		String hql = "from FeedbackRecord where status <> 'ACCEPT' and isDelete = 0 and project.id = " + projectId.toString();
+		return this.baseService.find(hql);
+	}
+
 }

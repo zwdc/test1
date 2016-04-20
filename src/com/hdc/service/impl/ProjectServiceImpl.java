@@ -284,8 +284,8 @@ public class ProjectServiceImpl implements IProjectService {
 	}
 
 	@Override
-	public Integer doUpdateStatus(String taskInfoId) throws Exception {
-		String hql = "update Project set status = 'IN_HANDLING' where taskInfo.id = " + taskInfoId;
+	public Integer doUpdateStatus(String taskInfoId, String status) throws Exception {
+		String hql = "update Project set status = '" + status + "' where taskInfo.id = " + taskInfoId;
 		return this.baseService.executeHql(hql);
 	}
 
@@ -375,6 +375,12 @@ public class ProjectServiceImpl implements IProjectService {
 	@Override
 	public void doCompleteApprovalFailed(String taskId) throws Exception {
 		this.processService.complete(taskId, null, null);
+	}
+
+	@Override
+	public Integer doUpdateProjectStatus(String projectId, String status) throws Exception {
+		String hql = "update Project set status = '" + status + "' where id = " + projectId;
+		return this.baseService.executeHql(hql);
 	}
 
 }

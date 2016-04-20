@@ -76,12 +76,22 @@ public interface IProjectService {
 	public void doUpdate(Project project) throws Exception;
 	
 	/**
-	 * 根据taskInfoId批量更新项目状态为-办理中
+	 * 根据taskInfoId批量更新项目状态
 	 * @param taskInfoId
+	 * @param status
 	 * @return
 	 * @throws Exception
 	 */
-	public Integer doUpdateStatus(String taskInfoId) throws Exception;
+	public Integer doUpdateStatus(String taskInfoId, String status) throws Exception;
+	
+	/**
+	 * 根据projectId更新状态
+	 * @param projectId
+	 * @param status
+	 * @return
+	 * @throws Exception
+	 */
+	public Integer doUpdateProjectStatus(String projectId, String status) throws Exception;
 	
 	/**
 	 * 更新拟办意见
