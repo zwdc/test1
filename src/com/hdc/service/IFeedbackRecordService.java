@@ -129,10 +129,10 @@ public interface IFeedbackRecordService {
 	
 	/**
 	 * 完成任务
-	 * @param taskInfo
+	 * @param feedbackId
 	 * @param taskId
 	 * @throws Exception
 	 */
-	public void doCompleteTask(FeedbackRecord feedback, String taskId) throws Exception;
+	public void doCompleteTask(Integer feedbackId,  String taskId) throws Exception;
 	
 }

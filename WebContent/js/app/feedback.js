@@ -49,15 +49,16 @@ $(function() {
               },
               {field: 'status', title: '状态', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true,
             	  formatter:function(value){
-            		  if (value=="SUCCESS") {           			
-                      	return "采用";
-                      }else if(value=="FAIL"){
-                    	  return "退回"; 
-                      }else if(value=="RUNNING"){
-                    	  return "反馈中"; 
-                      }else{
-                    	  return "未反馈";
-                      }
+            		  switch (value) {
+						case "FEEDBACKING":
+							return "<span class='text-primary'>反馈处理中</span>";
+						case "RETURNED":
+							return "<span class='text-danger'>已退回</span>";
+						case "ACCEPT":
+							return "<span class='text-success'>已采纳</span>";
+						default:
+							return "<span class='text-warning'>未反馈</span>";
+					  }
             	  },
             	  styler:function(value){
             		  if (value=="SUCCESS") {           			
@@ -205,7 +206,7 @@ function feedback(){
 	            	handler: function () {
 	                	$.messager.confirm('确认提示！','确认提交表单进入反馈审核流程吗？',function(result){
 	                		if(result){
-	                			taskInfo_form.form('submit',{
+	                			feedback_form.form('submit',{
 	    	            		 	url: ctx+"/feedback/callApproval",
 	    	            	        onSubmit: function () {
 	    	            		        $.messager.progress({
@@ -225,8 +226,8 @@ function feedback(){
 	    	            	            $.messager.progress('close');
 	    	            	            var json = $.parseJSON(data);
 	    	            	            if (json.status) {
-	    	            	            	taskInfo_dialog.dialog('destroy');//销毁对话框
-	    	            	            	taskInfo_datagrid.datagrid('reload');//重新加载列表数据
+	    	            	            	feedback_dialog.dialog('destroy');//销毁对话框
+	    	            	            	feedback_datagrid.datagrid('reload');//重新加载列表数据
 	    	            	            } 
 	    	            	            $.messager.show({
 	    	            					title : json.title,

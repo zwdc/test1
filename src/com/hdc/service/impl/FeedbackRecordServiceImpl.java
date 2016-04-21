@@ -187,9 +187,9 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 			processTask.setTaskInfoId(taskInfo.getId());
 			processTask.setTaskInfoType(taskInfo.getTaskSource().getTaskInfoType().getName());
 			processTask.setTitle("反馈已被退回，请修改后重新提交！");
-			processTask.setUrl("/feedback/toMain?fbId="+fbr.getId().toString()+"&action=feedback");
-			Serializable id = this.processTaskService.doAdd(processTask);
-			variables.put("processTaskId", id);
+			processTask.setUrl("/feedback/toMain?id="+fbr.getId().toString()+"&action=modify");
+			Serializable processTaskId = this.processTaskService.doAdd(processTask);
+			variables.put("processTaskId", processTaskId.toString());
 		}
 		// 评论,可记录每次审核意见
 		Comments comments = new Comments();
@@ -203,26 +203,27 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 	}
 
 	@Override
-	public void doCompleteTask(FeedbackRecord feedback, String taskId) throws Exception {
+	public void doCompleteTask(Integer feedbackId, String taskId) throws Exception {
 		//给秘书长提示代办任务
-				feedback.setStatus(FeedbackStatus.FEEDBACKING.toString());
-				this.baseService.update(feedback);
-				TaskInfo taskInfo=feedback.getProject().getTaskInfo();
-				Map<String, Object> variables = new HashMap<String, Object>();		
-				User user = UserUtil.getUserFromSession();
-				ProcessTask processTask = new ProcessTask();
-				processTask.setTaskTitle(taskInfo.getTitle());
-				processTask.setApplyUserId(user.getId());
-				processTask.setApplyUserName(user.getName());
-				processTask.setTaskInfoId(taskInfo.getId());
-				TaskSource taskSource = this.taskResourceService.findById(taskInfo.getTaskSource().getId());
-				processTask.setTaskInfoType(taskSource.getTaskInfoType().getName());
-				processTask.setTitle("反馈修改完成！需要重新审批!");
-				processTask.setUrl("/feedback/toApproval?fbId="+feedback.getId().toString());
-				Serializable processTaskId = this.processTaskService.doAdd(processTask);
-				//初始化任务参数
-				variables.put("processTaskId", processTaskId.toString());
-				this.processService.complete(taskId, null, variables);
+		FeedbackRecord feedback = this.findById(feedbackId);
+		feedback.setStatus(FeedbackStatus.FEEDBACKING.toString());
+		this.baseService.update(feedback);
+		TaskInfo taskInfo=feedback.getProject().getTaskInfo();
+		Map<String, Object> variables = new HashMap<String, Object>();		
+		User user = UserUtil.getUserFromSession();
+		ProcessTask processTask = new ProcessTask();
+		processTask.setTaskTitle(taskInfo.getTitle());
+		processTask.setApplyUserId(user.getId());
+		processTask.setApplyUserName(user.getName());
+		processTask.setTaskInfoId(taskInfo.getId());
+		TaskSource taskSource = this.taskResourceService.findById(taskInfo.getTaskSource().getId());
+		processTask.setTaskInfoType(taskSource.getTaskInfoType().getName());
+		processTask.setTitle("反馈修改完成！需要重新审批!");
+		processTask.setUrl("/feedback/toApproval?feedbackId="+feedback.getId().toString());
+		Serializable processTaskId = this.processTaskService.doAdd(processTask);
+		//初始化任务参数
+		variables.put("processTaskId", processTaskId.toString());
+		this.processService.complete(taskId, null, variables);
 		
 	}
 

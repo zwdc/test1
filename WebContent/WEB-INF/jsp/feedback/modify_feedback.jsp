@@ -6,22 +6,74 @@
 <script type="text/javascript" src="${ctx}/js/kindeditor.js"></script>
 
 <script type="text/javascript">
-	$(function() {
-		$('#download').tooltip({
-			position: 'right',
-			content: '<span style="color:#fff">点击下载</span>',
-			onShow: function(){
-				$(this).tooltip('tip').css({
-					backgroundColor: '#666',
-					borderColor: '#666'
+	//暂存
+	function saveTemporary() {
+		$('#feedback_form').form('submit', {
+	    	url: ctx+"/feedback/saveFeedback",
+	        onSubmit: function (data) {
+		        $.messager.progress({
+		            title: '提示信息！',
+		            text: '数据处理中，请稍后....'
+		        });
+		        var isValid = $(this).form('validate');
+		        if (!isValid) {
+		            $.messager.progress('close');
+		        }
+		        return isValid;
+		    },
+		    success: function (result) {
+		        $.messager.progress('close');
+		        var json = $.parseJSON(result);
+		        if (json.status) {
+		        	task_dialog.dialog("destroy");
+		        } 
+		        $.messager.show({
+					title : json.title,
+					msg : json.message,
+					timeout : 1000 * 2
 				});
-			}
-		});	 
-	});
-
+		    }
+	    });
+	}
+	
+	//完成任务
+	function completeTask() {
+		$('#feedback_form').form('submit', {
+	    	url: ctx+"/feedback/completeTask",
+	        onSubmit: function (param) {
+		        $.messager.progress({
+		            title: '提示信息！',
+		            text: '数据处理中，请稍后....'
+		        });
+		        var isValid = $(this).form('validate');
+		        if (!isValid) {
+		            $.messager.progress('close');
+		        }
+		        return isValid;
+		    },
+		    success: function (result) {
+		        $.messager.progress('close');
+		        var json = $.parseJSON(result);
+		        if (json.status) {
+		        	task_dialog.dialog('destroy');
+              	  	todoTask_datagrid.datagrid('reload');//重新加载列表数据
+		        } 
+		        $.messager.show({
+					title : json.title,
+					msg : json.message,
+					timeout : 1000 * 2
+				});
+		    }
+	    });
+	}
+	
+	//关闭dialog
+	function closeDialog() {
+		task_dialog.dialog('destroy');
+	}
 </script>
 <div class="easyui-layout">
-<form id="form" method="post" action="${ctx }/feedback/approval" encType="multipart/form-data">
+<form id="feedback_form" method="post" action="${ctx }/feedback/approval" encType="multipart/form-data">
 	<input type="hidden"  name="feedbackId" value="${feedback.id }">
 	<input id="taskId" name="taskId" type="hidden">
 	<table class="table table-bordered" style="width: 100%;">
@@ -92,20 +144,11 @@
 
 		   		</td>
 		   	</tr>	   
-	  	<tr>
-	  		<td colspan="6">
-	  			<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;审批意见:
-	  			<textarea class="easyui-kindeditor" name="comment" rows="3"></textarea>
-	  		</td>
-	  	</tr>
-    	
 	</table>
-    
+    <hr style="margin-top: -5px ">
+	<div class="pull-right" style="margin: -15px 5px 5px 0px;">
+	 	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="saveTemporary();" data-options="iconCls:'icon-save'">暂存</a>
+		<a href="javascript:void(0);" class="easyui-linkbutton" onclick="completeTask();" data-options="iconCls:'icon-ok'">提交任务</a>
+		<a href="javascript:void(0);" class="easyui-linkbutton" onclick="closeDialog();" data-options="iconCls:'icon-cancel'">关闭</a>
+	</div>
 </form>
-<hr style="margin-top: -5px ">
-<div class="pull-right" style="margin: -15px 5px 5px 0px">
- 	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="submit(true);" data-options="iconCls:'icon-ok'">同意</a>
-	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="submit(false);" data-options="iconCls:'icon-remove'">不同意</a>
-	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="closeDialog();" data-options="iconCls:'icon-cancel'">关闭</a>
-</div>
-</div>
