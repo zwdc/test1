@@ -79,19 +79,18 @@
 			<td colspan="5"><textarea class="easyui-kindeditor"
 				data-options="readonlyMode:true" rows="3">${feedback.solutions }</textarea></td>
 		</tr>
-        <tr>
-		  		<td class="text-right">附件材料：</td>
-		   		<td colspan="5" style="8px">
-		   		     <c:forEach items="${feedback.fdaList}" var="fda"> 
-					 <div class="layout_default">
-    					<p class="info"><span class="date"></span> <span class="author"></span></p>
-    					<div class="image_container"> <a href="${ctx }${fda.url}" rel="lightbox[ostec]"> 
-    						<img src="${ctx }${fda.url}"> </a> </div>
-  					</div>
-					 </c:forEach> 
-
-		   		</td>
-		   	</tr>	   
+		<tr>
+	  		<td class="text-right">附件材料：</td>
+	   		<td colspan="5" style="8px">		   
+	   		     <c:forEach items="${feedback.fdaList}" var="fda"> 
+	   		     	<div class="well well-small">
+   					    <a href="${ctx }${fda.url}" target=blank> 
+   						<img src="${ctx }/images/icon/${fda.type}.gif" title="" onmousemove="showPic(event,'http://avatar.profile.csdn.net/D/8/D/2_dean8828.jpg');" onmouseout="hiddenPic();">${fda.uploadDate} - ${fda.name} 
+ 					    </a>
+ 					</div>
+				 </c:forEach> 
+	   		</td>
+	   	</tr>
 	  	<tr>
 	  		<td colspan="6">
 	  			<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;审批意见:

@@ -131,39 +131,18 @@
 				data-options="readonlyMode:true" rows="3">${feedback.solutions }</textarea></td>
 		</tr>
         <tr>
-		  		<td class="text-right">附件材料：</td>
-		   		<td colspan="5" style="8px">		   
-		   		     <c:forEach items="${feedback.fdaList}" var="fda"> 
-		   		     		<div>
-    					    <a href="${ctx }${fda.url}" target=blank> 
-    						<pre><img src="${ctx }/images/icon/${fda.type}.gif" title="" onmousemove="showPic(event,'http://avatar.profile.csdn.net/D/8/D/2_dean8828.jpg');" onmouseout="hiddenPic();">${fda.uploadDate} - ${fda.name}</pre> 
-  					        </a>
-  					        </div>
-							
-					 </c:forEach> 
-					 <div id="Layer1" style="display:none; position: absolute; z-index: 100; background-color:black">sdfsdf</div>
-		   		</td>
-		   	</tr>	   
-	  	<tr>
-	  		<td class="text-right">反馈材料审核:</td>
-	  		<td colspan="5">
-	  		   <div class="">
-	  		   <c:choose>
-	  		    <c:when test="${feedback.status=='SUCCESS'}">
-			    <input type="radio" class="easyui-radio" name="status" value="SUCCESS" checked="checked" disabled="disabled"/>采用   /  <input type="radio" class="easyui-radio" name="status" value="FAIL" disabled="disabled"/>退回
-		        </c:when>
-		        <c:otherwise>
-		 		<input type="radio" class="easyui-radio" name="status" value="SUCCESS" disabled="disabled"/>采用   /  <input type="radio" class="easyui-radio" name="status" value="FAIL" disabled="disabled" checked="checked" />退回
-		       </c:otherwise>
-		       </c:choose>
-	  		   </div>
-	  		   <div>
-	  		   <textarea class="easyui-kindeditor"
-					data-options="readonlyMode:true" name="suggestion" rows="3">${feedback.suggestion}</textarea>	   
-	  		   </div>	  		    
-	  		</td>	
-	  	</tr>
-    	
+	  		<td class="text-right">附件材料：</td>
+	   		<td colspan="5" style="8px">		   
+	   		     <c:forEach items="${feedback.fdaList}" var="fda"> 
+	   		     	<div class="well well-small">
+   					    <a href="${ctx }${fda.url}" target=blank> 
+   						<img src="${ctx }/images/icon/${fda.type}.gif" title="" onmousemove="showPic(event,'http://avatar.profile.csdn.net/D/8/D/2_dean8828.jpg');" onmouseout="hiddenPic();">${fda.uploadDate} - ${fda.name} 
+ 					    </a>
+ 					</div>
+				 </c:forEach> 
+				 <div id="Layer1" style="display:none; position: absolute; z-index: 100; background-color:black">sdfsdf</div>
+	   		</td>
+	   	</tr>	   
 	</table>
    
 </form>
