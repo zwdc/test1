@@ -26,7 +26,7 @@ import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.TaskSource;
 import com.hdc.service.ITaskSourceService;
-import com.hdc.util.BeanUtils;
+import com.hdc.util.BeanUtilsExt;
 import com.hdc.util.Constants;
 import com.hdc.util.FileDownloadUtils;
 import com.hdc.util.upload.FileUploadUtils;
@@ -156,7 +156,7 @@ public class TaskSourceController {
     public void downloadFile(
     		@RequestParam("id") Integer id,
     		HttpServletRequest request, HttpServletResponse response) throws Exception {
-    	if(!BeanUtils.isBlank(id)){
+    	if(!BeanUtilsExt.isBlank(id)){
     		TaskSource TaskSource = this.taskSourceService.findById(id);
     		if(StringUtils.isBlank(TaskSource.getFileName()) || StringUtils.isBlank(TaskSource.getFilePath())){
     			response.setContentType("text/html;charset=utf-8");

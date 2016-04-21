@@ -26,7 +26,7 @@ import com.hdc.service.IFeedbackRecordService;
 import com.hdc.service.IProcessService;
 import com.hdc.service.IProcessTaskService;
 import com.hdc.service.ITaskSourceService;
-import com.hdc.util.BeanUtils;
+import com.hdc.util.BeanUtilsExt;
 import com.hdc.util.Constants.BusinessForm;
 import com.hdc.util.Constants.FeedbackStatus;
 import com.hdc.util.UserUtil;
@@ -107,7 +107,7 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 			MultipartFile file, HttpServletRequest request) throws Exception {
 		Integer id = feedback.getId();
 		if(id == null) {
-			if(!BeanUtils.isBlank(file)) {
+			if(!BeanUtilsExt.isBlank(file)) {
 				/*String filePath = FileUploadUtils.upload(request, file, Constants.FILE_PATH);
 				feedback.setFilePath(filePath);
 				feedback.setFileName(file.getOriginalFilename());

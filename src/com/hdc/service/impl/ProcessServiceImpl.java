@@ -53,7 +53,7 @@ import com.hdc.service.ICommentsService;
 import com.hdc.service.IProcessService;
 import com.hdc.service.IProcessTaskService;
 import com.hdc.service.IUserService;
-import com.hdc.util.BeanUtils;
+import com.hdc.util.BeanUtilsExt;
 import com.hdc.util.UserUtil;
 import com.hdc.workflow.WorkflowService;
 
@@ -205,7 +205,7 @@ public class ProcessServiceImpl implements IProcessService{
         	String processInstanceId = task.getProcessInstanceId();
         	String executionId = task.getExecutionId();
             ProcessInstance processInstance = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).active().singleResult();
-            if(BeanUtils.isBlank(processInstance)){
+            if(BeanUtilsExt.isBlank(processInstance)){
             	continue;//如果有挂起的流程则continue
             }
             String processTaskId = (String) getVariableByExecutionId(executionId, "processTaskId");

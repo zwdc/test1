@@ -15,7 +15,7 @@ import com.hdc.entity.Parameter;
 import com.hdc.entity.Resource;
 import com.hdc.service.IBaseService;
 import com.hdc.service.IResourceService;
-import com.hdc.util.BeanUtils;
+import com.hdc.util.BeanUtilsExt;
 
 @Service
 public class ResourceServiceImpl implements IResourceService {
@@ -36,7 +36,7 @@ public class ResourceServiceImpl implements IResourceService {
 	
 	@Override
 	public List<Resource> getTree(Integer roleId) throws Exception {
-		if(!BeanUtils.isBlank(roleId)){
+		if(!BeanUtilsExt.isBlank(roleId)){
 			String hql = "select r from Resource r, RoleAndResource rar where " +
 					     "r.id = rar.resourceId and r.isDelete = 0 and r.type = 'menu' and rar.roleId = "+roleId +
 					     " order by r.parentId, r.sort";
@@ -105,7 +105,7 @@ public class ResourceServiceImpl implements IResourceService {
 
 	@Override
 	public Integer doUpdateSort(String id, String pId, String sort) throws Exception {
-		if(!BeanUtils.isBlank(sort)){
+		if(!BeanUtilsExt.isBlank(sort)){
 			String hql = "update Resource set parentId="+ pId +", sort="+ sort +" where id=" + id;
 			return this.baseService.executeHql(hql);
 		}else{

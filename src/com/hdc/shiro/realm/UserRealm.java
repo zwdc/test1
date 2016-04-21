@@ -26,7 +26,7 @@ import com.hdc.entity.User;
 import com.hdc.service.IResourceService;
 import com.hdc.service.IRoleAndResourceService;
 import com.hdc.service.IUserService;
-import com.hdc.util.BeanUtils;
+import com.hdc.util.BeanUtilsExt;
 import com.hdc.util.UserUtil;
 
 /**
@@ -64,7 +64,7 @@ public class UserRealm extends AuthorizingRealm{
 	        Set<String> resources = new HashSet<String>();
 	        for(RoleAndResource rar : rarList){
 	        	Resource resource = this.resourceService.getPermissions(rar.getResourceId());
-	        	if(!BeanUtils.isBlank(resource)){
+	        	if(!BeanUtilsExt.isBlank(resource)){
 	        		resources.add(resource.getPermission());	//添加权限字符串
 	        	}
 	        }

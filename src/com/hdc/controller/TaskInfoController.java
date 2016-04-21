@@ -26,7 +26,7 @@ import com.hdc.entity.TaskInfo;
 import com.hdc.entity.User;
 import com.hdc.service.IGroupService;
 import com.hdc.service.ITaskInfoService;
-import com.hdc.util.BeanUtils;
+import com.hdc.util.BeanUtilsExt;
 import com.hdc.util.Constants.ApprovalStatus;
 import com.uwantsoft.goeasy.client.goeasyclient.GoEasy;
 import com.uwantsoft.goeasy.client.goeasyclient.listener.GoEasyError;
@@ -66,7 +66,7 @@ public class TaskInfoController {
 	@RequestMapping("/toMain")
 	public ModelAndView toMain(@RequestParam(value="id", required=false) Integer id) throws Exception {
 		ModelAndView mv = new ModelAndView("taskInfo/main_taskInfo");
-		if(!BeanUtils.isBlank(id)) {
+		if(!BeanUtilsExt.isBlank(id)) {
 			TaskInfo taskInfo = this.taskInfoService.findById(id);
 			mv.addObject("taskInfo", taskInfo);
 		}
@@ -155,7 +155,7 @@ public class TaskInfoController {
 		Message message = new Message();
 		Integer id = taskInfo.getId();
 		try {
-			if(BeanUtils.isBlank(id)) {
+			if(BeanUtilsExt.isBlank(id)) {
 				taskInfo.setStatus(ApprovalStatus.WAITING_FOR_APPROVAL.toString());
 				Serializable taskInfoId = this.taskInfoService.doAdd(taskInfo);
 				message.setData(taskInfoId.toString());

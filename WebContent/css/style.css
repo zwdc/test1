@@ -1,0 +1,193 @@
+* {
+	margin:0 auto;
+	padding:0px;
+	text-align:center;
+	text-decoration:none;
+	color: #000000;
+}
+
+.lan1{
+    position: absolute;
+	top: 30px;
+	right: 40px;
+
+}
+
+.cont_principal { 
+  position:absolute;
+  width:100%;
+  height:100%;  background:url('../images/bg.jpeg')  center / cover;
+}
+
+.cont_join {
+	overflow:hidden;
+	position:absolute;
+	width:600px;
+	height:350px;
+	box-shadow:1px 1px 1000px 1000px rgba(0,0,0,0.3),0px 0px 20px 4px rgba(0,0,0,0.4);
+	left:40%;
+	top:340px;
+	margin-top:-230px;
+	margin-left:-160px;
+	-webkit-transition: all 500ms;
+	-o-transition: all 500ms;
+	transition: all 500ms;
+	background: rgba(250,250,250,0.5);
+
+}
+  .cont_join:hover {
+  box-shadow:1px 1px 1000px 1000px rgba(0,0,0,0.5),0px 0px 20px 4px rgba(0,0,0,0.9);
+
+}
+.cont_btn_join {  
+  position:absolute;
+  bottom:0px;
+  width:100%;
+  -webkit-transition: all 500ms;
+  -o-transition: all 500ms;
+  transition: all 500ms;
+}
+
+.cont_btn_join > button {
+  display:block;
+  text-align:center;
+  padding:10px 0px;
+  background-color:rgba(21, 74, 118,0.82);
+  font-size:20px;
+  font-family:Arial;
+  font-weight:100;
+  width:100%;
+  color:#fff;
+}
+
+
+.cont_letras { 
+  position:relative;
+  float:right;
+  margin:16px;
+  -webkit-transition: all 500ms;
+  -o-transition: all 500ms;
+  transition: all 500ms;
+}
+ 
+.cont_letras > p {
+	position:relative;
+	margin: 0px 16px;
+	font-size:48px;
+	font-family: 'Josefin Sans';
+	font-weight:1000;
+	font-style:italic;
+	color:#333333;
+	-webkit-transition: all 500ms;
+	-o-transition: all 500ms;
+	transition: all 500ms;
+	left:0px;
+}
+
+.cont_join_form_act{
+
+}
+.cont_join_form_act > .cont_letras {
+  right:0px;
+  height:0px;  
+} 
+
+.cont_join_form_act > .cont_form_join
+{
+  left:0px;
+}
+.cont_form_join {
+  position: relative;
+  width:100%;
+  height:94%;
+  float:left;
+  left:-320px;
+  -webkit-transition: all 500ms;
+  -o-transition: all 500ms;
+  transition: all 500ms;
+  bottom:0px;
+ }
+
+.cont_form_join > h2 {
+	font-family: 'Josefin Sans';
+	font-wight:800;
+	color:#000000;
+	font-size:40px;
+	margin-top:15px;
+}
+
+
+
+.cont_form_join > p {
+	font-family: 'Josefin Sans';
+	font-weight:700;
+	color:#000000;
+	font-size:20px;
+	margin:15px 0px 2px 15px;
+	marigin-bottom:2px;
+	text-align:left;
+}
+
+.input_text {
+	width:400px;
+	padding:10px;
+	border:1px solid rgba(0,0,0,0.2);
+	font-size:20px;
+	text-align:left;
+	background-color:rgba(255,255,255,1);
+	color:#333333;
+	border-radius: 5px;
+}
+
+ 
+ 
+.cont_join_finish >  .cont_btn_join {
+  bottom:-200px;
+}
+.cont_join_form_finish {
+position:relative;
+top:50%;
+left:-115px;
+}
+.cont_join_finish > .cont_join_form_finish {
+ left:115px; 
+-webkit-transition: all 1s;
+-o-transition: all 1s;
+transition: all 1s;
+}
+
+
+.cont_join_form_finish  > h2 {
+	font-family: 'Josefin Sans';
+	font-weight:700;
+	color:#00FFCC;
+	font-size:26px;
+}
+
+.cont_join_finish  {
+box-shadow:0px 0px;  
+
+}
+
+.cont_join_finish:hover {
+  box-shadow:0px 0px;  
+}
+ 
+.demo-text {
+	margin: auto;
+	position: absolute;
+	top: -430px;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	width: 100%;
+	display: table;
+	height: auto;
+	color: #fcfcfc;
+	text-align: center;
+	font-size: 4em;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: bold;
+	letter-spacing: -0.02em;
+	line-height: 1.2em;
+}

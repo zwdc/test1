@@ -1,6 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/taglibs/taglibs.jsp"%>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,34 +10,24 @@
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
+	<link rel="stylesheet" type="text/css" href="${ctx}/css/htmleaf-demo.css">
+	<link rel="stylesheet" href="${ctx}/css/style.css">
+	<script src='${ctx}/js/shine.min.js'></script>
+    <script src="${ctx}/js/index.js"></script>
 </head>
 <body>
-  <div id="main-wrapper">
-    <div class="navbar navbar-inverse" role="navigation">
-      <div class="navbar-header">
-        <div class="logo"><h1>邯郸市政务电子督查系统</h1></div>
-      </div>   
-    </div>
-    <div class="template-page-wrapper">
-      <form class="form-horizontal templatemo-signin-form" role="form" name="formLogin" action="" id="formLogin" method="post">
-      	<div id="errorMsg" class="form-group">
-      		<div class="row">
-		        <div id="msg" class="alert alert-danger sr-only" role="alert">
-				  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-				  <span class="sr-only">Error:</span>
-				  ${msg }
- 				   <button type="button" class="close" data-dismiss="alert" 
-				      aria-hidden="true">
-				      &times;
-				   </button>
-			    </div>
-		    </div>
-	    </div>
+  <div id="main-wrapper htmleaf-container">
+  <div class="cont_principal">
+    <div class="template-page-wrapper cont_join">
+      <div class="">
+        	<h1>邯郸市政务电子督查系统</h1>
+       </div> 
+      <form class="form-horizontal" role="form" name="formLogin" action="" id="formLogin" method="post">
         <div id="username" class="form-group">
           <div class="col-sm-12">
             <label for="username" class="col-sm-2 control-label">用户名</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" name="name" placeholder="Username" value="admin">
+              <input type="text" class="form-control input_text" name="name" placeholder="Username" value="发改委1">
             </div>
           </div>              
         </div>
@@ -44,7 +35,7 @@
           <div class="col-sm-12">
             <label for="password" class="col-sm-2 control-label">密&nbsp;&nbsp;码</label>
             <div class="col-sm-10">
-              <input type="password" class="form-control" name="passwd" placeholder="Password" value="123">
+              <input type="password" class="form-control input_text" name="passwd" placeholder="Password" value="123">
             </div>
           </div>
         </div>
@@ -63,22 +54,29 @@
 					</c:if>
               </div>
             </div>
-<!--             <div class="col-sm-2"></div>
-            <div class="col-sm-5 form-inline input-group">
-            	
-            </div> -->
           </div>
         </div>
-        <div class="form-group">
-          <div class="col-sm-12">
-            <div class="col-sm-offset-2 col-sm-10">
-              <input type="submit" value="登录" class="btn btn-default">
-            </div>
-          </div>
+        <div id="errorMsg" class="form-group">
+      		<div class="row">
+		        <div id="msg" class="alert alert-danger sr-only" role="alert">
+				  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				  <span class="sr-only">Error:</span>
+				  ${msg }
+ 				   <button type="button" class="close" data-dismiss="alert" 
+				      aria-hidden="true">
+				      &times;
+				   </button>
+			    </div>
+		    </div>
+	    </div>
+        <div class="cont_btn_join">
+              <button type="submit" class="">登录</button>
         </div>
       </form>
     </div>
+    </div>
   </div>
+  
 <script>
 	$(function() {
 	    $("#jcaptcha").click(function() {

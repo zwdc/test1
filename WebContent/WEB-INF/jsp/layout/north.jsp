@@ -29,6 +29,7 @@
 		});
 	}
 </script>
+<div style="font-size:20px">欢迎使用邯郸市政务电子督查系统</div>
 <div style="position: absolute; right: 10px; bottom: 5px; ">
 	<shiro:principal/>&nbsp;&nbsp;你好，欢迎登录！&nbsp;&nbsp;
 	<a href="javascript:void(0);" class="easyui-menubutton" menu="#layout_north_kzmbMenu" iconCls="icon-help">控制面板</a> 

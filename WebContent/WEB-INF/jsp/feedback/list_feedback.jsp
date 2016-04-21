@@ -16,7 +16,7 @@
 	<script type="text/javascript" src="${ctx}/js/app/feedback.js?_=${sysInitTime}"></script>
   </head>
   <body>
-	<div id="toolbar" style="padding:2px 0">
+	<div id="feedbacktoolbar" style="padding:2px 0">
 		<table>
 			<tr>
 				<td style="padding-left:2px">

@@ -21,7 +21,7 @@ import com.hdc.service.IActivitiIdentityService;
 import com.hdc.service.IBaseService;
 import com.hdc.service.IGroupService;
 import com.hdc.service.IUserService;
-import com.hdc.util.BeanUtils;
+import com.hdc.util.BeanUtilsExt;
 
 
 /**
@@ -59,7 +59,7 @@ public class UserServiceImpl implements IUserService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("name", user_name);
 		User user = this.baseService.findUnique("User", map);
-		if(BeanUtils.isBlank(user)){
+		if(BeanUtilsExt.isBlank(user)){
 			return null;
 		}else{
 			return user;

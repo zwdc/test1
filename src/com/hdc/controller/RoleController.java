@@ -16,7 +16,7 @@ import com.hdc.entity.Role;
 import com.hdc.entity.RoleAndResource;
 import com.hdc.service.IRoleAndResourceService;
 import com.hdc.service.IRoleService;
-import com.hdc.util.BeanUtils;
+import com.hdc.util.BeanUtilsExt;
 
 /**
  * 角色(职位)控制器
@@ -112,7 +112,7 @@ public class RoleController {
 	@RequestMapping(value = "/savePermission")
 	@ResponseBody
 	public Message savePermission(@RequestParam("roleId") Integer roleId, @RequestParam("resourceIds[]") String[] resourceIds) throws Exception {
-		if(!BeanUtils.isBlank(roleId)){
+		if(!BeanUtilsExt.isBlank(roleId)){
 			this.rarService.doDeleteByRole(roleId);
 			for(String resourceId: resourceIds){
 				RoleAndResource rar = new RoleAndResource();
@@ -135,7 +135,7 @@ public class RoleController {
 	@RequestMapping(value = "/delete")
 	@ResponseBody
 	public Message delete(@RequestParam("id") Integer id) throws Exception{
-		if(!BeanUtils.isBlank(id)) {
+		if(!BeanUtilsExt.isBlank(id)) {
 			this.rarService.doDeleteByRole(id);
 			this.roleService.doDelete(id.toString());
 			return new Message(Boolean.TRUE, "删除成功！");

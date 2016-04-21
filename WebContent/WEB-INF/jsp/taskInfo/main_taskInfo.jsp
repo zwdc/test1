@@ -230,7 +230,7 @@
 			<td class="text-right">任务简称:</td>
 			<td><input name="info" value="${taskInfo.info }" data-options="prompt:'任务简称'" class="easyui-textbox" required="required"></td>
 			<td class="text-right">急缓程度:</td>
-			<td><input id="urgency" name="urgency" value="${taskInfo.urgency }" data-options="prompt:'选择急缓程度'" class="easyui-combobox" required="required"></td>
+			<td><input id="urgency" name="urgency" value="${taskInfo.urgency}" data-options="prompt:'选择急缓程度'" class="easyui-combobox" required="required"></td>
 		</tr>
 		<tr>
 			<td class="text-right">任务来源:</td>

@@ -150,11 +150,9 @@ public class ProjectServiceImpl implements IProjectService {
 					}
 				}
 				String gs = gradeSearch.toString();
-				sb.append(" and (" + gs.substring(StringUtils.indexOfIgnoreCase(gs, " ",1), gs.length()) + " )");
-			
+				sb.append(" and (" + gs.substring(StringUtils.indexOfIgnoreCase(gs, " ",1), gs.length()) + " )");			
 			}
-        }
-        
+        }     
         if(param != null && StringUtils.isNotBlank(param.getSort())) {
 			sb.append(" order by a." + param.getSort() + " " + param.getOrder());
 		} else {

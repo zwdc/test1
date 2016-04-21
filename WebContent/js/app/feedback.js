@@ -5,11 +5,12 @@
 var feedback_datagrid;
 var feedback_form;
 var feedback_dialog;
-
+var fb=${feedback};
 $(function() {
+	
 	//数据列表
 	feedback_datagrid = $('#feedback_datagrid').datagrid({
-        url: ctx+"/feedback/getList",
+        //url: ctx+"/feedback/getList",
         width : 'auto',
 		height : fixHeight(1),
 		pagination:true,
@@ -22,13 +23,20 @@ $(function() {
               {field: 'warningLevel', title: '预警', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true,
             	  formatter:function(value){
             		  if (value=="1") {           			
-                      	return "<img style=\"height: 15px;width: 15px;\" src=\"../images/yellow.png\"/>";
+                      	return "反馈";
                       }else if(value=="2"){
-                    	  return "<img style=\"height: 15px;width: 15px;\" src=\"../images/red.png\"/>"; 
+                    	  return "逾期"; 
                       }else{
-                    	  return "无色"; 
+                    	  return ""; 
                       }
-            	  }
+            	  },
+            	  styler:function(value){
+            		  if (value=="1") {           			
+                          return 'background-color:yellow;color:white';
+                        }else if(value=="2"){
+                      	  return 'background-color:red;color:white';; 
+                        }
+              	  }
 			},
 			  {field: 'feedbackStartDate', title: '反馈期间', width: fixWidth(0.2), align: 'center', halign: 'center', sortable: true,
 					  formatter:function(value,row){
@@ -73,9 +81,12 @@ $(function() {
               {field: 'refuseCount', title: '退回次数', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true}  
         ]
      ],
-     toolbar: "#toolbar"
+     toolbar: "#feedbacktoolbar"
+  /*   onLoadSuccess:function(fb){
+    	 feedback_datagrid.datagrid("loadData",fb);
+     }*/
     });
-    
+	 feedback_datagrid.datagrid("loadData",fb);
 	$("#searchbox").searchbox({ 
 		menu:"#searchMenu", 
 		prompt :'模糊查询',

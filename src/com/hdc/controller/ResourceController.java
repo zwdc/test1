@@ -19,7 +19,7 @@ import com.hdc.entity.RoleAndResource;
 import com.hdc.entity.User;
 import com.hdc.service.IResourceService;
 import com.hdc.service.IRoleAndResourceService;
-import com.hdc.util.BeanUtils;
+import com.hdc.util.BeanUtilsExt;
 import com.hdc.util.UserUtil;
 
 /**
@@ -84,7 +84,7 @@ public class ResourceController {
 		Message message = new Message();
 		message.setStatus(Boolean.TRUE);
 		Integer id = resource.getId();
-		if(BeanUtils.isBlank(id)){
+		if(BeanUtilsExt.isBlank(id)){
 			Integer parentId = resource.getParentId();
 			List<Resource> list = this.resourceService.getResourceByPid(parentId);
 			resource.setSort(list.size()+1);

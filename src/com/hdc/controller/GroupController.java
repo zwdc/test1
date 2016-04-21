@@ -23,7 +23,7 @@ import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.User;
 import com.hdc.service.IGroupService;
-import com.hdc.util.BeanUtils;
+import com.hdc.util.BeanUtilsExt;
 
 @Controller
 @RequestMapping("/group")
@@ -67,7 +67,7 @@ public class GroupController {
 		Message message = new Message();
 		Integer id = group.getId();
 		try {
-			if(BeanUtils.isBlank(id)) {
+			if(BeanUtilsExt.isBlank(id)) {
 				group.setIsDelete(0);
 				group.setCreateDate(new Date());
 				this.groupService.doAdd(group);
@@ -116,7 +116,7 @@ public class GroupController {
 	@ResponseBody
 	public Message delete(@RequestParam("id") Integer id) throws Exception{
 		Message message = new Message();
-		if(!BeanUtils.isBlank(id)){
+		if(!BeanUtilsExt.isBlank(id)){
 			Group group = this.groupService.getGroupById(id);
 			group.setIsDelete(1);
 			this.groupService.doUpdate(group);

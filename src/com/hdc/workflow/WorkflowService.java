@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 
 import com.hdc.entity.User;
 import com.hdc.service.IUserService;
-import com.hdc.util.BeanUtils;
+import com.hdc.util.BeanUtilsExt;
 import com.hdc.util.WorkflowUtils;
 
 /**
@@ -206,7 +206,7 @@ public class WorkflowService {
         logger.info("assignee: "+assignee);
         if (assignee != null) {
         	User assigneeUser = this.userService.getUserById(new Integer(assignee));
-        	if(!BeanUtils.isBlank(assigneeUser)){
+        	if(!BeanUtilsExt.isBlank(assigneeUser)){
         		vars.put("当前处理人", assigneeUser.getName());
         	}else{
         		vars.put("当前处理人", "不存在！");

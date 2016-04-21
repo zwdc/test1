@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.hdc.entity.User;
 import com.hdc.service.IUserService;
-import com.hdc.util.BeanUtils;
+import com.hdc.util.BeanUtilsExt;
 import com.hdc.util.Constants;
 import com.hdc.util.UserUtil;
 
@@ -81,7 +81,7 @@ public class CustomFormAuthenticationFilter extends FormAuthenticationFilter {
     	if(session != null){
     		//会话过期 attribute 为空，重新设置。
     		User user = (User) session.getAttribute(Constants.CURRENT_USER);
-    		if(BeanUtils.isBlank(user)){
+    		if(BeanUtilsExt.isBlank(user)){
     			user = this.userService.getUserByName(subject.getPrincipal().toString());
     			UserUtil.saveUserToSession(session, user);
     		}

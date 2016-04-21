@@ -6,10 +6,99 @@
 <script type="text/javascript" src="${ctx}/js/kindeditor.js"></script>
 <script type="text/javascript" src="${ctx}/js/app/feedback.js?_=${sysInitTime}"></script>
 <script type="text/javascript">
-	$(function(){
-		$("#assistantGroup").kindeditor({readonlyMode: true});
-		$("#remark").kindeditor({readonlyMode: true});
-	})
+var feedback_datagrid;
+var feedback_form;
+var feedback_dialog;
+
+$(function() {
+	//数据列表
+	feedback_datagrid = $('#feedback_datagrid').datagrid({
+        url: ctx+"/feedback/getList",
+        width : 'auto',
+		height : fixHeight(1),
+		pagination:true,
+		rownumbers:true,
+		border:false,
+		singleSelect:true,
+		striped:true,
+        columns : [
+             [
+              {field: 'warningLevel', title: '预警', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true,
+            	  formatter:function(value){
+            		  if (value=="1") {           			
+                      	return "反馈";
+                      }else if(value=="2"){
+                    	  return "逾期"; 
+                      }else{
+                    	  return ""; 
+                      }
+            	  },
+            	  styler:function(value){
+            		  if (value=="1") {           			
+                          return 'background-color:yellow;color:white';
+                        }else if(value=="2"){
+                      	  return 'background-color:red;color:white';; 
+                        }
+              	  }
+			},
+			  {field: 'feedbackStartDate', title: '反馈期间', width: fixWidth(0.2), align: 'center', halign: 'center', sortable: true,
+					  formatter:function(value,row){
+						  return moment(value).format("MM月DD日")+"-"+moment(row.feedbackEndDate).format("MM月DD日");
+					  }
+				},
+              {field: 'groupName', title: '牵头单位', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
+              {field: 'createUser', title: '填报人', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
+              {field: 'feedbackDate', title: '反馈时间', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true,
+            	  formatter:function(value,row){
+            		  if(value==null){
+            			  return "--"
+            		  }else{
+            			  return moment(value).format("YYYY-MM-DD HH:mm:ss");
+            		  }
+            		 
+				  }
+              },
+              {field: 'status', title: '状态', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true,
+            	  formatter:function(value){
+            		  switch (value) {
+						case "FEEDBACKING":
+							return "<span class='text-primary'>反馈处理中</span>";
+						case "RETURNED":
+							return "<span class='text-danger'>已退回</span>";
+						case "ACCEPT":
+							return "<span class='text-success'>已采纳</span>";
+						default:
+							return "<span class='text-warning'>未反馈</span>";
+					  }
+            	  },
+            	  styler:function(value){
+            		  if (value=="SUCCESS") {           			
+                          return 'background-color:green;color:white';
+                        }else if(value=="FAIL"){
+                      	  return 'background-color:orange;color:white';; 
+                        }
+              	  }
+              },
+              
+              {field: 'delayCount', title: '延期次数', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true},
+              {field: 'refuseCount', title: '退回次数', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true}  
+        ]
+     ],
+     toolbar: "#feedbacktoolbar"
+    });
+    
+	$("#searchbox").searchbox({ 
+		menu:"#searchMenu", 
+		prompt :'模糊查询',
+	    searcher:function(value,name){   
+	    	var str="{\"searchName\":\""+name+"\",\"searchValue\":\""+value+"\"}";
+            var obj = eval('('+str+')');
+            feedback_datagrid.datagrid('reload',obj); 
+	    }
+	});
+	$("#assistantGroup").kindeditor({readonlyMode: true});
+	$("#remark").kindeditor({readonlyMode: true});
+});
 </script>
 <div class="easyui-layout">
     <table id="sales" class="table table-bordered table-condensed">
@@ -77,7 +166,9 @@
 		</tr>
 		<tr>
 			<td class="text-right">责任单位:</td>
-			<td colspan="3"><textarea class="easyui-kindeditor" id="assistantGroup" rows="1" >${taskInfo.assistantGroup }</textarea></td>
+			<td colspan="3">
+				<textarea name="assistantGroup" rows="1" cols="80" style="width: 100%">${taskInfo.assistantGroup }</textarea>
+			</td>
 		</tr>
 		 <tr class="bg-primary">
 			<td colspan="4" align="center">反馈列表</td>

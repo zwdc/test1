@@ -2,7 +2,10 @@ package com.hdc.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,12 +14,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OrderBy;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -64,6 +69,19 @@ public class Project extends BaseEntity implements Serializable {
 	@JsonIgnore
 	private TaskInfo taskInfo;		//任务
 	
+	@OneToMany(mappedBy = "project",fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
+	@JsonIgnore
+	@OrderBy(clause="id ASC")
+	private Set<FeedbackRecord> fbrList=new HashSet<FeedbackRecord>(); //反馈表
+	
+	public Set<FeedbackRecord> getFbrList() {
+		return fbrList;
+	}
+
+	public void setFbrList(Set<FeedbackRecord> fbrList) {
+		this.fbrList = fbrList;
+	}
+
 	/**
 	 * @see ProjectStatus
 	 */

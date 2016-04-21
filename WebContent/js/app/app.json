@@ -10,10 +10,10 @@
 	],
 	
 	"urgencyType" : [
-		{ "id":"1", "name":"特提" },
-		{ "id":"2", "name":"特急" },
-		{ "id":"3", "name":"加急" },
-		{ "id":"4", "name":"平急" }
+		{ "id":"0", "name":"特提" },
+		{ "id":"1", "name":"特急" },
+		{ "id":"2", "name":"加急" },
+		{ "id":"3", "name":"平急" }
 	],
 		
 	"productPartType" : [

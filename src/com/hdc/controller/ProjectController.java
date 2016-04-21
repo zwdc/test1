@@ -1,11 +1,16 @@
 package com.hdc.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.activiti.engine.ActivitiException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,14 +18,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.hdc.entity.Comments;
 import com.hdc.entity.Datagrid;
+import com.hdc.entity.FeedbackAtt;
+import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.Project;
 import com.hdc.service.ICommentsService;
 import com.hdc.service.IProjectService;
+import com.hdc.util.BeanToMapUtil;
+import com.hdc.util.BeanUtilsExt;
 import com.hdc.util.Constants.BusinessForm;
 
 /**
@@ -75,6 +86,8 @@ public class ProjectController {
 			mv.setViewName("project/approval_project");
 		} else if("details".equals(type)) {
 			mv.setViewName("project/details_project");
+		}else if("feedback".equals(type)) {
+			mv.setViewName("project/feedback_project");
 		} else if("approval_refuse".equals(type)) {
 			mv.setViewName("project/approval_refuse_project");
 		} else if("change_failed".equals(type)) {
@@ -87,6 +100,35 @@ public class ProjectController {
     	if(project != null) {
 			mv.addObject("taskInfo", project.getTaskInfo());
 			mv.addObject("project", project);
+			List<Map> jsonList=new ArrayList<Map>();
+			int fbWL=0;
+			Date currentDate=new Date();
+			for(FeedbackRecord fb:project.getFbrList()){
+				Map<String, Object> map=new HashMap<String, Object>();
+				map.put("id", fb.getId());				
+				if(currentDate.before(fb.getFeedbackStartDate())){
+					fbWL=0;//未到反馈期
+				}else if(currentDate.after(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
+					fbWL=2;//红色警告
+				}else if(currentDate.after(fb.getFeedbackStartDate())&&currentDate.before(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
+					fbWL=1;//黄色警告
+				}
+				map.put("warningLevel", fbWL);
+				map.put("feedbackStartDate", fb.getFeedbackStartDate());
+				map.put("feedbackEndDate", fb.getFeedbackEndDate());
+				map.put("groupName", fb.getProject().getGroup().getName());
+				map.put("createUser", fb.getCreateUser().getName());
+				map.put("feedbackDate", fb.getFeedbackDate());
+				map.put("status", fb.getStatus());
+				map.put("refuseCount", fb.getRefuseCount());
+				map.put("delayCount", fb.getDelayCount());
+				jsonList.add(map);
+			}
+			Datagrid fbList=new Datagrid(jsonList.size(),jsonList);
+			Gson gson=new Gson();
+			//在gson转换ArrayList的时候，不能有懒加载的对象		
+			System.out.println(gson.toJson(fbList));
+			mv.addObject("feedback",gson.toJson(fbList));
 		}
     	return mv;
 	}
@@ -116,7 +158,7 @@ public class ProjectController {
 	/**
 	 * 根据type获取不同数据
 	 * @param param
-	 * @param type
+	 * @param type  1 未签收     2办理中    3已办结
 	 * @return
 	 * @throws Exception
 	 */
@@ -125,7 +167,28 @@ public class ProjectController {
 	public Datagrid<Map<String, Object>> getList(Parameter param, @RequestParam("type") Integer type) throws Exception {
 		Page<Map<String, Object>> page = new Page<Map<String, Object>>(param.getPage(), param.getRows());
 		List<Map<String, Object>> list = this.projectService.getProjectList(param, type, page);
-		return new Datagrid<Map<String, Object>>(page.getTotal(), list);
+		List<Map<String,Object>> jsonList=new ArrayList<Map<String,Object>>(); 
+		int fbWL=0;
+		Date currentDate=new Date();
+		for(Map map:list){
+			Project project=this.projectService.findById(Integer.valueOf(map.get("ID").toString()));
+			Set<FeedbackRecord> fbSet=project.getFbrList();
+			FeedbackRecord fbr=fbSet.iterator().next();
+			Date startDate=fbr.getFeedbackStartDate();
+			Date endDate=fbr.getFeedbackEndDate();
+			if(currentDate.before(startDate)){
+				fbWL=0;//未到反馈期
+			}else if(currentDate.after(endDate)&&fbr.getFeedbackDate()==null){
+				fbWL=2;//红色警告
+			}else if(currentDate.after(startDate)&&currentDate.before(endDate)&&fbr.getFeedbackDate()==null){
+				fbWL=1;//黄色警告
+			}else{
+				fbWL=0;//反馈结束正常,未到反馈期
+			}
+			map.put("warningLevel", fbWL);
+			jsonList.add(map);
+		}
+		return new Datagrid<Map<String, Object>>(page.getTotal(), jsonList);
 	}
 	
 	/**

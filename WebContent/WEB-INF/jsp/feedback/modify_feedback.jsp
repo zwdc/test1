@@ -34,6 +34,19 @@
 				});
 		    }
 	    });
+		
+		var count = 0; 
+		$("#filefield").click(function(){  
+			var input = $("<input class='easyui-filebox' type='text' name='file' data-options=\""+"prompt:'请选择文件...'\""+" style='width: 40%;height: 25px;'>");  	
+			var button = $("<input type='button' class='easyui-linkbutton' value='移除 '></div>");  
+			var pre=$("<div>").append(button).append(input);		
+			$("#fileZone").append(pre);
+			$.parser.parse(pre);
+			button.click(function() {  
+				pre.remove();
+		    });
+			 
+		});
 	}
 	
 	//完成任务
@@ -132,18 +145,25 @@
 				data-options="readonlyMode:true" rows="3">${feedback.solutions }</textarea></td>
 		</tr>
         <tr>
-		  		<td class="text-right">附件材料：</td>
-		   		<td colspan="5" style="8px">
-		   		     <c:forEach items="${feedback.fdaList}" var="fda"> 
-					 <div class="layout_default">
-    					<p class="info"><span class="date"></span> <span class="author"></span></p>
-    					<div class="image_container"> <a href="${ctx }${fda.url}" rel="lightbox[ostec]"> 
-    						<img src="${ctx }${fda.url}"> </a> </div>
-  					</div>
-					 </c:forEach> 
-
-		   		</td>
-		   	</tr>	   
+	  		<td class="text-right">附件材料：</td>
+	   		<td colspan="5" style="8px">		   
+	   		     <c:forEach items="${feedback.fdaList}" var="fda"> 
+	   		     	<div class="well well-small">
+   					    <a href="${ctx }${fda.url}" target=blank> 
+   						<img src="${ctx }/images/icon/${fda.type}.gif" title="">${fda.uploadDate} - ${fda.name} 
+ 					    </a>
+ 					</div>
+				 </c:forEach> 
+	   		</td>
+	   	</tr>	
+	   	<tr>
+		  	<td class="text-right">佐证材料上传:</td>
+		  	<td colspan="5">
+		  		  <a id="filefield" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加附件</a> 
+		  		   <input class='easyui-filebox' type='hidden' name='file'>
+		  		   <div id="fileZone"> </div>    	
+		   </td>
+		</tr>   	   
 	</table>
     <hr style="margin-top: -5px ">
 	<div class="pull-right" style="margin: -15px 5px 5px 0px;">
@@ -152,3 +172,4 @@
 		<a href="javascript:void(0);" class="easyui-linkbutton" onclick="closeDialog();" data-options="iconCls:'icon-cancel'">关闭</a>
 	</div>
 </form>
+</div>

@@ -38,7 +38,7 @@ import com.hdc.service.IRoleService;
 import com.hdc.service.IUserService;
 import com.hdc.service.impl.PasswordHelper;
 import com.hdc.shiro.realm.UserRealm;
-import com.hdc.util.BeanUtils;
+import com.hdc.util.BeanUtilsExt;
 import com.hdc.util.Constants;
 import com.hdc.util.UserUtil;
 
@@ -158,7 +158,7 @@ public class UserController {
 				@RequestParam("salt") String salt) throws Exception{
 		Message message = new Message();
 		Integer id = user.getId();
-		if(!BeanUtils.isBlank(id)){
+		if(!BeanUtilsExt.isBlank(id)){
 			if(StringUtils.isBlank(rePasswd)) {
 				user.setPasswd(password);
 				user.setSalt(salt);
@@ -193,7 +193,7 @@ public class UserController {
 	@ResponseBody
 	public Message delete(@PathVariable("id") Integer id,
 						@Value("#{APP_PROPERTIES['account.user.delete.syntoactiviti']}") Boolean synToActiviti) throws Exception{
-		if(!BeanUtils.isBlank(id)){
+		if(!BeanUtilsExt.isBlank(id)){
 			User user = new User();
 			user.setId(id);
 			this.userService.doDelete(user, synToActiviti);
@@ -367,7 +367,7 @@ public class UserController {
 	public Message validPasswd(@RequestParam("userId") Integer userId, @RequestParam("passwd") String passwd) throws Exception {
 		Message message = new Message();
 		User u = this.userService.getUserById(userId);
-		if(!BeanUtils.isBlank(u)){
+		if(!BeanUtilsExt.isBlank(u)){
 			String oldPass = u.getPasswd();
 			
 			u.setPasswd(passwd);
