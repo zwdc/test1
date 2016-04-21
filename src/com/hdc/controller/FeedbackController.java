@@ -119,6 +119,8 @@ public class FeedbackController {
 			mv = new ModelAndView("feedback/do_feedback");			
 		}else if("add".equals(action)){
 			mv = new ModelAndView("feedback/main_feedback");
+		}else if("modify".equals(action)) {
+			mv = new ModelAndView("feedback/modify_feedback");
 		}	
 		if(id!=null){
 			mv.addObject("feedback", this.feedbackService.findById(id));
@@ -467,10 +469,10 @@ public class FeedbackController {
      */
     @RequestMapping("/completeTask")
     @ResponseBody
-    public Message completeTask(FeedbackRecord feedback, @RequestParam(value = "feedbackId", required = false) String feedbackId) throws Exception {
+    public Message completeTask(@RequestParam(value = "feedbackId", required = false) Integer feedbackId,  String taskId) throws Exception {
     	Message message = new Message();
     	try {
-    		this.feedbackService.doCompleteTask(feedback, feedbackId);
+    		this.feedbackService.doCompleteTask(feedbackId, taskId);
     		message.setMessage("提交成功！");
 		} catch (Exception e) {
 			message.setStatus(Boolean.FALSE);
