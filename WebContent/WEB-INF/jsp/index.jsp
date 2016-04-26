@@ -17,7 +17,7 @@
     <script type="text/javascript" src="${ctx}/js/messenger.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/messenger-theme-flat.js"></script>
     <%-- <script type="text/javascript" src="${ctx}/js/goeasy.js"></script> --%>
-    <script type="text/javascript" src="${ctx}/js/goeasy.js"></script>
+    <script type="text/javascript" src="https://cdn.goeasy.io/goeasy.js"></script>
 	<style type="text/css">
 		.ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
 	</style>
@@ -60,7 +60,18 @@
    			    extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
    			    theme: 'flat'
    			}
-			 var goEasy = new GoEasy({
+			
+			var goEasy = new GoEasy({
+		         appkey: '2cd54c54-b215-4a5f-8d83-50542809b207'
+		     });
+			 goEasy.subscribe({
+		         channel: 'demo',
+		         onMessage: function(message){  //自动接收推送信息                           
+		        	 $.messager.alert('Meessage received:'+message.content);
+		         }
+		    });
+			
+			/*  var goEasy = new GoEasy({
 		         appkey: '0cf326d6-621b-495a-991e-a7681bcccf6a',
 		         onConnected: function() {
 		        	//alert("成功连接 GoEasy。");
@@ -122,8 +133,8 @@
             	 	//alert("Channel 订阅失败, 错误编码：" + error.code + " 错误信息：" + error.content)
             	 }
 	         });
-		});
-		
+		}); */
+	});
 		var message_dialog;
 		function showMessage(data) {	//5.弹窗显示任务页面
 			message_dialog = $('<div/>').dialog({

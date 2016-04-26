@@ -29,13 +29,11 @@
 			 
 	});  
 	});
-	function submitForm(obj, taskId) {
+	//暂存
+	function saveTemporary() {
 		$('#feedback_form').form('submit', {
-		 	url: ctx+"/feedback/saveOrUpdate",
-	        onSubmit: function () {
-	        	if(taskId != null) {
-		        	param.taskId = taskId;
-	        	}
+	    	url: ctx+"/feedback/saveFeedback",
+	        onSubmit: function (data) {
 		        $.messager.progress({
 		            title: '提示信息！',
 		            text: '数据处理中，请稍后....'
@@ -46,20 +44,60 @@
 		        }
 		        return isValid;
 		    },
-		    success: function (data) {
-	            $.messager.progress('close');
-	            var json = $.parseJSON(data);
-	            if (json.status) {
-	            	obj.dialog('destroy');
-	            } 
-	            $.messager.show({
+		    success: function (result) {
+		        $.messager.progress('close');
+		        var json = $.parseJSON(result);
+		        if (json.status) {
+		        	feedback_dialog.dialog("refresh",ctx+"/feedback/saveFeedback?id="+json.data);
+		        } 
+		        $.messager.show({
 					title : json.title,
 					msg : json.message,
 					timeout : 1000 * 2
 				});
-	            
-	        }
+		    }
 	    });
+	}
+	
+	//完成任务
+	function completeTask() {
+		$('#feedback_form').form('submit', {
+	    	url: ctx+"/feedback/completeTask",
+	        onSubmit: function (param) {
+		        $.messager.progress({
+		            title: '提示信息！',
+		            text: '数据处理中，请稍后....'
+		        });
+		        var isValid = $(this).form('validate');
+		        if (!isValid) {
+		            $.messager.progress('close');
+		        }
+		        return isValid;
+		    },
+		    success: function (result) {
+		        $.messager.progress('close');
+		        var json = $.parseJSON(result);
+		        if (json.status) {
+		        	task_dialog.dialog('destroy');
+              	  	todoTask_datagrid.datagrid('reload');//重新加载列表数据
+		        } 
+		        $.messager.show({
+					title : json.title,
+					msg : json.message,
+					timeout : 1000 * 2
+				});
+		    }
+	    });
+	}
+	
+	//重置表单
+	function reloadForm() {
+		$('#feedback_form').form('clear');
+	}
+	
+	//关闭dialog
+	function closeDialog() {
+		task_dialog.dialog('destroy');
 	}
 </script>
 <div class="easyui-layout">
@@ -132,4 +170,11 @@
 		</tr>   	
 	</table>    
 </form>
+<hr style="margin-top: -5px ">
+<div class="pull-right" style="margin: -15px 5px 5px 0px">
+ 	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="saveTemporary();" data-options="iconCls:'icon-save'">暂存</a>
+	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="completeTask();" data-options="iconCls:'icon-ok'">提交任务</a>
+	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="reloadForm();" data-options="iconCls:'icon-reload'">重置</a>
+	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="closeDialog();" data-options="iconCls:'icon-cancel'">关闭</a>
+</div>
 </div>

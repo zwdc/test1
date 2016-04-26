@@ -109,22 +109,24 @@ public class FeedbackController {
 		     	@RequestParam(value = "action", required = false) String action,
 				@RequestParam(value = "id", required = false) Integer id) throws Exception {
 		ModelAndView mv = null;
-		if("edit".equals(action)){
-			mv = new ModelAndView("feedback/main_feedback");			
-		}else if("check".equals(action)){
-			mv = new ModelAndView("feedback/approval_feedback");			
-		}else if("detail".equals(action)){
-			mv = new ModelAndView("feedback/details_feedback");			
-		}else if("feedback".equals(action)){
-			mv = new ModelAndView("feedback/do_feedback");			
-		}else if("add".equals(action)){
-			mv = new ModelAndView("feedback/main_feedback");
-		}else if("modify".equals(action)) {
-			mv = new ModelAndView("feedback/modify_feedback");
-		}	
+		FeedbackRecord fbr=null;
 		if(id!=null){
-			mv.addObject("feedback", this.feedbackService.findById(id));
-		}		
+			fbr=this.feedbackService.findById(id);	
+			if("edit".equals(action)){
+				mv = new ModelAndView("feedback/main_feedback");			
+			}else if("check".equals(action)){
+				mv = new ModelAndView("feedback/approval_feedback");			
+			}else if("detail".equals(action)){
+				mv = new ModelAndView("feedback/details_feedback");			
+			}else if("feedback".equals(action)){
+				mv = new ModelAndView("feedback/do_feedback");			
+			}else if("add".equals(action)){
+				mv = new ModelAndView("feedback/main_feedback");
+			}else if("modify".equals(action)) {
+				mv = new ModelAndView("feedback/modify_feedback");
+			}	
+			mv.addObject("feedback",fbr );
+		}	
 		return mv;
 	}
 	/**
@@ -146,7 +148,7 @@ public class FeedbackController {
 				message.setMessage("获取反馈对象失败");
 			} else {
 				FeedbackRecord fbr=this.feedbackService.findById(id);
-			    fbr.setStatus(feedback.getStatus()); //获取反馈状态，（反馈中 RUNNING、已退回 FAIL、已采用 SUCCESS）
+			    fbr.setStatus(feedback.getStatus()); //获取反馈状态，（未反馈  NULL 反馈中 RUNNING、已退回 FAIL、已采用 SUCCESS）
 			    //fbr.setSuggestion(feedback.getSuggestion());//获取建议意见
 			    this.feedbackService.doUpdate(fbr);
 				message.setData(id);
@@ -186,6 +188,38 @@ public class FeedbackController {
 			message.setStatus(Boolean.FALSE);
 			message.setMessage("审批反馈时出错！");
 		}
+		return message;
+    }
+    /**
+     * 检查反馈周期
+     * @param feedbackId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/checkFeedbackDate/{feedbackId}")
+    @ResponseBody
+	public Message checkFeedbackDate(@PathVariable("feedbackId") Integer feedbackId)
+					throws Exception {
+		Message message = new Message();
+		if(feedbackId == null) {
+			message.setMessage("获取反馈对象失败");
+		} else {
+			FeedbackRecord fbr=this.feedbackService.findById(feedbackId);
+			Date currentDate=new Date();
+			if(currentDate.before(fbr.getFeedbackStartDate())){
+				message.setTitle("提示");
+				message.setMessage("还未到反馈期，不能反馈！");
+				message.setStatus(false);
+			}else if(fbr.getStatus()=="SUCCESS"){
+				message.setTitle("提示");
+				message.setMessage("反馈已经被采用，不能再次反馈！");
+				message.setStatus(false);
+			}else{
+				message.setTitle("提示");
+				message.setMessage("可以开始反馈！");
+				message.setStatus(true);
+			}
+		}		
 		return message;
     }
 	/**

@@ -28,6 +28,7 @@
 			}
 		});
 	}
+	 
 </script>
 <div style="font-size:20px">欢迎使用邯郸市政务电子督查系统</div>
 <div style="position: absolute; right: 10px; bottom: 5px; ">

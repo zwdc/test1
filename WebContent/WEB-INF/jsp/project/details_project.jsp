@@ -14,7 +14,7 @@ $(function() {
 	feedback_datagrid = $('#feedback_datagrid').datagrid({
         //url: ctx+"/feedback/getList",
         width : 'auto',
-		height : fixHeight(1),
+		height : 'auto',
 		pagination:true,
 		rownumbers:true,
 		border:false,
@@ -22,14 +22,14 @@ $(function() {
 		striped:true,
         columns : [
              [
-              {field: 'warningLevel', title: '预警', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true,
+              {field: 'warningLevel', title: '预警', width: fixWidth(0.08), align: 'center', halign: 'center', sortable: true,
             	  formatter:function(value){
             		  if (value=="1") {           			
-                      	return "反馈";
+                      	return "开始反馈";
                       }else if(value=="2"){
-                    	  return "逾期"; 
+                    	  return "逾期反馈"; 
                       }else{
-                    	  return ""; 
+                    	  return "未到时间"; 
                       }
             	  },
             	  styler:function(value){
@@ -83,7 +83,7 @@ $(function() {
               {field: 'refuseCount', title: '退回次数', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true}  
         ]
      ],
-     toolbar: "#feedbacktoolbar"
+     toolbar: "#toolbar1"
   /*   onLoadSuccess:function(fb){
     	 feedback_datagrid.datagrid("loadData",fb);
      }*/
@@ -493,21 +493,13 @@ function delFeedback() {
 			<td colspan="4" align="center">反馈列表</td>
 		</tr>
   	</table>
-  	<div id="feedbacktoolbar" style="padding:2px 0">
+  	<div id="toolbar1" style="padding:2px 0">
 	<table>   
 		<tr>
 		<td style="padding-left:2px">
-			<!--  <shiro:hasRole name="admin">
-				<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="addFeedback();">添加反馈</a>-->
-				<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="feedback();">承办反馈</a>
-				<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="check();">反馈审核</a>
-				<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editFeedback();">编辑</a>
-		    	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="delFeedback();">删除</a>
+			<!--  <shiro:hasRole name="admin">-->
 				<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="detailsFeedback();">详情</a>
 			<!--</shiro:hasRole>-->
-		</td>
-		<td style="padding-left:5px">
-			<input id="searchbox" type="text"/>
 		</td>
 		</tr>
 	</table>

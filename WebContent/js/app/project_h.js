@@ -26,14 +26,14 @@ $(function(){
 					  } 
 				 }
 				},
-				{field: 'warningLevel',title: '反馈预警',width:fixWidth(0.07),align:'center', halign:'center',sortable:true,
+				{field: 'warningLevel',title: '反馈预警',width:fixWidth(0.08),align:'center', halign:'center',sortable:true,
 					 formatter:function(value){
 	            		  if (value=="1") {           			
 	            			  return '进入反馈期';
 	                      }else if(value=="2"){
 	                    	  return '已过期';
 	                      }else{
-	                    	  return ""; 
+	                    	  return "未到时间"; 
 	                      }
 	            	  },
 	            	  styler:function(value){
