@@ -34,6 +34,8 @@ public class ProcessTaskListener implements TaskListener {
 				processTask.setTaskId(delegateTask.getId());
 				processTask.setExecutionId(delegateTask.getExecutionId());
 				processTask.setProcessInstanceId(delegateTask.getProcessInstanceId());
+				processTask.setAssign(delegateTask.getAssignee());
+				processTask.setOwner(delegateTask.getOwner());
 				this.processTaskService.doUpdate(processTask);
 				delegateTask.setVariable("taskTitle", processTask.getTaskTitle());
 				delegateTask.setVariable("title", processTask.getTitle());
