@@ -226,7 +226,6 @@ function handleTask() {
     			minimizable: true,
     			maximizable: true,
     			onLoad: function () {
-    				debugger;
     				$("#taskId").val(row.taskId);	//根据taskId完成任务
     			},
 	            onClose: function () {

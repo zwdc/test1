@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.activiti.engine.ActivitiException;
 import org.apache.commons.fileupload.FileUploadBase.FileSizeLimitExceededException;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,19 +23,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.hdc.entity.Comments;
 import com.hdc.entity.Datagrid;
 import com.hdc.entity.FeedbackAtt;
 import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
-import com.hdc.entity.TaskInfo;
-import com.hdc.entity.User;
+import com.hdc.service.ICommentsService;
 import com.hdc.service.IFeedbackRecordService;
-import com.hdc.service.impl.FeedbackRecordServiceImpl;
 import com.hdc.util.Constants;
+import com.hdc.util.Constants.BusinessForm;
+import com.hdc.util.Constants.BusinessType;
 import com.hdc.util.Constants.FeedbackStatus;
-import com.hdc.util.UserUtil;
 import com.hdc.util.upload.FileUploadUtils;
 import com.hdc.util.upload.exception.InvalidExtensionException;
 /**
@@ -51,6 +50,9 @@ public class FeedbackController {
 
 	@Autowired
 	private IFeedbackRecordService feedbackService;
+	
+	@Autowired
+	private ICommentsService commentService;
 	
 	/**
 	 * 跳转列表页面
@@ -110,22 +112,24 @@ public class FeedbackController {
 	public ModelAndView toMain(
 		     	@RequestParam(value = "action", required = false) String action,
 				@RequestParam(value = "id", required = false) Integer id) throws Exception {
-		ModelAndView mv = null;
+		ModelAndView mv = new ModelAndView();
 		FeedbackRecord fbr=null;
 		if(id!=null){
 			fbr=this.feedbackService.findById(id);	
 			if("edit".equals(action)){
-				mv = new ModelAndView("feedback/main_feedback");			
+				mv.setViewName("feedback/main_feedback");			
 			}else if("check".equals(action)){
-				mv = new ModelAndView("feedback/approval_feedback");			
+				mv.setViewName("feedback/approval_feedback");			
 			}else if("detail".equals(action)){
-				mv = new ModelAndView("feedback/details_feedback");			
+				mv.setViewName("feedback/details_feedback");			
 			}else if("feedback".equals(action)){
-				mv = new ModelAndView("feedback/do_feedback");			
+				mv.setViewName("feedback/do_feedback");			
 			}else if("add".equals(action)){
-				mv = new ModelAndView("feedback/main_feedback");
+				mv.setViewName("feedback/main_feedback");
 			}else if("modify".equals(action)) {
-				mv = new ModelAndView("feedback/modify_feedback");
+				List<Comments> list = this.commentService.findComments(id, BusinessForm.FEEDBACK_FORM.toString());
+				mv.setViewName("feedback/modify_feedback");
+				mv.addObject("commentsList", list);
 			}	
 			mv.addObject("feedback",fbr );
 		}	
@@ -507,7 +511,7 @@ public class FeedbackController {
      */
     @RequestMapping("/completeTask")
     @ResponseBody
-    public Message completeTask(@RequestParam(value = "feedbackId", required = false) Integer feedbackId,  String taskId) throws Exception {
+    public Message completeTask(@RequestParam(value = "id", required = false) Integer feedbackId,  String taskId) throws Exception {
     	Message message = new Message();
     	try {
     		this.feedbackService.doCompleteTask(feedbackId, taskId);
