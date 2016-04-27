@@ -25,23 +25,22 @@ $(function() {
 		nowrap:false,
         columns : [
              [
-              {field: 'warningLevel', title: '预警', width: fixWidth(0.08), align: 'center', halign: 'center', sortable: true,
+              {field: 'warningLevel', title: '反馈状态', width: fixWidth(0.08), align: 'center', halign: 'center', sortable: true,
             	  formatter:function(value){
             		  if (value=="1") {           			
-                      	return "开始反馈";
+                      	  return "开始反馈";
                       }else if(value=="2"){
                     	  return "逾期反馈"; 
+                      }else if(value=='3'){
+                    	  return "反馈被退回"; 
+                      }else if(value=='4'){
+                    	  return "反馈被采纳"; 
+                      }else if(value=='5'){
+                    	  return "反馈中";
                       }else{
-                    	  return "未到时间"; 
+                    	  return "未到反馈期";
                       }
-            	  },
-            	  styler:function(value){
-            		  if (value=="1") {           			
-                          return 'background-color:yellow;color:white';
-                        }else if(value=="2"){
-                      	  return 'background-color:red;color:white';; 
-                        }
-              	  }
+            	  }
 			},
 			  {field: 'feedbackStartDate', title: '反馈期间', width: fixWidth(0.2), align: 'center', halign: 'center', sortable: true,
 					  formatter:function(value,row){
@@ -60,32 +59,26 @@ $(function() {
             		 
 				  }
               },
-              {field: 'status', title: '状态', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true,
-            	  formatter:function(value){
-            		  switch (value) {
-						case "FEEDBACKING":
-							return "<span class='text-primary'>反馈处理中</span>";
-						case "RETURNED":
-							return "<span class='text-danger'>已退回</span>";
-						case "ACCEPT":
-							return "<span class='text-success'>已采纳</span>";
-						default:
-							return "<span class='text-warning'>未反馈</span>";
-					  }
-            	  },
-            	  styler:function(value){
-            		  if (value=="SUCCESS") {           			
-                          return 'background-color:green;color:white';
-                        }else if(value=="FAIL"){
-                      	  return 'background-color:orange;color:white';; 
-                        }
-              	  }
-              },
               
-              {field: 'delayCount', title: '延期次数', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true},
-              {field: 'refuseCount', title: '退回次数', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true}  
+              {field: 'delayCount', title: '延期次数', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
+              {field: 'refuseCount', title: '退回次数', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true}  
         ]
      ],
+	  rowStyler:function(index,row){
+		  if (row.warningLevel=="1") {           			
+             return 'background-color:yellow;color:white';
+           }else if(row.warningLevel=="2"){
+         	  return 'background-color:red;color:white';
+           }else if(row.warningLevel=='3'){
+         	  return 'background-color:red;color:white';
+           }else if(row.warningLevel=='4'){
+         	  return 'background-color:green;color:white';
+           }else if(row.warningLevel=='5'){
+         	  return 'background-color:blue;color:white';
+           }else{
+         	  return ;
+           }
+	  },
      toolbar: "#feedbacktoolbar"
     });
 	//feedback_datagrid.datagrid("loadData",fb);

@@ -6,6 +6,14 @@
 <script type="text/javascript" src="${ctx}/js/kindeditor.js"></script>
 
 <script type="text/javascript">
+	$(function() {
+		$("blockquote").css({
+			"border-left": "5px solid #4EA76E",
+			"font-size": "15px",
+			"padding": "5px 10px",
+			"margin": "0px 0px 10px"
+		})
+	});
 	//暂存
 	function saveTemporary() {
 		$('#feedback_form').form('submit', {
@@ -25,7 +33,7 @@
 		        $.messager.progress('close');
 		        var json = $.parseJSON(result);
 		        if (json.status) {
-		        	task_dialog.dialog("destroy");
+		        	task_dialog.dialog("refresh",ctx+"/feedback/toMain?action=modify&id="+json.data);
 		        } 
 		        $.messager.show({
 					title : json.title,
@@ -86,8 +94,8 @@
 	}
 </script>
 <div class="easyui-layout">
-<form id="feedback_form" method="post" action="${ctx }/feedback/approval" encType="multipart/form-data">
-	<input type="hidden"  name="feedbackId" value="${feedback.id }">
+<form id="feedback_form" method="post" encType="multipart/form-data">
+	<input type="hidden" id="feedbackId" name="id" value="${feedback.id }">
 	<input id="taskId" name="taskId" type="hidden">
 	<table class="table table-bordered" style="width: 100%;">
 		<tr class="bg-primary">
@@ -125,24 +133,21 @@
 		<tr>
 			<td class="text-right">阶段工作计划:</td>
 			<td colspan="5"><textarea class="easyui-kindeditor" 
-					data-options="readonlyMode:true"  rows="3">${feedback.workPlan }</textarea>
+					data-options="readonlyMode:true" rows="3">${feedback.workPlan }</textarea>
 			</td>
 		</tr>
 		<tr>
 			<td class="text-right">落实情况:</td>
-			<td colspan="5"><textarea class="easyui-kindeditor"
-				data-options="readonlyMode:true" 	 rows="3">${feedback.situation }</textarea></td>
+			<td colspan="5"><textarea class="easyui-kindeditor" name="situation" rows="3" required="required" >${feedback.situation }</textarea></td>
 		</tr>
 		
 		<tr>
 			<td class="text-right">存在问题/困难:</td>
-			<td colspan="5"><textarea class="easyui-kindeditor"
-				data-options="readonlyMode:true" 	rows="3">${feedback.problems }</textarea></td>
+			<td colspan="5"><textarea class="easyui-kindeditor" name="problems" rows="3">${feedback.problems }</textarea></td>
 		</tr>
 		<tr>
 			<td class="text-right">解决措施/建议:</td>
-			<td colspan="5"><textarea class="easyui-kindeditor"
-				data-options="readonlyMode:true" rows="3">${feedback.solutions }</textarea></td>
+			<td colspan="5"><textarea class="easyui-kindeditor" name="solutions" rows="3">${feedback.solutions }</textarea></td>
 		</tr>
         <tr>
 	  		<td class="text-right">附件材料：</td>
@@ -163,7 +168,31 @@
 		  		   <input class='easyui-filebox' type='hidden' name='file'>
 		  		   <div id="fileZone"> </div>    	
 		   </td>
-		</tr>   	   
+		</tr>   
+		<tr>
+	  		<td colspan="6">
+	  			<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>&nbsp;
+	  			<a data-toggle="collapse" href="#comments" aria-expanded="false" aria-controls="comments" title="点击查看审批意见">意见列表:</a>
+	  			<div class="collapse" id="comments">
+	  			<c:choose>
+	  				<c:when test="${!empty commentsList }">
+	  					<c:forEach var="comments" items="${commentsList }">
+				  			<blockquote>
+								<p class="text-primary">${comments.userName } : ${comments.content }</p>
+		  						<footer><fmt:formatDate value="${comments.time }" type="both"/></footer>
+						    </blockquote> 
+						</c:forEach>
+	  				</c:when>
+	  				<c:otherwise>
+	  					<blockquote>
+							<p class="text-muted">暂无审批意见！</p>
+					    </blockquote> 
+	  				</c:otherwise>
+	  			</c:choose>
+				  	
+				</div>
+	  		</td>
+	  	</tr>	   
 	</table>
     <hr style="margin-top: -5px ">
 	<div class="pull-right" style="margin: -15px 5px 5px 0px;">

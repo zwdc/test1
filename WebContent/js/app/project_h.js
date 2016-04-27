@@ -13,7 +13,8 @@ $(function(){
 		rownumbers:true,				
 		border:false,					
 		singleSelect:true,				
-		striped:true,					
+		striped:true,
+		nowrap:false,
 		columns:[
 		    [
 		     	{field:'URGENCY',title:'急缓程度',width:fixWidth(0.07),align:'center',sortable:true,
@@ -27,24 +28,36 @@ $(function(){
 				 }
 				},
 				{field: 'warningLevel',title: '反馈预警',width:fixWidth(0.08),align:'center', halign:'center',sortable:true,
-					 formatter:function(value){
+					formatter:function(value){
 	            		  if (value=="1") {           			
-	            			  return '进入反馈期';
+	                      	  return "开始反馈";
 	                      }else if(value=="2"){
-	                    	  return '已过期';
+	                    	  return "逾期反馈"; 
+	                      }else if(value=='3'){
+	                    	  return "反馈被退回"; 
+	                      }else if(value=='4'){
+	                    	  return "反馈被采纳"; 
+	                      }else if(value=='5'){
+	                    	  return "反馈中";
 	                      }else{
-	                    	  return "未到时间"; 
+	                    	  return "未到反馈期";
 	                      }
 	            	  },
 	            	  styler:function(value){
 	            		  if (value=="1") {           			
 	                          return 'background-color:yellow;color:white';
 	                        }else if(value=="2"){
-	                      	  return 'background-color:red;color:white';; 
+	                      	  return 'background-color:red;color:white';
+	                        }else if(value=='3'){
+	                      	  return 'background-color:red;color:white';
+	                        }else if(value=='4'){
+	                      	  return 'background-color:green;color:white';
+	                        }else if(value=='5'){
+	                      	  return 'background-color:blue;color:white';
 	                        }else{
-	                          return '';
+	                      	  return ;
 	                        }
-	              	  }
+	            	  }
 	             },
 		     	{field:'TITLE',title:'任务内容',width:fixWidth(0.3),align:'left',halign:'center'},
 		     	{field:'SOURCE_NAME',title:'任务来源',width:fixWidth(0.2),align:'center'},

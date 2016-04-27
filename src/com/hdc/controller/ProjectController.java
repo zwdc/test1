@@ -3,6 +3,7 @@ package com.hdc.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,6 +34,9 @@ import com.hdc.service.IProjectService;
 import com.hdc.util.BeanToMapUtil;
 import com.hdc.util.BeanUtilsExt;
 import com.hdc.util.Constants.BusinessForm;
+import com.hdc.util.Constants.FeedbackStatus;
+
+import oracle.net.aso.f;
 
 /**
  * 任务交办管理器
@@ -107,17 +111,21 @@ public class ProjectController {
 			for(FeedbackRecord fb:project.getFbrList()){
 				Map<String, Object> map=new HashMap<String, Object>();
 				map.put("id", fb.getId());				
-				if(currentDate.before(fb.getFeedbackStartDate()) && fb.getStatus()==null){
-					fbWL=0;//未到反馈期
-				}else if(currentDate.after(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
-					fbWL=2;//红色警告
-				}else if(currentDate.after(fb.getFeedbackStartDate())&&currentDate.before(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
-					fbWL=1;//黄色警告
-				}else if(){
-					fbWL=3;//反馈被采用
+				if(FeedbackStatus.RETURNED.toString().equals(fb.getStatus())){
+					fbWL=3;//反馈被退回
+				}else if(FeedbackStatus.ACCEPT.toString().equals(fb.getStatus())){
+					fbWL=4;//反馈采用fbWL=4,如果反馈采纳，则进入下一个反馈期
+				}else if(FeedbackStatus.FEEDBACKING.toString().equals(fb.getStatus())){
+					fbWL=5;//反馈中
 				}else{
-					fbWL=4;//反馈被退回
-				}
+					if(currentDate.before(fb.getFeedbackStartDate()) && fb.getStatus()==null){
+						fbWL=0;//未到反馈期
+					}else if(currentDate.after(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null&&fb.getStatus()==null){
+						fbWL=2;//红色警告
+					}else if(currentDate.after(fb.getFeedbackStartDate())&&currentDate.before(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
+						fbWL=1;//黄色警告
+					}
+				}		
 				map.put("warningLevel", fbWL);
 				map.put("feedbackStartDate", fb.getFeedbackStartDate());
 				map.put("feedbackEndDate", fb.getFeedbackEndDate());
@@ -177,18 +185,30 @@ public class ProjectController {
 		for(Map map:list){
 			Project project=this.projectService.findById(Integer.valueOf(map.get("ID").toString()));
 			Set<FeedbackRecord> fbSet=project.getFbrList();
-			FeedbackRecord fbr=fbSet.iterator().next();
-			Date startDate=fbr.getFeedbackStartDate();
-			Date endDate=fbr.getFeedbackEndDate();
-			if(currentDate.before(startDate)){
-				fbWL=0;//未到反馈期
-			}else if(currentDate.after(endDate)&&fbr.getFeedbackDate()==null){
-				fbWL=2;//红色警告
-			}else if(currentDate.after(startDate)&&currentDate.before(endDate)&&fbr.getFeedbackDate()==null){
-				fbWL=1;//黄色警告
+		    Iterator iter = fbSet.iterator();
+		    FeedbackRecord fbr=null;
+			while(iter.hasNext()){
+				fbr=(FeedbackRecord)iter.next();
+				if(fbr.getFeedbackDate()==null && fbr.getStatus()==null){
+					break;
+				}
+			 }	
+			if(FeedbackStatus.RETURNED.toString().equals(fbr.getStatus())){
+				fbWL=3;//反馈被退回
+			}else if(FeedbackStatus.ACCEPT.toString().equals(fbr.getStatus())){
+				fbWL=4;//反馈采用fbWL=4,如果反馈采纳，则进入下一个反馈期
+			}else if(FeedbackStatus.FEEDBACKING.toString().equals(fbr.getStatus())){
+				fbWL=5;//反馈中
 			}else{
-				fbWL=0;//反馈结束正常,未到反馈期
-			}
+				if(currentDate.before(fbr.getFeedbackStartDate()) && fbr.getStatus()==null){
+					fbWL=0;//未到反馈期
+				}else if(currentDate.after(fbr.getFeedbackEndDate())&&fbr.getFeedbackDate()==null&&fbr.getStatus()==null){
+					fbWL=2;//红色警告
+				}else if(currentDate.after(fbr.getFeedbackStartDate())&&currentDate.before(fbr.getFeedbackEndDate())&&fbr.getFeedbackDate()==null){
+					fbWL=1;//黄色警告
+				}
+			}			
+			System.out.println(fbWL);
 			map.put("warningLevel", fbWL);
 			jsonList.add(map);
 		}

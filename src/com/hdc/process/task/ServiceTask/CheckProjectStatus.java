@@ -12,7 +12,11 @@ import com.hdc.entity.Project;
 import com.hdc.service.IProjectService;
 import com.hdc.service.ITaskInfoService;
 import com.hdc.util.Constants.ProjectStatus;
-
+/**
+ * 检查是否所有的project都审批通过，是的话所有办理人的任务将进入办理中状态
+ * @author zhao
+ *
+ */
 @Component
 public class CheckProjectStatus implements JavaDelegate {
 
