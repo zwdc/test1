@@ -15,7 +15,6 @@ $(function() {
         //url: ctx+"/feedback/getList",
         width : 'auto',
 		height : 'auto',
-		pagination:true,
 		rownumbers:true,
 		border:false,
 		singleSelect:true,
@@ -45,7 +44,7 @@ $(function() {
 					  }
 				},
               {field: 'groupName', title: '牵头单位', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
-              {field: 'createUser', title: '填报人', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
+              {field: 'feedbackUser', title: '填报人', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
               {field: 'feedbackDate', title: '反馈时间', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true,
             	  formatter:function(value,row){
             		  if(value==null){
@@ -428,36 +427,51 @@ function delFeedback() {
 }
 </script>
 <div class="easyui-layout">
-   <table class="table table-bordered table-condensed">
+    <table id="sales" class="table table-bordered table-condensed">
   		<tr class="bg-primary">
-			<td colspan="4" align="center">任务交办信息</td>
+			<td colspan="4" align="center">任务信息</td>
 		</tr>
 		<tr>
-			<td class="text-right">任务标题:</td>
-			<td colspan="3">${taskInfo.title }</td>
+			<td class="text-right">任务内容:</td>
+			<td colspan="3"><textarea class="easyui-kindeditor" 
+					data-options="readonlyMode:true"  rows="2">${taskInfo.title }</textarea></td>
 		</tr>
 		<tr>
 			<td class="text-right">任务简称:</td>
-			<td>${taskInfo.title }</td>
+			<td><input type="text" class="easyui-textbox" 
+			    value="${taskInfo.title }"
+				data-option="prompt:'牵头部门'"  disabled="disabled" ></td>
 			<td class="text-right">急缓程度:</td>
-			<td>${zwdc:getUrgencyType(taskInfo.urgency) }</td>
+			<td><input type="text" class="easyui-textbox" 
+			    value="${zwdc:getUrgencyType(taskInfo.urgency) }"
+				data-option="prompt:'急缓程度'"  disabled="disabled" ></td>
 
 		</tr>
 		<tr>
 			<td class="text-right">任务来源:</td>
-			<td>${taskInfo.taskSource.name }</td>
+			<td><input type="text" class="easyui-textbox" 
+			    value="${taskInfo.taskSource.name }"
+				data-option="prompt:'任务来源'"  disabled="disabled" ></td>
 			<td class="text-right">反馈频度:</td>
-			<td>${taskInfo.fbFrequency.name }</td>
+			<td><input type="text" class="easyui-textbox" 
+			    value="${taskInfo.fbFrequency.name }"
+				data-option="prompt:'反馈频度'"  disabled="disabled" ></td>
 		</tr>
 		<tr>
 			<td class="text-right">开始时间:</td>
-			<td><fmt:formatDate value="${taskInfo.createTaskDate }" type="both"/></td>
+			<td><input class="easyui-datetimebox"
+				data-options="prompt:'反馈时限'" disabled="disabled"
+				value="<fmt:formatDate value='${taskInfo.createTaskDate }' type='both'/>"></td>
 			<td class="text-right">办结时限:</td>
-			<td><fmt:formatDate value="${taskInfo.endTaskDate }" type="both"/></td>
+			<td><input class="easyui-datetimebox"
+				data-options="prompt:'反馈时限'" disabled="disabled"
+				value="<fmt:formatDate value='${taskInfo.endTaskDate }' type='both'/>"></td>
 		</tr>
 		<tr>
 			<td class="text-right">签收时限:</td>
-			<td><fmt:formatDate value="${taskInfo.claimLimitDate }" type="both"/></td>
+			<td><input class="easyui-datetimebox"
+				data-options="prompt:'反馈时限'" disabled="disabled"
+				value="<fmt:formatDate value='${taskInfo.claimLimitDate }' type='both'/>"></td>
 			<td colspan="2"></td>
 		</tr>
 		<tr>

@@ -47,7 +47,7 @@ public class TaskInfo extends BaseEntity implements Serializable{
 	@Column(name = "id", length = 10, nullable = false, unique = true)
 	private Integer id;
 	
-	@Column(name = "title", length = 200)
+	@Column(name = "title", length = 1500)
 	private String title;			//任务标题
 	
 	@Column(name = "info", length = 200)

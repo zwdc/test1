@@ -66,18 +66,29 @@ public class User implements Serializable{
 	@JsonIgnore
 	private Role role;				//所属角色（职位）
 	
-	@Column(name="DATE_ALL", length=1)
-	private Integer allData ;			//是否有查询所有数据的权限：0无；1有
-	
-	@Column(name="DATE_GROUP", length=1) 
-	private Integer groupData ;			//是否有查询部门数据的权限
-	
-//	@Column(name="data_role", length=1)
+//	@Column(name="DATA_ALL", length=1)
+//	private Integer allData ;			//是否有查询所有数据的权限：0无；1有
+//	
+//	@Column(name="DATA_GROUP", length=1) 
+//	private Integer groupData ;			//是否有查询部门数据的权限
+//	
+//	@Column(name="DATA_ROLE", length=1)
 //	private Integer roleData ;			//是否有查询角色数据的权限
+//	
+//	@Column(name="DATA_SELF", length=1)
+//	private Integer selfData ;			//是否有查询自己数据的权限
 	
-	@Column(name="DATE_SELF", length=1)
-	private Integer selfData ;			//是否有查询自己数据的权限
-	
+	@Column(name="DATA_PERMISSION", length=1)  //数据级权限  0自己的   1单位的  2 角色的  3单位的且角色的  4单位的或角色的 5所有的
+	private Integer dataPermission ;
+
+	public Integer getDataPermission() {
+		return dataPermission;
+	}
+
+	public void setDataPermission(Integer dataPermission) {
+		this.dataPermission = dataPermission;
+	}
+
 	@Column(name = "IS_DELETE", length = 1)
     private Integer isDelete;
 	
@@ -90,6 +101,10 @@ public class User implements Serializable{
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@Column(name = "update_date")
 	private Date updateDate ;					//修改时间
+	
+	@Column(name = "LINK_TYPE", length = 20)
+	private String linkType;
+	
 	
 	public User(){
 		
@@ -167,30 +182,6 @@ public class User implements Serializable{
 		this.group = group;
 	}
 
-	public Integer getAllData() {
-		return allData;
-	}
-
-	public void setAllData(Integer allData) {
-		this.allData = allData;
-	}
-
-	public Integer getGroupData() {
-		return groupData;
-	}
-
-	public void setGroupData(Integer groupData) {
-		this.groupData = groupData;
-	}
-
-	public Integer getSelfData() {
-		return selfData;
-	}
-
-	public void setSelfData(Integer selfData) {
-		this.selfData = selfData;
-	}
-
 	public Integer getIsDelete() {
 		return isDelete;
 	}
@@ -214,5 +205,14 @@ public class User implements Serializable{
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
 	}
+
+	public String getLinkType() {
+		return linkType;
+	}
+
+	public void setLinkType(String linkType) {
+		this.linkType = linkType;
+	}
+	
 	
 }

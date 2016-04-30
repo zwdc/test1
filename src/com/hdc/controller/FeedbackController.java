@@ -30,9 +30,13 @@ import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
+import com.hdc.entity.Project;
+import com.hdc.entity.ProjectScore;
 import com.hdc.service.ICommentsService;
 import com.hdc.service.IFeedbackRecordService;
+import com.hdc.service.IProjectScoreService;
 import com.hdc.util.Constants;
+import com.hdc.util.UserUtil;
 import com.hdc.util.Constants.BusinessForm;
 import com.hdc.util.Constants.BusinessType;
 import com.hdc.util.Constants.FeedbackStatus;
@@ -50,6 +54,9 @@ public class FeedbackController {
 
 	@Autowired
 	private IFeedbackRecordService feedbackService;
+	
+	@Autowired
+	private IProjectScoreService projectScoreService;
 	
 	@Autowired
 	private ICommentsService commentService;
@@ -291,16 +298,30 @@ public class FeedbackController {
 			}
 			if(id == null) {
 				message.setMessage("获取反馈对象失败");
-			} else {
-			
+			} else {			
 			    fbr.setSolutions(feedback.getSituation());
 			    fbr.setProblems(feedback.getProblems());
 			    fbr.setSituation(feedback.getSituation());
 			    fbr.setFdaList(fbaList);
 			    fbr.setFeedbackDate(new Date());
+			    fbr.setFeedbackUser(UserUtil.getUserFromSession());
 				this.feedbackService.doUpdate(fbr);
-				message.setData(id);
-				message.setMessage("上传了"+count+"附件，反馈成功！");
+				
+				//以下是为了查看是否延期反馈
+				Project prj=feedback.getProject();//获取该反馈的project
+				Date currentDate=new Date();
+				Date claimLimitDate=prj.getClaimDate();
+				if(currentDate.after(claimLimitDate)){
+					ProjectScore projectScore1=new ProjectScore(prj,"超期未反馈",-50);
+					ProjectScore projectScore2=new ProjectScore(prj,"超期未反馈，又反馈",+20);
+					this.projectScoreService.doAdd(projectScore1);
+					this.projectScoreService.doAdd(projectScore2);
+					message.setData(id);
+					message.setMessage("上传了"+count+"个附件，反馈成功！ 但属逾期反馈，减30分");
+				}else{
+					message.setData(id);
+					message.setMessage("上传了"+count+"个附件，反馈成功！");
+				}					
 			}
 		} catch (Exception e) {
 			message.setStatus(Boolean.FALSE);

@@ -29,8 +29,10 @@ import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.Project;
+import com.hdc.entity.ProjectScore;
 import com.hdc.service.ICommentsService;
 import com.hdc.service.IProjectService;
+import com.hdc.service.IProjectScoreService;
 import com.hdc.util.BeanToMapUtil;
 import com.hdc.util.BeanUtilsExt;
 import com.hdc.util.Constants.BusinessForm;
@@ -49,6 +51,9 @@ public class ProjectController {
 
 	@Autowired
 	private IProjectService projectService;
+	
+	@Autowired
+	private IProjectScoreService projectScoreService;
 	
 	@Autowired
 	private ICommentsService commentsService;
@@ -75,36 +80,44 @@ public class ProjectController {
 	}
 	
 	/**
-	 * 根据type判断页面 签收页面、审批页面、修改页面
+	 * 根据type判断页面 签收页面、审批页面、修改页面,显示的是project详情
 	 * @return
 	 * @throws Exception 
 	 */
 	@RequestMapping("/toProject/{type}")
 	public ModelAndView toProject(@PathVariable("type") String type, @RequestParam("projectId") Integer projectId) throws Exception {
 		ModelAndView mv = new ModelAndView();
-		if("modify".equals(type)) {
-			mv.setViewName("project/modify_project");
-		} else if("claim".equals(type)) {
-			mv.setViewName("project/claim_project");
-		} else if("approval".equals(type)) {
-			mv.setViewName("project/approval_project");
-		} else if("details".equals(type)) {
-			mv.setViewName("project/details_project");
-		}else if("feedback".equals(type)) {
-			mv.setViewName("project/feedback_project");
-		} else if("approval_refuse".equals(type)) {
-			mv.setViewName("project/approval_refuse_project");
-		} else if("change_failed".equals(type)) {
-			//拒签操作被驳回的操作
-			List<Comments> commentsList = this.commentsService.findComments(projectId, BusinessForm.PROJECT_FORM.toString());
-			mv.addObject("commentsList", commentsList);
-			mv.setViewName("project/change_failed_project");
-		}
-    	Project project = this.projectService.findById(projectId);
-    	if(project != null) {
-    		//以下开始装载项目下的反馈列表
+		Project project = this.projectService.findById(projectId);
+		if(project!=null){
 			mv.addObject("taskInfo", project.getTaskInfo());
 			mv.addObject("project", project);
+			if("modify".equals(type)) {
+				mv.setViewName("project/modify_project");
+			} else if("claim".equals(type)) {
+				mv.setViewName("project/claim_project");
+				this.putFbListToProject(mv, project);
+			} else if("approval".equals(type)) {
+				mv.setViewName("project/approval_project");
+			} else if("details".equals(type)) {
+				mv.setViewName("project/details_project");
+				this.putFbListToProject(mv, project);
+			}else if("feedback".equals(type)) {
+				mv.setViewName("project/feedback_project");
+				this.putFbListToProject(mv, project);
+			} else if("approval_refuse".equals(type)) {
+				mv.setViewName("project/approval_refuse_project");
+			} else if("change_failed".equals(type)) {
+				//拒签操作被驳回的操作
+				List<Comments> commentsList = this.commentsService.findComments(projectId, BusinessForm.PROJECT_FORM.toString());
+				mv.addObject("commentsList", commentsList);
+				mv.setViewName("project/change_failed_project");
+			}
+		}		
+    	return mv;
+	}
+	private void putFbListToProject(ModelAndView mv,Project project) throws Exception{	
+    	if(project != null) {
+    		//以下开始装载项目下的反馈列表
 			List<Map> jsonList=new ArrayList<Map>();
 			int fbWL=0;
 			Date currentDate=new Date();
@@ -130,7 +143,12 @@ public class ProjectController {
 				map.put("feedbackStartDate", fb.getFeedbackStartDate());
 				map.put("feedbackEndDate", fb.getFeedbackEndDate());
 				map.put("groupName", fb.getProject().getGroup().getName());
-				map.put("createUser", fb.getCreateUser().getName());
+				if(fb.getFeedbackUser()!=null){
+					map.put("feedbackUser", fb.getFeedbackUser().getName());
+				}else{
+					map.put("feedbackUser", "--");
+				}
+				
 				map.put("feedbackDate", fb.getFeedbackDate());
 				map.put("status", fb.getStatus());
 				map.put("refuseCount", fb.getRefuseCount());
@@ -142,11 +160,10 @@ public class ProjectController {
 			//在gson转换ArrayList的时候，不能有懒加载的对象		
 			mv.addObject("feedback",gson.toJson(fbList));
 		}
-    	return mv;
 	}
 	
 	/**
-	 * 更新操作
+	 * 更新操作--添加建议
 	 * @param project
 	 * @return
 	 * @throws Exception 
@@ -182,36 +199,51 @@ public class ProjectController {
 		List<Map<String,Object>> jsonList=new ArrayList<Map<String,Object>>(); 
 		int fbWL=0;
 		Date currentDate=new Date();
-		for(Map map:list){
-			Project project=this.projectService.findById(Integer.valueOf(map.get("ID").toString()));
-			Set<FeedbackRecord> fbSet=project.getFbrList();
-		    Iterator iter = fbSet.iterator();
-		    FeedbackRecord fbr=null;
-			while(iter.hasNext()){
-				fbr=(FeedbackRecord)iter.next();
-				if(fbr.getFeedbackDate()==null && fbr.getStatus()==null){
-					break;
+		if(type==1){//显示待签收的项目页面
+			for(Map map:list){
+				Project project=this.projectService.findById(Integer.valueOf(map.get("ID").toString()));
+				if(project.getTaskInfo().getClaimLimitDate().before(currentDate)&&project.getStatus().equals("WAIT_FOR_CLAIM")){
+					fbWL=1; //在待签收的状态下，逾期
 				}
-			 }	
-			if(FeedbackStatus.RETURNED.toString().equals(fbr.getStatus())){
-				fbWL=3;//反馈被退回
-			}else if(FeedbackStatus.ACCEPT.toString().equals(fbr.getStatus())){
-				fbWL=4;//反馈采用fbWL=4,如果反馈采纳，则进入下一个反馈期
-			}else if(FeedbackStatus.FEEDBACKING.toString().equals(fbr.getStatus())){
-				fbWL=5;//反馈中
-			}else{
-				if(currentDate.before(fbr.getFeedbackStartDate()) && fbr.getStatus()==null){
-					fbWL=0;//未到反馈期
-				}else if(currentDate.after(fbr.getFeedbackEndDate())&&fbr.getFeedbackDate()==null&&fbr.getStatus()==null){
-					fbWL=2;//红色警告
-				}else if(currentDate.after(fbr.getFeedbackStartDate())&&currentDate.before(fbr.getFeedbackEndDate())&&fbr.getFeedbackDate()==null){
-					fbWL=1;//黄色警告
-				}
-			}			
-			System.out.println(fbWL);
-			map.put("warningLevel", fbWL);
-			jsonList.add(map);
+				map.put("claim_limit_date", project.getTaskInfo().getClaimLimitDate());
+				map.put("warningLevel", fbWL);
+				jsonList.add(map);
+			}
+			
+		}else if(type==2){//显示办理中的项目页面
+			for(Map map:list){
+				Project project=this.projectService.findById(Integer.valueOf(map.get("ID").toString()));
+				Set<FeedbackRecord> fbSet=project.getFbrList();
+			    Iterator iter = fbSet.iterator();
+			    FeedbackRecord fbr=null;
+				while(iter.hasNext()){
+					fbr=(FeedbackRecord)iter.next();
+					if(fbr.getFeedbackDate()==null && fbr.getStatus()==null){
+						break;
+					}
+				 }	
+				if(FeedbackStatus.RETURNED.toString().equals(fbr.getStatus())){
+					fbWL=3;//反馈被退回
+				}else if(FeedbackStatus.ACCEPT.toString().equals(fbr.getStatus())){
+					fbWL=4;//反馈采用fbWL=4,如果反馈采纳，则进入下一个反馈期
+				}else if(FeedbackStatus.FEEDBACKING.toString().equals(fbr.getStatus())){
+					fbWL=5;//反馈中
+				}else{
+					if(currentDate.before(fbr.getFeedbackStartDate()) && fbr.getStatus()==null){
+						fbWL=0;//未到反馈期
+					}else if(currentDate.after(fbr.getFeedbackEndDate())&&fbr.getFeedbackDate()==null&&fbr.getStatus()==null){
+						fbWL=2;//红色警告
+					}else if(currentDate.after(fbr.getFeedbackStartDate())&&currentDate.before(fbr.getFeedbackEndDate())&&fbr.getFeedbackDate()==null){
+						fbWL=1;//黄色警告
+					}
+				}			
+				map.put("warningLevel", fbWL);
+				jsonList.add(map);
+			}
+		}else{
+			
 		}
+		
 		return new Datagrid<Map<String, Object>>(page.getTotal(), jsonList);
 	}
 	
@@ -228,7 +260,16 @@ public class ProjectController {
 			if(StringUtils.isNotBlank(projectId)) {
 				Boolean flag = this.projectService.doClaimProject(projectId);
 				if(flag) {
-					message.setMessage("签收成功！");
+					Project prj=this.projectService.findById(Integer.valueOf(projectId));
+					Date currentDate=new Date();
+					Date claimLimitDate=prj.getClaimDate();
+					if(currentDate.after(claimLimitDate)){
+						ProjectScore projectScore=new ProjectScore(prj,"未按时签收任务",-10);
+						this.projectScoreService.doAdd(projectScore);
+						message.setMessage("签收成功，但未按时签收，减10分");
+					}else{
+						message.setMessage("签收成功！");
+					}					
 				} else {
 					message.setMessage("该任务已被其他人签收！");
 				}

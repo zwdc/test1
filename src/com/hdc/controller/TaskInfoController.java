@@ -176,6 +176,28 @@ public class TaskInfoController {
 		
 		return message;
 	}
+	/*
+	 * 
+	 */
+  	@RequestMapping(value = "/delete/{id}")
+   	public Message delete(@PathVariable("id") Integer id) throws Exception {
+  		Message message = new Message();
+		try {
+			if(!BeanUtilsExt.isBlank(id)) {//如果id是空的，没有选择行
+				this.taskInfoService.doDelete(id);
+				message.setData(id);
+				message.setMessage("删除成功！");
+			} else {
+				message.setData(id);
+				message.setMessage("没有选择行，请选择某一行删除！");
+			}
+		} catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setTitle("操作失败！");
+		}
+		
+		return message;
+  	}
 	
     /**
      * 申请审批，由秘书长先进行审批，通过后承办单位可签收。

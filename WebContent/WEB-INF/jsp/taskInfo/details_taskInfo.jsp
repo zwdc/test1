@@ -16,7 +16,6 @@ $(function() {
         //url: ctx+"/feedback/getList",
         width : 'auto',
 		height : 'auto',
-		pagination:true,
 		rownumbers:true,
 		border:false,
 		singleSelect:true,

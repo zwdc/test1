@@ -242,7 +242,7 @@ function edit() {
     //选中的行（第一次选择的行）
     var row = taskInfo_datagrid.datagrid('getSelected');
     if (row) {
-    	if(row.status=="PENDING"){
+    	if(row.status!="WAITING_FOR_APPROVAL"){
     		$.messager.alert("提示","此任务已经进入审批流程，不能修改！");
     	}else{
     		showTaskInfo(row);
@@ -255,8 +255,8 @@ function edit() {
 function del() {
     var row = taskInfo_datagrid.datagrid('getSelected');
     if (row) {
-    	if(row.status=="PENDING"){
-    		$.messager.alert("提示","此任务已经进入审批流程，不能修改！");
+    	if(row.status!="WAITING_FOR_APPROVAL"){
+    		$.messager.alert("提示","此任务已经进入审批流程，不能删除！");
     	}else{
     		 $.messager.confirm('确认提示！', '您确定要删除选中的数据?', function (result) {
     	            if (result) {

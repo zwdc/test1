@@ -55,12 +55,10 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 	@Override
 	public List<T> findListPage(String tableSimpleName, Parameter param, Map<String, Object> map, Page<T> page, Boolean dataSetPermission) throws Exception {
 		StringBuffer sb = new StringBuffer();  
-        sb.append("select a from ").append(tableSimpleName).append(" a where a.isDelete=0");  
-        
+        sb.append("select a from ").append(tableSimpleName).append(" a where a.isDelete=0 ");        
         if(dataSetPermission) {
-        	sb.append(this.getDataSetPermission());
-        }
-        
+        	sb.append(this.getDataSetPermission()); //获得用户数据级权限
+        }    
         //自定义查询条件
         if (map != null && !map.isEmpty()) {
         	for(Map.Entry<String, Object> entry : map.entrySet()){    
@@ -262,10 +260,16 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 	public StringBuffer getDataSetPermission() throws Exception{
 		StringBuffer sb = new StringBuffer(); 
 		User user = UserUtil.getUserFromSession();
-		if(user.getGroupData() == 1) {
-			sb.append(" and a.createUser.group = " + user.getGroup().getId().toString());
-		} else if(user.getSelfData() == 1) {
-			sb.append(" and a.createUser = " + user.getId().toString());
+		if(user.getDataPermission() == 0) {
+			sb.append("and a.createUser.id = " + user.getId().toString());			
+		} else if(user.getDataPermission() == 1) {
+			sb.append("and a.createUser.group.id = " + user.getGroup().getId().toString());
+		}else if(user.getDataPermission()==2){
+			sb.append("and a.createUser.role.id="+user.getRole().getId().toString());
+		}else if(user.getDataPermission()==3){
+			sb.append("and a.createUser.role.id="+user.getRole().getId().toString()+" and a.createUser.group.id="+ user.getGroup().getId().toString());
+		}else if(user.getDataPermission()==4){
+			sb.append("and (a.createUser.role.id="+user.getRole().getId().toString()+" or a.createUser.group.id="+ user.getGroup().getId().toString()+")");
 		}
 		return sb;
 	}

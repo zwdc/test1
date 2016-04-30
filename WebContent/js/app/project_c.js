@@ -13,10 +13,11 @@ $(function(){
 		rownumbers:true,				
 		border:false,					
 		singleSelect:true,				
-		striped:true,					
+		striped:true,	
+		nowrap:false,
 		columns:[
 		    [
-		     	{field:'URGENCY',title:'急缓程度',width:fixWidth(0.1),align:'center',sortable:true,
+		     	{field:'URGENCY',title:'急缓程度',width:fixWidth(0.07),align:'center',sortable:true,
 					formatter:function(value,row){
 					  switch (value) {
 					  	case 0: return "特提";
@@ -26,17 +27,7 @@ $(function(){
 					  } 
 				 }
 				},
-		     	{field:'TITLE',title:'任务标题',width:fixWidth(0.2),align:'left',halign:'center'},
-		     	{field:'SOURCE_NAME',title:'任务来源',width:fixWidth(0.2),align:'center'},
-		     	{field:'GROUP_NAME',title:'承办单位',width:fixWidth(0.1),align:'center'},
-		     	{field:'USER_NAME',title:'办理人',width:fixWidth(0.1),align:'center'},
-		     	{field:'END_TASK_DATE',title:'办结时限',width:fixWidth(0.1),align:'center',sortable:true,
-		     		formatter:function(value,row){
-		     			return moment(value).format("YYYY-MM-DD HH:mm:ss");
-		     		}
-		     	},
-		     	{field:'FREQUENCY_NAME',title:'反馈频度',width:fixWidth(0.1),align:'center'},
-		     	{field: 'STATUS',title: '状态',width:fixWidth(0.1),align:'center', halign:'center',sortable:true,
+				{field: 'STATUS',title: '状态',width:fixWidth(0.07),align:'center', halign:'center',sortable:true,
 	            	  formatter:function(value, row){
 	            		  switch (value) {
 							case "REFUSE_CLAIM":
@@ -62,8 +53,29 @@ $(function(){
 							default:
 								return "";
 						  }
-	    			  }
-	              }
+	    			  },
+		     	    styler:function(row,index){
+		          		  if (row.warningLevel=="1") {           			
+		                        return 'background-color:orange;color:white';
+		                  }
+		          	}
+				},
+		     	{field:'TITLE',title:'任务内容',width:fixWidth(0.4),align:'left',halign:'center'},
+		     	{field:'SOURCE_NAME',title:'任务来源',width:fixWidth(0.1),align:'center'},
+		     	{field:'GROUP_NAME',title:'承办单位',width:fixWidth(0.1),align:'center'},
+		     	{field:'USER_NAME',title:'签收人',width:fixWidth(0.06),align:'center'},
+		     	{field:'claim_limit_date',title:'签收期限',width:fixWidth(0.1),align:'center',sortable:true,
+		     		formatter:function(value,row){
+		     			return moment(value).format("YYYY-MM-DD HH:mm:ss");
+		     		}
+		     	},
+		     	{field:'END_TASK_DATE',title:'办结时限',width:fixWidth(0.1),align:'center',sortable:true,
+		     		formatter:function(value,row){
+		     			return moment(value).format("YYYY-MM-DD HH:mm:ss");
+		     		}
+		     	},
+		     	{field:'FREQUENCY_NAME',title:'反馈频度',width:fixWidth(0.1),align:'center'}
+		     	
 		    ]
 		],
         onDblClickRow: function(index, row) {
@@ -140,22 +152,26 @@ function claim() {
     	if(row.USER_NAME != null){
     		$.messager.alert("提示", "您已经签收此任务，根据任务状态进行【审批】任务！");
     	}else{
-    		$.ajax({
-    			url: ctx + '/project/claimProject/'+row.ID,
-    			type: 'post',
-    			dataType: 'json',
-    			success: function (data) {
-    				if (data.status) {
-    					project_datagrid.datagrid('load');
-    				}
-    				$.messager.show({
-    					title : data.title,
-    					msg : data.message,
-    					timeout : 1000 * 2
-    				});
-    			}
-    		});
-    	}
+    		 $.messager.confirm('确认提示！', '您是否已经查看了项目详细信息，如果签收，请点击确定?', function (result) {
+    			 if(result){
+    				 $.ajax({
+    		    			url: ctx + '/project/claimProject/'+row.ID,
+    		    			type: 'post',
+    		    			dataType: 'json',
+    		    			success: function (data) {
+    		    				if (data.status) {
+    		    					project_datagrid.datagrid('load');
+    		    				}
+    		    				$.messager.show({
+    		    					title : data.title,
+    		    					msg : data.message,
+    		    					timeout : 1000 * 2
+    		    				});
+    		    			}
+    		    		});
+    		       }
+    		 }
+    	)};
     }
 }
 

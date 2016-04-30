@@ -67,6 +67,7 @@ public class CreateTaskService implements JavaDelegate {
 				project.setGroup(new Group(new Integer(groupId)));
 				project.setTaskInfo(taskInfo);
 				project.setStatus(ProjectStatus.WAIT_FOR_CLAIM.toString());
+				project.setScore(100.00);
 				this.projectService.doAdd(project);
 			}
 		}

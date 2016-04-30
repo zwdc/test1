@@ -47,6 +47,7 @@ function showToDoTask(map){
 		border:false,
 		singleSelect:true,
 		striped:true,
+		nowrap:false,
 		columns : [ 
 		    [ 
 				{field : 'assign',title : '任务状态',width : fixWidth(0.05),align : 'center',
@@ -58,16 +59,16 @@ function showToDoTask(map){
 						}
 					}
 				},
-                {field : 'taskTitle',title : '任务标题',width : fixWidth(0.2),align : 'center'},
+                {field : 'taskTitle',title : '任务内容',width : fixWidth(0.35),align : 'center'},
                 {field : 'taskInfoType',title : '任务类型',width : fixWidth(0.1),align : 'center'},
-                {field : 'user_name',title : '申请人',width : fixWidth(0.05),align : 'center'},                
-                {field : 'title',title : '任务描述',width : fixWidth(0.2),align : 'center'},
+                {field : 'applyUserName',title : '申请人',width : fixWidth(0.06),align : 'center'},                
+                {field : 'title',title : '任务描述',width : fixWidth(0.18),align : 'center'},
                 {field : 'taskName',title : '当前节点',width : fixWidth(0.1),align : 'center',
                 	formatter:function(value, row){
                 		return "<a class='trace' onclick=\"graphTrace('"+row.processInstanceId+"')\" id='diagram' href='javascript:void(0)' title='see'>"+value+"</a>";
                 	}
                 },
-                {field : 'owner',title : '执行人',width : fixWidth(0.1),align : 'center',
+                {field : 'owner',title : '执行人',width : fixWidth(0.07),align : 'center',
                 	formatter:function(value, row){
                 		if(value != null && value != row.assign){
                 			return row.assign+" (原执行人："+value+")";
@@ -81,7 +82,7 @@ function showToDoTask(map){
 						return moment(value).format("YYYY-MM-DD HH:mm:ss");
 					}
                 },
-                {field : 'suspended',title : '流程状态',width : fixWidth(0.1),align : 'center',
+                {field : 'suspended',title : '流程状态',width : fixWidth(0.07),align : 'center',
                 	formatter:function(value, row){
                 		if(value){
                 			return "已挂起";

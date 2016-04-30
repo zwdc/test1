@@ -17,6 +17,13 @@ import javax.persistence.Table;
 @Entity
 @Table(name="project_score")
 public class ProjectScore {
+	
+	public ProjectScore(Project project,String reason,Integer score) {
+		this.project=project;
+		this.reason=reason;
+		this.score=score;
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", length = 10, nullable = false, unique = true)

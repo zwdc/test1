@@ -23,11 +23,11 @@ $(function() {
               {field: 'type', title: '频度类型', width: fixWidth(0.4), align: 'left', halign: 'center',
             	  formatter:function(value,row){
             		  if(value == 1) {
-            			  return "默认一次";
+            			  return "单次或月频度";
             		  } else if(value == 2) {
-            			  return "每周一次"
+            			  return "周频度"
             		  } else if(value == 3) {
-            			  return "每月一次";
+            			  return "单次或月频度";
             		  }
             	  }
             	  

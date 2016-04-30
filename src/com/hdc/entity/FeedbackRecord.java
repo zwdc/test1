@@ -51,6 +51,20 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 	@JsonIgnore
 	private Project project;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="feedback_user_id")
+	@JsonIgnore
+	private User feedbackUser;//反馈执行人
+	
+	
+	public User getFeedbackUser() {
+		return feedbackUser;
+	}
+
+	public void setFeedbackUser(User feedbackUser) {
+		this.feedbackUser = feedbackUser;
+	}
+
 	@OneToMany(mappedBy = "fdRecord",fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
 	@JsonIgnore
 	private Set<FeedbackAtt> fdaList=new HashSet<FeedbackAtt>();
@@ -110,6 +124,8 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 	
 	@Column(name = "is_delay", length = 1)
 	private Integer isDelay;				//是否迟报（1.是、0.否）
+	
+	
 
 	public Integer getId() {
 		return id;

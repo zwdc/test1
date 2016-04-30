@@ -24,7 +24,7 @@
 	position:absolute;
 	width:450px;
 	height:350px;
-	box-shadow:1px 1px 1000px 1000px rgba(0,0,0,0.3),0px 0px 20px 4px rgba(0,0,0,0.4);
+	box-shadow:1px 1px 1000px 1000px rgba(0,0,0,0.2),0px 0px 20px 4px rgba(0,0,0,0.3);
 	left:45%;
 	top:340px;
 	margin-top:-230px;
@@ -36,7 +36,7 @@
 
 }
   .cont_join:hover {
-  box-shadow:1px 1px 1000px 1000px rgba(0,0,0,0.5),0px 0px 20px 4px rgba(0,0,0,0.9);
+  box-shadow:1px 1px 1000px 1000px rgba(0,0,0,0.7),0px 0px 20px 4px rgba(0,0,0,1);
 
 }
 .cont_btn_join {  

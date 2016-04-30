@@ -1,5 +1,5 @@
 /**
- * 办理人 待签收列表
+ * 办理人 已办结列表
  */
 var project_datagrid;
 var project_form;
@@ -13,7 +13,8 @@ $(function(){
 		rownumbers:true,				
 		border:false,					
 		singleSelect:true,				
-		striped:true,					
+		striped:true,	
+		nowrap:false,
 		columns:[
 		    [
 		     	{field:'URGENCY',title:'急缓程度',width:fixWidth(0.1),align:'center',sortable:true,
@@ -26,7 +27,7 @@ $(function(){
 					  } 
 				 }
 				},
-		     	{field:'TITLE',title:'任务标题',width:fixWidth(0.2),align:'left',halign:'center'},
+		     	{field:'TITLE',title:'任务内容',width:fixWidth(0.2),align:'left',halign:'center'},
 		     	{field:'SOURCE_NAME',title:'任务来源',width:fixWidth(0.2),align:'center'},
 		     	{field:'GROUP_NAME',title:'承办单位',width:fixWidth(0.1),align:'center'},
 		     	{field:'USER_NAME',title:'办理人',width:fixWidth(0.1),align:'center'},
@@ -36,34 +37,7 @@ $(function(){
 		     		}
 		     	},
 		     	{field:'FREQUENCY_NAME',title:'反馈频度',width:fixWidth(0.1),align:'center'},
-		     	{field: 'STATUS',title: '状态',width:fixWidth(0.1),align:'center', halign:'center',sortable:true,
-	            	  formatter:function(value, row){
-	            		  switch (value) {
-							case "REFUSE_CLAIM":
-								return "<span class='text-danger'>拒绝签收</span>";
-							case "WAIT_FOR_CLAIM":
-								return "<span class='text-warning'>待签收</span>";
-							case "CLAIMED":
-								return "<span class='text-success'>已签收</span>";
-							case "APPLY_FINISHED":
-								return "<span class='text-primary'>申请办结</span>";
-							case "APPROVAL_SUCCESS":
-								return "<span class='text-success'>审批通过</span>";
-							case "APPROVAL_FAILED":
-								return "<span class='text-danger'>审批失败</span>";
-							case "REFUSE_FAILED":
-								return "<span class='text-primary'>拒签失败</span>";
-							case "WAITING_FOR_APPROVAL":
-								return "<span class='text-warning'>待申请审批</span>";
-							case "PENDING":
-								return "<span class='text-primary'>审批中</span>";
-							case "REAPPROVAL":
-								return "<span class='text-danger'>需要重新审批</span>";
-							default:
-								return "";
-						  }
-	    			  }
-	              }
+		     	{field: 'STATUS',title: '状态',width:fixWidth(0.1),align:'center', halign:'center',sortable:true,}
 		    ]
 		],
         onDblClickRow: function(index, row) {

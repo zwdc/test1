@@ -37,31 +37,43 @@ $(function(){
 	    valueField:'id',
 	    textField:'value',
 	    data: [{
-			id: '1',
-			value: '所有数据'
+			id: '0',
+			value: '仅本人'
 		},{
-			id: '2',
+			id: '1',
 			value: '所在部门'
 		},{
+			id: '2',
+			value: '所属角色'
+		},{
 			id: '3',
-			value: '仅本人'
+			value: '所在部门且所属角色'
+		},{
+			id: '4',
+			value: '所在部门或所属角色'
+		},{
+			id: '5',
+			value: '所有数据'
 		}],
 		onSelect: function(record){
 			switch(record.id) {
+				case '0':
+					$("#dataPermission").val(0);
+					break;
 				case '1':
-					$("#allData").val(1);
-					$("#groupData").val(0);
-					$("#selfData").val(0);
+					$("#dataPermission").val(1);
 					break;
 				case '2':
-					$("#allData").val(0);
-					$("#groupData").val(1);
-					$("#selfData").val(0);
+					$("#dataPermission").val(2);
 					break;
 				case '3':
-					$("#allData").val(0);
-					$("#groupData").val(0);
-					$("#selfData").val(1);
+					$("#dataPermission").val(3);
+					break;
+				case '4':
+					$("#dataPermission").val(4);
+					break;
+				case '5':
+					$("#dataPermission").val(5);
 					break;
 			}
 		}
@@ -112,10 +124,7 @@ $(function(){
 <div id="dlg" class="easyui-layout" style="padding:10px 20px">
     <div class="ftitle"><img src="${ctx }/images/fromedit.png" style="margin-bottom: -3px;"/> 用户信息</div>
     <form id="user_form" method="post">
-    	<input id="allData" name="allData" type="hidden">
-    	<input id="groupData" name="groupData" type="hidden">
-    	<input id="selfData" name="selfData" type="hidden">
-        <div class="fitem">
+    	<div class="fitem">
             <label>用户名:</label>
             <input id="name" name="name" class="easyui-textbox" required="required">
         </div>
@@ -142,7 +151,7 @@ $(function(){
         </div>
         <div class="fitem">
             <label>数据权限:</label>
-			<input id="dataPermission" class="easyui-combobox" required="required" />
+			<input id="dataPermission" name="dataPermission" class="easyui-combobox" required="required" />
         </div>
         <div class="fitem">
             <label>状态:</label>

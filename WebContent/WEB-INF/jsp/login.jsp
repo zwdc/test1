@@ -19,8 +19,7 @@
   <div id="main-wrapper htmleaf-container">
   <div class="cont_principal">
     <div class="template-page-wrapper cont_join">
-     <br/>
-      <div class="">
+      <div style="background:#FFCC33; filter:alpha(opacity=50);margin-top:5px;padding-top:10px;padding-bottom:10px">
         	<img src='${ctx}/images/solg_login.png'/>
        </div> 
        <br/>  <br/>

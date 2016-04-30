@@ -92,26 +92,33 @@ public class ProjectServiceImpl implements IProjectService {
 		sb.append("select a.id, g.name group_name, u.user_name user_name, t.id task_id, t.title, t.urgency, s.name source_name, t.end_task_date, fb.name frequency_name, a.status from project a ");
 		sb.append("left join groups g on (g.group_id = a.group_id) ");
 		sb.append("left join users u on (u.user_id = a.user_id) ");
+		sb.append("left join role r on(r.id=u.role_id)");
 		sb.append("left join task_info t on (t.id = a.task_info_id and t.is_delete = 0) ");
-		sb.append("left join task_source s on (s.id = t.id) ");
+		sb.append("left join task_source s on (s.id = t.task_source) ");
 		sb.append("left join feedback_frequency fb on (fb.id = t.fb_frequency and fb.is_delete = 0) ");
 		
 		if(type == 1) {
-			//待签收/已签收/审批中/审批通过/审批失败
-			sb.append("where a.is_delete = 0 and (a.status = 'WAIT_FOR_CLAIM' or a.status = 'CLAIMED' or a.status = 'PENDING' or a.status = 'APPROVAL_SUCCESS' or a.status = 'APPROVAL_FAILED' or a.status = 'REFUSE_FAILED') and a.group_id = :groupId and (a.user_id = :userId or a.user_id is null)");
+			//待签收/已签收/审批中/审批通过/审批失败     一个单位只有两个人可以签收，其他人都可以查看
+			sb.append("where a.is_delete = 0 and (a.status = 'WAIT_FOR_CLAIM' or a.status = 'CLAIMED' or a.status = 'PENDING' or a.status = 'APPROVAL_SUCCESS' or a.status = 'APPROVAL_FAILED' or a.status = 'REFUSE_FAILED')");
 		} else if(type == 2) {
-			//办理中/申请办结
-			sb.append("where a.is_delete = 0 and (a.status = 'IN_HANDLING' or a.status='CAN_BE_FINISHED' or a.status = 'APPLY_FINISHED') and a.group_id = :groupId and a.user_id = :userId ");
+			//办理中/申请办结   
+			sb.append("where a.is_delete = 0 and (a.status = 'IN_HANDLING' or a.status='CAN_BE_FINISHED' or a.status = 'APPLY_FINISHED')");
 		} else if(type == 3) {
-			//已办结
-			sb.append("where a.is_delete = 0 and a.status = 'FINISHED' and a.group_id = :groupId and a.user_id = :userId ");
+			//已办结     同单位的人可以查看
+			sb.append("where a.is_delete = 0 and a.status = 'FINISHED'");
 		}
-		//数据权限
-		/*if(user.getGroupData() == 1) {
-			sb.append("and a.create_user_id.group = " + user.getGroup().getId().toString());
-		} else if(user.getSelfData() == 1) {
-			sb.append("and a.createUser = " + user.getId().toString());
-		}*/
+		//数据权限（主要是为了签收用）与所有人的数据权限不同
+		if(user.getDataPermission() == 0) {
+			sb.append("and a.user_id = " + user.getId().toString());			
+		} else if(user.getDataPermission() == 1) {
+			sb.append("and a.group_id = " + user.getGroup().getId().toString());
+		}else if(user.getDataPermission()==2){
+			sb.append("and a.role_id="+user.getRole().getId().toString());
+		}else if(user.getDataPermission()==3){
+			sb.append("and (a.role_id="+user.getRole().getId().toString()+" or a.role_id is null) and a.group_id="+ user.getGroup().getId().toString());
+		}else if(user.getDataPermission()==4){
+			sb.append("and (a.role_id="+user.getRole().getId().toString()+" or a.group_id="+ user.getGroup().getId().toString()+")");
+		}
 		//模糊查询
 		if(param != null && StringUtils.isNotBlank(param.getSearchValue())){
         	//如果查询的字段中有日期

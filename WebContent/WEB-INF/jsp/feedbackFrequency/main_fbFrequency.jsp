@@ -86,7 +86,7 @@
     <input type="hidden" name="createDate" value="<fmt:formatDate value='${feedback.createDate }' type='both'/>">
     <input type="hidden" name="isDelete" value="${feedback.isDelete }">
 	<div class="table-responsive">
-	<table class="table table-bordered table-hover table-condensed">
+	<table class="table table-bordered table-condensed">
 		<tr class="bg-primary">
 			<td colspan="4" align="center">反馈频度信息</td>
 		</tr>
@@ -96,7 +96,7 @@
 	  			<input name="name" class="easyui-textbox" data-options="prompt:'填写频度名称'" value="${feedback.name }" required="required" type="text">
 	  		</td>
 	  	</tr>
-		<tr class="active">
+		<%-- <tr class="active">
 		  	<td colspan="2">
 		  		<span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;默认一次:
 		  	</td>
@@ -119,10 +119,10 @@
 		  		</table>
 		  		</div>
 	  		</td>
-	  	</tr>
+	  	</tr> --%>
 	  	<tr class="active">
 		  	<td colspan="2">
-		  		<span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;每周一次:
+		  		<span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;周频度:
 		  	</td>
 	  	</tr>
 		<tr>
@@ -175,7 +175,7 @@
 		</tr>
 	  	<tr class="active">
 		  	<td colspan="2">
-		  		<span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;每月一次:
+		  		<span class="glyphicon glyphicon-link" aria-hidden="true"></span>&nbsp;单次或月频度:
 		  	</td>
 	  	</tr>
 		<tr>

@@ -62,7 +62,7 @@ $(function(){
 		     	{field:'TITLE',title:'任务内容',width:fixWidth(0.3),align:'left',halign:'center'},
 		     	{field:'SOURCE_NAME',title:'任务来源',width:fixWidth(0.2),align:'center'},
 		     	{field:'GROUP_NAME',title:'承办单位',width:fixWidth(0.1),align:'center'},
-		     	{field:'USER_NAME',title:'办理人',width:fixWidth(0.08),align:'center'},
+		     	{field:'USER_NAME',title:'签收人',width:fixWidth(0.08),align:'center'},
 		     	{field:'END_TASK_DATE',title:'办结时限',width:fixWidth(0.1),align:'center',sortable:true,
 		     		formatter:function(value,row){
 		     			return moment(value).format("YYYY-MM-DD HH:mm:ss");

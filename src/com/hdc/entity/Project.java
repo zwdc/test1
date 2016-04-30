@@ -49,16 +49,25 @@ public class Project extends BaseEntity implements Serializable {
 	@Column(name = "id", length = 10, nullable = false, unique = true)
 	private Integer id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="group_id")
-	@JsonIgnore
-    private Group group;			//承办单位
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="user_id")
 	@JsonIgnore
-	private User user;				//承办人(签收用)
+	private User user;				//承办人(签收用)  签收人
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="role_id")
+	@JsonIgnore
+	private Role role;				//承办人角色(签收用)
+
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="group_id")
+	@JsonIgnore
+	private Group group;				//承办单位(签收用)
+	
+	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="refuse_user_id")
 	@JsonIgnore
@@ -120,14 +129,7 @@ public class Project extends BaseEntity implements Serializable {
 		this.id = id;
 	}
 
-	public Group getGroup() {
-		return group;
-	}
-
-	public void setGroup(Group group) {
-		this.group = group;
-	}
-
+	
 	public TaskInfo getTaskInfo() {
 		return taskInfo;
 	}
@@ -206,6 +208,22 @@ public class Project extends BaseEntity implements Serializable {
 
 	public void setRefuseUser(User refuseUser) {
 		this.refuseUser = refuseUser;
+	}
+	
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public Group getGroup() {
+		return group;
+	}
+
+	public void setGroup(Group group) {
+		this.group = group;
 	}
 	
 }

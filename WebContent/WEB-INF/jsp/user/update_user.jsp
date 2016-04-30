@@ -40,48 +40,46 @@ $(function(){
 	    valueField:'id',
 	    textField:'value',
 	    data: [{
-			id: '1',
-			value: '所有数据'
+			id: '0',
+			value: '仅本人'
 		},{
-			id: '2',
+			id: '1',
 			value: '所在部门'
 		},{
+			id: '2',
+			value: '所属角色'
+		},{
 			id: '3',
-			value: '仅本人'
+			value: '所在部门且所属角色'
+		},{
+			id: '4',
+			value: '所在部门或所属角色'
+		},{
+			id: '5',
+			value: '所有数据'
 		}],
 		onSelect: function(record){
 			switch(record.id) {
+				case '0':
+					$("#dataPermission").val(0);
+					break;
 				case '1':
-					$("#allData").val(1);
-					$("#groupData").val(0);
-					$("#selfData").val(0);
+					$("#dataPermission").val(1);
 					break;
 				case '2':
-					$("#allData").val(0);
-					$("#groupData").val(1);
-					$("#selfData").val(0);
+					$("#dataPermission").val(2);
 					break;
 				case '3':
-					$("#allData").val(0);
-					$("#groupData").val(0);
-					$("#selfData").val(1);
+					$("#dataPermission").val(3);
+					break;
+				case '4':
+					$("#dataPermission").val(4);
+					break;
+				case '5':
+					$("#dataPermission").val(5);
 					break;
 			}
-		},
-		onLoadSuccess: function (data) {
-			debugger;
-			var allData = $("#allData").val();
-			var groupData = $("#groupData").val();
-			var selfData = $("#selfData").val();
-			if(allData == 1) {
-				$("#dataPermission").combobox('setValue',1);
-			} else if(groupData == 1) {
-				$("#dataPermission").combobox('setValue',2);
-			} else if(selfData == 1) {
-				$("#dataPermission").combobox('setValue',3);
-			}
-            
-        }
+		}
 	});
 	
 	//扩展easyui的validatebox
@@ -146,9 +144,7 @@ $(function(){
 		<input id="id" name="id" type="hidden" />
 		<input id="groupId" name="groupId" type="hidden" />
 		<input id="roleId" name="roleId" type="hidden" />
-		<input id="allData" name="allData" type="hidden"/>
-    	<input id="groupData" name="groupData" type="hidden"/>
-    	<input id="selfData" name="selfData" type="hidden"/>
+		
 		<input name="registerDate" type="hidden" />
 		<input name="isDelete" type="hidden" />
         <div class="fitem">
@@ -180,7 +176,7 @@ $(function(){
         </div>
         <div class="fitem">
             <label>数据权限:</label>
-			<input id="dataPermission" class="easyui-combobox" required="required" />
+			<input id="dataPermission" name="dataPermission" class="easyui-combobox" required="required" />
         </div>
         <div class="fitem">
             <label>状态:</label>

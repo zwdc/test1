@@ -26,7 +26,25 @@ $(function() {
             		  return moment(value).format("YYYY-MM-DD HH:mm");
 				  }
               },
+              {field : 'group_name',title : '部门',width : fixWidth(0.1),sortable: true},
               {field : 'role_name',title : '角色',width : fixWidth(0.1),sortable: true},
+              {field : 'dataPermission',title : '数据权限',width : fixWidth(0.1),sortable: true,
+            	  formatter:function(value,row){
+            		 if(value==0){
+            			 return "仅可见自己数据";
+            		 }else if(value==1){
+            			 return"可见部门内数据";
+            		 }else if(value==2){
+            			 return"可见同角色数据";
+            		 }else if(value==3){
+            			 return"可见本部门且同角色数据";
+            		 }else if(value==4){
+            			 return"可见本部门或同角色数据";
+            		 }else if(value==5){
+            			 return"可见所有数据";
+            		 }
+				  }
+              },
               {field : 'locked',title : '状态',width : fixWidth(0.1),
             	  formatter:function(value,row){
             		  if("0"==row.locked){
