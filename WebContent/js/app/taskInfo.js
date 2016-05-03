@@ -121,6 +121,12 @@ function formInit(row) {
 		        if (!isValid) {
 		            $.messager.progress('close');
 		        }
+		        var hostGroupId = $("#hostGroupId").val();
+		        if(hostGroupId == "") {
+		        	$.messager.progress('close');
+		        	$.messager.alert("提示","至少选择一个牵头单位！");
+		        	return false;
+		        }
 		        return isValid;
 		    },
 		    success: function (data) {
