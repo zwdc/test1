@@ -191,6 +191,8 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 			Serializable processTaskId = this.processTaskService.doAdd(processTask);
 			variables.put("processTaskId", processTaskId.toString());
 		}
+		this.doUpdate(fbr);
+		
 		// 评论,可记录每次审核意见
 		Comments comments = new Comments();
 		comments.setUserId(user.getId().toString());
@@ -199,7 +201,6 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 		comments.setBusinessKey(feedbackId);
 		comments.setBusinessForm(BusinessForm.FEEDBACK_FORM.toString());
 	    variables.put("isPass", isPass);
-	    System.out.println(taskId);
 		this.processService.complete(taskId, comments, variables);
 	}
 
