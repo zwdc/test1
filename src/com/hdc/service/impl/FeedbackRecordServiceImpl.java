@@ -179,6 +179,9 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 			fbr.setStatus(FeedbackStatus.ACCEPT.toString()); //审批成功
 		} else {
 			fbr.setStatus(FeedbackStatus.RETURNED.toString()); //审批失败
+			
+			
+			
 			TaskInfo taskInfo=fbr.getProject().getTaskInfo();
 			ProcessTask processTask = new ProcessTask();
 			processTask.setTaskTitle(taskInfo.getTitle());
