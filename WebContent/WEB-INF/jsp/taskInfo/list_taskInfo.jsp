@@ -26,19 +26,17 @@
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="showTaskInfo();">批量创建任务</a>
 					<!-- <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="publishMessage();">发送</a> -->
 				</td>
-				<td style="padding-left:5px">
+				<td style="padding-left:5px;">
 					<input id="searchbox" type="text"/>
 				</td>
-				<td style="padding-left:5px">
+				<!-- <td style="padding-left:5px">
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="invoiceSearch();">高级查询</a>
-				</td>
+				</td> -->
 			</tr>
 		</table>
 	</div>
-	<div id="searchMenu" style="display: none;">
-		<div data-options="name:'title'">任务标题</div>
-		<div data-options="name:'createTaskDate'">任务开始日期</div>
-		<div data-options="name:'endTaskDate'">任务结束时限</div>
+	<div id="searchMenu" style="display:none;">
+		<div data-options="name:'title'">任务内容</div>
 	</div>
 	<table id="taskInfo_datagrid" title="任务列表"></table>
   </body>

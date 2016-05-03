@@ -18,6 +18,8 @@ import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.ProcessTask;
+import com.hdc.entity.Project;
+import com.hdc.entity.ProjectScore;
 import com.hdc.entity.TaskInfo;
 import com.hdc.entity.TaskSource;
 import com.hdc.entity.User;
@@ -25,6 +27,7 @@ import com.hdc.service.IBaseService;
 import com.hdc.service.IFeedbackRecordService;
 import com.hdc.service.IProcessService;
 import com.hdc.service.IProcessTaskService;
+import com.hdc.service.IProjectScoreService;
 import com.hdc.service.ITaskSourceService;
 import com.hdc.util.BeanUtilsExt;
 import com.hdc.util.Constants.BusinessForm;
@@ -45,6 +48,9 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
     
 	@Autowired
 	private IProcessTaskService processTaskService;
+	
+	@Autowired
+	private IProjectScoreService projectScoreService;
 	
 	@Override
 	public List<FeedbackRecord> getListPage(Parameter param,
@@ -179,9 +185,14 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 			fbr.setStatus(FeedbackStatus.ACCEPT.toString()); //审批成功
 		} else {
 			fbr.setStatus(FeedbackStatus.RETURNED.toString()); //审批失败
-			
-			
-			
+			//以下是为了查看是否延期反馈
+			Project prj=fbr.getProject();//获取该反馈的project
+			Date currentDate=new Date();
+			Date claimLimitDate=prj.getClaimDate();
+			if(currentDate.after(claimLimitDate)){
+				ProjectScore projectScore=new ProjectScore(prj,"反馈未予采用，返回承办单位一次",-10);
+				this.projectScoreService.doAdd(projectScore);
+			}			
 			TaskInfo taskInfo=fbr.getProject().getTaskInfo();
 			ProcessTask processTask = new ProcessTask();
 			processTask.setTaskTitle(taskInfo.getTitle());
@@ -194,6 +205,8 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 			Serializable processTaskId = this.processTaskService.doAdd(processTask);
 			variables.put("processTaskId", processTaskId.toString());
 		}
+		this.doUpdate(fbr);
+		
 		// 评论,可记录每次审核意见
 		Comments comments = new Comments();
 		comments.setUserId(user.getId().toString());
@@ -202,7 +215,6 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 		comments.setBusinessKey(feedbackId);
 		comments.setBusinessForm(BusinessForm.FEEDBACK_FORM.toString());
 	    variables.put("isPass", isPass);
-	    System.out.println(taskId);
 		this.processService.complete(taskId, comments, variables);
 	}
 

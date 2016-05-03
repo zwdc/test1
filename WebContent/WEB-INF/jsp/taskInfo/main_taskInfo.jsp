@@ -227,12 +227,6 @@
 					data-options="readonlyMode:false" name="title" rows="2" required="required">${taskInfo.title }</textarea></td>
 		</tr>
 		<tr>
-			<td class="text-right">任务简称:</td>
-			<td><input name="info" value="${taskInfo.info }" data-options="prompt:'任务简称'" class="easyui-textbox" required="required"></td>
-			<td class="text-right">急缓程度:</td>
-			<td><input id="urgency" name="urgency" value="${taskInfo.urgency}" data-options="prompt:'选择急缓程度'" class="easyui-combobox" required="required"></td>
-		</tr>
-		<tr>
 			<td class="text-right">任务来源:</td>
 			<td><input id="taskSource" name="taskSource.id" class="easyui-combogrid" data-options="prompt:'选择来源'"  value="${taskInfo.taskSource.id }" required="required"></td>
 			<td class="text-right">反馈频度:</td>
@@ -247,7 +241,8 @@
 		<tr>
 			<td class="text-right">签收时限:</td>
 			<td><input id="claimLimitDate" name="claimLimitDate" class="easyui-datetimebox" data-options="prompt:'选择签收时限',editable:false" value="${taskInfo.claimLimitDate }" required="required"></td>
-			<td colspan="2"></td>
+			<td class="text-right">急缓程度:</td>
+			<td><input id="urgency" name="urgency" value="${taskInfo.urgency}" data-options="prompt:'选择急缓程度'" class="easyui-combobox" required="required"></td>
 		</tr>
 		<tr>
 			<td class="text-right">牵头单位:</td>

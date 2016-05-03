@@ -19,8 +19,7 @@ $(function(){
 		columns:[
 		    [
 		     
-		     	{field:'title',title:'任务内容',width:fixWidth(0.4),align:'left',halign:'center',multiline:true},
-		     	{field:'info',title:'任务简称',width:fixWidth(0.1),align:'left',halign:'center'},
+		     	{field:'title',title:'任务内容',width:fixWidth(0.5),align:'left',halign:'center',multiline:true},
 		     	{field:'createTaskDate',title:'开始时间',width:fixWidth(0.1),align:'center',sortable:true,
 		     		formatter:function(value,row){
 	            		  return moment(value).format("YYYY-MM-DD HH:mm:ss");

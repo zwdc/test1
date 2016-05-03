@@ -292,15 +292,15 @@
     <input type="hidden" name="status" value="${taskInfo.status }">
 	<table class="table table-bordered table-hover table-condensed">
 		<tr class="bg-primary">
-			<td colspan="4" align="center">任务信息</td>
+			<td colspan="4" align="center">修改任务信息</td>
 		</tr>
 		<tr>
-			<td class="text-right">任务标题:</td>
-			<td colspan="3"><input name="title" class="easyui-textbox" data-options="prompt:'填写任务标题'" value="${taskInfo.title }" required="required" type="text" style="width: 50%"></td>
+			<td class="text-right">任务内容:</td>
+			<td colspan="3"><input name="title" class="easyui-textbox" data-options="prompt:'填写任务内容'" value="${taskInfo.title }" required="required" type="text" style="width: 50%"></td>
 		</tr>
 		<tr>
-			<td class="text-right">任务简称:</td>
-			<td><input name="info" value="${taskInfo.info }" data-options="prompt:'任务简称'" class="easyui-textbox" required="required"></td>
+			<td class="text-right">开始时间:</td>
+			<td><input id="createTaskDate" name="createTaskDate" class="easyui-datetimebox" data-options="prompt:'选择开始时间',editable:false" value="${taskInfo.createTaskDate }" required="required"></td>
 			<td class="text-right">急缓程度:</td>
 			<td><input id="urgency" name="urgency" value="${taskInfo.urgency }" data-options="prompt:'选择急缓程度'" class="easyui-combobox" required="required"></td>
 		</tr>
@@ -311,15 +311,10 @@
 			<td><input id="fbFrequency" name="fbFrequency.id" class="easyui-combobox" data-options="prompt:'选择反馈频度'" value="${taskInfo.fbFrequency.id }" required="required"></td>
 		</tr>
 		<tr>
-			<td class="text-right">开始时间:</td>
-			<td><input id="createTaskDate" name="createTaskDate" class="easyui-datetimebox" data-options="prompt:'选择开始时间',editable:false" value="${taskInfo.createTaskDate }" required="required"></td>
-			<td class="text-right">办结时限:</td>
-			<td><input id="endTaskDate" name="endTaskDate" class="easyui-datetimebox" data-options="prompt:'选择半截时间',editable:false" value="${taskInfo.endTaskDate }" required="required"></td>
-		</tr>
-		<tr>
 			<td class="text-right">签收时限:</td>
 			<td><input id="claimLimitDate" name="claimLimitDate" class="easyui-datetimebox" data-options="prompt:'选择签收时限',editable:false" value="${taskInfo.claimLimitDate }" required="required"></td>
-			<td colspan="2"></td>
+			<td class="text-right">办结时限:</td>
+			<td><input id="endTaskDate" name="endTaskDate" class="easyui-datetimebox" data-options="prompt:'选择半截时间',editable:false" value="${taskInfo.endTaskDate }" required="required"></td>
 		</tr>
 		<tr>
 			<td class="text-right">牵头单位:</td>
@@ -335,7 +330,7 @@
 				    </thead>
 				</table>
 				<!-- <button type="button" class="btn btn-primary btn-xs" onclick="chooseHostGroup();">添加</button> -->
-				<input id="hostGroupId" name="hostGroup" value = "${taskInfo.hostGroup }" type="hidden"/>
+				<input id="hostGroupId" name="hostGroup" value = "${taskInfo.hostGroup }" type="hidden" required="required"/>
 			</td>
 		</tr>
 		<tr>
