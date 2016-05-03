@@ -11,7 +11,6 @@ import java.util.Set;
 import org.activiti.engine.ActivitiException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,10 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.hdc.entity.Comments;
 import com.hdc.entity.Datagrid;
-import com.hdc.entity.FeedbackAtt;
 import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Message;
 import com.hdc.entity.Page;
@@ -31,14 +28,11 @@ import com.hdc.entity.Parameter;
 import com.hdc.entity.Project;
 import com.hdc.entity.ProjectScore;
 import com.hdc.service.ICommentsService;
-import com.hdc.service.IProjectService;
+import com.hdc.service.IFeedbackRecordService;
 import com.hdc.service.IProjectScoreService;
-import com.hdc.util.BeanToMapUtil;
-import com.hdc.util.BeanUtilsExt;
+import com.hdc.service.IProjectService;
 import com.hdc.util.Constants.BusinessForm;
 import com.hdc.util.Constants.FeedbackStatus;
-
-import oracle.net.aso.f;
 
 /**
  * 任务交办管理器
@@ -54,6 +48,9 @@ public class ProjectController {
 	
 	@Autowired
 	private IProjectScoreService projectScoreService;
+	
+	@Autowired
+	private IFeedbackRecordService feedbackService;
 	
 	@Autowired
 	private ICommentsService commentsService;
@@ -453,5 +450,23 @@ public class ProjectController {
     	return message;
     }
     
-	
+    /**
+     * 申请办结
+     * @param projectId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/applyEnd/{projectId}")
+    @ResponseBody
+	public Message applyEnd(@PathVariable("projectId") String projectId) throws Exception {
+    	Message message = new Message();
+		List<FeedbackRecord> list = this.feedbackService.findNoAccept(projectId);
+		if(list.size() > 0) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("请确保所有反馈信息都被采纳后，才可以申请办结！");
+		} else {
+			
+		}
+		return message;
+	}
 }

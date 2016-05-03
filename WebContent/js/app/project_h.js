@@ -206,3 +206,33 @@ function showDetails(row) {
         }
     });
 }
+
+//申请办结
+function applyEnd() {
+	var row = feedback_datagrid.datagrid('getSelected');
+    if (row) {
+        $.messager.confirm('确认提示！', '您确定要办结此任务?', function (result) {
+            if (result) {
+                $.ajax({
+            		async: false,
+            		cache: false,
+                    url: ctx + '/project/applyEnd/'+row.id,
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.status) {
+                        	feedback_datagrid.datagrid('load');
+                        }
+                        $.messager.show({
+        					title : data.title,
+        					msg : data.message,
+        					timeout : 1000 * 2
+        				});
+                    }
+                });
+            }
+        });
+    } else {
+    	$.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
+    }
+}

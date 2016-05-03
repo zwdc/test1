@@ -167,7 +167,7 @@ function feedback(){
 	    	            	            if (json.status) {
 	    	            	            	feedback_dialog.dialog('destroy');//销毁对话框
 	    	            	            	feedback_datagrid.datagrid('reload');//重新加载列表数据
-	    	            	            	$("#feedback_datagrid")datagrid('reload');
+	    	            	            	$("#feedback_datagrid").datagrid('reload');
 	    	            	            } 
 	    	            	            $.messager.show({
 	    	            					title : json.title,
@@ -253,7 +253,7 @@ function saveTemporary() {
 	        $.messager.progress('close');
 	        var json = $.parseJSON(result);
 	        if (json.status) {
-	        	$("#feedback_datagrid")datagrid('reload');
+	        	$("#feedback_datagrid").datagrid('reload');
 	        	feedback_dialog.dialog("refresh",ctx+"/feedback/toMain?action=feedback&id="+json.data);
 	        } 
 	        $.messager.show({
