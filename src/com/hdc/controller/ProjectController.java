@@ -78,6 +78,32 @@ public class ProjectController {
 		}
 		return null;
 	}
+	 /**
+     * 检查是否可以签收异议
+     * @param feedbackId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/checkTaskInfoType/{projectId}")
+    @ResponseBody
+	public Message checkFeedbackDate(@PathVariable("projectId") Integer projectId)
+					throws Exception {
+		Message message = new Message();
+		if(projectId == null) {
+			message.setMessage("获取反馈对象失败");
+		} else {
+			Project project=this.projectService.findById(projectId);
+			Integer taskInfoType=project.getTaskInfo().getTaskSource().getTaskInfoType().getId();
+			if(taskInfoType==1){
+				message.setTitle("提示");
+				message.setMessage("政府工作报告，不能提出异议！");
+				message.setStatus(false);
+			}else{
+				message.setStatus(true);
+			}
+		}		
+		return message;
+    }
 	
 	/**
 	 * 根据type判断页面 签收页面、审批页面、修改页面,显示的是project详情

@@ -4,7 +4,6 @@
 <%@ taglib prefix="zwdc" uri="http://zwdc.com/zwdc/tags/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <script type="text/javascript" src="${ctx}/js/kindeditor.js"></script>
-<script type="text/javascript" src="${ctx}/js/app/feedback.js"></script>
 <script type="text/javascript">
 var feedback_datagrid;
 var feedback_form;
@@ -19,27 +18,25 @@ $(function() {
 		rownumbers:true,
 		border:false,
 		singleSelect:true,
-		data:fb,
 		striped:true,
         columns : [
              [
               {field: 'warningLevel', title: '预警', width: fixWidth(0.08), align: 'center', halign: 'center', sortable: true,
             	  formatter:function(value){
             		  if (value=="1") {           			
-                      	return "开始反馈";
+                      	  return "开始反馈";
                       }else if(value=="2"){
                     	  return "逾期反馈"; 
+                      }else if(value=='3'){
+                    	  return "反馈被退回"; 
+                      }else if(value=='4'){
+                    	  return "反馈被采纳"; 
+                      }else if(value=='5'){
+                    	  return "反馈中";
                       }else{
-                    	  return "未到时间"; 
+                    	  return "未到反馈期";
                       }
-            	  },
-            	  styler:function(value){
-            		  if (value=="1") {           			
-                          return 'background-color:yellow;color:white';
-                        }else if(value=="2"){
-                      	  return 'background-color:red;color:white';; 
-                        }
-              	  }
+            	  }
 			},
 			  {field: 'feedbackStartDate', title: '反馈期间', width: fixWidth(0.2), align: 'center', halign: 'center', sortable: true,
 					  formatter:function(value,row){
@@ -47,7 +44,7 @@ $(function() {
 					  }
 				},
               {field: 'groupName', title: '牵头单位', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
-              {field: 'createUser', title: '填报人', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
+              {field: 'feedbackUser', title: '填报人', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
               {field: 'feedbackDate', title: '反馈时间', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true,
             	  formatter:function(value,row){
             		  if(value==null){
@@ -58,35 +55,32 @@ $(function() {
             		 
 				  }
               },
-              {field: 'status', title: '状态', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true,
-            	  formatter:function(value){
-            		  switch (value) {
-						case "FEEDBACKING":
-							return "<span class='text-primary'>反馈处理中</span>";
-						case "RETURNED":
-							return "<span class='text-danger'>已退回</span>";
-						case "ACCEPT":
-							return "<span class='text-success'>已采纳</span>";
-						default:
-							return "<span class='text-warning'>未反馈</span>";
-					  }
-            	  },
-            	  styler:function(value){
-            		  if (value=="SUCCESS") {           			
-                          return 'background-color:green;color:white';
-                        }else if(value=="FAIL"){
-                      	  return 'background-color:orange;color:white';; 
-                        }
-              	  }
-              },
-              
-              {field: 'delayCount', title: '延期次数', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true},
-              {field: 'refuseCount', title: '退回次数', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true}  
+              {field: 'delayCount', title: '延期次数', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
+              {field: 'refuseCount', title: '退回次数', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true}  
         ]
-     ],
-     toolbar: "#feedbacktoolbar"
+     ]
+	,
+	  rowStyler:function(index,row){
+		  if (row.warningLevel=="1") {           			
+           return 'background-color:yellow;color:white';
+         }else if(row.warningLevel=="2"){
+       	  return 'background-color:red;color:white';
+         }else if(row.warningLevel=='3'){
+       	  return 'background-color:red;color:white';
+         }else if(row.warningLevel=='4'){
+       	  return 'background-color:green;color:white';
+         }else if(row.warningLevel=='5'){
+       	  return 'background-color:blue;color:white';
+         }else{
+       	  return ;
+         }
+	  },
+    toolbar: "#toolbar1"
+  /*   onLoadSuccess:function(fb){
+    	 feedback_datagrid.datagrid("loadData",fb);
+     }*/
     });
-	//feedback_datagrid.datagrid("loadData",fb);
+	 feedback_datagrid.datagrid("loadData",fb);
 	$("#searchbox").searchbox({ 
 		menu:"#searchMenu", 
 		prompt :'模糊查询',
@@ -98,7 +92,339 @@ $(function() {
 	});
 	$("#assistantGroup").kindeditor({readonlyMode: true});
 	$("#remark").kindeditor({readonlyMode: true});
+	$("#suggestion").kindeditor({readonlyMode: true});
 });
+
+//修正宽高
+function fixHeight(percent) {   
+	return parseInt($(this).height() * percent);
+}
+
+function fixWidth(percent) {   
+	return parseInt(($(this).width() - 50) * percent);
+}
+
+//初始化表单
+function formInit(row,url) {
+	feedback_form = $('#feedback_form').form({
+        url: url,
+        onSubmit: function () {
+	        $.messager.progress({
+	            title: '提示信息！',
+	            text: '数据处理中，请稍后....'
+	        });
+	        var isValid = $(this).form('validate');
+	        if (!isValid) {
+	            $.messager.progress('close');
+	        } 
+	        return isValid;
+	    },
+	    success: function (data) {
+	        $.messager.progress('close');
+	        var json = $.parseJSON(data);
+	        if (json.status) {
+	        	feedback_dialog.dialog('destroy');
+	        	feedback_datagrid.datagrid('load');
+	        	
+	        } 
+	        $.messager.show({
+				title : json.title,
+				msg : json.message,
+				timeout : 1000 * 2
+			});
+	    }
+    });
+}
+
+//反馈审核—— 督查人员
+function check(){
+    var row = feedback_datagrid.datagrid('getSelected');
+    if (row) {
+    	feedback_dialog = $('<div/>').dialog({
+	    	title : "反馈信息审核",
+			top: 20,
+			width : fixWidth(0.9),
+			height : 'auto',
+	        modal: true,
+	        minimizable: true,
+	        maximizable: true,
+	        href: ctx+"/feedback/toMain?action=check&id="+row.id,
+	        onLoad: function () {
+	            formInit(row,ctx+"/feedback/checkFeedback");
+	        },
+	        buttons: [
+	            {
+	                text: '保存',
+	                iconCls: 'icon-save',
+	                handler: function () {
+	                	feedback_form.submit();
+	                }
+	            },
+	            {
+	                text: '重置',
+	                iconCls: 'icon-reload',
+	                handler: function () {
+	                	feedback_form.form('clear');
+	                }
+	            },
+	            {
+	                text: '关闭',
+	                iconCls: 'icon-cancel',
+	                handler: function () {
+	                	feedback_dialog.dialog('destroy');
+	                }
+	            }
+	        ],
+	        onClose: function () {
+	        	feedback_dialog.dialog('destroy');
+	        }
+	    });
+    } else {
+        $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
+    }
+}
+//实施反馈—— 承办单位
+function feedback(){
+    var row = feedback_datagrid.datagrid('getSelected');
+    if (row) {
+    	feedback_dialog = $('<div/>').dialog({
+	    	title : "进行反馈",
+			top: 20,
+			width : fixWidth(0.9),
+			height : 'auto',
+	        modal: true,
+	        minimizable: true,
+	        maximizable: true,
+	        href: ctx+"/feedback/toMain?action=feedback&id="+row.id,
+	        onLoad: function () {
+	            formInit(row,ctx+"/feedback/saveFeedback");
+	        },
+	        buttons: [
+	            {
+	                text: '暂存',
+	                iconCls: 'icon-save',
+	                handler: function () {
+	                	feedback_form.submit();
+	                }
+	            },
+	            {
+	            	text: '申请审核',
+	            	iconCls: 'icon-ok',
+	            	id: 'ok',
+	            	handler: function () {
+	                	$.messager.confirm('确认提示！','确认提交表单进入反馈审核流程吗？',function(result){
+	                		if(result){
+	                			feedback_form.form('submit',{
+	    	            		 	url: ctx+"/feedback/callApproval",
+	    	            	        onSubmit: function () {
+	    	            		        $.messager.progress({
+	    	            		            title: '提示信息！',
+	    	            		            text: '数据处理中，请稍后....'
+	    	            		        });
+	    	            		        var isValid = $(this).form('validate');
+	    	            		        if (!isValid) {
+	    	            		            $.messager.progress('close');
+	    	            		        } else {
+	    	            		        	$("#save").linkbutton("disable");
+	    	            		        	$("#ok").linkbutton("disable");
+	    	            		        }
+	    	            		        return isValid;
+	    	            		    },
+	    	            		    success: function (data) {
+	    	            	            $.messager.progress('close');
+	    	            	            var json = $.parseJSON(data);
+	    	            	            if (json.status) {
+	    	            	            	feedback_dialog.dialog('destroy');//销毁对话框
+	    	            	            	feedback_datagrid.datagrid('reload');//重新加载列表数据
+	    	            	            } 
+	    	            	            $.messager.show({
+	    	            					title : json.title,
+	    	            					msg : json.message,
+	    	            					timeout : 1000 * 2
+	    	            				});
+	    	            	        }
+	    	            	    });
+	                		}
+	                	});
+	                }
+	            },
+	            {
+	                text: '重置',
+	                iconCls: 'icon-reload',
+	                handler: function () {
+	                	feedback_form.form('clear');
+	                }
+	            },
+	            {
+	                text: '关闭',
+	                iconCls: 'icon-cancel',
+	                handler: function () {
+	                	feedback_dialog.dialog('destroy');
+	                }
+	            }
+	        ],
+	        onClose: function () {
+	        	feedback_dialog.dialog('destroy');
+	        }
+	    });
+    } else {
+        $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
+    }
+}
+//编辑
+function editFeedback() {
+    var row = feedback_datagrid.datagrid('getSelected');
+    if (row) {
+    	feedback_dialog = $('<div/>').dialog({
+	    	title : "反馈信息编辑",
+			top: 20,
+			width : fixWidth(0.9),
+			height : 'auto',
+	        modal: true,
+	        minimizable: true,
+	        maximizable: true,
+	        href: ctx+"/feedback/toMain?action=edit&id="+row.id,
+	        onLoad: function () {
+	            formInit(row,ctx+"/feedback/saveOrUpdate");
+	        },
+	        buttons: [
+	            {
+	                text: '保存',
+	                iconCls: 'icon-save',
+	                handler: function () {
+	                	feedback_form.submit();
+	                }
+	            },
+	            {
+	                text: '重置',
+	                iconCls: 'icon-reload',
+	                handler: function () {
+	                	feedback_form.form('clear');
+	                }
+	            },
+	            {
+	                text: '关闭',
+	                iconCls: 'icon-cancel',
+	                handler: function () {
+	                	feedback_dialog.dialog('destroy');
+	                }
+	            }
+	        ],
+	        onClose: function () {
+	        	feedback_dialog.dialog('destroy');
+	        }
+	    });
+    } else {
+        $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
+    }
+}
+//查看反馈详情
+function detailsFeedback(){
+    var row = feedback_datagrid.datagrid('getSelected');
+    if (row) {
+    	feedback_dialog = $('<div/>').dialog({
+	    	title : "反馈记录详情",
+			top: 20,
+			width : fixWidth(0.8),
+			height : 'auto',
+	        modal: true,
+	        minimizable: true,
+	        maximizable: true,
+	        href: ctx+"/feedback/toMain?action=detail&id="+row.id,
+	        onLoad: function () {
+	            formInit(row,ctx+"/feedback/detail");
+	        },
+	        buttons: [
+	  	          {
+	  	                text: '关闭',
+	  	                iconCls: 'icon-cancel',
+	  	                handler: function () {
+	  	                	feedback_dialog.dialog('destroy');
+	  	                }
+	  	            }
+	  	        ],
+	        onClose: function () {
+	        	source_dialog.dialog('destroy');
+	        }
+	    });
+    } else {
+        $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
+    }
+}
+//添加
+function addFeedback(){
+	feedback_dialog = $('<div/>').dialog({
+    	title : "反馈信息添加",
+		top: 20,
+		width : fixWidth(0.9),
+		height : 'auto',
+        modal: true,
+        minimizable: true,
+        maximizable: true,
+        href: ctx+"/feedback/toMain?action=add",
+        onLoad: function () {
+            formInit(null,ctx+"/feedback/saveOrUpdate");
+        },
+        buttons: [
+            {
+                text: '保存',
+                iconCls: 'icon-save',
+                handler: function () {
+                	feedback_form.submit();
+                }
+            },
+            {
+                text: '重置',
+                iconCls: 'icon-reload',
+                handler: function () {
+                	feedback_form.form('clear');
+                }
+            },
+            {
+                text: '关闭',
+                iconCls: 'icon-cancel',
+                handler: function () {
+                	feedback_dialog.dialog('destroy');
+                }
+            }
+        ],
+        onClose: function () {
+        	feedback_dialog.dialog('destroy');
+        }
+    });
+}
+
+
+//删除
+function delFeedback() {
+    var row = feedback_datagrid.datagrid('getSelected');
+    if (row) {
+        $.messager.confirm('确认提示！', '您确定要删除选中的数据?', function (result) {
+            if (result) {
+                $.ajax({
+            		async: false,
+            		cache: false,
+                    url: ctx + '/feedback/delete/'+row.id,
+                    type: 'post',
+                    dataType: 'json',
+                    data: {},
+                    success: function (data) {
+                        if (data.status) {
+                        	feedback_datagrid.datagrid('load');
+                        }
+                        $.messager.show({
+        					title : data.title,
+        					msg : data.message,
+        					timeout : 1000 * 2
+        				});
+                    }
+                });
+            }
+        });
+    } else {
+    	$.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
+    }
+}
 </script>
 <div class="easyui-layout">
     <table id="sales" class="table table-bordered table-condensed">
@@ -174,21 +500,20 @@ $(function() {
 			<td colspan="4" align="center">反馈列表</td>
 		</tr>
   	</table>
+  	<div id="toolbar1" style="padding:2px 0">
 	<table>   
 		<tr>
 		<td style="padding-left:2px">
-			<shiro:hasRole name="admin">
+			<!--  <shiro:hasRole name="admin">-->
 				<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="detailsFeedback();">详情</a>
-			</shiro:hasRole>
-		</td>
-		<td style="padding-left:5px">
-			<input id="searchbox" type="text"/>
+			<!--</shiro:hasRole>-->
 		</td>
 		</tr>
 	</table>
+		</div>
 	<div id="searchMenu" style="display: none;">
 		<div data-options="name:'name'">任务名称</div>
 		<div data-options="name:'createDate'">反馈时间</div>
 	</div>
-	<table id="feedback_datagrid" title=" "></table>
+	<table id="feedback_datagrid" title=""></table>
 </div>

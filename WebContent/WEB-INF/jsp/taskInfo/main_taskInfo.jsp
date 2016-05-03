@@ -217,7 +217,7 @@
     <input type="hidden" name="createDate" value="<fmt:formatDate value='${taskInfo.createDate }' type='both'/>">
     <input type="hidden" name="isDelete" value="${taskInfo.isDelete }">
     <input type="hidden" name="status" value="${taskInfo.status }">
-	<table class="table table-bordered table-hover table-condensed">
+	<table class="table table-bordered table-condensed">
 		<tr class="bg-primary">
 			<td colspan="4" align="center">任务信息</td>
 		</tr>
@@ -247,13 +247,14 @@
 		<tr>
 			<td class="text-right">牵头单位:</td>
 			<td colspan="3">
-				<table id="hostGroupDatagrid" class="easyui-datagrid" data-options="url:'${ctx }/group/getHostGroupList?groupIds=${taskInfo.hostGroup }',fitColumns:true,rownumbers:true,border:true">
+				<table id="hostGroupDatagrid" class="easyui-datagrid" data-options="url:'${ctx }/group/getHostGroupList?groupIds=${taskInfo.hostGroup }',fitColumns:true,rownumbers:true,border:true,singleSelect:true">
 				    <thead>
 						<tr>
-							<th data-options="field:'ck',checkbox:true"></th>
-							<th data-options="field:'groupId',hidden:true">ID</th>
-							<th data-options="field:'groupName'" width="40%">牵头单位名称</th>
-							<th data-options="field:'userNames'" width="50%">联系人</th>
+							<th data-options="field:'groupName'" width="25%">牵头单位名称</th>
+							<th data-options="field:'userNames0'" width="15%">联系人A</th>
+							<th data-options="field:'linkway0'" width="20%">联系方式</th>
+							<th data-options="field:'userNames1'" width="15%">联系人B</th>
+							<th data-options="field:'linkway1'" width="20%">联系方式</th>
 						</tr>
 				    </thead>
 				</table>

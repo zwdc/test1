@@ -30,13 +30,15 @@
 	}
 	 
 </script>
-<div style="magin:0px;"><img src='${ctx }/images/solg_login.png'/></div>
-<div style="position: absolute; right: 10px; bottom: 5px; ">
-	<shiro:principal/>&nbsp;&nbsp;你好，欢迎登录！&nbsp;&nbsp;
-	<a href="javascript:void(0);" class="easyui-menubutton" menu="#layout_north_kzmbMenu" iconCls="icon-help">控制面板</a> 
-</div>
-<div id="layout_north_kzmbMenu" style="width: 100px; display: none;">
-	<div onclick="showUserInfo();">个人信息</div>
-	<div class="menu-sep"></div>
-	<div onclick="logout();">退出系统</div>
+<div style="magin:0px;">
+	<img src='${ctx }/images/solg_login.png'/ height=40>
+	<div style="position: absolute; right: 10px; bottom: 5px; ">
+		<shiro:principal/>&nbsp;&nbsp;你好，欢迎登录！&nbsp;&nbsp;
+		<a href="javascript:void(0);" class="easyui-menubutton" menu="#layout_north_kzmbMenu" iconCls="icon-help">控制面板</a> 
+	</div>
+	<div id="layout_north_kzmbMenu" style="width: 100px; display: none;">
+		<div onclick="showUserInfo();">个人信息</div>
+		<div class="menu-sep"></div>
+		<div onclick="logout();">退出系统</div>
+	</div>
 </div>

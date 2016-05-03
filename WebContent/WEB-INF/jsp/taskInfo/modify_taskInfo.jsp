@@ -319,13 +319,14 @@
 		<tr>
 			<td class="text-right">牵头单位:</td>
 			<td colspan="3">
-				<table id="hostGroupDatagrid" class="easyui-datagrid" data-options="url:'${ctx }/group/getHostGroupList?groupIds=${taskInfo.hostGroup }',fitColumns:true,rownumbers:true,border:true">
+				<table id="hostGroupDatagrid" class="easyui-datagrid" data-options="url:'${ctx }/group/getHostGroupList?groupIds=${taskInfo.hostGroup }',fitColumns:true,rownumbers:true,border:true,singleSelect:true">
 				    <thead>
 						<tr>
-							<th data-options="field:'ck',checkbox:true"></th>
-							<th data-options="field:'groupId',hidden:true">ID</th>
-							<th data-options="field:'groupName'" width="40%">牵头单位名称</th>
-							<th data-options="field:'userNames'" width="50%">联系人</th>
+							<th data-options="field:'groupName'" width="25%">牵头单位名称</th>
+							<th data-options="field:'userNames0'" width="15%">联系人A</th>
+							<th data-options="field:'linkway0'" width="20%">联系方式</th>
+							<th data-options="field:'userNames1'" width="15%">联系人B</th>
+							<th data-options="field:'linkway1'" width="20%">联系方式</th>
 						</tr>
 				    </thead>
 				</table>
@@ -337,12 +338,6 @@
 			<td class="text-right">责任单位:</td>
 			<td colspan="3">
 				<textarea name="assistantGroup" rows="3" cols="80" style="width: 100%">${taskInfo.assistantGroup }</textarea>
-			</td>
-		</tr>
-		<tr>
-			<td class="text-right">备注:</td>
-			<td colspan="3">
-				<textarea name="remark" class="easyui-kindeditor" rows="3" cols="80" style="width: 100%">${taskInfo.remark }</textarea>
 			</td>
 		</tr>
 	</table>

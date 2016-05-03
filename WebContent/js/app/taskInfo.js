@@ -121,13 +121,19 @@ function formInit(row) {
 		        if (!isValid) {
 		            $.messager.progress('close');
 		        }
+		        var hostGroupId = $("#hostGroupId").val();
+		        if(hostGroupId == "") {
+		        	$.messager.progress('close');
+		        	$.messager.alert("提示","至少选择一个牵头单位！");
+		        	return false;
+		        }
 		        return isValid;
 		    },
 		    success: function (data) {
 	            $.messager.progress('close');
 	            var json = $.parseJSON(data);
 	            if (json.status) {
-	            	taskInfo_dialog.dialog("refresh",ctx+"/taskInfo/toMain?id="+json.data);
+	            	taskInfo_dialog.dialog("refresh",ctx+"/taskInfo/toMain?id="+json.data);//刷新更新
 	            	taskInfo_datagrid.datagrid('reload');//重新加载列表数据
 	            } 
 	            $.messager.show({
@@ -139,6 +145,66 @@ function formInit(row) {
 	    });
 }
 
+
+//显示弹出窗口 输入文件地址，上传文件
+function multiInsert() {
+	taskInfo_dialog = $('<div/>').dialog({
+    	title : "批量上传文件",
+    	top: 20,
+		width : fixWidth(0.8),
+		height : 'auto',
+        modal: true,
+        minimizable: true,
+        maximizable: true,
+        href: ctx+"/taskInfo/toMultiInsert",
+        onLoad: function () {
+        	taskInfo_form = $('#taskInfo_form').form({
+        		url: ctx+"/taskInfo/multiInsert",
+    	        onSubmit: function () {
+    		        $.messager.progress({
+    		            title: '提示信息！',
+    		            text: '数据处理中，请稍后....'
+    		        })
+    		    },
+    		    success: function (data) {
+    		    	 $.messager.progress('close');
+    		    	 var json = $.parseJSON(data);
+    		            if (json.status) {
+    		            	taskInfo_dialog.dialog('destroy');//销毁对话框
+    		            	taskInfo_datagrid.datagrid('reload');//重新加载列表数据
+    		            } 
+    		            $.messager.show({
+    						title : json.title,
+    						msg : json.message,
+    						timeout : 1000 * 2
+    					});
+    	        }
+        	});
+        },
+        buttons: [
+            {
+                text: '上传',
+                iconCls: 'icon-save',
+                id: 'save',
+                handler: function () {
+                	taskInfo_form.submit();
+                }
+            },
+            {
+                text: '关闭',
+                iconCls: 'icon-cancel',
+                handler: function () {
+                	taskInfo_dialog.dialog('destroy');
+                	taskInfo_datagrid.datagrid('reload');
+                }
+            }
+        ],
+        onClose: function () {
+        	taskInfo_dialog.dialog('destroy');
+        	taskInfo_datagrid.datagrid('reload');
+        }
+    });
+}
 
 //显示弹出窗口 新增：row为空 编辑:row有值
 function showTaskInfo(row) {
@@ -259,11 +325,10 @@ function del() {
     	}else{
     		 $.messager.confirm('确认提示！', '您确定要删除选中的数据?', function (result) {
     	            if (result) {
-    	                var id = row.id;
     	                $.ajax({
     	            		async: false,
     	            		cache: false,
-    	                    url: ctx + '/taskInfo/delete/'+id,
+    	                    url: ctx + '/taskInfo/delete/'+row.id,
     	                    type: 'post',
     	                    dataType: 'json',
     	                    data: {},

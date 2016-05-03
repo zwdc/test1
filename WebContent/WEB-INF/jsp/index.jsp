@@ -171,7 +171,7 @@
 	</script>
  </head>
  <body class="easyui-layout">
-	<div data-options="region:'north',border:false" style="height:50px;background-color:#eee;padding:10px;overflow: hidden;" href="${ctx }/north"></div>
+	<div data-options="region:'north',border:false" style="height:50px;background-color:#eee;padding:0px;overflow: hidden;" href="${ctx }/north"></div>
 	<div data-options="region:'west',split:true,title:'主要菜单'" style="width:200px;background:#EEE;">
 		<div class="well well-small">
 			<shiro:lacksRole name="admin">
@@ -188,6 +188,6 @@
 		<div id="divSortContent"></div> <!-- 调试输出用，暂时先留着 -->
 	</div> 
 	<div data-options="region:'south',border:false" style="height:25px;background:#EEE;padding:5px;" href="${ctx }/south"></div>
-	<div data-options="region:'center',plain:true,title:'欢迎使用'" style="overflow: hidden;"  href="${ctx }/center"></div>
+	<div data-options="region:'center',plain:false" style="overflow: hidden;"  href="${ctx }/center"></div>
 </body>
 </html>

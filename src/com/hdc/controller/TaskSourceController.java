@@ -111,7 +111,7 @@ public class TaskSourceController {
 		Integer id = taskSource.getId();
 		try {
 			if(!file.isEmpty()) {
-				String filePath = FileUploadUtils.upload(request, file, Constants.FILE_PATH);
+				String filePath = FileUploadUtils.upload(request, file, Constants.FILE_PATH+taskSource.getTaskInfoType().getId());
 				taskSource.setFilePath(filePath);
 				taskSource.setFileName(file.getOriginalFilename());
 				taskSource.setUploadDate(new Date());

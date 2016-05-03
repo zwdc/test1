@@ -39,6 +39,21 @@ $(function() {
                       }else{
                     	  return "未到反馈期";
                       }
+            	  },
+            	  styler:function(index,row){
+            		  if (row.warningLevel=="1") {           			
+                         return 'background-color:yellow;color:white';
+                       }else if(row.warningLevel=="2"){
+                     	  return 'background-color:red;color:white';
+                       }else if(row.warningLevel=='3'){
+                     	  return 'background-color:red;color:white';
+                       }else if(row.warningLevel=='4'){
+                     	  return 'background-color:green;color:white';
+                       }else if(row.warningLevel=='5'){
+                     	  return 'background-color:blue;color:white';
+                       }else{
+                     	  return ;
+                       }
             	  }
 			},
 			  {field: 'feedbackStartDate', title: '反馈期间', width: fixWidth(0.2), align: 'center', halign: 'center', sortable: true,
@@ -63,21 +78,6 @@ $(function() {
               {field: 'refuseCount', title: '退回次数', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true}  
         ]
      ],
-	  rowStyler:function(index,row){
-		  if (row.warningLevel=="1") {           			
-             return 'background-color:yellow;color:white';
-           }else if(row.warningLevel=="2"){
-         	  return 'background-color:red;color:white';
-           }else if(row.warningLevel=='3'){
-         	  return 'background-color:red;color:white';
-           }else if(row.warningLevel=='4'){
-         	  return 'background-color:green;color:white';
-           }else if(row.warningLevel=='5'){
-         	  return 'background-color:blue;color:white';
-           }else{
-         	  return ;
-           }
-	  },
      toolbar: "#feedbacktoolbar"
     });
 	//feedback_datagrid.datagrid("loadData",fb);

@@ -7,7 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.activiti.engine.ActivitiException;
+import org.apache.commons.fileupload.FileUploadBase.FileSizeLimitExceededException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
@@ -27,11 +31,16 @@ import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.Project;
 import com.hdc.entity.TaskInfo;
+import com.hdc.entity.TaskSource;
 import com.hdc.entity.User;
+import com.hdc.service.IExcel2TaskInfoService;
 import com.hdc.service.IGroupService;
 import com.hdc.service.ITaskInfoService;
 import com.hdc.util.BeanUtilsExt;
+import com.hdc.util.Constants;
 import com.hdc.util.Constants.ApprovalStatus;
+import com.hdc.util.upload.FileUploadUtils;
+import com.hdc.util.upload.exception.InvalidExtensionException;
 import com.uwantsoft.goeasy.client.goeasyclient.GoEasy;
 import com.uwantsoft.goeasy.client.goeasyclient.listener.GoEasyError;
 import com.uwantsoft.goeasy.client.goeasyclient.listener.PublishListener;
@@ -51,6 +60,9 @@ public class TaskInfoController {
 	
 	@Autowired
 	private IGroupService groupService;
+	
+	@Autowired
+	private IExcel2TaskInfoService excel2TaskInfoService;
 	
 	/**
 	 * 跳转列表页面
@@ -116,6 +128,67 @@ public class TaskInfoController {
 			return "";
 		}
 	}
+	
+	/**
+	 * 跳转添加修改页面
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/toMultiInsert")
+	public ModelAndView toMultiInsert() throws Exception {
+		ModelAndView mv = new ModelAndView("taskInfo/multi_taskInfo");
+		return mv;
+	}
+	
+	/**
+	 * 批量添加
+	 * @param TaskInfo
+	 * @param file
+	 * @param request
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping("/multiInsert")
+	@ResponseBody
+	public Message multiInsert( 
+				@RequestParam("file") MultipartFile file,
+				HttpServletRequest request) throws Exception {
+		Message message = new Message();
+		message.setStatus(true);
+		message.setTitle("提示");
+		message.setMessage("这是咋回事");
+		try {
+			if(!file.isEmpty()) {
+				String filePath = FileUploadUtils.upload(request, file, Constants.FILE_PATH+"\\excel");				
+				message=this.excel2TaskInfoService.readXls(request.getSession().getServletContext().getRealPath(filePath));
+				if(message.getStatus()==true){
+					List<TaskInfo> taskInfoList=(List<TaskInfo>) message.getData();
+					for(int i=0;i<taskInfoList.size();i++){
+						this.taskInfoService.doAdd(taskInfoList.get(i));
+					}				
+				}
+			}
+		} catch (Exception e) {
+			message.setStatus(Boolean.FALSE);
+			message.setTitle("操作失败！");
+			if(e instanceof FileSizeLimitExceededException){
+				Long actual = ((FileSizeLimitExceededException) e).getActualSize();
+				Long permitted = ((FileSizeLimitExceededException) e).getPermittedSize();
+				message.setMessage("上传失败！文件大小超过限制，最大上传："+getFileMB(permitted)+",实际大小："+getFileMB(actual));
+			} else if (e instanceof InvalidExtensionException){
+				message.setMessage("不能上传此文件类型,请重新选择文件上传！");
+			}
+		}
+		return message;
+	}
+	
+    private String getFileMB(long byteFile){  
+        if(byteFile==0)  
+           return "0MB";  
+        long mb=1024*1024;  
+        return ""+byteFile/mb+"MB";  
+    } 
 	
 	/**
 	 * 获取列表分页数据
@@ -194,8 +267,7 @@ public class TaskInfoController {
 		} catch (Exception e) {
 			message.setStatus(Boolean.FALSE);
 			message.setTitle("操作失败！");
-		}
-		
+		}		
 		return message;
   	}
 	

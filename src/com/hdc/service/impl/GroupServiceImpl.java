@@ -2,6 +2,7 @@ package com.hdc.service.impl;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import org.activiti.engine.IdentityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,11 @@ public class GroupServiceImpl implements IGroupService {
 	@Override
 	public Group getGroupById(Integer id) throws Exception {
 		return this.baseService.getBean(Group.class, id);
+	}
+	
+	@Override
+	public Group getGroupByName(Map<String, Object> param) throws Exception {
+		return this.baseService.findUnique("Group", param);
 	}
 
 	@Override

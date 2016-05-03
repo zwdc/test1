@@ -1,20 +1,26 @@
 package com.hdc.service.impl;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.fileupload.FileUploadBase.FileSizeLimitExceededException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hdc.entity.Comments;
+import com.hdc.entity.FeedbackAtt;
 import com.hdc.entity.FeedbackRecord;
+import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.ProcessTask;
@@ -30,8 +36,11 @@ import com.hdc.service.IProcessTaskService;
 import com.hdc.service.IProjectScoreService;
 import com.hdc.service.ITaskSourceService;
 import com.hdc.util.BeanUtilsExt;
+import com.hdc.util.Constants;
 import com.hdc.util.Constants.BusinessForm;
 import com.hdc.util.Constants.FeedbackStatus;
+import com.hdc.util.upload.FileUploadUtils;
+import com.hdc.util.upload.exception.InvalidExtensionException;
 import com.hdc.util.UserUtil;
 
 @Service
@@ -79,12 +88,96 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 	public Serializable doAdd(FeedbackRecord feedback) throws Exception {
 		return this.baseService.add(feedback);
 	}
-
+	
 	@Override
 	public void doUpdate(FeedbackRecord feedback) throws Exception {
 		this.baseService.update(feedback);
 	}
-	
+
+	@Override
+	public Message doUpdate(FeedbackRecord feedback,MultipartFile[] file,HttpServletRequest request) throws Exception {
+		Message message=new Message();
+		int count=0;//上传文件计数
+		Integer id = feedback.getId();
+		Set<FeedbackAtt> fbaList=new HashSet<FeedbackAtt>();
+		FeedbackRecord fbr=this.findById(id);
+		String path1=fbr.getProject().getGroup().getId().toString();
+		String path2=fbr.getProject().getId().toString();
+		if(path1==null || path2==null){
+			message.setMessage("上传路径错误，上传失败");
+			return message;
+		}
+		if(file!=null){							
+			for(int i=0;i<file.length;i++){
+				try {
+					if(!file[i].isEmpty()){
+						String filePath = FileUploadUtils.upload(request, file[i], 
+								Constants.FILE_PATH
+								        +File.separator+path1
+										+File.separator+path2
+										+File.separator+id);
+						FeedbackAtt fba=new FeedbackAtt();
+						String[] fileExName=file[i].getOriginalFilename().split("\\.");
+						fba.setUrl(filePath);
+						fba.setName(file[i].getOriginalFilename());;
+						fba.setUploadDate(new Date());
+						fba.setType(fileExName[fileExName.length-1]);
+						//子类把主类加一下，子类中才会有主类的ID外键；
+						fba.setFdRecord(feedback);
+						fbaList.add(fba);
+						count++;
+					}	
+				} catch (Exception e) {
+					message.setStatus(Boolean.FALSE);
+					message.setTitle("操作失败！");
+					if(e instanceof FileSizeLimitExceededException){
+						Long actual = ((FileSizeLimitExceededException) e).getActualSize();
+						Long permitted = ((FileSizeLimitExceededException) e).getPermittedSize();
+						message.setMessage("上传失败！文件大小超过限制，最大上传："+getFileMB(permitted)+",实际大小："+getFileMB(actual));
+					} else if (e instanceof InvalidExtensionException){
+						message.setMessage("不能上传此文件类型,请重新选择文件上传！");
+					}
+				}	
+			}
+		}else{				
+			//this.feedbackService.doCompleteTask(feedback, taskId, null, request);
+		}
+		if(id == null) {
+			message.setMessage("获取反馈对象失败");
+		} else {			
+		    fbr.setSolutions(feedback.getSituation());
+		    fbr.setProblems(feedback.getProblems());
+		    fbr.setSituation(feedback.getSituation());
+		    fbr.setFdaList(fbaList);
+		    fbr.setFeedbackDate(new Date());
+		    fbr.setFeedbackUser(UserUtil.getUserFromSession());
+		    this.baseService.update(feedback);
+			
+			//以下是为了查看是否延期反馈
+			Project prj=feedback.getProject();//获取该反馈的project
+			Date currentDate=new Date();
+			Date claimLimitDate=prj.getClaimDate();
+			if(currentDate.after(claimLimitDate)){
+				ProjectScore projectScore1=new ProjectScore(prj,"超期未反馈",-50);
+				ProjectScore projectScore2=new ProjectScore(prj,"超期未反馈，又反馈",+20);
+				this.projectScoreService.doAdd(projectScore1);
+				this.projectScoreService.doAdd(projectScore2);
+				message.setData(id);
+				message.setMessage("上传了"+count+"个附件，反馈成功！ 但属逾期反馈，减30分");
+			}else{
+				message.setData(id);
+				message.setMessage("上传了"+count+"个附件，反馈成功！");
+			}					
+		}		
+		return message;		
+	}
+	private String getFileMB(long byteFile){  
+		   if(byteFile==0)  
+		       return "0MB";  
+		   long mb=1024*1024;  
+		   return ""+byteFile/mb+"MB";  
+		} 
+
 //	@Override
 //	public void doUpdate(FeedbackRecord feedback) throws Exception {
 //		String situation=feedback.getSituation();
@@ -146,6 +239,8 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 		String hql = "from FeedbackRecord where project.id = " + projectId +" order by createDate ASC";
 		return this.baseService.find(hql);
 	}
+	
+	
 
 	@Override
 	public void doStartProcess(FeedbackRecord fb) throws Exception {

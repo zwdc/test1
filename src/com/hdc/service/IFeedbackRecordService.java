@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.hdc.entity.FeedbackRecord;
+import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 
@@ -48,6 +49,12 @@ public interface IFeedbackRecordService {
 	 * @throws Exception
 	 */
 	public void doUpdate(FeedbackRecord feedback) throws Exception;
+	/**
+	 * 反馈
+	 * @param feedback
+	 * @throws Exception
+	 */
+	public Message doUpdate(FeedbackRecord feedback,MultipartFile[] file,HttpServletRequest request)  throws Exception;
 	
 	/**
 	 * 根据反馈id查询反馈信息
@@ -134,5 +141,6 @@ public interface IFeedbackRecordService {
 	 * @throws Exception
 	 */
 	public void doCompleteTask(Integer feedbackId,  String taskId) throws Exception;
+	
 	
 }

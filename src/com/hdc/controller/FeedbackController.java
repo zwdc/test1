@@ -87,13 +87,21 @@ public class FeedbackController {
 			Map<String, Object> map=new HashMap<String, Object>();
 			map.put("id", fb.getId());
 			
-			if(currentDate.before(fb.getFeedbackStartDate())){
-				fbWL=0;//未到反馈期
-			}else if(currentDate.after(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
-				fbWL=2;//红色警告
-			}else if(currentDate.after(fb.getFeedbackStartDate())&&currentDate.before(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
-				fbWL=1;//黄色警告
-			}
+			if(FeedbackStatus.RETURNED.toString().equals(fb.getStatus())){
+				fbWL=3;//反馈被退回
+			}else if(FeedbackStatus.ACCEPT.toString().equals(fb.getStatus())){
+				fbWL=4;//反馈采用fbWL=4,如果反馈采纳，则进入下一个反馈期
+			}else if(FeedbackStatus.FEEDBACKING.toString().equals(fb.getStatus())){
+				fbWL=5;//反馈中
+			}else{
+				if(currentDate.before(fb.getFeedbackStartDate()) && fb.getStatus()==null){
+					fbWL=0;//未到反馈期
+				}else if(currentDate.after(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null&&fb.getStatus()==null){
+					fbWL=2;//红色警告
+				}else if(currentDate.after(fb.getFeedbackStartDate())&&currentDate.before(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
+					fbWL=1;//黄色警告
+				}
+			}		
 			map.put("warningLevel", fbWL);
 			map.put("feedbackStartDate", fb.getFeedbackStartDate());
 			map.put("feedbackEndDate", fb.getFeedbackEndDate());
@@ -142,39 +150,39 @@ public class FeedbackController {
 		}	
 		return mv;
 	}
-	/**
-	 * 审核反馈 -- 暂时没用了
-	 * @param feedback
-	 * @param request
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping("/checkFeedback")
-	@ResponseBody
-	public Message checkFeedback(
-				FeedbackRecord feedback, 
-				HttpServletRequest request) throws Exception {
-		Message message = new Message();
-		Integer id = feedback.getId();
-		try {
-			if(id == null) {
-				message.setMessage("获取反馈对象失败");
-			} else {
-				FeedbackRecord fbr=this.feedbackService.findById(id);
-			    fbr.setStatus(feedback.getStatus()); //获取反馈状态，（未反馈  NULL 反馈中 RUNNING、已退回 FAIL、已采用 SUCCESS）
-			    //fbr.setSuggestion(feedback.getSuggestion());//获取建议意见
-			    this.feedbackService.doUpdate(fbr);
-				message.setData(id);
-				message.setMessage("审核完成！");
-			}
-		} catch (Exception e) {
-			message.setStatus(Boolean.FALSE);
-			message.setMessage("操作失败!");
-			throw e;
-		}
-		
-		return message;
-	}
+//	/**
+//	 * 审核反馈 -- 暂时没用了
+//	 * @param feedback
+//	 * @param request
+//	 * @return
+//	 * @throws Exception
+//	 */
+//	@RequestMapping("/checkFeedback")
+//	@ResponseBody
+//	public Message checkFeedback(
+//				FeedbackRecord feedback, 
+//				HttpServletRequest request) throws Exception {
+//		Message message = new Message();
+//		Integer id = feedback.getId();
+//		try {
+//			if(id == null) {
+//				message.setMessage("获取反馈对象失败");
+//			} else {
+//				FeedbackRecord fbr=this.feedbackService.findById(id);
+//			    fbr.setStatus(feedback.getStatus()); //获取反馈状态，（未反馈  NULL 反馈中 RUNNING、已退回 FAIL、已采用 SUCCESS）
+//			    //fbr.setSuggestion(feedback.getSuggestion());//获取建议意见
+//			    this.feedbackService.doUpdate(fbr);
+//				message.setData(id);
+//				message.setMessage("审核完成！");
+//			}
+//		} catch (Exception e) {
+//			message.setStatus(Boolean.FALSE);
+//			message.setMessage("操作失败!");
+//			throw e;
+//		}
+//		
+//		return message;
+//	}
 	 /**
      * 审批反馈操作
      * @param taskInfoId
@@ -249,80 +257,9 @@ public class FeedbackController {
 				FeedbackRecord feedback, 
 				@RequestParam(value = "file", required = false) MultipartFile[] file,
 				HttpServletRequest request) throws Exception {
-		Message message = new Message();
-		int count=0;//上传文件计数
-		Integer id = feedback.getId();
-		Set<FeedbackAtt> fbaList=new HashSet<FeedbackAtt>();
-		FeedbackRecord fbr=this.feedbackService.findById(id);
-		String path1=fbr.getProject().getGroup().getId().toString();
-		String path2=fbr.getProject().getId().toString();
-		if(path1==null || path2==null){
-			message.setMessage("上传路径错误，上传失败");
-			return message;
-		}
+		Message message=null;
 		try {
-			if(file!=null){							
-				for(int i=0;i<file.length;i++){
-					try {
-						if(!file[i].isEmpty()){
-							String filePath = FileUploadUtils.upload(request, file[i], 
-									Constants.FILE_PATH
-									        +File.separator+path1
-											+File.separator+path2
-											+File.separator+id);
-							FeedbackAtt fba=new FeedbackAtt();
-							String[] fileExName=file[i].getOriginalFilename().split("\\.");
-							fba.setUrl(filePath);
-							fba.setName(file[i].getOriginalFilename());;
-							fba.setUploadDate(new Date());
-							fba.setType(fileExName[fileExName.length-1]);
-							//子类把主类加一下，子类中才会有主类的ID外键；
-							fba.setFdRecord(feedback);
-							fbaList.add(fba);
-							count++;
-						}	
-					} catch (Exception e) {
-						message.setStatus(Boolean.FALSE);
-						message.setTitle("操作失败！");
-						if(e instanceof FileSizeLimitExceededException){
-							Long actual = ((FileSizeLimitExceededException) e).getActualSize();
-							Long permitted = ((FileSizeLimitExceededException) e).getPermittedSize();
-							message.setMessage("上传失败！文件大小超过限制，最大上传："+getFileMB(permitted)+",实际大小："+getFileMB(actual));
-						} else if (e instanceof InvalidExtensionException){
-							message.setMessage("不能上传此文件类型,请重新选择文件上传！");
-						}
-					}	
-				}
-			}else{				
-				//this.feedbackService.doCompleteTask(feedback, taskId, null, request);
-			}
-			if(id == null) {
-				message.setMessage("获取反馈对象失败");
-			} else {			
-			    fbr.setSolutions(feedback.getSituation());
-			    fbr.setProblems(feedback.getProblems());
-			    fbr.setSituation(feedback.getSituation());
-			    fbr.setFdaList(fbaList);
-			    fbr.setFeedbackDate(new Date());
-			    fbr.setFeedbackUser(UserUtil.getUserFromSession());
-				this.feedbackService.doUpdate(fbr);
-				
-				//以下是为了查看是否延期反馈
-				Project prj=feedback.getProject();//获取该反馈的project
-				Date currentDate=new Date();
-				Date claimLimitDate=prj.getClaimDate();
-				if(currentDate.after(claimLimitDate)){
-					ProjectScore projectScore1=new ProjectScore(prj,"超期未反馈",-50);
-					ProjectScore projectScore2=new ProjectScore(prj,"超期未反馈，又反馈",+20);
-					this.projectScoreService.doAdd(projectScore1);
-					this.projectScoreService.doAdd(projectScore2);
-					message.setData(id);
-					message.setMessage("上传了"+count+"个附件，反馈成功！ 但属逾期反馈，减30分");
-				}else{
-					message.setData(id);
-					message.setMessage("上传了"+count+"个附件，反馈成功！");
-				}					
-			}
+			message=this.feedbackService.doUpdate(feedback, file, request);
 		} catch (Exception e) {
 			message.setStatus(Boolean.FALSE);
 			message.setMessage("操作失败!");
@@ -332,7 +269,7 @@ public class FeedbackController {
 		return message;
 	}
 	/**
-	 * 添加或修改
+	 * 添加或修改---add使用了，doUpdate未使用
 	 * @param feedback
 	 * @param request
 	 * @return
@@ -350,7 +287,7 @@ public class FeedbackController {
 				this.feedbackService.doAdd(feedback);
 				message.setMessage("添加成功！");
 			} else {
-				this.feedbackService.doUpdate(feedback);;
+				//this.feedbackService.doUpdate(feedback);;
 				message.setData(id);
 				message.setMessage("反馈成功！");
 			}
@@ -366,12 +303,7 @@ public class FeedbackController {
 	
 	
 	
-	private String getFileMB(long byteFile){  
-	   if(byteFile==0)  
-	       return "0MB";  
-	   long mb=1024*1024;  
-	   return ""+byteFile/mb+"MB";  
-	} 
+	
 	  /**
 		 * 删除
 		 * @param id
@@ -440,7 +372,7 @@ public class FeedbackController {
 			if(workPlan != null) {
 				FeedbackRecord feedback = this.feedbackService.findById(feedbackId);
 				feedback.setWorkPlan(workPlan);
-				this.feedbackService.doUpdate(feedback);
+				this.feedbackService.doUpdate(feedback,null,null);
 				message.setMessage("修改成功！");
 			} else {
 				message.setData(0);

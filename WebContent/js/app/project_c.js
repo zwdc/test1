@@ -272,7 +272,26 @@ function approval() {
 //拒签收
 function refuse() {
 	var row = project_datagrid.datagrid('getSelected');
-    if (row) {
+	var flag=false;
+	if(row){
+	  	$.ajax({
+	  		async:false,
+	  		cache:false,
+	  		url:ctx+'/project/checkTaskInfoType/'+row.id,
+	  		type:'post',
+	  		dataType:'json',
+	  		success:function(data){
+	  			if(data.status){
+	  				flag=true;
+	  			}else{
+	  				$.messager.alert(data.title,data.message);
+	  			}
+	  		}
+	  	});
+	  }else {
+	      $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
+	  }
+    if (flag) {
     	if(row.USER_NAME != null){
     		$.messager.alert("提示", "此任务已经签收，不能进行拒签收操作！");
     	} else if(row.STATUS == 'PENDING'){
