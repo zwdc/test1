@@ -13,10 +13,13 @@ import com.hdc.entity.TaskInfo;
 import com.hdc.service.IProcessTaskService;
 import com.hdc.service.ITaskInfoService;
 import com.hdc.service.IUserService;
-import com.hdc.util.Constants.BusinessType;
-import com.hdc.util.Constants.OperationType;
 import com.uwantsoft.goeasy.client.goeasyclient.GoEasy;
 
+/**
+ * 这个监听器没有用了
+ * @author ZML
+ *
+ */
 @Component
 public class RemindFeedback implements TaskListener {
 

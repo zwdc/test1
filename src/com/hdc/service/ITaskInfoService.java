@@ -44,10 +44,11 @@ public interface ITaskInfoService {
 	/**
 	 * 更改任务状态为-办理中
 	 * @param id
+	 * @param status
 	 * @return
 	 * @throws Exception
 	 */
-	public Integer doUpdateStatus(String id) throws Exception;
+	public Integer doUpdateStatus(String id, String status) throws Exception;
 	
 	/**
 	 * 删除

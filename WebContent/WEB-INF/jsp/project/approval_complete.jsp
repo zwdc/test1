@@ -39,21 +39,6 @@ $(function() {
                       }else{
                     	  return "未到反馈期";
                       }
-            	  },
-            	  styler:function(index,row){
-            		  if (row.warningLevel=="1") {           			
-                         return 'background-color:yellow;color:white';
-                       }else if(row.warningLevel=="2"){
-                     	  return 'background-color:red;color:white';
-                       }else if(row.warningLevel=='3'){
-                     	  return 'background-color:red;color:white';
-                       }else if(row.warningLevel=='4'){
-                     	  return 'background-color:green;color:white';
-                       }else if(row.warningLevel=='5'){
-                     	  return 'background-color:blue;color:white';
-                       }else{
-                     	  return ;
-                       }
             	  }
 			},
 			  {field: 'feedbackStartDate', title: '反馈期间', width: fixWidth(0.2), align: 'center', halign: 'center', sortable: true,
@@ -78,17 +63,33 @@ $(function() {
               {field: 'refuseCount', title: '退回次数', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true}  
         ]
      ],
-     toolbar: "#feedbacktoolbar"
+	  rowStyler:function(index,row){
+		  if (row.warningLevel=="1") {           			
+             return 'background-color:yellow;color:white';
+           }else if(row.warningLevel=="2"){
+         	  return 'background-color:red;color:white';
+           }else if(row.warningLevel=='3'){
+         	  return 'background-color:red;color:white';
+           }else if(row.warningLevel=='4'){
+         	  return 'background-color:green;color:white';
+           }else if(row.warningLevel=='5'){
+         	  return 'background-color:blue;color:white';
+           }else{
+         	  return ;
+           }
+	  },
     });
 	
 	$("#assistantGroup").kindeditor({readonlyMode: true});
 	$("#remark").kindeditor({readonlyMode: true});
 	$("#suggestion").kindeditor({readonlyMode: true});
 });
-
 </script>
 <div class="easyui-layout">
-   <table id="sales" class="table table-bordered table-condensed">
+<form id="form" action="${ctx }/project/approvalComplete" method="post">
+	<input name="projectId" value="${project.id }" type="hidden">
+	<input id="taskId" name="taskId" type="hidden">
+    <table id="sales" class="table table-bordered table-condensed">
   		<tr class="bg-primary">
 			<td colspan="4" align="center">任务信息</td>
 		</tr>
@@ -157,25 +158,14 @@ $(function() {
 				<textarea name="assistantGroup" rows="1" cols="80" style="width: 100%">${taskInfo.assistantGroup }</textarea>
 			</td>
 		</tr>
+		<tr>
+	  		<td colspan="4">
+	  			<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;审批意见:
+	  			<textarea class="easyui-kindeditor" name="comment" rows="3"></textarea>
+	  		</td>
+	  	</tr>
   	</table>
-  	<div id="feedbacktoolbar" style="padding:2px 0">
-		<table>   
-			<tr>
-				<td style="padding-left:2px">
-					<!--  <shiro:hasRole name="admin">
-						<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="addFeedback();">添加反馈</a>-->
-						<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="feedback();">承办反馈</a>
-						<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="check();">反馈审核</a>
-						<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="detailsFeedback();">详情</a>
-						<!--<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editFeedback();">编辑</a>
-				    	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="delFeedback();">删除</a>
-						<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="detailsFeedback();">详情</a>
-					</shiro:hasRole>-->
-				</td>
-			</tr>
-		</table>
-	</div>
-  	<table class="table table-bordered table-condensed">
+	<table class="table table-bordered table-condensed">
   		<tr class="bg-primary">
 			<td colspan="4" align="center">反馈列表</td>
 		</tr>
@@ -185,4 +175,11 @@ $(function() {
   			</td>
   		</tr>
   	</table>
+</form>
+<hr style="margin-top: -5px ">
+<div class="pull-right" style="margin: -15px 5px 5px 0px">
+ 	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="submit(true);" data-options="iconCls:'icon-ok'">同意</a>
+	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="submit(false);" data-options="iconCls:'icon-remove'">不同意</a>
+	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="closeDialog();" data-options="iconCls:'icon-cancel'">关闭</a>
+</div>
 </div>

@@ -207,11 +207,11 @@ public class Constants {
 	}
 	
 	/**
-	 * 业务表单类型(任务表单(TaskInfo)、任务交班表(Project)、任务反馈表(Feedback))
+	 * 业务表单类型(任务表单(TaskInfo)、任务交办表(Project)、交办表办结(ProjectComplete)、任务反馈表(Feedback))
 	 * 用途：审批评论时，来标记此评论所属类型
 	 */
 	public enum  BusinessForm {
-		TASK_FORM("TASK_FORM"), PROJECT_FORM("PROJECT_FORM"), FEEDBACK_FORM("FEEDBACK_FORM");
+		TASK_FORM("TASK_FORM"), PROJECT_FORM("PROJECT_FORM"), PROJECT_COMPLETE("PROJECT_COMPLETE"), FEEDBACK_FORM("FEEDBACK_FORM");
 		private final String value;
 		
 		private BusinessForm(String value) {
@@ -235,76 +235,13 @@ public class Constants {
 			case "FEEDBACK_FORM":
 				bf = FEEDBACK_FORM;
 				break;
+			case "PROJECT_COMPLETE":
+				bf = PROJECT_COMPLETE;
+				break;
 			default:
 				break;
 			}
 			return bf;
-		}
-	}
-	
-	
-	/**
-	 * 业务操作类型（针对代办任务中使用）
-	 *
-	 */
-	public enum OperationType {
-		ADD("ADD"), MODIFY("MODIFY"), UPLOAD("UPLOAD"), APPROVAL("APPROVAL"), PRINT("PRINT"), IN_BOUND("IN_BOUND"),STAMP("STAMP");
-		private final String value;
-		
-		private OperationType(String value) {
-			this.value = value;
-		}
-		
-		@Override
-        public String toString() {
-            return this.value;
-        }
-	}
-	
-	/**
-	 * 订单状态枚举
-	 * 待采购、采购中、可入库、已入库、可出库、待操作、已出库
-	 */
-	public enum OrderStatus {
-		WAIT_FOR_PROCUREMENT("WAIT_FOR_PROCUREMENT"), PROCUREMENT("PROCUREMENT"), IN_BOUNDABLE("IN_BOUNDABLE"), IN_BOUNDED("IN_BOUNDED"), OUT_BOUNDABLE("OUT_BOUNDABLE"), WAIT_FOR_OPERATION("WAIT_FOR_OPERATION"), OUT_BOUNDED("OUT_BOUNDED");
-		private final String value;
-		private OrderStatus(String value) {
-			this.value = value;
-		}
-		
-		@Override
-        public String toString() {
-            return this.value;
-        }
-		
-		public static OrderStatus getValue( String value ) {
-			OrderStatus as = null;
-			switch (value) {
-				case "WAIT_FOR_PROCUREMENT":
-					as = WAIT_FOR_PROCUREMENT;
-					break;
-				case "PROCUREMENT":
-					as = PROCUREMENT;
-					break;
-				case "IN_BOUNDABLE":
-					as = IN_BOUNDABLE;
-					break;
-				case "IN_BOUNDED":
-					as = IN_BOUNDED;
-					break;
-				case "OUT_BOUNDABLE":
-					as = OUT_BOUNDABLE;
-					break;
-				case "WAIT_FOR_OPERATION":
-					as = WAIT_FOR_OPERATION;
-					break;
-				case "OUT_BOUNDED":
-					as = OUT_BOUNDED;
-					break;
-				default:
-					break;
-			}
-			return as;
 		}
 	}
 	

@@ -11,7 +11,6 @@ import java.util.Set;
 import org.activiti.engine.ActivitiException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,25 +19,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.hdc.entity.Comments;
 import com.hdc.entity.Datagrid;
-import com.hdc.entity.FeedbackAtt;
 import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.Project;
-import com.hdc.entity.ProjectScore;
 import com.hdc.service.ICommentsService;
+import com.hdc.service.IFeedbackRecordService;
 import com.hdc.service.IProjectService;
-import com.hdc.service.IProjectScoreService;
-import com.hdc.util.BeanToMapUtil;
-import com.hdc.util.BeanUtilsExt;
 import com.hdc.util.Constants.BusinessForm;
 import com.hdc.util.Constants.FeedbackStatus;
-
-import oracle.net.aso.f;
 
 /**
  * 任务交办管理器
@@ -53,7 +45,7 @@ public class ProjectController {
 	private IProjectService projectService;
 	
 	@Autowired
-	private IProjectScoreService projectScoreService;
+	private IFeedbackRecordService feedbackService;
 	
 	@Autowired
 	private ICommentsService commentsService;
@@ -127,16 +119,26 @@ public class ProjectController {
 			} else if("details".equals(type)) {
 				mv.setViewName("project/details_project");
 				this.putFbListToProject(mv, project);
-			}else if("feedback".equals(type)) {
+			} else if("feedback".equals(type)) {
 				mv.setViewName("project/feedback_project");
 				this.putFbListToProject(mv, project);
 			} else if("approval_refuse".equals(type)) {
 				mv.setViewName("project/approval_refuse_project");
 			} else if("change_failed".equals(type)) {
-				//拒签操作被驳回的操作
+				//拒签操作被驳回的页面
 				List<Comments> commentsList = this.commentsService.findComments(projectId, BusinessForm.PROJECT_FORM.toString());
 				mv.addObject("commentsList", commentsList);
 				mv.setViewName("project/change_failed_project");
+			} else if("complete".equals(type)) {
+				//审批申请办结页面
+				mv.setViewName("project/approval_complete");
+				this.putFbListToProject(mv, project);
+			} else if("modifyComplete".equals(type)) {
+				//申请办结被驳回的页面
+				List<Comments> commentsList = this.commentsService.findComments(projectId, BusinessForm.PROJECT_COMPLETE.toString());
+				mv.addObject("commentsList", commentsList);
+				mv.setViewName("project/failed_complete");
+				this.putFbListToProject(mv, project);
 			}
 		}		
     	return mv;
@@ -144,7 +146,7 @@ public class ProjectController {
 	private void putFbListToProject(ModelAndView mv,Project project) throws Exception{	
     	if(project != null) {
     		//以下开始装载项目下的反馈列表
-			List<Map> jsonList=new ArrayList<Map>();
+			List<Object> jsonList=new ArrayList<Object>();
 			int fbWL=0;
 			Date currentDate=new Date();
 			for(FeedbackRecord fb:project.getFbrList()){
@@ -181,7 +183,7 @@ public class ProjectController {
 				map.put("delayCount", fb.getDelayCount());
 				jsonList.add(map);
 			}
-			Datagrid fbList=new Datagrid(jsonList.size(),jsonList);
+			Datagrid<Object> fbList=new Datagrid<Object>(jsonList.size(),jsonList);
 			Gson gson=new Gson();
 			//在gson转换ArrayList的时候，不能有懒加载的对象		
 			mv.addObject("feedback",gson.toJson(fbList));
@@ -226,9 +228,9 @@ public class ProjectController {
 		int fbWL=0;
 		Date currentDate=new Date();
 		if(type==1){//显示待签收的项目页面
-			for(Map map:list){
+			for(Map<String, Object> map:list){
 				Project project=this.projectService.findById(Integer.valueOf(map.get("ID").toString()));
-				if(project.getTaskInfo().getClaimLimitDate().before(currentDate)&&project.getStatus().equals("WAIT_FOR_CLAIM")){
+				if(project.getTaskInfo().getClaimLimitDate().before(currentDate)&&"WAIT_FOR_CLAIM".equals(project.getStatus())){
 					fbWL=1; //在待签收的状态下，逾期
 				}
 				map.put("claim_limit_date", project.getTaskInfo().getClaimLimitDate());
@@ -237,10 +239,10 @@ public class ProjectController {
 			}
 			
 		}else if(type==2){//显示办理中的项目页面
-			for(Map map:list){
+			for(Map<String, Object> map:list){
 				Project project=this.projectService.findById(Integer.valueOf(map.get("ID").toString()));
 				Set<FeedbackRecord> fbSet=project.getFbrList();
-			    Iterator iter = fbSet.iterator();
+			    Iterator<FeedbackRecord> iter = fbSet.iterator();
 			    FeedbackRecord fbr=null;
 				while(iter.hasNext()){
 					fbr=(FeedbackRecord)iter.next();
@@ -267,7 +269,7 @@ public class ProjectController {
 				jsonList.add(map);
 			}
 		}else{
-			
+			jsonList = list;
 		}
 		
 		return new Datagrid<Map<String, Object>>(page.getTotal(), jsonList);
@@ -286,16 +288,7 @@ public class ProjectController {
 			if(StringUtils.isNotBlank(projectId)) {
 				Boolean flag = this.projectService.doClaimProject(projectId);
 				if(flag) {
-					Project prj=this.projectService.findById(Integer.valueOf(projectId));
-					Date currentDate=new Date();
-					Date claimLimitDate=prj.getClaimDate();
-					if(currentDate.after(claimLimitDate)){
-						ProjectScore projectScore=new ProjectScore(prj,"未按时签收任务",-10);
-						this.projectScoreService.doAdd(projectScore);
-						message.setMessage("签收成功，但未按时签收，减10分");
-					}else{
-						message.setMessage("签收成功！");
-					}					
+					message.setMessage("签收成功！");		
 				} else {
 					message.setMessage("该任务已被其他人签收！");
 				}
@@ -458,7 +451,7 @@ public class ProjectController {
     }
     
     /**
-     * 查看驳回申请时，点确认完成任务
+     * 查看驳回申请 或 查看驳回的办结申请，点确认完成任务
      * @param taskId
      * @return
      * @throws Exception
@@ -479,5 +472,52 @@ public class ProjectController {
     	return message;
     }
     
-	
+    /**
+     * 申请办结
+     * @param projectId
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/completion/{projectId}")
+    @ResponseBody
+	public Message applyForCompletion(@PathVariable("projectId") Integer projectId) throws Exception {
+    	Message message = new Message();
+		List<FeedbackRecord> list = this.feedbackService.findNoAccept(projectId.toString());
+		if(list.size() > 0) {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("请确保所有反馈信息都被采纳后，才可以申请办结！");
+		} else {
+			this.projectService.doStartComplete(projectId);
+			message.setMessage("申请成功！");
+		}
+		return message;
+	}
+    
+    /**
+     * 审批办结申请
+     * @param projectId
+     * @param isPass
+     * @param taskId
+     * @param comment
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/approvalComplete")
+    @ResponseBody
+    public Message approvalComplete(
+    		@RequestParam("projectId") Integer projectId, 
+   			@RequestParam("isPass") boolean isPass,
+   			@RequestParam("taskId") String taskId, 
+   			@RequestParam("comment") String comment) throws Exception {
+   		Message message = new Message();
+   		try {
+   			this.projectService.doApprovalComplete(projectId, isPass, taskId, comment);
+   			message.setMessage("审批完成！");
+   		} catch (Exception e) {
+   			message.setStatus(Boolean.FALSE);
+   			message.setMessage("审批失败！");
+   		}
+   		return message;
+    }
+    
 }

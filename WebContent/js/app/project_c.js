@@ -36,8 +36,6 @@ $(function(){
 								return "<span class='text-warning'>待签收</span>";
 							case "CLAIMED":
 								return "<span class='text-success'>已签收</span>";
-							case "APPLY_FINISHED":
-								return "<span class='text-primary'>申请办结</span>";
 							case "APPROVAL_SUCCESS":
 								return "<span class='text-success'>审批通过</span>";
 							case "APPROVAL_FAILED":
