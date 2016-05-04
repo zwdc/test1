@@ -3,24 +3,100 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="zwdc" uri="http://zwdc.com/zwdc/tags/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
+<script type="text/javascript" src="${ctx}/js/kindeditor.js"></script>
+<script type="text/javascript" src="${ctx}/js/app/feedback.js"></script>
 <script type="text/javascript">
-	$(function(){
-		$("#assistantGroup").kindeditor({readonlyMode: true});
-		$("#remark").kindeditor({readonlyMode: true});
-		$("#refuseReason").kindeditor({readonlyMode: true});
-		
-		$("blockquote").css({
-			"border-left": "5px solid #4EA76E",
-			"font-size": "15px",
-			"padding": "5px 10px",
-			"margin": "0px 0px 10px"
-		})
+var feedback_datagrid;
+var feedback_form;
+var feedback_dialog;
+var fb=${feedback};
+$(function() {
+	//数据列表
+	feedback_datagrid = $('#feedback_datagrid').datagrid({
+        //url: ctx+"/feedback/getList",
+        width : 'auto',
+		height : 'auto',
+		rownumbers:true,
+		border:false,
+		singleSelect:true,
+		data:fb,
+		striped:true,
+		nowrap:false,
+        columns : [
+             [
+              {field: 'warningLevel', title: '反馈状态', width: fixWidth(0.08), align: 'center', halign: 'center', sortable: true,
+            	  formatter:function(value){
+            		  if (value=="1") {           			
+                      	  return "开始反馈";
+                      }else if(value=="2"){
+                    	  return "逾期反馈"; 
+                      }else if(value=='3'){
+                    	  return "反馈被退回"; 
+                      }else if(value=='4'){
+                    	  return "反馈被采纳"; 
+                      }else if(value=='5'){
+                    	  return "反馈中";
+                      }else{
+                    	  return "未到反馈期";
+                      }
+            	  }
+			},
+			  {field: 'feedbackStartDate', title: '反馈期间', width: fixWidth(0.2), align: 'center', halign: 'center', sortable: true,
+					  formatter:function(value,row){
+						  return moment(value).format("MM月DD日")+"-"+moment(row.feedbackEndDate).format("MM月DD日");
+					  }
+				},
+              {field: 'groupName', title: '牵头单位', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
+              {field: 'feedbackUser', title: '填报人', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
+              {field: 'feedbackDate', title: '反馈时间', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true,
+            	  formatter:function(value,row){
+            		  if(value==null){
+            			  return "--"
+            		  }else{
+            			  return moment(value).format("YYYY-MM-DD HH:mm:ss");
+            		  }
+            		 
+				  }
+              },
+              
+              {field: 'delayCount', title: '延期次数', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
+              {field: 'refuseCount', title: '退回次数', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true}  
+        ]
+     ],
+	  rowStyler:function(index,row){
+		  if (row.warningLevel=="1") {           			
+             return 'background-color:yellow;color:white';
+           }else if(row.warningLevel=="2"){
+         	  return 'background-color:red;color:white';
+           }else if(row.warningLevel=='3'){
+         	  return 'background-color:red;color:white';
+           }else if(row.warningLevel=='4'){
+         	  return 'background-color:green;color:white';
+           }else if(row.warningLevel=='5'){
+         	  return 'background-color:blue;color:white';
+           }else{
+         	  return ;
+           }
+	  },
+    });
+	
+	$("#assistantGroup").kindeditor({readonlyMode: true});
+	$("#remark").kindeditor({readonlyMode: true});
+	$("#suggestion").kindeditor({readonlyMode: true});
+	
+	$("blockquote").css({
+		"border-left": "5px solid #4EA76E",
+		"font-size": "15px",
+		"padding": "5px 10px",
+		"margin": "0px 0px 10px"
 	})
+});
+
 </script>
 <div class="easyui-layout">
 <form id="form" action="${ctx }/project/completeApprovalFailed" method="post">
-	 <input id="taskId" name="taskId" type="hidden">
-     <table id="sales" class="table table-bordered table-condensed">
+    <input id="taskId" name="taskId" type="hidden">
+    <table id="sales" class="table table-bordered table-condensed">
   		<tr class="bg-primary">
 			<td colspan="4" align="center">任务信息</td>
 		</tr>
@@ -89,20 +165,6 @@
 				<textarea name="assistantGroup" rows="1" cols="80" style="width: 100%">${taskInfo.assistantGroup }</textarea>
 			</td>
 		</tr>
-		<tr class="bg-primary">
-			<td colspan="4" align="center">拒签交办表信息</td>
-		</tr>
-		<tr>
-			<td class="text-right">拒签单位:</td>
-			<td>
-				${project.group.name }
-			</td>
-			<td class="text-right">拒签人:</td>
-			<td>${project.refuseUser.name }</td>
-		</tr>
-		<tr>
-			<td colspan="4">拒签原因:<textarea class="easyui-kindeditor" id="refuseReason" rows="3" >${project.refuseReason }</textarea></td>
-		</tr>
 		<c:if test="${!empty commentsList }">
 	  	<tr>
 	  		<td colspan="4">
@@ -119,6 +181,16 @@
 	  		</td>
 	  	</tr>
 	  	</c:if>
+  	</table>
+  	<table class="table table-bordered table-condensed">
+  		<tr class="bg-primary">
+			<td colspan="4" align="center">反馈列表</td>
+		</tr>
+  		<tr>
+  			<td>
+				<table id="feedback_datagrid"></table>
+  			</td>
+  		</tr>
   	</table>
 </form>
 <hr style="margin-top: -5px ">

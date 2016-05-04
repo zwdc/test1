@@ -64,7 +64,48 @@ public class Group implements Serializable{
 
 	@OneToMany(mappedBy="group")
     private Set<User> user = new HashSet<User>();
+	
+	@Column(name = "leader_name") //主管局长
+	private String leaderName;
+	@Column(name = "leader_phone") //主管局长联系方式
+	private String leaderPhone;
+	@Column(name = "major_name") //主管市长
+	private String majorName;
+	@Column(name = "major_phone") //主管市长联系方式
+	private String majorPhone;
     
+	public String getLeaderName() {
+		return leaderName;
+	}
+
+	public void setLeaderName(String leaderName) {
+		this.leaderName = leaderName;
+	}
+
+	public String getLeaderPhone() {
+		return leaderPhone;
+	}
+
+	public void setLeaderPhone(String leaderPhone) {
+		this.leaderPhone = leaderPhone;
+	}
+
+	public String getMajorName() {
+		return majorName;
+	}
+
+	public void setMajorName(String majorName) {
+		this.majorName = majorName;
+	}
+
+	public String getMajorPhone() {
+		return majorPhone;
+	}
+
+	public void setMajorPhone(String majorPhone) {
+		this.majorPhone = majorPhone;
+	}
+
 	public Group(){
 		
 	}

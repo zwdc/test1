@@ -29,7 +29,9 @@ $(function(){
 				},
 				{field: 'warningLevel',title: '反馈预警',width:fixWidth(0.08),align:'center', halign:'center',sortable:true,
 					formatter:function(value){
-	            		  if (value=="1") {           			
+						  if(value=='0'){
+							  return "未到反馈期";
+						  }else if (value=="1") {           			
 	                      	  return "开始反馈";
 	                      }else if(value=="2"){
 	                    	  return "逾期反馈"; 
@@ -40,16 +42,18 @@ $(function(){
 	                      }else if(value=='5'){
 	                    	  return "反馈中";
 	                      }else{
-	                    	  return "未到反馈期";
+	                    	  return "获取反馈状态出错";
 	                      }
 	            	  },
 	            	  styler:function(value){
-	            		  if (value=="1") {           			
+	            		    if(value=="0"){
+	            		      return ;	
+	            		    }else if (value=="1") {           			
 	                          return 'background-color:yellow;color:white';
 	                        }else if(value=="2"){
 	                      	  return 'background-color:red;color:white';
 	                        }else if(value=='3'){
-	                      	  return 'background-color:red;color:white';
+	                      	  return 'background-color:orange;color:white';
 	                        }else if(value=='4'){
 	                      	  return 'background-color:green;color:white';
 	                        }else if(value=='5'){
@@ -68,7 +72,23 @@ $(function(){
 		     			return moment(value).format("YYYY-MM-DD HH:mm:ss");
 		     		}
 		     	},
-		     	{field:'FREQUENCY_NAME',title:'反馈频度',width:fixWidth(0.1),align:'center'}
+		     	{field:'FREQUENCY_NAME',title:'反馈频度',width:fixWidth(0.1),align:'center'},
+		     	{field: 'STATUS',title: '状态',width:fixWidth(0.07),align:'center', halign:'center',sortable:true,
+	            	  formatter:function(value, row){
+	            		  switch (value) {
+							case "APPLY_FINISHED":
+								return "<span class='text-primary'>申请办结中</span>";
+							case "APPROVAL_SUCCESS":
+								return "<span class='text-success'>审批通过</span>";
+							case "APPROVAL_FAILED":
+								return "<span class='text-danger'>审批失败</span>";
+							case "REAPPROVAL":
+								return "<span class='text-danger'>需要重新审批</span>";
+							default:
+								return "";
+						  }
+	    			  }
+				}
 		    ]
 		],
         onDblClickRow: function(index, row) {
@@ -205,4 +225,52 @@ function showDetails(row) {
         	project_dialog.dialog('destroy');
         }
     });
+}
+
+//申请办结
+function applyEnd() {
+	var row = project_datagrid.datagrid('getSelected');
+	 var flag=false;
+	  if(row){
+	  	$.ajax({
+	  		async:false,
+	  		cache:false,
+	  		url:ctx+'/project/checkIfFinished/'+row.ID,
+	  		type:'post',
+	  		dataType:'json',
+	  		success:function(data){
+	  			if(data.status){
+	  				flag=true;
+	  			}else{
+	  				$.messager.alert("提示",data.message);
+	  			}
+	  		}
+	  	});
+	  	 if (flag) {
+	         $.messager.confirm('确认提示！', '您确定要办结此任务?', function (result) {
+	             if (result) {
+	                 $.ajax({
+	             		async: false,
+	             		cache: false,
+	                     url: ctx + '/project/completion/'+row.ID,
+	                     type: 'post',
+	                     dataType: 'json',
+	                     success: function (data) {
+	                         if (data.status) {
+	                         	project_datagrid.datagrid('load');
+	                         }
+	                         $.messager.show({
+	         					title : data.title,
+	         					msg : data.message,
+	         					timeout : 1000 * 2
+	         				});
+	                     }
+	                 });
+	             }
+	         });
+	     } 
+	  }else {
+	      $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
+	  }
+   
 }

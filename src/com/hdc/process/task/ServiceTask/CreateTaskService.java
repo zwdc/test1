@@ -90,7 +90,7 @@ public class CreateTaskService implements JavaDelegate {
 			if(!taskBegin.after(taskEnd)) {	//判断日期是否正确
 				for(Project project : listProject){	//每个项目下，生成反馈表
 					switch (fbType) {
-						case 1:	//单次任务
+						case 1:	//单次任务，单次任务已由单月确定
 							FeedbackRecord feedback = new FeedbackRecord();
 							feedback.setProject(project);
 							feedback.setIsDelay(0);
@@ -103,8 +103,7 @@ public class CreateTaskService implements JavaDelegate {
 							Calendar w_begin = new GregorianCalendar();
 						    Calendar w_end = new GregorianCalendar();
 						    
-						    w_begin.setTime(taskBegin);
-						    
+						    w_begin.setTime(taskBegin);						    
 						    w_end.setTime(taskEnd);
 						    w_end.add(Calendar.DAY_OF_YEAR, 1);  //为了包含结束日期的最后一天
 						    
@@ -127,6 +126,10 @@ public class CreateTaskService implements JavaDelegate {
 							    			
 							    			w_feedback.setFeedbackStartDate(formatter.parse(sb_begin.toString()));
 							    			w_feedback.setFeedbackEndDate(formatter.parse(sb_end.toString()));
+							    			
+							    			//延期次数和退回次数置0
+						    				w_feedback.setDelayCount(0);
+						    				w_feedback.setRefuseCount(0);
 							    			this.feedbackService.doAdd(w_feedback);
 							    			break;
 							    		}
@@ -165,6 +168,10 @@ public class CreateTaskService implements JavaDelegate {
 						    				sb_end.append(m_begin.get(Calendar.YEAR)).append("-").append(m_begin.get(Calendar.MONTH)+1).append("-").append(monthlyEndDay+" ");
 						    				sb_end.append(monthlyEndTime);
 						    				m_feedback.setFeedbackEndDate(formatter.parse(sb_end.toString()));
+						    				
+						    				//延期次数和退回次数置0
+						    				m_feedback.setDelayCount(0);
+						    				m_feedback.setRefuseCount(0);
 							    			this.feedbackService.doAdd(m_feedback);
 							    			break;
 						    			}
@@ -189,6 +196,9 @@ public class CreateTaskService implements JavaDelegate {
 						    				sb_end.append(m_end.get(Calendar.YEAR)).append("-").append(m_end.get(Calendar.MONTH)+1).append("-").append(monthlyEndDay+" ");
 						    				sb_end.append(monthlyEndTime);
 						    				d_feedback.setFeedbackEndDate(formatter.parse(sb_end.toString()));
+						    				//延期次数和退回次数置0
+						    				d_feedback.setDelayCount(0);
+						    				d_feedback.setRefuseCount(0);
 						    				this.feedbackService.doAdd(d_feedback);
 						    			}
 						    		}

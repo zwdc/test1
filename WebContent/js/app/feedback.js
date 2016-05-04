@@ -167,7 +167,6 @@ function feedback(){
 	    	            	            if (json.status) {
 	    	            	            	feedback_dialog.dialog('destroy');//销毁对话框
 	    	            	            	feedback_datagrid.datagrid('reload');//重新加载列表数据
-	    	            	            	$("#feedback_datagrid")datagrid('reload');
 	    	            	            } 
 	    	            	            $.messager.show({
 	    	            					title : json.title,

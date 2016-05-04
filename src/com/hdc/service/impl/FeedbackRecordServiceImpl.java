@@ -151,22 +151,29 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 		    fbr.setFdaList(fbaList);
 		    fbr.setFeedbackDate(new Date());
 		    fbr.setFeedbackUser(UserUtil.getUserFromSession());
-		    this.baseService.update(feedback);
+		    this.baseService.update(fbr);
 			
 			//以下是为了查看是否延期反馈
-			Project prj=feedback.getProject();//获取该反馈的project
 			Date currentDate=new Date();
-			Date claimLimitDate=prj.getClaimDate();
-			if(currentDate.after(claimLimitDate)){
-				ProjectScore projectScore1=new ProjectScore(prj,"超期未反馈",-50);
-				ProjectScore projectScore2=new ProjectScore(prj,"超期未反馈，又反馈",+20);
-				this.projectScoreService.doAdd(projectScore1);
-				this.projectScoreService.doAdd(projectScore2);
-				message.setData(id);
-				message.setMessage("上传了"+count+"个附件，反馈成功！ 但属逾期反馈，减30分");
-			}else{
-				message.setData(id);
-				message.setMessage("上传了"+count+"个附件，反馈成功！");
+			Project prj=fbr.getProject();
+			Date feedbackStartDate=fbr.getFeedbackEndDate();
+			if(prj!=null){
+				if(currentDate.after(feedbackStartDate)){
+					ProjectScore projectScore1=new ProjectScore(prj,fbr.getId(),"超期未反馈",-50);
+					ProjectScore projectScore2=new ProjectScore(prj,fbr.getId(),"超期未反馈，又反馈",+20);
+					//将延迟次数+1
+					Integer relayCount=fbr.getDelayCount();
+					fbr.setRefuseCount(relayCount+1);
+					this.baseService.update(fbr);
+					
+					this.projectScoreService.doAdd(projectScore1);
+					this.projectScoreService.doAdd(projectScore2);
+					message.setData(id);
+					message.setMessage("上传了"+count+"个附件，反馈成功！ 但属逾期反馈，减30分");
+				}else{
+					message.setData(id);
+					message.setMessage("上传了"+count+"个附件，反馈成功！");
+				}		
 			}					
 		}		
 		return message;		
@@ -280,14 +287,11 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 			fbr.setStatus(FeedbackStatus.ACCEPT.toString()); //审批成功
 		} else {
 			fbr.setStatus(FeedbackStatus.RETURNED.toString()); //审批失败
-			//以下是为了查看是否延期反馈
+			//以下是为了查看是否存在未反馈
 			Project prj=fbr.getProject();//获取该反馈的project
-			Date currentDate=new Date();
-			Date claimLimitDate=prj.getClaimDate();
-			if(currentDate.after(claimLimitDate)){
-				ProjectScore projectScore=new ProjectScore(prj,"反馈未予采用，返回承办单位一次",-10);
-				this.projectScoreService.doAdd(projectScore);
-			}			
+			ProjectScore projectScore=new ProjectScore(prj,fbr.getId(),"反馈未予采用，返回承办单位一次",-10);
+			this.projectScoreService.doAdd(projectScore);
+			
 			TaskInfo taskInfo=fbr.getProject().getTaskInfo();
 			ProcessTask processTask = new ProcessTask();
 			processTask.setTaskTitle(taskInfo.getTitle());

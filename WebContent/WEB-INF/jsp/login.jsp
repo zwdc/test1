@@ -18,20 +18,21 @@
 <body>
   <div id="main-wrapper htmleaf-container">
   <div class="cont_principal">
+   
     <div class="template-page-wrapper cont_join">
-      <div style="background:#FFCC33; filter:alpha(opacity=50);margin-top:5px;padding-top:10px;padding-bottom:10px">
+      <div style="background:#FFCC33; filter:alpha(opacity=50);margin-top:2px;padding-top:10px;padding-bottom:10px">
         	<img src='${ctx}/images/solg_login.png'/>
        </div> 
-       <br/>  <br/>
+       <br/>
       <form class="form-horizontal" role="form" name="formLogin" action="" id="formLogin" method="post">
         <div id="username" class="form-group">
           <div class="col-sm-12">
-              <input type="text" class="form-control input_text" name="name" placeholder="用户名" value="发改委1">
+              <input type="text" class="input_text" name="name" placeholder="用户名" value="发改委1">
           </div>              
         </div>
         <div id="password" class="form-group">
           <div class="col-sm-12">
-              <input type="password" class="form-control input_text" name="passwd" placeholder="密码" value="123">
+              <input type="password" class="input_text" name="passwd" placeholder="密码" value="123">
           </div>
         </div>
         <div class="form-group">
@@ -57,12 +58,17 @@
 			    </div>
 		    </div>
 	    </div>
+	   
         <div class="cont_btn_join">
-              <button type="submit" class="">登录</button>
+             <button type="submit" class="">登录</button>
+               
         </div>
+        
       </form>
     </div>
+   
     </div>
+    
   </div>
   
 <script>

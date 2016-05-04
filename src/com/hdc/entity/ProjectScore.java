@@ -2,11 +2,15 @@ package com.hdc.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 项目分数表
@@ -18,8 +22,9 @@ import javax.persistence.Table;
 @Table(name="project_score")
 public class ProjectScore {
 	
-	public ProjectScore(Project project,String reason,Integer score) {
+	public ProjectScore(Project project,Integer feedback_id,String reason,Integer score) {
 		this.project=project;
+		this.feedback_id=feedback_id;
 		this.reason=reason;
 		this.score=score;
 	}
@@ -30,8 +35,13 @@ public class ProjectScore {
 	private Integer id;
 	
 	//不需要通过分数查项目信息，所以这里不做ManyToOne的映射
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JsonIgnore
 	@JoinColumn(name="project_id")
 	private Project project;
+	//
+	@JoinColumn(name="feedback_id")
+	private Integer feedback_id;
 	
 	@Column(name = "score", length = 1)
 	private Integer score;
@@ -69,6 +79,14 @@ public class ProjectScore {
 
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+
+	public Integer getFeedback_id() {
+		return feedback_id;
+	}
+
+	public void setFeedback_id(Integer feedback_id) {
+		this.feedback_id = feedback_id;
 	}
 	
 }

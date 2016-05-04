@@ -42,6 +42,16 @@ public interface IProjectService {
 	public void doApproval(Integer projectId, boolean isPass, String taskId, String comment) throws Exception;
 	
 	/**
+	 * 审批办结任务
+	 * @param projectId
+	 * @param isPass
+	 * @param taskId
+	 * @param comment
+	 * @throws Exception
+	 */
+	public void doApprovalComplete(Integer projectId, boolean isPass, String taskId, String comment) throws Exception;
+	
+	/**
 	 * 审批拒绝签收
 	 * @param projectId
 	 * @param oldGroupId
@@ -157,4 +167,10 @@ public interface IProjectService {
 	 */
 	public List<Project> findByTaskInfo(Integer taskInfoId) throws Exception;
 	
+	/**
+	 * 办结申请
+	 * @param ProjectId
+	 * @throws Exception
+	 */
+	public void doStartComplete(Integer projectId) throws Exception;
 }

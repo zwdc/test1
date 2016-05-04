@@ -144,8 +144,8 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 	}
 
 	@Override
-	public Integer doUpdateStatus(String id) throws Exception {
-		String hql = "update TaskInfo set status = 'IN_HANDLING' where id = " + id;
+	public Integer doUpdateStatus(String id, String status) throws Exception {
+		String hql = "update TaskInfo set status = '" + status + "' where id = " + id;
 		return this.baseService.executeHql(hql);
 	}
 

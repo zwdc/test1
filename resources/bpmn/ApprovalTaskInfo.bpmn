@@ -15,15 +15,15 @@
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isPass}]]></conditionExpression>
     </sequenceFlow>
     <serviceTask id="createTask" name="生成项目表和反馈表" activiti:delegateExpression="${createTaskService}"></serviceTask>
-    <userTask id="updateTask" name="修改任务信息" activiti:assignee="${startUser}">
+    <userTask id="modifyApply" name="修改任务信息" activiti:assignee="${startUser}">
       <extensionElements>
         <activiti:taskListener event="create" delegateExpression="${processTaskListener}"></activiti:taskListener>
       </extensionElements>
     </userTask>
-    <sequenceFlow id="flow4" name="不同意" sourceRef="exclusivegateway1" targetRef="updateTask">
+    <sequenceFlow id="flow4" name="不同意" sourceRef="exclusivegateway1" targetRef="modifyApply">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!isPass}]]></conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="flow5" name="重新审批" sourceRef="updateTask" targetRef="approval"></sequenceFlow>
+    <sequenceFlow id="flow5" name="重新审批" sourceRef="modifyApply" targetRef="approval"></sequenceFlow>
     <endEvent id="endevent1" name="End"></endEvent>
     <sequenceFlow id="flow6" sourceRef="createTask" targetRef="endevent1"></sequenceFlow>
   </process>
@@ -41,7 +41,7 @@
       <bpmndi:BPMNShape bpmnElement="createTask" id="BPMNShape_createTask">
         <omgdc:Bounds height="55.0" width="146.0" x="420.0" y="250.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="updateTask" id="BPMNShape_updateTask">
+      <bpmndi:BPMNShape bpmnElement="modifyApply" id="BPMNShape_modifyApply">
         <omgdc:Bounds height="55.0" width="105.0" x="288.0" y="130.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">

@@ -31,7 +31,6 @@ import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.Project;
-import com.hdc.entity.ProjectScore;
 import com.hdc.service.ICommentsService;
 import com.hdc.service.IFeedbackRecordService;
 import com.hdc.service.IProjectScoreService;
@@ -54,9 +53,6 @@ public class FeedbackController {
 
 	@Autowired
 	private IFeedbackRecordService feedbackService;
-	
-	@Autowired
-	private IProjectScoreService projectScoreService;
 	
 	@Autowired
 	private ICommentsService commentService;
@@ -231,7 +227,7 @@ public class FeedbackController {
 				message.setTitle("提示");
 				message.setMessage("还未到反馈期，不能反馈！");
 				message.setStatus(false);
-			}else if(fbr.getStatus()=="SUCCESS"){
+			}else if(Constants.FeedbackStatus.ACCEPT.equals(fbr.getStatus())){
 				message.setTitle("提示");
 				message.setMessage("反馈已经被采用，不能再次反馈！");
 				message.setStatus(false);
@@ -261,11 +257,11 @@ public class FeedbackController {
 		try {
 			message=this.feedbackService.doUpdate(feedback, file, request);
 		} catch (Exception e) {
+			message=new Message();
 			message.setStatus(Boolean.FALSE);
 			message.setMessage("操作失败!");
 			throw e;
-		}
-		
+		}		
 		return message;
 	}
 	/**
