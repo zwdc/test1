@@ -68,7 +68,23 @@ $(function(){
 		     			return moment(value).format("YYYY-MM-DD HH:mm:ss");
 		     		}
 		     	},
-		     	{field:'FREQUENCY_NAME',title:'反馈频度',width:fixWidth(0.1),align:'center'}
+		     	{field:'FREQUENCY_NAME',title:'反馈频度',width:fixWidth(0.1),align:'center'},
+		     	{field: 'STATUS',title: '状态',width:fixWidth(0.07),align:'center', halign:'center',sortable:true,
+	            	  formatter:function(value, row){
+	            		  switch (value) {
+							case "APPLY_FINISHED":
+								return "<span class='text-primary'>申请办结中</span>";
+							case "APPROVAL_SUCCESS":
+								return "<span class='text-success'>审批通过</span>";
+							case "APPROVAL_FAILED":
+								return "<span class='text-danger'>审批失败</span>";
+							case "REAPPROVAL":
+								return "<span class='text-danger'>需要重新审批</span>";
+							default:
+								return "";
+						  }
+	    			  }
+				}
 		    ]
 		],
         onDblClickRow: function(index, row) {
@@ -209,19 +225,19 @@ function showDetails(row) {
 
 //申请办结
 function applyEnd() {
-	var row = feedback_datagrid.datagrid('getSelected');
+	var row = project_datagrid.datagrid('getSelected');
     if (row) {
         $.messager.confirm('确认提示！', '您确定要办结此任务?', function (result) {
             if (result) {
                 $.ajax({
             		async: false,
             		cache: false,
-                    url: ctx + '/project/applyEnd/'+row.id,
+                    url: ctx + '/project/completion/'+row.ID,
                     type: 'post',
                     dataType: 'json',
                     success: function (data) {
                         if (data.status) {
-                        	feedback_datagrid.datagrid('load');
+                        	project_datagrid.datagrid('load');
                         }
                         $.messager.show({
         					title : data.title,

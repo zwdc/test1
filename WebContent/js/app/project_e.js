@@ -37,7 +37,16 @@ $(function(){
 		     		}
 		     	},
 		     	{field:'FREQUENCY_NAME',title:'反馈频度',width:fixWidth(0.1),align:'center'},
-		     	{field: 'STATUS',title: '状态',width:fixWidth(0.1),align:'center', halign:'center',sortable:true,}
+		     	{field: 'STATUS',title: '状态',width:fixWidth(0.07),align:'center', halign:'center',sortable:true,
+	            	  formatter:function(value, row){
+	            		  switch (value) {
+							case "FINISHED":
+								return "<span class='text-success'>已办结</span>";
+							default:
+								return "";
+						  }
+	    			  }
+				}
 		    ]
 		],
         onDblClickRow: function(index, row) {

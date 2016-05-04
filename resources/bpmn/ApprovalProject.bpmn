@@ -11,15 +11,15 @@
     <sequenceFlow id="flow1" sourceRef="startevent1" targetRef="approval"></sequenceFlow>
     <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
     <sequenceFlow id="flow2" sourceRef="approval" targetRef="exclusivegateway1"></sequenceFlow>
-    <userTask id="updateProject" name="修改项目信息" activiti:assignee="${startUser}">
+    <userTask id="modifyApply" name="修改项目信息" activiti:assignee="${startUser}">
       <extensionElements>
         <activiti:taskListener event="create" delegateExpression="${processTaskListener}"></activiti:taskListener>
       </extensionElements>
     </userTask>
-    <sequenceFlow id="flow4" name="不同意" sourceRef="exclusivegateway1" targetRef="updateProject">
+    <sequenceFlow id="flow4" name="不同意" sourceRef="exclusivegateway1" targetRef="modifyApply">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${!isPass}]]></conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="flow5" name="重新审批" sourceRef="updateProject" targetRef="approval"></sequenceFlow>
+    <sequenceFlow id="flow5" name="重新审批" sourceRef="modifyApply" targetRef="approval"></sequenceFlow>
     <sequenceFlow id="flow6" name="同意" sourceRef="exclusivegateway1" targetRef="servicetask1">
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${isPass}]]></conditionExpression>
     </sequenceFlow>
@@ -42,7 +42,7 @@
       <bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
         <omgdc:Bounds height="40.0" width="40.0" x="330.0" y="248.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape bpmnElement="updateProject" id="BPMNShape_updateProject">
+      <bpmndi:BPMNShape bpmnElement="modifyApply" id="BPMNShape_modifyApply">
         <omgdc:Bounds height="55.0" width="105.0" x="298.0" y="120.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="servicetask1" id="BPMNShape_servicetask1">
@@ -81,7 +81,7 @@
         <omgdi:waypoint x="370.0" y="268.0"></omgdi:waypoint>
         <omgdi:waypoint x="427.0" y="268.0"></omgdi:waypoint>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="14.0" width="100.0" x="379.0" y="250.0"></omgdc:Bounds>
+          <omgdc:Bounds height="14.0" width="24.0" x="379.0" y="250.0"></omgdc:Bounds>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow7" id="BPMNEdge_flow7">

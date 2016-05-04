@@ -12,13 +12,14 @@ import com.hdc.entity.Project;
 import com.hdc.service.IProjectService;
 import com.hdc.service.ITaskInfoService;
 import com.hdc.util.Constants.ProjectStatus;
+
 /**
- * 检查是否所有的project都审批通过，是的话所有办理人的任务将进入办理中状态
- * @author zhao
+ * 查看是否所有的project都已办结，都已办结后则置TaskInfo的状态为已办结
+ * @author ZML
  *
  */
 @Component
-public class CheckProjectStatus implements JavaDelegate {
+public class CheckProjectComplete implements JavaDelegate {
 
 	@Autowired
 	private IProjectService projectService;
@@ -33,17 +34,15 @@ public class CheckProjectStatus implements JavaDelegate {
 			List<Project> list = this.projectService.findByTaskInfo(new Integer(taskInfoId));
 			Boolean flag = true;
 			for(Project project : list) {
-				if(!"APPROVAL_SUCCESS".equals(project.getStatus())) {
+				if(!"FINISHED".equals(project.getStatus())) {
 					flag =false;
 					break;
 				}
 			}
 			if(flag) {
-				this.taskInfoService.doUpdateStatus(taskInfoId, ProjectStatus.IN_HANDLING.toString()); //更改任务状体为办理中
-				this.projectService.doUpdateStatus(taskInfoId, ProjectStatus.IN_HANDLING.toString());  //更改此任务下所有项目表的状态为-办理中
+				this.taskInfoService.doUpdateStatus(taskInfoId, ProjectStatus.FINISHED.toString()); 	//更改任务状体为办理中
 			}
 		}
-		
 	}
 
 }
