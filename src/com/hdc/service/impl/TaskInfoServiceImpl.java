@@ -134,7 +134,7 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 			processTask.setTitle("任务审批不通过，请修改后重新审批！");
 			processTask.setUrl("/taskInfo/toModify?id="+taskInfo.getId().toString());
 			Serializable id = this.processTaskService.doAdd(processTask);
-			variables.put("processTaskId", id);
+			variables.put("processTaskId", id.toString());
 		}
 		// 评论
 		Comments comments = new Comments();
