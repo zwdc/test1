@@ -1,6 +1,8 @@
 package test;
 
-import org.junit.Test;
+
+
+import  org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -41,5 +43,6 @@ public class GroupTest {
 		assertEquals(list.size(), 2);
 		assertEquals(list.get(0).getName(), "采购组");*/
 		
+    	//解决冲突
 	}
 }
