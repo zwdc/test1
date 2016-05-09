@@ -43,5 +43,6 @@ public class GroupTest {
 		assertEquals(list.size(), 2);
 		assertEquals(list.get(0).getName(), "采购组");*/
 		
+    	//解决冲突
 	}
 }
