@@ -20,6 +20,7 @@ public class GroupTest {
 		
 		Group group2 = new Group();
 		group2.setName("承办单位1");
+		group2.setName("承办单位1");
 		group2.setType("UNDERTAKER1_DEPARTMENT");
 		
 		Group group5 = new Group();
@@ -43,5 +44,6 @@ public class GroupTest {
 		assertEquals(list.size(), 2);
 		assertEquals(list.get(0).getName(), "采购组");*/
 		
+    	//解决冲突
 	}
 }

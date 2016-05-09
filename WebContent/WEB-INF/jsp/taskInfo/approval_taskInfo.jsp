@@ -11,7 +11,7 @@
 </script>
 <div class="easyui-layout">
 <form id="form" action="${ctx }/taskInfo/approval" method="post">
-    <input name="taskInfoId" value="${taskInfo.id }"  type="hidden">
+    <input name="taskInfoId" value="${taskInfo.id}"  type="hidden">
     <input id="taskId" name="taskId" type="hidden">
     <table id="sales" class="table table-bordered table-condensed">
   		<tr class="bg-primary">
@@ -20,7 +20,7 @@
 		<tr>
 			<td class="text-right">任务内容:</td>
 			<td colspan="3"><textarea class="easyui-kindeditor" 
-					data-options="readonlyMode:true"  rows="2">${taskInfo.title }</textarea></td>
+					data-options="readonlyMode:true"  rows="2">${taskInfo.title}</textarea></td>
 		</tr>
 		<tr>
 			<td class="text-right">任务简称:</td>
