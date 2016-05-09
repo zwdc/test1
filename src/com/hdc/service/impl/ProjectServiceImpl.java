@@ -232,6 +232,7 @@ public class ProjectServiceImpl implements IProjectService {
 		//初始化流程参数
 		Map<String, Object> vars = new HashMap<String, Object>();
 		vars.put("taskInfoId", taskInfo.getId().toString());	//根据taskInfoId查询所有project,判断项目状态
+		vars.put("projectId", projectId.toString());			//根据projectId查询审批流程
 		vars.put("processTaskId", processTaskId.toString());
 		//启动审批流程
 		this.processService.startApproval("ApprovalProject", projectId.toString(), vars);	
@@ -252,7 +253,6 @@ public class ProjectServiceImpl implements IProjectService {
 			processTask.setTaskTitle(taskInfo.getTitle());
 			processTask.setApplyUserId(user.getId());
 			processTask.setApplyUserName(user.getName());
-			processTask.setProjectId(project.getId());
 			processTask.setTaskInfoId(taskInfo.getId());
 			processTask.setTaskInfoType(taskInfo.getTaskSource().getTaskInfoType().getName());
 			processTask.setTitle("任务交办表审批不通过，请修改后重新审批！");

@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
-import com.hdc.entity.ApprovalProcess;
 import com.hdc.entity.Datagrid;
 import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Group;
@@ -32,7 +31,6 @@ import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.Project;
 import com.hdc.entity.TaskInfo;
-import com.hdc.entity.TaskSource;
 import com.hdc.entity.User;
 import com.hdc.service.IExcel2TaskInfoService;
 import com.hdc.service.IGroupService;
@@ -395,7 +393,7 @@ public class TaskInfoController {
    		ModelAndView mv = new ModelAndView("taskInfo/details_taskInfo");
    		TaskInfo taskInfo = this.taskInfoService.findById(id);
    		//以下获取任务下的反馈的列表
-		List<Map> jsonList=new ArrayList<Map>();
+		List<Object> jsonList=new ArrayList<Object>();
 		int fbWL=-1;
 		Date currentDate=new Date();
 		for(Project project:taskInfo.getProjectList()){
@@ -433,7 +431,7 @@ public class TaskInfoController {
 				jsonList.add(map);
 			}
 		}		
-		Datagrid fbList=new Datagrid(jsonList.size(),jsonList);
+		Datagrid<Object> fbList= new Datagrid<Object>(jsonList.size(),jsonList);
 		Gson gson=new Gson();
 		//在gson转换ArrayList的时候，不能有懒加载的对象		
 		mv.addObject("feedback",gson.toJson(fbList));
@@ -451,7 +449,7 @@ public class TaskInfoController {
    		ModelAndView mv = new ModelAndView("taskInfo/ap_taskInfo");
 		List<Map<String,Object>> list = this.taskInfoService.getApprovalProcess(id);
 		System.out.println(list.get(0));;
-		Datagrid fbList=new Datagrid(list.size(),list);
+		Datagrid<Map<String,Object>> fbList=new Datagrid<Map<String,Object>>(list.size(),list);
 		Gson gson=new Gson();
 		//在gson转换ArrayList的时候，不能有懒加载的对象		
 		mv.addObject("approvalProcess",gson.toJson(fbList));

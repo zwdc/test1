@@ -148,7 +148,7 @@ function claim() {
 	var row = project_datagrid.datagrid('getSelected');
     if (row) {
     	if(row.USER_NAME != null){
-    		$.messager.alert("提示", "您已经签收此任务，根据任务状态进行【审批】任务！");
+    		$.messager.alert("提示", "您已经签收此任务，根据任务状态进行【填写拟办意见】操作！");
     	}else{
     		 $.messager.confirm('确认提示！', '您是否已经查看了项目详细信息，如果签收，请点击确定?', function (result) {
     			 if(result){

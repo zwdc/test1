@@ -1,11 +1,9 @@
 package com.hdc.service;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.hdc.entity.ApprovalProcess;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.TaskInfo;
