@@ -28,6 +28,7 @@ public class ProcessTaskListener implements TaskListener {
 	@Override
 	public void notify(DelegateTask delegateTask) {
 		String processTaskId = (String) delegateTask.getVariable("processTaskId");
+		Object projectId = delegateTask.getVariable("projectId");
 		try {
 			if(StringUtils.isNotBlank(processTaskId)){
 				ProcessTask processTask = this.processTaskService.findById(new Integer(processTaskId));
@@ -36,6 +37,9 @@ public class ProcessTaskListener implements TaskListener {
 				processTask.setProcessInstanceId(delegateTask.getProcessInstanceId());
 				processTask.setAssign(delegateTask.getAssignee());
 				processTask.setOwner(delegateTask.getOwner());
+				if(projectId != null) {
+					processTask.setProjectId(new Integer(projectId.toString()));
+				}
 				this.processTaskService.doUpdate(processTask);
 				delegateTask.setVariable("taskTitle", processTask.getTaskTitle());
 				delegateTask.setVariable("title", processTask.getTitle());
