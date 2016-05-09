@@ -60,7 +60,7 @@ $(function() {
      ],
 	  rowStyler:function(index,row){
 		  if (row.warningLevel=="1") {           			
-           return 'background-color:yellow;color:white';
+           return 'background-color:yellow;color:black';
         }else if(row.warningLevel=="2"){
       	    return 'background-color:red;color:white';
         }

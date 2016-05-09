@@ -349,5 +349,11 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 		String hql = "from FeedbackRecord where status <> 'ACCEPT' and isDelete = 0 and project.id = " + projectId.toString();
 		return this.baseService.find(hql);
 	}
+	
+	@Override
+	public void doRemoveAttrByID(Integer id) throws Exception {
+		String hql="delete from FeedbackAtt where id="+id.toString();
+		this.baseService.executeHql(hql);
+	}
 
 }

@@ -287,7 +287,26 @@ public class FeedbackController {
 		return message;
 	}
     
-	
+
+	  /**
+		 * 删除某一个附件
+		 * @param id
+		 * @return
+		 * @throws Exception
+		 */
+		@RequestMapping("/removeAttr/{id}")
+		@ResponseBody
+		public Message removeAttr(@PathVariable("id") Integer id) throws Exception {
+			Message message = new Message();
+			if(id!=null){
+				this.feedbackService.doRemoveAttrByID(id);
+				message.setMessage("删除成功！");
+			}else{
+				message.setMessage("删除失败！未获得附件ID");
+			}
+		
+			return message;
+		}
 	
 	
 	

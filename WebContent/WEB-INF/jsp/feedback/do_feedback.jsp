@@ -18,21 +18,38 @@
 		});	 
 		var count = 0; 
 		 $("#filefield").click(function(){  
-			if(confirm("添加附件后，原附件删除，是否确认？")){
-				var input = $("<input class='easyui-filebox' type='text' name='file' data-options=\""+"prompt:'请选择文件...'\""+" style='width: 40%;height: 25px;'>");  	
-				var button = $("<input type='button' class='easyui-linkbutton' value='移除 '></div>");  
-				var pre=$("<div>").append(button).append(input);		
-				$("#fileZone").append(pre);
-				$.parser.parse(pre);
-				  button.click(function() {  
-					  pre.remove();
-			     });
-				 
-			}else{
-				
-			}
-			
-	});  
+			var input = $("<input class='easyui-filebox' type='text' name='file' data-options=\""+"prompt:'请选择文件...'\""+" style='width: 40%;height: 25px;'>");  	
+			var button = $("<input type='button' class='easyui-linkbutton' value='移除 '></div>");  
+			var pre=$("<div>").append(button).append(input);		
+			$("#fileZone").append(pre);
+			$.parser.parse(pre);
+			button.click(function() {  
+				pre.remove();
+			});
+		});
+		 
+		 $(".del").click(function() {
+             var $p = $(this).parent();
+             var $this = $(this);
+             $.ajax({
+            	 url:ctx+'/feedback/removeAttr/'+$this.attr("id"),
+			  	 type:'post',
+			  	 dataType:'json',
+                 beforeSend: function() {
+                     //发送请求前改变背景色
+                     $p.css("backgroundColor", "#FB6C6C");
+                 },
+                 success: function() {
+                     //删除成功
+                     $p.slideUp(300, function() {
+                         //移除父级div
+                         $p.remove();
+                     });
+                 }
+             });
+		     //阻止浏览器默认事件
+		     return false;
+         });
 	});
 	
 </script>
@@ -43,7 +60,7 @@
     <input type="hidden" name="createDate" value="<fmt:formatDate value='${feedback.createDate }' type='both'/>"/>
     <input type="hidden" name="isDelete" value="${feedback.isDelete }"/>
     <input type="hidden" name="status" value="${feedback.status }"/> --%>
-	<table class="table table-bordered table-hover" style="width: 100%;">
+	<table class="table table-bordered" style="width: 100%;">
 		<tr class="bg-primary">
 			<td colspan="6" align="center">填报反馈信息</td>
 		</tr>
@@ -63,7 +80,7 @@
 		<tr>
 			<td class="text-right">记录状态:</td>
 			<td><input type="text" name="status" class="easyui-textbox"
-				value="${(feedback.status eq 'RUNNING' ) ? '反馈中' : ((feedback.status eq 'FAIL') ? '已退回' : '已采用') }" data-option="prompt:'来源名称'"
+				value="${(feedback.status eq 'FEEDBACKING' ) ? '反馈中' : ((feedback.status eq 'RETURNED') ? '已退回' : ((feedback.status eq 'ACCEPT') ? '已采用' : '未反馈')) }" data-option="prompt:'来源名称'"
 				disabled="disabled"></td>
 			<td class="text-right">是否延期:</td>
 			<td><input type="text" name="delayCount" class="easyui-textbox"
@@ -99,15 +116,14 @@
 		<tr>
 		  	<td class="text-right">佐证材料上传:</td>
 		  	<td colspan="5">
-		  	     
 		  		  <a id="filefield" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加附件</a> 
 		  		   <input class='easyui-filebox' type='hidden' name='file'>
 		  		   <div id="fileZone"> </div> 
 		  		  <c:forEach items="${feedback.fdaList}" var="fda"> 
 	   		     	<div class="well well-small">
    					    <a href="${ctx }${fda.url}" target=blank> 
-   						<img src="${ctx }/images/icon/${fda.type}.gif" title="" onmousemove="showPic(event,'http://avatar.profile.csdn.net/D/8/D/2_dean8828.jpg');" onmouseout="hiddenPic();">${fda.uploadDate} - ${fda.name} 
- 					    </a>
+   						<img src="${ctx }/images/icon/${fda.type}.gif" title="" >${fda.uploadDate} - ${fda.name}   
+ 					    </a> - <input id="${fda.id}" type='button' class='easyui-linkbutton del' value='移除 '>
  					</div>
 				 </c:forEach>    	
 		   </td>

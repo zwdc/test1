@@ -142,5 +142,12 @@ public interface IFeedbackRecordService {
 	 */
 	public void doCompleteTask(Integer feedbackId,  String taskId) throws Exception;
 	
+	/**
+	 * 根据附件ID删除某一个附件
+	 * @param id 附件的ID
+	 * @throws Exception
+	 */
+	public void doRemoveAttrByID(Integer id) throws Exception;
+	
 	
 }
