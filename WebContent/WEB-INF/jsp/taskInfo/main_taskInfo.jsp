@@ -137,13 +137,65 @@
 	                url: ctx+"/choose/chooseGroup",
 	                width : 'auto',
 	        		height :'auto',
-	        		rownumbers:true,
 	        		border:false,
-	        		striped:true,
+	        		checkOnSelect: false, 
+	        		selectOnCheck: false,
 	                columns : [ 
 	                    [ 
-	                      {field:'ck', title : '#',width : ($(this).width() - 50) * 0.1,align : 'center',checkbox:true},
-	                      {field : 'name',title : '单位名称',width : ($(this).width() - 50) * 0.45,align : 'center'}
+	                      /* {field:'ck', title : '#',width : ($(this).width() - 50) * 0.1,align : 'center',checkbox:true},
+	                      {field : 'name',title : '单位名称',width : ($(this).width() - 50) * 0.45,align : 'center'} */
+	                      {field : 'col0',width :0.08,align : 'left',
+	                    	  formatter: function (value,row) {
+	                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                          }
+	                      },
+	                      {field : 'col1',width :0.08,align : 'left',
+	                    	  formatter: function (value,row) {
+	                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                          }
+	                      },
+	                      {field : 'col2',width :0.08,align : 'left',
+	                    	  formatter: function (value,row) {
+	                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                          }
+	                      },
+	                      {field : 'col3',width :0.08,align : 'left',
+	                    	  formatter: function (value,row) {
+	                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                          }
+	                      },
+	                      {field : 'col4',width :0.08,align : 'left',
+	                    	  formatter: function (value,row) {
+	                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                          }
+	                      },
+	                      {field : 'col5',width :0.08,align : 'left',
+	                    	  formatter: function (value,row) {
+	                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                          }
+	                      },
+	                      {field : 'col6',width :0.08,align : 'left',
+	                    	  formatter: function (value,row) {
+	                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                          }
+	                      },
+	                      {field : 'col7',width :0.08,align : 'left',
+	                    	  formatter: function (value,row) {
+	                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                          }
+	                      },
+	                      {field : 'col8',width :0.08,align : 'left',
+	                    	  formatter: function (value,row) {
+	                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                          }
+	                      },
+	                      {field : 'col9',width :0.08,align : 'left',
+	                    	  formatter: function (value,row) {
+	                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                          }
+	                      }
+	                     
+	                                           
 	            	    ] 
 	                ]
 	            });
@@ -175,24 +227,24 @@
 		$('#hostGroupDatagrid').datagrid('loadData', { total: 0, rows: [] }); //清空已生成的牵头单位
 		$("#hostGroupId").val("");	//清空id
 		//重新生成牵头单位
-		var rows = group_datagrid.datagrid('getChecked');
+		/* var rows = group_datagrid.datagrid('getChecked'); */
+		var rows = $("input[name='PD']:checked");
 		var groupIds = "";
-		$.each(rows, function(index, field) { 
+		$.each(rows, function(index, item) { 
     		$.ajax({
-                url: ctx + '/taskInfo/getGroupUser/'+field.id,
+                url: ctx + '/taskInfo/getGroupUser/'+item.value,
                 type: 'post',
                 dataType: 'text',
                 success: function (data) {
 					$('#hostGroupDatagrid').datagrid('insertRow',{
 						row: {
-							groupId: field.id,
-							groupName: field.name,
-							userNames: data
+							groupId: item.value,
+							groupName:data,
 						}
 					});
                 }
             });
-    		groupIds += field.id + ',';
+    		groupIds += item.value + ',';
     	});
 		$("#hostGroupId").val(groupIds.substring(0, groupIds.length-1));
 	}

@@ -117,16 +117,21 @@ public class TaskInfoController {
 	@RequestMapping(value="/getGroupUser/{groupId}", method=RequestMethod.POST, produces="text/html;charset=UTF-8")
 	@ResponseBody
 	public String getGroupUser(@PathVariable("groupId") Integer groupId) throws Exception {
+
 		Group group = this.groupService.getGroupById(groupId);
-		String userNames = "";
-		for(User user : group.getUser()) {
-			userNames += user.getName()+"、";
+		if(group!=null){
+			return group.getName();
 		}
-		if(StringUtils.isNotBlank(userNames)) {
-			return userNames.substring(0, userNames.length()-1);
-		} else {
-			return "";
-		}
+		return null;
+//		String userNames = "";
+//		for(User user : group.getUser()) {
+//			userNames += user.getName()+"、";
+//		}
+//		if(StringUtils.isNotBlank(userNames)) {
+//			return userNames.substring(0, userNames.length()-1);
+//		} else {
+//			return "";
+//		}
 	}
 	
 	/**

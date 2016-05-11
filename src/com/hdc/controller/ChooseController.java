@@ -52,8 +52,18 @@ public class ChooseController {
 	 */
 	@RequestMapping(value = "/chooseGroup")
 	@ResponseBody
-	public Datagrid<Group> chooseGroup(Parameter param) throws Exception{		
-		return new Datagrid<Group>(null,this.groupService.getGroupList());
+	public Datagrid<Map> chooseGroup(Parameter param) throws Exception{	
+		List<Group> list=this.groupService.getGroupList();
+		List<Map> groupList=new ArrayList();
+		Map<String, Object> map=new HashMap<>();
+		for(int i=0;i<list.size();i++){		
+			map.put("col"+i%10, list.get(i));
+			if(i%10==9){
+				groupList.add(map);
+				map=new HashMap<>();
+			}
+		}
+		return new Datagrid<Map>(null,groupList);
 		
 	}
 	
