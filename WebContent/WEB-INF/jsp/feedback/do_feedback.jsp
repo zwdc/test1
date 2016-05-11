@@ -50,6 +50,77 @@
 		     //阻止浏览器默认事件
 		     return false;
          });
+		 
+		  var situation = KindEditor.create('textarea[name="situation"]',{
+			   readonlyMode : false, //只读模式 默认为false
+			   width:'100%',
+			   themeType : 'default', 			   
+			   afterChange : function() {
+			      //限制字数
+			      var limitNum = ${limitSituation};  //设定限制字数
+			      var pattern = '可以输入' + limitNum + '字'; 
+			      $('.situation_surplus').html(pattern); //输入显示
+			      if(this.count('text') > limitNum) {
+			       pattern = ('字数超过限制，请适当删除部分内容');
+			       //超过字数限制自动截取
+			       var strValue = situation.text();
+			       strValue = strValue.substring(0,limitNum);
+			       situation.text(strValue);      
+			       } else {
+			       //计算剩余字数
+			       var result = limitNum - this.count('text'); 
+			       pattern = '你已输入'+this.count()+'字符（字数统计包含HTML代码。），还可以输入' +  result + '字'; 
+			       }
+			       $('.situation_surplus').html(pattern); //输入显示
+			     } 
+		});
+		  
+		  var problems = KindEditor.create('textarea[name="problems"]',{
+			   readonlyMode : false, //只读模式 默认为false
+			   width:'100%',
+			   themeType : 'default', 			   
+			   afterChange : function() {
+			      //限制字数
+			      var limitNum = ${limitProblem};  //设定限制字数
+			      var pattern = '可以输入' + limitNum + '字'; 
+			      $('.problems_surplus').html(pattern); //输入显示
+			      if(this.count('text') > limitNum) {
+			       pattern = ('字数超过限制，请适当删除部分内容');
+			       //超过字数限制自动截取
+			       var strValue = problems.text();
+			       strValue = strValue.substring(0,limitNum);
+			       problems.text(strValue);      
+			       } else {
+			       //计算剩余字数
+			       var result = limitNum - this.count('text'); 
+			       pattern = '你已输入'+this.count('text')+'字符（字数统计包含HTML代码。），还可以输入' +  result + '字'; 
+			       }
+			       $('.problems_surplus').html(pattern); //输入显示
+			     } 
+		});
+		  var solutions = KindEditor.create('textarea[name="solutions"]',{
+			   readonlyMode : false, //只读模式 默认为false
+			   width:'100%',
+			   themeType : 'default', 			   
+			   afterChange : function() {
+			      //限制字数
+			      var limitNum = ${limitSolution};  //设定限制字数
+			      var pattern = '可以输入' + limitNum + '字'; 
+			      $('.solutions_surplus').html(pattern); //输入显示
+			      if(this.count('text') > limitNum) {
+			       pattern = ('字数超过限制，请适当删除部分内容');
+			       //超过字数限制自动截取
+			       var strValue = solutions.text();
+			       strValue = strValue.substring(0,limitNum);
+			       solutions.text(strValue);      
+			       } else {
+			       //计算剩余字数
+			       var result = limitNum - this.count('text'); 
+			       pattern = '你已输入'+this.count('text')+'字符（字数统计包含HTML代码。），还可以输入' +  result + '字'; 
+			       }
+			       $('.solutions_surplus').html(pattern); //输入显示
+			     } 
+		});
 	});
 	
 </script>
@@ -95,23 +166,31 @@
 			<td class="text-right">阶段工作计划:</td>
 			<td colspan="5"><textarea class="easyui-kindeditor"
 					data-options="readonlyMode:true,prompt:'阶段工作计划'" rows="3">${feedback.workPlan }</textarea>
+					
 			</td>
 		</tr>
 		<tr>
 			<td class="text-right">落实情况:</td>
-			<td colspan="5"><textarea class="easyui-kindeditor"
-					name="situation" rows="3"  required="required" >${feedback.situation }</textarea></td>
+			<td colspan="5">
+			<span class="situation_surplus"></span>			
+			<textarea name="situation" rows="3" class="easyui-kindeditor"  data-options="readonlyMode:false,prompt:'落实情况，最多不可超过100字'"  required="required" >${feedback.situation }</textarea>							
+			</td>
 		</tr>
 		
 		<tr>
 			<td class="text-right">存在问题/困难:</td>
-			<td colspan="5"><textarea class="easyui-kindeditor"
-					name="problems" rows="3">${feedback.problems }</textarea></td>
+			<td colspan="5">
+			<span class="problems_surplus"></span>
+			<textarea class="easyui-kindeditor" name="problems" rows="3">${feedback.problems }</textarea>			
+			</td>
 		</tr>
 		<tr>
 			<td class="text-right">解决措施/建议:</td>
-			<td colspan="5"><textarea class="easyui-kindeditor"
-					name="solutions" rows="3">${feedback.solutions }</textarea></td>
+			<td colspan="5">
+			<span class="solutions_surplus"></span>
+			<textarea class="easyui-kindeditor" data-options="readonlyMode:false,prompt:'落实情况，最多不可超过100字'"
+					name="solutions" rows="3">${feedback.solutions }</textarea>	
+			</td>	
 		</tr>
 		<tr>
 		  	<td class="text-right">佐证材料上传:</td>
@@ -130,4 +209,5 @@
 		</tr>   	
 	</table>    
 </form>
+
 </div>

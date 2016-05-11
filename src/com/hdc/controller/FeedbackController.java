@@ -31,6 +31,7 @@ import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.Project;
+import com.hdc.entity.TaskInfoType;
 import com.hdc.service.ICommentsService;
 import com.hdc.service.IFeedbackRecordService;
 import com.hdc.service.IProjectScoreService;
@@ -125,6 +126,12 @@ public class FeedbackController {
 			}else if("detail".equals(action)){
 				mv.setViewName("feedback/details_feedback");			
 			}else if("feedback".equals(action)){
+				TaskInfoType type=fbr.getProject().getTaskInfo().getTaskSource().getTaskInfoType();
+				if(type!=null){
+					mv.addObject("limitSituation", type.getLimitSituation());
+					mv.addObject("limitProblem", type.getLimitProblems());
+					mv.addObject("limitSolution", type.getLimitSolutions());
+				}
 				mv.setViewName("feedback/do_feedback");			
 			}else if("add".equals(action)){
 				mv.setViewName("feedback/main_feedback");

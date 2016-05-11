@@ -49,7 +49,16 @@ public class TaskInfoType implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@Column(name = "create_date")
-	private Date createDate ;					//创建时间
+	private Date createDate ;		//创建时间
+	
+	@Column(name = "limit_situation") 
+	private Integer limitSituation; //落实情况字数限制
+	
+	@Column(name = "limit_problems")
+	private Integer limitProblems;//存在问题字数限制
+	
+	@Column(name = "limit_solutions")
+	private Integer limitSolutions;//解决措施字数限制
 
 	public Integer getId() {
 		return id;
@@ -89,6 +98,30 @@ public class TaskInfoType implements Serializable {
 
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+
+	public Integer getLimitSituation() {
+		return limitSituation;
+	}
+
+	public void setLimitSituation(Integer limitSituation) {
+		this.limitSituation = limitSituation;
+	}
+
+	public Integer getLimitProblems() {
+		return limitProblems;
+	}
+
+	public void setLimitProblems(Integer limitProblems) {
+		this.limitProblems = limitProblems;
+	}
+
+	public Integer getLimitSolutions() {
+		return limitSolutions;
+	}
+
+	public void setLimitSolutions(Integer limitSolutions) {
+		this.limitSolutions = limitSolutions;
 	}
 	
 }
