@@ -72,7 +72,10 @@
 			       pattern = '你已输入'+this.count()+'字符（字数统计包含HTML代码。），还可以输入' +  result + '字'; 
 			       }
 			       $('.situation_surplus').html(pattern); //输入显示
-			     } 
+			     },
+			     items : ['fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+						'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+						'insertunorderedlist','file'],
 		});
 		  
 		  var problems = KindEditor.create('textarea[name="problems"]',{
@@ -96,7 +99,10 @@
 			       pattern = '你已输入'+this.count('text')+'字符（字数统计包含HTML代码。），还可以输入' +  result + '字'; 
 			       }
 			       $('.problems_surplus').html(pattern); //输入显示
-			     } 
+			     },
+			     items : ['fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+							'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+							'insertunorderedlist','file'], 
 		});
 		  var solutions = KindEditor.create('textarea[name="solutions"]',{
 			   readonlyMode : false, //只读模式 默认为false
@@ -119,7 +125,10 @@
 			       pattern = '你已输入'+this.count('text')+'字符（字数统计包含HTML代码。），还可以输入' +  result + '字'; 
 			       }
 			       $('.solutions_surplus').html(pattern); //输入显示
-			     } 
+			     },
+			     items : ['fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+							'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+							'insertunorderedlist','file'], 
 		});
 	});
 	
