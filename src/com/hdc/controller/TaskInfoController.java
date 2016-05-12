@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.activiti.engine.ActivitiException;
 import org.apache.commons.fileupload.FileUploadBase.FileSizeLimitExceededException;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +30,6 @@ import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.Project;
 import com.hdc.entity.TaskInfo;
-import com.hdc.entity.User;
 import com.hdc.service.IExcel2TaskInfoService;
 import com.hdc.service.IGroupService;
 import com.hdc.service.ITaskInfoService;
