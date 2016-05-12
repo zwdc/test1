@@ -309,7 +309,7 @@ function refuse() {
 			          {
 			        	  text: '拒绝签收',
 			        	  iconCls: 'icon-remove',
-			        	  id: 'save',
+			        	  id: 'refuseBtn',
 			        	  handler: function () {
 			        		  $('#refuse_form').form('submit',{
 	        					  url: ctx+"/project/refuse",
@@ -322,12 +322,12 @@ function refuse() {
 	        						  if (!isValid) {
 	        							  $.messager.progress('close');
 	        						  } else {
-	        							  if($("#refuseReason").val() == "") {
+	        							  var editor = KindEditor.create("#refuseReason");
+	        							  if(editor.isEmpty()) {
 	        								  $.messager.alert("提示", "请填写拒绝原因！");
 	        								  return false;
 	        							  }
-	        							  $("#save").linkbutton("disable");
-	        							  $("#ok").linkbutton("disable");
+	        							  $("#refuseBtn").linkbutton("disable");
 	        						  }
 	        						  return isValid;
 	        					  },
