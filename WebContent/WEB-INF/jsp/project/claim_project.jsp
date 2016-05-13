@@ -81,6 +81,9 @@
 			editIndex = undefined;
 		}
 	}
+	function formatFeedback(value,row){
+		 return moment(value).format("MM月DD日")+"-"+moment(row.feedbackEndDate).format("MM月DD日");
+	}
 </script>
 <div class="easyui-layout">
 <form id="project_form" method="post">
@@ -157,7 +160,8 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan="4">拟办意见:<textarea class="easyui-kindeditor" name="suggestion" rows="3" >${project.suggestion }</textarea></td>
+		    <td class="text-right">拟办意见:</td>
+			<td colspan="3"><textarea class="easyui-kindeditor" name="suggestion" rows="3" >${project.suggestion }</textarea></td>
 		</tr>
 		<tr>
 			<td class="text-right">阶段性计划:</td>
@@ -166,8 +170,8 @@
 				    <thead>
 						<tr>
 							<th data-options="field:'id',hidden:true">ID</th>
-							<th data-options="field:'workPlanDate'" width="40%">阶段日期</th>
-							<th data-options="field:'workPlan',editor:'text'" width="50%">阶段计划</th>
+							<th data-options="field:'feedbackStartDate'" formatter='formatFeedback' align='center' width="30%">反馈期间</th>
+							<th data-options="field:'workPlan',editor:'text'" width="60%">阶段计划</th>
 						</tr>
 				    </thead>
 				</table>

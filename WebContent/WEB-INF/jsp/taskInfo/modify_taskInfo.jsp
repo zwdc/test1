@@ -314,7 +314,7 @@
 			<td class="text-right">签收时限:</td>
 			<td><input id="claimLimitDate" name="claimLimitDate" class="easyui-datetimebox" data-options="prompt:'选择签收时限',editable:false" value="${taskInfo.claimLimitDate }" required="required"></td>
 			<td class="text-right">办结时限:</td>
-			<td><input id="endTaskDate" name="endTaskDate" class="easyui-datetimebox" data-options="prompt:'选择半截时间',editable:false" value="${taskInfo.endTaskDate }" required="required"></td>
+			<td><input id="endTaskDate" name="endTaskDate" class="easyui-datetimebox" data-options="prompt:'选择办结时间',editable:false" value="${taskInfo.endTaskDate }" required="required"></td>
 		</tr>
 		<tr>
 			<td class="text-right">牵头单位:</td>

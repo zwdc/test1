@@ -85,7 +85,8 @@
 			</td>
 		</tr>
 		<tr>
-			<td colspan="4">拟办意见:<textarea class="easyui-kindeditor" id="suggestion" rows="3" >${project.suggestion }</textarea></td>
+		    <td class="text-right">拟办意见:</td>
+			<td colspan="3"><textarea class="easyui-kindeditor" id="suggestion" rows="3" >${project.suggestion }</textarea></td>
 		</tr>
 		<tr>
 			<td class="text-right">阶段性计划:</td>
@@ -94,7 +95,7 @@
 				    <thead>
 						<tr>
 							<th data-options="field:'id',hidden:true">ID</th>
-							<th data-options="field:'workPlanDate'" width="40%">阶段日期</th>
+							<th data-options="field:'workPlanDate'" width="40%">反馈期间</th>
 							<th data-options="field:'workPlan',editor:'text'" width="50%">阶段计划</th>
 						</tr>
 				    </thead>
