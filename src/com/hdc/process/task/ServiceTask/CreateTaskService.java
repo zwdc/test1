@@ -179,8 +179,9 @@ public class CreateTaskService implements JavaDelegate {
 						    		m_begin.add(Calendar.MONTH, 1);
 						    	}
 						    	
+						    	
 						    	//上面的循环里，不会包括最后一个月，单独计算
-						    	for(String month : monthlyTask.split(",")){
+						    	/*for(String month : monthlyTask.split(",")){
 						    		if(Integer.parseInt(month) == m_end.get(Calendar.MONTH)+1){
 						    			Integer day = m_end.get(Calendar.DAY_OF_MONTH);
 						    			if(day >= monthlyEndDay) { //如过项目的结束时限所规定最后的一天 >= 每月任务选择的 天和日期，则生成反馈表
@@ -202,7 +203,7 @@ public class CreateTaskService implements JavaDelegate {
 						    				this.feedbackService.doAdd(d_feedback);
 						    			}
 						    		}
-						    	}
+						    	}*/
 						    }
 							break;
 						default:

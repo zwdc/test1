@@ -55,12 +55,12 @@ public class ChooseController {
 	public List<Object> chooseGroup(Parameter param) throws Exception{	
 		List<Group> list=this.groupService.getGroupList();
 		List<Object> groupList=new ArrayList<Object>();
-		Map<String, Object> map=new HashMap<>();
+		Map<String, Object> map=new HashMap<String, Object>();
 		for(int i=0;i<list.size();i++){		
 			map.put("col"+i%10, list.get(i));
+			groupList.add(map);
 			if(i%10==9){
-				groupList.add(map);
-				map=new HashMap<>();
+				map=new HashMap<String, Object>();
 			}
 		}
 		return groupList;
