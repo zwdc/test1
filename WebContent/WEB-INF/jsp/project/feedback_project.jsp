@@ -9,19 +9,17 @@
 var feedback_datagrid;
 var feedback_form;
 var feedback_dialog;
-var fb=${feedback};
+var pid=${project.id};
 $(function() {
 	//数据列表
 	feedback_datagrid = $('#feedback_datagrid').datagrid({
-        //url: ctx+"/feedback/getList",
+        url: ctx+'/feedback/getFeedbackByProject?projectId='+pid,
         width : 'auto',
 		height : 'auto',
-		rownumbers:true,
+		rownumbers:true,	
 		border:false,
 		singleSelect:true,
-		data:fb,
 		striped:true,
-		nowrap:false,
         columns : [
              [
               {field: 'status', title: '反馈状态', width: fixWidth(0.08), align: 'center', halign: 'center', sortable: true,
@@ -67,9 +65,7 @@ $(function() {
 	  },
     toolbar: "#feedbacktoolbar"
     });
-	   $("#assistantGroup").kindeditor({readonlyMode: true});
-		$("#remark").kindeditor({readonlyMode: true});
-		$("#suggestion").kindeditor({readonlyMode: true});
+	 
 });
 	//初始化表单
 	function formInit(row,url) {
@@ -172,9 +168,10 @@ $(function() {
 					    	            		    success: function (data) {
 					    	            	            $.messager.progress('close');
 					    	            	            var json = $.parseJSON(data);
+					    	            	            debugger;
 					    	            	            if (json.status) {
 					    	            	            	feedback_dialog.dialog('destroy');//销毁对话框
-					    	            	            	feedback_datagrid.datagrid('reload');//重新加载列表数据
+					    	            	            	feedback_datagrid.datagrid('load');//重新加载列表数据
 					    	            	            } 
 					    	            	            $.messager.show({
 					    	            					title : json.title,

@@ -9,11 +9,11 @@
 var feedback_datagrid;
 var feedback_form;
 var feedback_dialog;
-var fb=${feedback};
+var pid=${project.id}
 $(function() {
 	//数据列表
 	feedback_datagrid = $('#feedback_datagrid').datagrid({
-        //url: ctx+"/feedback/getList",
+        url: ctx+'/feedback/getFeedbackByProject?projectId='+pid,
         width : 'auto',
 		height : 'auto',
 		rownumbers:true,
@@ -69,7 +69,7 @@ $(function() {
     	 feedback_datagrid.datagrid("loadData",fb);
      }*/
     });
-	 feedback_datagrid.datagrid("loadData",fb);
+	// feedback_datagrid.datagrid("loadData",fb);
 	$("#searchbox").searchbox({ 
 		menu:"#searchMenu", 
 		prompt :'模糊查询',
@@ -83,16 +83,6 @@ $(function() {
 	$("#remark").kindeditor({readonlyMode: true});
 	$("#suggestion").kindeditor({readonlyMode: true});
 });
-
-//修正宽高
-function fixHeight(percent) {   
-	return parseInt($(this).height() * percent);
-}
-
-function fixWidth(percent) {   
-	return parseInt(($(this).width() - 50) * percent);
-}
-
 //初始化表单
 function formInit(row,url) {
 	feedback_form = $('#feedback_form').form({
@@ -125,100 +115,6 @@ function formInit(row,url) {
     });
 }
 
-//反馈审核—— 督查人员
-function check(){
-    var row = feedback_datagrid.datagrid('getSelected');
-    if (row) {
-    	feedback_dialog = $('<div/>').dialog({
-	    	title : "反馈信息审核",
-			top: 20,
-			width : fixWidth(0.9),
-			height : 'auto',
-	        modal: true,
-	        minimizable: true,
-	        maximizable: true,
-	        href: ctx+"/feedback/toMain?action=check&id="+row.id,
-	        onLoad: function () {
-	            formInit(row,ctx+"/feedback/checkFeedback");
-	        },
-	        buttons: [
-	            {
-	                text: '保存',
-	                iconCls: 'icon-save',
-	                handler: function () {
-	                	feedback_form.submit();
-	                }
-	            },
-	            {
-	                text: '重置',
-	                iconCls: 'icon-reload',
-	                handler: function () {
-	                	feedback_form.form('clear');
-	                }
-	            },
-	            {
-	                text: '关闭',
-	                iconCls: 'icon-cancel',
-	                handler: function () {
-	                	feedback_dialog.dialog('destroy');
-	                }
-	            }
-	        ],
-	        onClose: function () {
-	        	feedback_dialog.dialog('destroy');
-	        }
-	    });
-    } else {
-        $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
-    }
-}
-//编辑
-function editFeedback() {
-    var row = feedback_datagrid.datagrid('getSelected');
-    if (row) {
-    	feedback_dialog = $('<div/>').dialog({
-	    	title : "反馈信息编辑",
-			top: 20,
-			width : fixWidth(0.9),
-			height : 'auto',
-	        modal: true,
-	        minimizable: true,
-	        maximizable: true,
-	        href: ctx+"/feedback/toMain?action=edit&id="+row.id,
-	        onLoad: function () {
-	            formInit(row,ctx+"/feedback/saveOrUpdate");
-	        },
-	        buttons: [
-	            {
-	                text: '保存',
-	                iconCls: 'icon-save',
-	                handler: function () {
-	                	feedback_form.submit();
-	                }
-	            },
-	            {
-	                text: '重置',
-	                iconCls: 'icon-reload',
-	                handler: function () {
-	                	feedback_form.form('clear');
-	                }
-	            },
-	            {
-	                text: '关闭',
-	                iconCls: 'icon-cancel',
-	                handler: function () {
-	                	feedback_dialog.dialog('destroy');
-	                }
-	            }
-	        ],
-	        onClose: function () {
-	        	feedback_dialog.dialog('destroy');
-	        }
-	    });
-    } else {
-        $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
-    }
-}
 //查看反馈详情
 function detailsFeedback(){
     var row = feedback_datagrid.datagrid('getSelected');
@@ -252,81 +148,10 @@ function detailsFeedback(){
         $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
     }
 }
-//添加
-function addFeedback(){
-	feedback_dialog = $('<div/>').dialog({
-    	title : "反馈信息添加",
-		top: 20,
-		width : fixWidth(0.9),
-		height : 'auto',
-        modal: true,
-        minimizable: true,
-        maximizable: true,
-        href: ctx+"/feedback/toMain?action=add",
-        onLoad: function () {
-            formInit(null,ctx+"/feedback/saveOrUpdate");
-        },
-        buttons: [
-            {
-                text: '保存',
-                iconCls: 'icon-save',
-                handler: function () {
-                	feedback_form.submit();
-                }
-            },
-            {
-                text: '重置',
-                iconCls: 'icon-reload',
-                handler: function () {
-                	feedback_form.form('clear');
-                }
-            },
-            {
-                text: '关闭',
-                iconCls: 'icon-cancel',
-                handler: function () {
-                	feedback_dialog.dialog('destroy');
-                }
-            }
-        ],
-        onClose: function () {
-        	feedback_dialog.dialog('destroy');
-        }
-    });
-}
 
-
-//删除
-function delFeedback() {
-    var row = feedback_datagrid.datagrid('getSelected');
-    if (row) {
-        $.messager.confirm('确认提示！', '您确定要删除选中的数据?', function (result) {
-            if (result) {
-                $.ajax({
-            		async: false,
-            		cache: false,
-                    url: ctx + '/feedback/delete/'+row.id,
-                    type: 'post',
-                    dataType: 'json',
-                    data: {},
-                    success: function (data) {
-                        if (data.status) {
-                        	feedback_datagrid.datagrid('load');
-                        }
-                        $.messager.show({
-        					title : data.title,
-        					msg : data.message,
-        					timeout : 1000 * 2
-        				});
-                    }
-                });
-            }
-        });
-    } else {
-    	$.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
-    }
-}
 </script>
+
+
 <div class="easyui-layout">
     <table id="sales" class="table table-bordered table-condensed">
   		<tr class="bg-primary">

@@ -165,7 +165,7 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 				+ "Left Join act_hi_comment ON act_hi_comment.PROC_INST_ID_ = process_task.pro_inst_id "
 				+ "Inner Join users ON users.USER_ID = process_task.assign "
 				+ " WHERE "
-				+ "task_info_id="+taskInfo_id+" order by project_id";
+				+ "task_info_id="+taskInfo_id+" order by project_id,createDate";
 		return this.jdbcDao.findAll(sql,null);
 	}
 

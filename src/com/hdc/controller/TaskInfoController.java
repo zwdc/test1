@@ -451,7 +451,6 @@ public class TaskInfoController {
 	public ModelAndView getApprovalProcess(@PathVariable("id") Integer id) throws Exception{
    		ModelAndView mv = new ModelAndView("taskInfo/ap_taskInfo");
 		List<Map<String,Object>> list = this.taskInfoService.getApprovalProcess(id);
-		System.out.println(list.get(0));;
 		Datagrid<Map<String,Object>> fbList=new Datagrid<Map<String,Object>>(list.size(),list);
 		Gson gson=new Gson();
 		//在gson转换ArrayList的时候，不能有懒加载的对象		

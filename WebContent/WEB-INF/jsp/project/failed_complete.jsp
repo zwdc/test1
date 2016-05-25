@@ -9,17 +9,16 @@
 var feedback_datagrid;
 var feedback_form;
 var feedback_dialog;
-var fb=${feedback};
+var pid=${project.id};
 $(function() {
 	//数据列表
 	feedback_datagrid = $('#feedback_datagrid').datagrid({
-        //url: ctx+"/feedback/getList",
+		url: ctx+'/feedback/getFeedbackByProject?projectId='+pid,
         width : 'auto',
 		height : 'auto',
 		rownumbers:true,
 		border:false,
 		singleSelect:true,
-		data:fb,
 		striped:true,
 		nowrap:false,
         columns : [

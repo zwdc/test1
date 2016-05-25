@@ -151,16 +151,19 @@ public class ProjectController {
 			if("modify".equals(type)) {
 				mv.setViewName("project/modify_project");
 			} else if("claim".equals(type)) {
+				//签收任务
 				mv.setViewName("project/claim_project");
 				//this.putFbListToProject(mv, project);
 			} else if("approval".equals(type)) {
 				mv.setViewName("project/approval_project");
 			} else if("details".equals(type)) {
+				//查看任务详情
 				mv.setViewName("project/details_project");
-				this.putFbListToProject(mv, project);
+				//this.putFbListToProject(mv, project);
 			} else if("feedback".equals(type)) {
+				//任务反馈
 				mv.setViewName("project/feedback_project");
-				this.putFbListToProject(mv, project);
+				//this.putFbListToProject(mv, project);
 			} else if("approval_refuse".equals(type)) {
 				mv.setViewName("project/approval_refuse_project");
 			} else if("change_failed".equals(type)) {
@@ -171,58 +174,59 @@ public class ProjectController {
 			} else if("complete".equals(type)) {
 				//审批申请办结页面
 				mv.setViewName("project/approval_complete");
-				this.putFbListToProject(mv, project);
+				//this.putFbListToProject(mv, project);
 			} else if("modifyComplete".equals(type)) {
 				//申请办结被驳回的页面
 				List<Comments> commentsList = this.commentsService.findComments(projectId, BusinessForm.PROJECT_COMPLETE.toString());
 				mv.addObject("commentsList", commentsList);
 				mv.setViewName("project/failed_complete");
-				this.putFbListToProject(mv, project);
+				//this.putFbListToProject(mv, project);
 			}
 		}		
     	return mv;
 	}
-	/*
-	 * 将反馈列表添加到项目内容表
-	 * 
-	 */
-	private void putFbListToProject(ModelAndView mv,Project project) throws Exception{	
-    	if(project != null) {
-    		//以下开始装载项目下的反馈列表
-			List<Object> jsonList=new ArrayList<Object>();
-			int fbWL=-1;
-			Date currentDate=new Date();
-			for(FeedbackRecord fb:project.getFbrList()){
-				Map<String, Object> map=new HashMap<String, Object>();
-				map.put("id", fb.getId());				
-				if(currentDate.before(fb.getFeedbackStartDate()) && fb.getStatus()==null){
-					fbWL=0;//未到反馈期
-				}else if(currentDate.after(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null&&fb.getStatus()==null){
-					fbWL=2;//红色警告
-				}else if(currentDate.after(fb.getFeedbackStartDate())&&currentDate.before(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
-					fbWL=1;//黄色警告
-				}
-				map.put("warningLevel", fbWL);
-				map.put("feedbackStartDate", fb.getFeedbackStartDate());
-				map.put("feedbackEndDate", fb.getFeedbackEndDate());
-				map.put("groupName", fb.getProject().getGroup().getName());
-				if(fb.getFeedbackUser()!=null){
-					map.put("feedbackUser", fb.getFeedbackUser().getName());
-				}else{
-					map.put("feedbackUser", "--");
-				}				
-				map.put("feedbackDate", fb.getFeedbackDate());
-				map.put("status", fb.getStatus());
-				map.put("refuseCount", fb.getRefuseCount());
-				map.put("delayCount", fb.getDelayCount());
-				jsonList.add(map);
-			}
-			Datagrid<Object> fbList=new Datagrid<Object>(jsonList.size(),jsonList);
-			Gson gson=new Gson();
-			//在gson转换ArrayList的时候，不能有懒加载的对象		
-			mv.addObject("feedback",gson.toJson(fbList));
-		}
-	}
+//	/*
+//	 * 将反馈列表添加到项目内容表  ——feedback的获取还得用url方法，直接显示的不行
+//	 * 
+	
+//	 */
+//	private void putFbListToProject(ModelAndView mv,Project project) throws Exception{	
+//    	if(project != null) {
+//    		//以下开始装载项目下的反馈列表
+//			List<Object> jsonList=new ArrayList<Object>();
+//			int fbWL=-1;
+//			Date currentDate=new Date();
+//			for(FeedbackRecord fb:project.getFbrList()){
+//				Map<String, Object> map=new HashMap<String, Object>();
+//				map.put("id", fb.getId());				
+//				if(currentDate.before(fb.getFeedbackStartDate()) && fb.getStatus()==null){
+//					fbWL=0;//未到反馈期
+//				}else if(currentDate.after(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null&&fb.getStatus()==null){
+//					fbWL=2;//红色警告
+//				}else if(currentDate.after(fb.getFeedbackStartDate())&&currentDate.before(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
+//					fbWL=1;//黄色警告
+//				}
+//				map.put("warningLevel", fbWL);
+//				map.put("feedbackStartDate", fb.getFeedbackStartDate());
+//				map.put("feedbackEndDate", fb.getFeedbackEndDate());
+//				map.put("groupName", fb.getProject().getGroup().getName());
+//				if(fb.getFeedbackUser()!=null){
+//					map.put("feedbackUser", fb.getFeedbackUser().getName());
+//				}else{
+//					map.put("feedbackUser", "--");
+//				}				
+//				map.put("feedbackDate", fb.getFeedbackDate());
+//				map.put("status", fb.getStatus());
+//				map.put("refuseCount", fb.getRefuseCount());
+//				map.put("delayCount", fb.getDelayCount());
+//				jsonList.add(map);
+//			}
+//			Datagrid<Object> fbList=new Datagrid<Object>(jsonList.size(),jsonList);
+//			Gson gson=new Gson();
+//			//在gson转换ArrayList的时候，不能有懒加载的对象		
+//			mv.addObject("feedback",gson.toJson(fbList));
+//		}
+//	}
 	
 	/**
 	 * 更新操作--添加建议

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.hdc.entity.Comments;
 import com.hdc.entity.Datagrid;
 import com.hdc.entity.FeedbackAtt;
@@ -102,6 +103,42 @@ public class FeedbackController {
 			jsonList.add(map);
 		}
 		return new Datagrid<Object>(page.getTotal(),jsonList);
+	}
+	/**
+	 * 根据projectId查询反馈列表 分页
+	 * @param projectId
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping("/getFeedbackByProject")
+	@ResponseBody
+	public Datagrid<Object> getList(@RequestParam("projectId") Integer projectId) throws Exception {	
+		List<FeedbackRecord> fbList=this.feedbackService.findByProjectId(projectId);
+		List<Object> jsonList=new ArrayList<Object>(); 
+		int fbWL=0;
+		Date currentDate=new Date();
+		for(FeedbackRecord fb:fbList){
+			Map<String, Object> map=new HashMap<String, Object>();
+			map.put("id", fb.getId());		
+			if(currentDate.before(fb.getFeedbackStartDate()) && fb.getFeedbackDate()==null){
+				fbWL=0;//未到反馈期
+			}else if(currentDate.after(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
+				fbWL=2;//红色警告
+			}else if(currentDate.after(fb.getFeedbackStartDate())&&currentDate.before(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
+				fbWL=1;//黄色警告
+			}		
+			map.put("warningLevel", fbWL);
+			map.put("feedbackStartDate", fb.getFeedbackStartDate());
+			map.put("feedbackEndDate", fb.getFeedbackEndDate());
+			map.put("groupName", fb.getProject().getGroup().getName());
+			map.put("createUser", fb.getCreateUser().getName());
+			map.put("feedbackDate", fb.getFeedbackDate());
+			map.put("status", fb.getStatus());
+			map.put("refuseCount", fb.getRefuseCount());
+			map.put("delayCount", fb.getDelayCount());
+			jsonList.add(map);
+		}
+		return new Datagrid<Object>(jsonList.size(),jsonList);
 	}
 	
 	/**
@@ -346,30 +383,7 @@ public class FeedbackController {
 		return mv;
 	} 
 	
-	/**
-	 * 根据projectId查询反馈列表
-	 * @param projectId
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping("/getFeedbackByProject")
-	@ResponseBody
-	public List<Map<String, Object>> getList(@RequestParam("projectId") Integer projectId) throws Exception {
-		List<FeedbackRecord> list = this.feedbackService.findByProjectId(projectId);
-		List<Map<String, Object>> jsonList = new ArrayList<Map<String, Object>>();
-		for(FeedbackRecord feedback : list) {
-			Map<String, Object> map = new HashMap<String, Object>();
-			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			String feedbackStartDate = sf.format(feedback.getFeedbackStartDate());
-			String feedbackEndDate = sf.format(feedback.getFeedbackEndDate());
-			map.put("id", feedback.getId());
-			map.put("workPlanDate", feedbackStartDate+" - "+feedbackEndDate);
-			map.put("workPlan", feedback.getWorkPlan());
-			jsonList.add(map);
-		}
-		return jsonList;
-	}
-	
+
 	/**
 	 * 添加阶段性任务计划
 	 * @param feedbackId

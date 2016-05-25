@@ -83,6 +83,13 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 		String hql = "from FeedbackRecord where taskInfo.id = " + id +" and isDelete = 0 order by createDate ASC";
 		return this.baseService.find(hql);
 	}
+	
+	@Override
+	public List<FeedbackRecord> findByProjectId(Integer projectId)
+			throws Exception {
+		String hql = "from FeedbackRecord where project.id = " + projectId +" order by createDate ASC";
+		return this.baseService.find(hql);
+	}
 
 	@Override
 	public Serializable doAdd(FeedbackRecord feedback) throws Exception {
@@ -241,15 +248,6 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 		String hql = "update FeedbackRecord set isDelete = 1 where id = " + id.toString();
 		this.baseService.executeHql(hql);
 	}
-
-	@Override
-	public List<FeedbackRecord> findByProjectId(Integer projectId)
-			throws Exception {
-		String hql = "from FeedbackRecord where project.id = " + projectId +" order by createDate ASC";
-		return this.baseService.find(hql);
-	}
-	
-	
 
 	@Override
 	public void doStartProcess(FeedbackRecord fb) throws Exception {
