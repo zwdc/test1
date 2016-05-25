@@ -37,6 +37,7 @@ import com.hdc.util.BeanUtilsExt;
 import com.hdc.util.Constants;
 import com.hdc.util.Constants.ApprovalStatus;
 import com.hdc.util.Constants.FeedbackStatus;
+import com.hdc.util.DateUtil;
 import com.hdc.util.upload.FileUploadUtils;
 import com.hdc.util.upload.exception.InvalidExtensionException;
 import com.uwantsoft.goeasy.client.goeasyclient.GoEasy;
@@ -63,12 +64,20 @@ public class TaskInfoController {
 	private IExcel2TaskInfoService excel2TaskInfoService;
 	
 	/**
-	 * 跳转列表页面
+	 * 跳转任务管理页面,显示所有页面
 	 * @return
 	 */
 	@RequestMapping("/toList")
 	public String toList() {
 		return "taskInfo/list_taskInfo";
+	}
+	/**
+	 * 跳转历年统计页面
+	 * @return
+	 */
+	@RequestMapping("/toHistoryList")
+	public String toHistoryList() {
+		return "taskInfo/list_taskInfo_history";
 	}
 	
 	/**
@@ -194,17 +203,23 @@ public class TaskInfoController {
     } 
 	
 	/**
-	 * 获取列表分页数据
+	 * 获取当年列表分页数据
 	 * @param param
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping("/getList")
+	@RequestMapping(value = "/getList/{type}")
 	@ResponseBody
-	public Datagrid<Object> getList(Parameter param) throws Exception{
+	public Datagrid<Object> getList(Parameter param,@PathVariable("type") String type) throws Exception{
 		Page<TaskInfo> page = new Page<TaskInfo>(param.getPage(), param.getRows());
 		Map<String, Object> m = new HashMap<String, Object>();
-		List<TaskInfo> list = this.taskInfoService.getListPage(param, page, m);
+		List<TaskInfo>  list=null;
+		if("thisYear".equals(type)){//如果type==1,那么就显示本年度的任务，否则显示历年的任务
+			list = this.taskInfoService.getThisYearListPage(param, page, m);
+		}else{
+			list = this.taskInfoService.getPastYearListPage(param, page, m);
+		}		
+		//List<TaskInfo> list = this.taskInfoService.getListPage(param, page, m);
 		List<Object> jsonList=new ArrayList<Object>(); 
 		for(TaskInfo task : list) {
 			Map<String, Object> map=new HashMap<String, Object>();
@@ -213,6 +228,7 @@ public class TaskInfoController {
 			map.put("info", task.getInfo());
 			map.put("createTaskDate", task.getCreateTaskDate());
 			map.put("endTaskDate", task.getEndTaskDate());
+			map.put("endYear", task.getEndTaskDate());
 			map.put("taskSourceName", task.getTaskSource().getName()); 	//任务来源
 			map.put("fbFrequencyName", task.getFbFrequency().getName());//反馈频度
 			map.put("urgency", task.getUrgency());	//急缓程度
@@ -238,7 +254,6 @@ public class TaskInfoController {
 		}
 		return new Datagrid<Object>(page.getTotal(), jsonList);
 	}
-	
 	/**
 	 * 添加或修改
 	 * @param taskInfo
@@ -458,7 +473,14 @@ public class TaskInfoController {
 		return mv;
 	}
 	   
-   	
+   	/**
+	 * 跳转到查询页面
+	 * @return
+	 */
+	@RequestMapping(value = "/taskInfoSearch")
+	public String taskInfoSearch(){
+		return "taskInfo/search";
+	}
    	
    	
    	

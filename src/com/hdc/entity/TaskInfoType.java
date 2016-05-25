@@ -59,6 +59,9 @@ public class TaskInfoType implements Serializable {
 	
 	@Column(name = "limit_solutions")
 	private Integer limitSolutions;//解决措施字数限制
+	
+	@Column(name = "isRefuse")
+	private Integer isRefuse;//可否拒签收  1可 0否
 
 	public Integer getId() {
 		return id;
@@ -110,6 +113,14 @@ public class TaskInfoType implements Serializable {
 
 	public Integer getLimitProblems() {
 		return limitProblems;
+	}
+
+	public Integer getIsRefuse() {
+		return isRefuse;
+	}
+
+	public void setIsRefuse(Integer isRefuse) {
+		this.isRefuse = isRefuse;
 	}
 
 	public void setLimitProblems(Integer limitProblems) {

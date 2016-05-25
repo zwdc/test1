@@ -26,6 +26,7 @@ import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.Project;
+import com.hdc.entity.TaskInfoType;
 import com.hdc.service.ICommentsService;
 import com.hdc.service.IFeedbackRecordService;
 import com.hdc.service.IProjectService;
@@ -86,14 +87,10 @@ public class ProjectController {
 			message.setMessage("获取反馈对象失败");
 		} else {
 			Project project=this.projectService.findById(projectId);
-			Integer taskInfoType=project.getTaskInfo().getTaskSource().getTaskInfoType().getId();
-			if(taskInfoType==1){
+			TaskInfoType taskInfoType=project.getTaskInfo().getTaskSource().getTaskInfoType();
+			if(taskInfoType.getIsRefuse()==0){
 				message.setTitle("提示");
-				message.setMessage("政府工作报告，不能提出异议！");
-				message.setStatus(false);
-			}else if(taskInfoType==2){
-				message.setTitle("提示");
-				message.setMessage("政府工作报告，不能提出异议！");
+				message.setMessage(taskInfoType.getName()+"，不能提出异议！");
 				message.setStatus(false);
 			}else{
 				message.setStatus(true);

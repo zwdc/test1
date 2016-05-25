@@ -78,10 +78,10 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
         
         //高级查询
         if(StringUtils.isNotBlank(param.getSearchColumnNames())){
-	        String[] searchColumnNameArray=param.getSearchColumnNames().split(",");
-			String[] searchAndsArray=param.getSearchAnds().split(",");
-			String[] searchConditionsArray=param.getSearchConditions().split(",");
-			String[] searchValsArray=param.getSearchVals().split(",");
+	        String[] searchColumnNameArray=param.getSearchColumnNames().split(","); //字段名称
+			String[] searchAndsArray=param.getSearchAnds().split(",");              //与、或关系
+			String[] searchConditionsArray=param.getSearchConditions().split(",");  //条件 >  <
+			String[] searchValsArray=param.getSearchVals().split(",");              //值
 			StringBuffer gradeSearch = new StringBuffer();  
 			
 			if(searchColumnNameArray.length >0 ){
@@ -90,13 +90,13 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 						String value=searchValsArray[i].trim().replaceAll("\'", "");
 						if ("like".equals(searchConditionsArray[i].trim())){
 							if(searchColumnNameArray[i].trim().toLowerCase().indexOf("date") >= 0){
-								gradeSearch.append(" " + searchAndsArray[i].trim() + " to_char(a." + searchColumnNameArray[i].trim() + ", 'yyyy-MM-dd') " + searchConditionsArray[i].trim() + " " +"'%"+ value+"%'");
+								gradeSearch.append(" " + searchAndsArray[i].trim() + " date_format(a." + searchColumnNameArray[i].trim() + ", '%Y-%m-%d') " + searchConditionsArray[i].trim() + " " +"'%"+ value+"%'");
 							}else{
 								gradeSearch.append(" " + searchAndsArray[i].trim() + " a." + searchColumnNameArray[i].trim() + " " + searchConditionsArray[i].trim() + " " +"'%"+ value+"%'");
 							}
 						}else {
 							if(searchColumnNameArray[i].trim().toLowerCase().indexOf("date") >= 0){
-								gradeSearch.append(" " + searchAndsArray[i].trim() + " to_char(a." + searchColumnNameArray[i].trim() + ", 'yyyy-MM-dd') " + searchConditionsArray[i].trim() + " " +"'"+ value+"'");
+								gradeSearch.append(" " + searchAndsArray[i].trim() + " date_format(a." + searchColumnNameArray[i].trim() + ", '%Y-%m-%d') " + searchConditionsArray[i].trim() + " " +"'"+ value+"'");
 							}else{
 								gradeSearch.append(" " + searchAndsArray[i].trim() + " a." + searchColumnNameArray[i].trim() + " " + searchConditionsArray[i].trim() + " " +"'"+ value+"'");
 							}
@@ -168,13 +168,13 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 						String value=searchValsArray[i].trim().replaceAll("\'", "");
 						if ("like".equals(searchConditionsArray[i].trim())){
 							if(searchColumnNameArray[i].trim().toLowerCase().indexOf("date") >= 0){
-								gradeSearch.append(" " + searchAndsArray[i].trim() + " to_char(a." + searchColumnNameArray[i].trim() + ", 'yyyy-MM-dd') " + searchConditionsArray[i].trim() + " " +"'%"+ value+"%'");
+								gradeSearch.append(" " + searchAndsArray[i].trim() + " date_format(a." + searchColumnNameArray[i].trim() + ", '%Y-%m-%d') " + searchConditionsArray[i].trim() + " " +"'%"+ value+"%'");
 							}else{
 								gradeSearch.append(" " + searchAndsArray[i].trim() + " a. " + searchColumnNameArray[i].trim() + " " + searchConditionsArray[i].trim() + " " +"'%"+ value+"%'");
 							}
 						}else {
 							if(searchColumnNameArray[i].trim().toLowerCase().indexOf("date") >= 0){
-								gradeSearch.append(" " + searchAndsArray[i].trim() + " to_char(a." + searchColumnNameArray[i].trim() + ", 'yyyy-MM-dd') " + searchConditionsArray[i].trim() + " " +"'"+ value+"'");
+								gradeSearch.append(" " + searchAndsArray[i].trim() + " date_format(a." + searchColumnNameArray[i].trim() + ", '%Y-%m-%d') " + searchConditionsArray[i].trim() + " " +"'"+ value+"'");
 							}else{
 								gradeSearch.append(" " + searchAndsArray[i].trim() + " a. " + searchColumnNameArray[i].trim() + " " + searchConditionsArray[i].trim() + " " +"'"+ value+"'");
 							}

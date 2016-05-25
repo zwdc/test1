@@ -172,6 +172,7 @@ public class CreateTaskService implements JavaDelegate {
 						    				//延期次数和退回次数置0
 						    				m_feedback.setDelayCount(0);
 						    				m_feedback.setRefuseCount(0);
+						    				System.out.println("弄一次");
 							    			this.feedbackService.doAdd(m_feedback);
 							    			break;
 						    			}
@@ -199,6 +200,7 @@ public class CreateTaskService implements JavaDelegate {
 						    				//延期次数和退回次数置0
 						    				d_feedback.setDelayCount(0);
 						    				d_feedback.setRefuseCount(0);
+						    				System.out.println("再弄一次");
 						    				this.feedbackService.doAdd(d_feedback);
 						    			}
 						    		}

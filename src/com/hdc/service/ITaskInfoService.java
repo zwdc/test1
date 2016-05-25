@@ -20,6 +20,23 @@ public interface ITaskInfoService {
 	public List<TaskInfo> getListPage(Parameter param, Page<TaskInfo> page, Map<String, Object> map) throws Exception;
 	
 	/**
+	 * 获取本年的任务列表
+	 * @param param
+	 * @param page
+	 * @return
+	 * @throws Exception
+	 */
+	public List<TaskInfo> getThisYearListPage(Parameter param, Page<TaskInfo> page, Map<String, Object> map) throws Exception;
+	/**
+	 * 获取往年的任务列表
+	 * @param param
+	 * @param page
+	 * @return
+	 * @throws Exception
+	 */
+	public List<TaskInfo> getPastYearListPage(Parameter param, Page<TaskInfo> page, Map<String, Object> map) throws Exception;
+	
+	/**
 	 * 通过id获取TaskInfo
 	 * @param id
 	 * @return

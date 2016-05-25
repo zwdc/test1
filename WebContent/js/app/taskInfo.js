@@ -6,7 +6,7 @@ var taskInfo_form;
 var taskInfo_dialog;
 $(function(){
 	taskInfo_datagrid=$('#taskInfo_datagrid').datagrid({
-		url:ctx+"/taskInfo/getList",	//路径访问后台方法获取数据
+		url:ctx+"/taskInfo/getList/thisYear",	//路径访问后台方法获取数据
 		width:'auto',					//宽度自适应
 		height:fixHeight(1),			//高度自适应
 		fitColumns:true,
@@ -96,7 +96,7 @@ function searchRemove(curr) {
 } 
 //高级查询
 function gradeSearch() {
-	jqueryUtil.gradeSearch(taskInfo_datagrid, "#invoiceSearch", "/invoice/invoiceSearch");
+	jqueryUtil.gradeSearch(taskInfo_datagrid, "#taskInfoSearch", "/taskInfo/taskInfoSearch");
 }
 
 //修正宽高

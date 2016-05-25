@@ -15,6 +15,55 @@ import java.util.Date;
 public class DateUtil {
 	static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	
+	  /** 
+     * 获取当年的第一天 
+     * @param year 
+     * @return 
+     */  
+    public static String getCurrYearFirst(){  
+        Calendar currCal=Calendar.getInstance();    
+        int currentYear = currCal.get(Calendar.YEAR);  
+        return getYearFirst(currentYear);  
+    }  
+      
+    /** 
+     * 获取当年的最后一天 
+     * @param year 
+     * @return 
+     */  
+    public static String getCurrYearLast(){  
+        Calendar currCal=Calendar.getInstance();    
+        int currentYear = currCal.get(Calendar.YEAR);  
+        return getYearLast(currentYear);  
+    }  
+	  /** 
+     * 获取某年第一天日期 
+     * @param year 年份 
+     * @return Date 
+     */  
+    public static String getYearFirst(int year){  
+        Calendar calendar = Calendar.getInstance();  
+        calendar.clear();  
+        calendar.set(Calendar.YEAR, year);  
+        Date currYearFirst = calendar.getTime();  
+        return sdf.format(currYearFirst);  
+    }  
+      
+    /** 
+     * 获取当年最后一天日期 
+     * @param year 年份 
+     * @return Date 
+     */  
+    public static String getYearLast(int year){  
+        Calendar calendar = Calendar.getInstance();  
+        calendar.clear();  
+        calendar.set(Calendar.YEAR, year);  
+        calendar.roll(Calendar.DAY_OF_YEAR, -1);  
+        Date currYearLast = calendar.getTime();           
+        return sdf.format(currYearLast);  
+    }  
+  
+	
 	public static Date StringToDate(String dateString,String formatString){
 		try {
 			DateFormat fm = new SimpleDateFormat(formatString);

@@ -25,18 +25,15 @@
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="del();">删除</a>
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="multiInsert();">批量创建任务</a>
 					</shiro:hasRole>
-
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="details();">详情</a>
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="approvalPrcess();">查看审批流程</a>
-
-					<!-- <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="publishMessage();">发送</a> -->
 				</td>
 				<td style="padding-left:5px;">
 					<input id="searchbox" type="text"/>
 				</td>
-				<!-- <td style="padding-left:5px">
-					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="invoiceSearch();">高级查询</a>
-				</td> -->
+				<td style="padding-left:5px">
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-large-chart',plain:true" onclick="invoiceSearch();">本年度完成情况统计</a>
+				</td>
 			</tr>
 		</table>
 	</div>

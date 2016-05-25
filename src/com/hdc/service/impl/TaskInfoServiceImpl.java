@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ import com.hdc.service.ITaskInfoService;
 import com.hdc.service.ITaskSourceService;
 import com.hdc.util.Constants.ApprovalStatus;
 import com.hdc.util.Constants.BusinessForm;
+import com.hdc.util.DateUtil;
 import com.hdc.util.UserUtil;
 
 @Service
@@ -43,6 +45,36 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 	@Autowired
 	private IProcessTaskService processTaskService;
 	
+	@Override
+	public List<TaskInfo> getThisYearListPage(Parameter param, Page<TaskInfo> page, Map<String, Object> map) throws Exception {
+		if(StringUtils.isNotBlank(param.getSearchColumnNames())&&param.getSearchColumnNames().length()>0){
+			param.setSearchColumnNames(param.getSearchColumnNames()+",endTaskDate");
+			param.setSearchAnds(param.getSearchAnds()+",and");
+			param.setSearchConditions(param.getSearchConditions()+",>");
+			param.setSearchVals(param.getSearchVals()+",\'"+DateUtil.getCurrYearFirst()+"\'");
+		}else{
+			param.setSearchColumnNames("endTaskDate");
+			param.setSearchAnds("and");
+			param.setSearchConditions(">");
+			param.setSearchVals("\'"+DateUtil.getCurrYearFirst()+"\'");
+		}
+		return this.baseService.findListPage("TaskInfo", param, map, page, true);
+	}
+	@Override
+	public List<TaskInfo> getPastYearListPage(Parameter param, Page<TaskInfo> page, Map<String, Object> map) throws Exception {
+		if(StringUtils.isNotBlank(param.getSearchColumnNames())&&param.getSearchColumnNames().length()>0){
+			param.setSearchColumnNames(param.getSearchColumnNames()+",endTaskDate");
+			param.setSearchAnds(param.getSearchAnds()+",and");
+			param.setSearchConditions(param.getSearchConditions()+",<");
+			param.setSearchVals(param.getSearchVals()+",\'"+DateUtil.getCurrYearFirst()+"\'");
+		}else{
+			param.setSearchColumnNames("endTaskDate");
+			param.setSearchAnds("and");
+			param.setSearchConditions("<");
+			param.setSearchVals("\'"+DateUtil.getCurrYearFirst()+"\'");
+		}
+		return this.baseService.findListPage("TaskInfo", param, map, page, true);
+	}
 	@Override
 	public List<TaskInfo> getListPage(Parameter param, Page<TaskInfo> page, Map<String, Object> map) throws Exception {
 		return this.baseService.findListPage("TaskInfo", param, map, page, true);

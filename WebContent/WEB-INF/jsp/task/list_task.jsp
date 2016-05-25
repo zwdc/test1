@@ -38,10 +38,10 @@
 			<tr>
 				<td style="padding-left:2px">
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="handleTask();">办理</a>
-					<!-- <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="claimTask();">签收</a> -->
+					<!-- <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="claimTask();">签收</a> 
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="transferTask();">转办</a>
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="delegateTask();">委派</a>
-					<!-- <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="jumpTask();">跳转</a> -->
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true" onclick="jumpTask();">跳转</a> -->
 				</td>
 				<td style="padding-left:2px;width:100px"></td>
 				<td style="padding-left:2px" class="text-right">
