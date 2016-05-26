@@ -50,16 +50,7 @@ function showToDoTask(map){
 		nowrap:false,
 		columns : [ 
 		    [ 
-				{field : 'assign',title : '任务状态',width : fixWidth(0.05),align : 'center',
-					formatter:function(value, row){
-						if(value == null){
-							return "待签收";
-						}else{
-							return "待办理";  
-						}
-					}
-				},
-                {field : 'taskTitle',title : '任务内容',width : fixWidth(0.35),align : 'center'},
+				{field : 'taskTitle',title : '任务内容',width : fixWidth(0.35),align : 'center'},
                 {field : 'taskInfoType',title : '任务类型',width : fixWidth(0.1),align : 'center'},
                 {field : 'applyUserName',title : '申请人',width : fixWidth(0.06),align : 'center'},                
                 {field : 'title',title : '任务描述',width : fixWidth(0.18),align : 'center'},

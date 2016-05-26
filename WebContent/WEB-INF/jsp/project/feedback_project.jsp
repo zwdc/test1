@@ -106,9 +106,9 @@ $(function() {
 	  var row = feedback_datagrid.datagrid('getSelected');
 	  var flag=false;
 	  if(row){
-		  if(row.warningLevel==4){
+		  if(row.status=="ACCEPT"){
 			  $.messager.alert("提示", "本次反馈已被采用，不可重复反馈！");
-		  }else if(row.warningLevel==5){
+		  }else if(row.status=="FEEDBACKING"){
 			  $.messager.alert("提示", "本反馈已提交审核，不可重复提交");
 		  }else{
 				$.ajax({
@@ -203,6 +203,7 @@ $(function() {
 					            }
 					        ],
 					        onClose: function () {
+					        	
 					        	feedback_dialog.dialog('destroy');
 					        }
 					    });

@@ -30,6 +30,7 @@ $(function(){
 				{field: 'STATUS',title: '状态',width:fixWidth(0.07),align:'center', halign:'center',sortable:true,
 	            	  formatter:function(value, row){
 	            		  switch (value) {
+	            		    
 							case "REFUSE_CLAIM":
 								return "<span class='text-danger'>拒绝签收</span>";
 							case "WAIT_FOR_CLAIM":

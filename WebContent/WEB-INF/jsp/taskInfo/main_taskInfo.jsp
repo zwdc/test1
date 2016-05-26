@@ -80,12 +80,13 @@
 		
 		var hostGroup = $('#hostGroupDatagrid').datagrid({
 			toolbar: [{
-				text:'添加牵头单位',
+				text:'选择牵头单位',
 				iconCls: 'icon-add',
 				handler: function(){
 					chooseHostGroup();
 				}
-			},'-',{
+			}
+		/* 	,'-',{
 				text:'删除单位',
 				iconCls: 'icon-remove',
 				handler: function(){
@@ -114,7 +115,8 @@
 				    	$.messager.alert("提示", "您未勾选任何操作对象，请勾选一行数据！");
 				    }
 				}
-			}]
+			} */
+			]
 		});
 	});
 	
@@ -134,16 +136,14 @@
 	            group_datagrid = $('#group_datagrid').datagrid({
 	                url: ctx+"/choose/chooseGroup",
 	                width : 'auto',
-	        		height :  $(this).height()-40,
-	        		pagination:true,
+	        		height :'auto',
 	        		rownumbers:true,
 	        		border:false,
 	        		striped:true,
 	                columns : [ 
 	                    [ 
 	                      {field:'ck', title : '#',width : ($(this).width() - 50) * 0.1,align : 'center',checkbox:true},
-	                      {field : 'name',title : '单位名称',width : ($(this).width() - 50) * 0.45,align : 'center'},
-	                      {field : 'type',title : '单位类型',width : ($(this).width() - 50) * 0.45,align : 'center'}
+	                      {field : 'name',title : '单位名称',width : ($(this).width() - 50) * 0.45,align : 'center'}
 	            	    ] 
 	                ]
 	            });

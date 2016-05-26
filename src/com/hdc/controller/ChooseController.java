@@ -52,10 +52,8 @@ public class ChooseController {
 	 */
 	@RequestMapping(value = "/chooseGroup")
 	@ResponseBody
-	public Datagrid<Group> chooseGroup(Parameter param) throws Exception{
-		Page<Group> page = new Page<Group>(param.getPage(), param.getRows());
-		this.groupService.getGroupListPage(param, page);
-		return new Datagrid<Group>(page.getTotal(), page.getResult());
+	public Datagrid<Group> chooseGroup(Parameter param) throws Exception{		
+		return new Datagrid<Group>(null,this.groupService.getGroupList());
 		
 	}
 	

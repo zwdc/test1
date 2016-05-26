@@ -117,12 +117,12 @@ public class ProjectController {
 			message.setMessage("获取反馈对象失败");
 		} else {
 			Project project=this.projectService.findById(projectId);
-			if(!Constants.ProjectStatus.CAN_BE_FINISHED.equals(project.getStatus())){//如果不是可办结状态，就反馈false
+			if(!Constants.ProjectStatus.CAN_BE_FINISHED.toString().equals(project.getStatus())){//如果不是可办结状态，就反馈false
 				message.setTitle("提示");
 				message.setStatus(false);
 				message.setMessage("存在未采用的反馈信息，不能申请办结");
 			}
-		}		
+		}
 		return message;
 //			Set<FeedbackRecord> fbrList=project.getFbrList();
 //			Iterator<FeedbackRecord> it=fbrList.iterator();
@@ -278,21 +278,26 @@ public class ProjectController {
 				Set<FeedbackRecord> fbSet=project.getFbrList();
 			    Iterator<FeedbackRecord> iter = fbSet.iterator();
 			    FeedbackRecord fbr=null;
+			    boolean flag=false;
 				while(iter.hasNext()){
 					fbr=(FeedbackRecord)iter.next();
 					if(fbr.getFeedbackDate()==null && fbr.getStatus()==null){
+						flag=true;
 						break;
 					}
 				 }	
-				if(currentDate.before(fbr.getFeedbackStartDate()) && fbr.getStatus()==null){
-					fbWL=0;//未到反馈期
-				}else if(currentDate.after(fbr.getFeedbackEndDate())&&fbr.getFeedbackDate()==null&&fbr.getStatus()==null){
-					fbWL=2;//红色警告
-				}else if(currentDate.after(fbr.getFeedbackStartDate())&&currentDate.before(fbr.getFeedbackEndDate())&&fbr.getFeedbackDate()==null){
-					fbWL=1;//黄色警告
+				if(flag==true){
+					if(currentDate.before(fbr.getFeedbackStartDate()) && fbr.getStatus()==null){
+						fbWL=0;//未到反馈期
+					}else if(currentDate.after(fbr.getFeedbackEndDate())&&fbr.getFeedbackDate()==null&&fbr.getStatus()==null){
+						fbWL=2;//红色警告
+					}else if(currentDate.after(fbr.getFeedbackStartDate())&&currentDate.before(fbr.getFeedbackEndDate())&&fbr.getFeedbackDate()==null){
+						fbWL=1;//黄色警告
+					}
+					map.put("warningLevel", fbWL);			
+					map.put("fbStatus", fbr.getStatus());
 				}
-				map.put("warningLevel", fbWL);
-				map.put("fbStatus", fbr.getStatus());
+
 				jsonList.add(map);
 			}
 		}else{//显示已办结的项目页面

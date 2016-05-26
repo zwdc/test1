@@ -27,19 +27,6 @@ $(function(){
 					  } 
 				 }
 				},
-				{field: 'fbstatus',title: '最近反馈',width:fixWidth(0.08),align:'center', halign:'center',sortable:true,
-					formatter:function(value){
-	            		  if (value==null) {           			
-	                      	  return "未反馈";
-	                      }else if(value=="FEEDBACKING"){
-	                    	  return "反馈中"; 
-	                      }else if(value=="ACCEPT"){
-	                    	  return "已采用"; 
-	                      }else if(value=="RETURNED"){
-	                    	  return "被退回"; 
-	                      }
-	            	  }
-	             },
 		     	{field:'TITLE',title:'任务内容',width:fixWidth(0.3),align:'left',halign:'center'},
 		     	{field:'SOURCE_NAME',title:'任务来源',width:fixWidth(0.2),align:'center'},
 		     	{field:'GROUP_NAME',title:'承办单位',width:fixWidth(0.1),align:'center'},
@@ -53,12 +40,20 @@ $(function(){
 		     	{field: 'STATUS',title: '状态',width:fixWidth(0.07),align:'center', halign:'center',sortable:true,
 	            	  formatter:function(value, row){
 	            		  switch (value) {
+	            		    case "IN_HANDLING":
+								return "<span class='text-danger'>办理中</span>";
+	            		    case "CAN_BE_FINISHED":
+								return "<span class='text-danger'>可办结</span>";
 							case "APPLY_FINISHED":
 								return "<span class='text-primary'>申请办结中</span>";
 							case "APPROVAL_SUCCESS":
 								return "<span class='text-success'>审批通过</span>";
 							case "APPROVAL_FAILED":
 								return "<span class='text-danger'>审批失败</span>";
+							case "WAITING_FOR_APPROVAL":
+								return "<span class='text-warning'>待申请审批</span>";
+							case "PENDING":
+								return "<span class='text-primary'>审批中</span>";
 							case "REAPPROVAL":
 								return "<span class='text-danger'>需要重新审批</span>";
 							default:
@@ -70,7 +65,7 @@ $(function(){
 		],
 		rowStyler:function(index,row){
 			  if (row.warningLevel=="1") {           			
-	            return 'background-color:yellow;color:white';
+	            return 'background-color:yellow;color:black';
 	         }else if(row.warningLevel=="2"){
 	       	    return 'background-color:red;color:white';
 	         }
@@ -169,6 +164,7 @@ function showTaskInfo(){
               }
             ],
             onClose: function () {
+            	project_datagrid.datagrid('load');
             	project_dialog.dialog('destroy');
             }
         });
