@@ -107,12 +107,16 @@ public class ProjectController {
 			for(FeedbackRecord fb:project.getFbrList()){
 				Map<String, Object> map=new HashMap<String, Object>();
 				map.put("id", fb.getId());				
-				if(currentDate.before(fb.getFeedbackStartDate())){
+				if(currentDate.before(fb.getFeedbackStartDate()) && fb.getStatus()==null){
 					fbWL=0;//未到反馈期
 				}else if(currentDate.after(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
 					fbWL=2;//红色警告
 				}else if(currentDate.after(fb.getFeedbackStartDate())&&currentDate.before(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
 					fbWL=1;//黄色警告
+				}else if(){
+					fbWL=3;//反馈被采用
+				}else{
+					fbWL=4;//反馈被退回
 				}
 				map.put("warningLevel", fbWL);
 				map.put("feedbackStartDate", fb.getFeedbackStartDate());

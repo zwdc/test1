@@ -151,6 +151,7 @@ public class Constants {
 		
 		public static FeedbackStatus getValue(String value) {
 			FeedbackStatus feedback = null;
+			
 			switch(value) {
 				case "FEEDBACKING":
 					feedback = FEEDBACKING;//反馈中

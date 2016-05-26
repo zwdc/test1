@@ -33,7 +33,9 @@ import com.hdc.entity.Parameter;
 import com.hdc.entity.TaskInfo;
 import com.hdc.entity.User;
 import com.hdc.service.IFeedbackRecordService;
+import com.hdc.service.impl.FeedbackRecordServiceImpl;
 import com.hdc.util.Constants;
+import com.hdc.util.Constants.FeedbackStatus;
 import com.hdc.util.UserUtil;
 import com.hdc.util.upload.FileUploadUtils;
 import com.hdc.util.upload.exception.InvalidExtensionException;
@@ -291,6 +293,7 @@ public class FeedbackController {
 			    fbr.setProblems(feedback.getProblems());
 			    fbr.setSituation(feedback.getSituation());
 			    fbr.setFdaList(fbaList);
+			    fbr.setFeedbackDate(new Date());
 				this.feedbackService.doUpdate(fbr);
 				message.setData(id);
 				message.setMessage("上传了"+count+"附件，反馈成功！");
@@ -433,6 +436,7 @@ public class FeedbackController {
     public Message callApproval(FeedbackRecord feedback) throws Exception {
     	Message message = new Message();
     	try {
+    		feedback.setStatus(FeedbackStatus.FEEDBACKING.toString());
     		this.feedbackService.doStartProcess(feedback);
     		message.setMessage("操作成功！");
 		} catch (ActivitiException e) {
