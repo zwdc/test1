@@ -22,10 +22,10 @@
 .cont_join {
 	overflow:hidden;
 	position:absolute;
-	width:600px;
+	width:450px;
 	height:350px;
 	box-shadow:1px 1px 1000px 1000px rgba(0,0,0,0.3),0px 0px 20px 4px rgba(0,0,0,0.4);
-	left:40%;
+	left:45%;
 	top:340px;
 	margin-top:-230px;
 	margin-left:-160px;

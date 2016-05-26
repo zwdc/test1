@@ -4,33 +4,34 @@
 <%@ taglib prefix="zwdc" uri="http://zwdc.com/zwdc/tags/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <script type="text/javascript" src="${ctx}/js/kindeditor.js"></script>
-<script type="text/javascript" src="${ctx}/js/app/feedback.js?_=${sysInitTime}"></script>
+<script type="text/javascript" src="${ctx}/js/app/feedback.js"></script>
 <script type="text/javascript">
 var feedback_datagrid;
 var feedback_form;
 var feedback_dialog;
-
+var fb=${feedback};
 $(function() {
 	//数据列表
 	feedback_datagrid = $('#feedback_datagrid').datagrid({
-        url: ctx+"/feedback/getList",
+        //url: ctx+"/feedback/getList",
         width : 'auto',
-		height : fixHeight(1),
+		height : 'auto',
 		pagination:true,
 		rownumbers:true,
 		border:false,
 		singleSelect:true,
+		data:fb,
 		striped:true,
         columns : [
              [
-              {field: 'warningLevel', title: '预警', width: fixWidth(0.05), align: 'center', halign: 'center', sortable: true,
+              {field: 'warningLevel', title: '预警', width: fixWidth(0.08), align: 'center', halign: 'center', sortable: true,
             	  formatter:function(value){
             		  if (value=="1") {           			
-                      	return "反馈";
+                      	return "开始反馈";
                       }else if(value=="2"){
-                    	  return "逾期"; 
+                    	  return "逾期反馈"; 
                       }else{
-                    	  return ""; 
+                    	  return "未到时间"; 
                       }
             	  },
             	  styler:function(value){
@@ -86,7 +87,7 @@ $(function() {
      ],
      toolbar: "#feedbacktoolbar"
     });
-    
+	//feedback_datagrid.datagrid("loadData",fb);
 	$("#searchbox").searchbox({ 
 		menu:"#searchMenu", 
 		prompt :'模糊查询',
@@ -178,11 +179,6 @@ $(function() {
 		<tr>
 		<td style="padding-left:2px">
 			<shiro:hasRole name="admin">
-				<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="addFeedback();">添加反馈</a>
-				<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="feedback();">承办反馈</a>
-				<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="check();">反馈审核</a>
-				<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editFeedback();">编辑</a>
-		    	<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="delFeedback();">删除</a>
 				<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="detailsFeedback();">详情</a>
 			</shiro:hasRole>
 		</td>

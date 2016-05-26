@@ -98,6 +98,7 @@ public class ProjectController {
 		}
     	Project project = this.projectService.findById(projectId);
     	if(project != null) {
+    		//以下开始装载项目下的反馈列表
 			mv.addObject("taskInfo", project.getTaskInfo());
 			mv.addObject("project", project);
 			List<Map> jsonList=new ArrayList<Map>();
@@ -127,7 +128,6 @@ public class ProjectController {
 			Datagrid fbList=new Datagrid(jsonList.size(),jsonList);
 			Gson gson=new Gson();
 			//在gson转换ArrayList的时候，不能有懒加载的对象		
-			System.out.println(gson.toJson(fbList));
 			mv.addObject("feedback",gson.toJson(fbList));
 		}
     	return mv;

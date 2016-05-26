@@ -199,6 +199,7 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 		comments.setBusinessKey(feedbackId);
 		comments.setBusinessForm(BusinessForm.FEEDBACK_FORM.toString());
 	    variables.put("isPass", isPass);
+	    System.out.println(taskId);
 		this.processService.complete(taskId, comments, variables);
 	}
 

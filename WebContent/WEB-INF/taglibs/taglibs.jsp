@@ -4,7 +4,7 @@
 <%@ page import="com.hdc.util.Constants" %>
 <%@ page import="java.util.Date" %>
 <%
-	String easyuiThemeName="metro";
+	String easyuiThemeName="default";
 	Cookie cookies[] =request.getCookies();
 	if(cookies!=null&&cookies.length>0){
 		for(Cookie cookie : cookies){

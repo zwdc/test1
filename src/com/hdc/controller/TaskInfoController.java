@@ -2,6 +2,7 @@ package com.hdc.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,11 +18,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.hdc.entity.Datagrid;
+import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Group;
 import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
+import com.hdc.entity.Project;
 import com.hdc.entity.TaskInfo;
 import com.hdc.entity.User;
 import com.hdc.service.IGroupService;
@@ -277,6 +281,38 @@ public class TaskInfoController {
    	public ModelAndView details(@PathVariable("id") Integer id) throws Exception {
    		ModelAndView mv = new ModelAndView("taskInfo/details_taskInfo");
    		TaskInfo taskInfo = this.taskInfoService.findById(id);
+   		//以下获取任务下的反馈的列表
+		List<Map> jsonList=new ArrayList<Map>();
+		int fbWL=0;
+		Date currentDate=new Date();
+		for(Project project:taskInfo.getProjectList()){
+			for(FeedbackRecord fb:project.getFbrList()){
+				Map<String, Object> map=new HashMap<String, Object>();
+				map.put("id", fb.getId());				
+				if(currentDate.before(fb.getFeedbackStartDate())){
+					fbWL=0;//未到反馈期
+				}else if(currentDate.after(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
+					fbWL=2;//红色警告
+				}else if(currentDate.after(fb.getFeedbackStartDate())&&currentDate.before(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
+					fbWL=1;//黄色警告
+				}
+				map.put("warningLevel", fbWL);
+				map.put("feedbackStartDate", fb.getFeedbackStartDate());
+				map.put("feedbackEndDate", fb.getFeedbackEndDate());
+				map.put("groupName", fb.getProject().getGroup().getName());
+				map.put("createUser", fb.getCreateUser().getName());
+				map.put("feedbackDate", fb.getFeedbackDate());
+				map.put("status", fb.getStatus());
+				map.put("refuseCount", fb.getRefuseCount());
+				map.put("delayCount", fb.getDelayCount());
+				jsonList.add(map);
+			}
+		}		
+		Datagrid fbList=new Datagrid(jsonList.size(),jsonList);
+		Gson gson=new Gson();
+		//在gson转换ArrayList的时候，不能有懒加载的对象		
+		System.out.println(gson.toJson(fbList));
+		mv.addObject("feedback",gson.toJson(fbList));
    		mv.addObject("taskInfo", taskInfo);
    		return mv;
    	}

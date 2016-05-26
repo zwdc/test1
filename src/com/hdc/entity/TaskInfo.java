@@ -2,7 +2,10 @@ package com.hdc.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,12 +14,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OrderBy;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -63,6 +68,10 @@ public class TaskInfo extends BaseEntity implements Serializable{
 	@Column(name = "status", length = 30)
 	private String status;			//状态(待签收  办理中  已办结) TaskInfoStatus
 
+	@OneToMany(mappedBy = "taskInfo",fetch = FetchType.LAZY)//不做级联删除或者加载
+	@JsonIgnore
+	@OrderBy(clause="id ASC")
+	private Set<Project> projectList=new HashSet<Project>(); //反馈表
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -223,6 +232,14 @@ public class TaskInfo extends BaseEntity implements Serializable{
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public Set<Project> getProjectList() {
+		return projectList;
+	}
+
+	public void setProjectList(Set<Project> projectList) {
+		this.projectList = projectList;
 	}
 	
 }

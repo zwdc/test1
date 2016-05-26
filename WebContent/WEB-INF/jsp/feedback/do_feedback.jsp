@@ -18,87 +18,23 @@
 		});	 
 		var count = 0; 
 		 $("#filefield").click(function(){  
-			var input = $("<input class='easyui-filebox' type='text' name='file' data-options=\""+"prompt:'请选择文件...'\""+" style='width: 40%;height: 25px;'>");  	
-			var button = $("<input type='button' class='easyui-linkbutton' value='移除 '></div>");  
-			var pre=$("<div>").append(button).append(input);		
-			$("#fileZone").append(pre);
-			$.parser.parse(pre);
-			  button.click(function() {  
-				  pre.remove();
-		     });
-			 
+			if(confirm("添加附件后，原附件删除，是否确认？")){
+				var input = $("<input class='easyui-filebox' type='text' name='file' data-options=\""+"prompt:'请选择文件...'\""+" style='width: 40%;height: 25px;'>");  	
+				var button = $("<input type='button' class='easyui-linkbutton' value='移除 '></div>");  
+				var pre=$("<div>").append(button).append(input);		
+				$("#fileZone").append(pre);
+				$.parser.parse(pre);
+				  button.click(function() {  
+					  pre.remove();
+			     });
+				 
+			}else{
+				
+			}
+			
 	});  
 	});
-	//暂存
-	function saveTemporary() {
-		$('#feedback_form').form('submit', {
-	    	url: ctx+"/feedback/saveFeedback",
-	        onSubmit: function (data) {
-		        $.messager.progress({
-		            title: '提示信息！',
-		            text: '数据处理中，请稍后....'
-		        });
-		        var isValid = $(this).form('validate');
-		        if (!isValid) {
-		            $.messager.progress('close');
-		        }
-		        return isValid;
-		    },
-		    success: function (result) {
-		        $.messager.progress('close');
-		        var json = $.parseJSON(result);
-		        if (json.status) {
-		        	feedback_dialog.dialog("refresh",ctx+"/feedback/saveFeedback?id="+json.data);
-		        } 
-		        $.messager.show({
-					title : json.title,
-					msg : json.message,
-					timeout : 1000 * 2
-				});
-		    }
-	    });
-	}
 	
-	//完成任务
-	function completeTask() {
-		$('#feedback_form').form('submit', {
-	    	url: ctx+"/feedback/completeTask",
-	        onSubmit: function (param) {
-		        $.messager.progress({
-		            title: '提示信息！',
-		            text: '数据处理中，请稍后....'
-		        });
-		        var isValid = $(this).form('validate');
-		        if (!isValid) {
-		            $.messager.progress('close');
-		        }
-		        return isValid;
-		    },
-		    success: function (result) {
-		        $.messager.progress('close');
-		        var json = $.parseJSON(result);
-		        if (json.status) {
-		        	task_dialog.dialog('destroy');
-              	  	todoTask_datagrid.datagrid('reload');//重新加载列表数据
-		        } 
-		        $.messager.show({
-					title : json.title,
-					msg : json.message,
-					timeout : 1000 * 2
-				});
-		    }
-	    });
-	}
-	
-	//重置表单
-	function reloadForm() {
-		$('#feedback_form').form('clear');
-	}
-	
-	//关闭dialog
-	function closeDialog() {
-		task_dialog.dialog('destroy');
-	}
 </script>
 <div class="easyui-layout">
 <form id="feedback_form" method="post" encType="multipart/form-data">
@@ -163,18 +99,19 @@
 		<tr>
 		  	<td class="text-right">佐证材料上传:</td>
 		  	<td colspan="5">
+		  	     
 		  		  <a id="filefield" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加附件</a> 
 		  		   <input class='easyui-filebox' type='hidden' name='file'>
-		  		   <div id="fileZone"> </div>    	
+		  		   <div id="fileZone"> </div> 
+		  		  <c:forEach items="${feedback.fdaList}" var="fda"> 
+	   		     	<div class="well well-small">
+   					    <a href="${ctx }${fda.url}" target=blank> 
+   						<img src="${ctx }/images/icon/${fda.type}.gif" title="" onmousemove="showPic(event,'http://avatar.profile.csdn.net/D/8/D/2_dean8828.jpg');" onmouseout="hiddenPic();">${fda.uploadDate} - ${fda.name} 
+ 					    </a>
+ 					</div>
+				 </c:forEach>    	
 		   </td>
 		</tr>   	
 	</table>    
 </form>
-<hr style="margin-top: -5px ">
-<div class="pull-right" style="margin: -15px 5px 5px 0px">
- 	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="saveTemporary();" data-options="iconCls:'icon-save'">暂存</a>
-	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="completeTask();" data-options="iconCls:'icon-ok'">提交任务</a>
-	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="reloadForm();" data-options="iconCls:'icon-reload'">重置</a>
-	<a href="javascript:void(0);" class="easyui-linkbutton" onclick="closeDialog();" data-options="iconCls:'icon-cancel'">关闭</a>
-</div>
 </div>

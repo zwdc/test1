@@ -9,15 +9,17 @@ $(function(){
 		url:ctx+"/taskInfo/getList",	//路径访问后台方法获取数据
 		width:'auto',					//宽度自适应
 		height:fixHeight(1),			//高度自适应
+		fitColumns:true,
 		pagination:true,				//显示底部分页栏
 		rownumbers:true,				//显示行号
 		border:false,					//边框
 		singleSelect:true,				//只允许选中一行
 		striped:true,					//隔行变色
+		nowrap:false,
 		columns:[
 		    [
 		     
-		     	{field:'title',title:'任务内容',width:fixWidth(0.3),align:'left',halign:'center'},
+		     	{field:'title',title:'任务内容',width:fixWidth(0.4),align:'left',halign:'center',multiline:true},
 		     	{field:'info',title:'任务简称',width:fixWidth(0.1),align:'left',halign:'center'},
 		     	{field:'createTaskDate',title:'开始时间',width:fixWidth(0.1),align:'center',sortable:true,
 		     		formatter:function(value,row){

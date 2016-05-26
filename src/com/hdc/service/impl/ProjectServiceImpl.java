@@ -101,7 +101,7 @@ public class ProjectServiceImpl implements IProjectService {
 			sb.append("where a.is_delete = 0 and (a.status = 'WAIT_FOR_CLAIM' or a.status = 'CLAIMED' or a.status = 'PENDING' or a.status = 'APPROVAL_SUCCESS' or a.status = 'APPROVAL_FAILED' or a.status = 'REFUSE_FAILED') and a.group_id = :groupId and (a.user_id = :userId or a.user_id is null)");
 		} else if(type == 2) {
 			//办理中/申请办结
-			sb.append("where a.is_delete = 0 and (a.status = 'IN_HANDLING' or a.status = 'APPLY_FINISHED') and a.group_id = :groupId and a.user_id = :userId ");
+			sb.append("where a.is_delete = 0 and (a.status = 'IN_HANDLING' or a.status='CAN_BE_FINISHED' or a.status = 'APPLY_FINISHED') and a.group_id = :groupId and a.user_id = :userId ");
 		} else if(type == 3) {
 			//已办结
 			sb.append("where a.is_delete = 0 and a.status = 'FINISHED' and a.group_id = :groupId and a.user_id = :userId ");

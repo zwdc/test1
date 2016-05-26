@@ -71,8 +71,6 @@ public class LoginController {
         }
         
         if(SecurityUtils.getSubject().isAuthenticated()) {
-        	GoEasy go=new GoEasy("2cd54c54-b215-4a5f-8d83-50542809b207");
-        	go.publish("demo", "你好");
         	return "index";
         } else {
         	return "login";

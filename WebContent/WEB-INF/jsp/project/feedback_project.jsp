@@ -4,6 +4,7 @@
 <%@ taglib prefix="zwdc" uri="http://zwdc.com/zwdc/tags/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <script type="text/javascript" src="${ctx}/js/kindeditor.js"></script>
+<script type="text/javascript" src="${ctx}/js/app/feedback.js"></script>
 <script type="text/javascript">
 var feedback_datagrid;
 var feedback_form;
@@ -19,7 +20,9 @@ $(function() {
 		rownumbers:true,
 		border:false,
 		singleSelect:true,
+		data:fb,
 		striped:true,
+		nowrap:false,
         columns : [
              [
               {field: 'warningLevel', title: '预警', width: fixWidth(0.08), align: 'center', halign: 'center', sortable: true,
@@ -85,7 +88,7 @@ $(function() {
      ],
      toolbar: "#feedbacktoolbar"
     });
-	 feedback_datagrid.datagrid("loadData",fb);
+	//feedback_datagrid.datagrid("loadData",fb);
 	$("#searchbox").searchbox({ 
 		menu:"#searchMenu", 
 		prompt :'模糊查询',
@@ -99,237 +102,6 @@ $(function() {
 	$("#remark").kindeditor({readonlyMode: true});
 	$("#suggestion").kindeditor({readonlyMode: true});
 });
-
-//修正宽高
-function fixHeight(percent) {   
-	return parseInt($(this).height() * percent);
-}
-
-function fixWidth(percent) {   
-	return parseInt(($(this).width() - 50) * percent);
-}
-
-//初始化表单
-function formInit(row,url) {
-	feedback_form = $('#feedback_form').form({
-        url: url,
-        onSubmit: function () {
-	        $.messager.progress({
-	            title: '提示信息！',
-	            text: '数据处理中，请稍后....'
-	        });
-	        var isValid = $(this).form('validate');
-	        if (!isValid) {
-	            $.messager.progress('close');
-	        } 
-	        return isValid;
-	    },
-	    success: function (data) {
-	        $.messager.progress('close');
-	        var json = $.parseJSON(data);
-	        if (json.status) {
-	        	feedback_dialog.dialog("refresh",ctx+"/feedback/toModify?id="+json.data);
-	        	feedback_datagrid.datagrid('load');
-	        } 
-	        $.messager.show({
-				title : json.title,
-				msg : json.message,
-				timeout : 1000 * 2
-			});
-	    }
-    });
-}
-
-//反馈审核—— 督查人员
-function check(){
-    var row = feedback_datagrid.datagrid('getSelected');
-    if (row) {
-    	feedback_dialog = $('<div/>').dialog({
-	    	title : "反馈信息审核",
-			top: 20,
-			width : fixWidth(0.9),
-			height : 'auto',
-	        modal: true,
-	        minimizable: true,
-	        maximizable: true,
-	        href: ctx+"/feedback/toMain?action=check&id="+row.id,
-	        onLoad: function () {
-	            formInit(row,ctx+"/feedback/checkFeedback");
-	        },
-	        buttons: [
-	            {
-	                text: '保存',
-	                iconCls: 'icon-save',
-	                handler: function () {
-	                	feedback_form.submit();
-	                }
-	            },
-	            {
-	                text: '重置',
-	                iconCls: 'icon-reload',
-	                handler: function () {
-	                	feedback_form.form('clear');
-	                }
-	            },
-	            {
-	                text: '关闭',
-	                iconCls: 'icon-cancel',
-	                handler: function () {
-	                	feedback_dialog.dialog('destroy');
-	                }
-	            }
-	        ],
-	        onClose: function () {
-	        	feedback_dialog.dialog('destroy');
-	        }
-	    });
-    } else {
-        $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
-    }
-}
-//实施反馈—— 承办单位
-function feedback(){
-    var row = feedback_datagrid.datagrid('getSelected');
-    var flag=false;
-    if(row){
-    	$.ajax({
-    		async:false,
-    		cache:false,
-    		url:ctx+'/feedback/checkFeedbackDate/'+row.id,
-    		type:'post',
-    		dataType:'json',
-    		success:function(data){
-    			if(data.status){
-    				flag=true;
-    			}else{
-    				$.messager.show({
-    					title:data.title,
-    					msg:data.message,
-    					timeout:1000*2
-    				});
-    			}
-    		}
-    	});
-    }else {
-        $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
-    }
-    if (flag) {
-    	feedback_dialog = $('<div/>').dialog({
-	    	title : "进行反馈",
-			top: 20,
-			width : fixWidth(0.9),
-			height : 'auto',
-	        modal: true,
-	        minimizable: true,
-	        maximizable: true,
-	        href: ctx+"/feedback/toMain?action=feedback&id="+row.id,
-	        onLoad: function () {
-	            formInit(row,ctx+"/feedback/saveFeedback");
-	        },
-	        buttons: [
-	            {
-	                text: '暂存',
-	                iconCls: 'icon-save',
-	                handler: function () {
-	                	feedback_form.submit();
-	                }
-	            },
-	            {
-	            	text: '申请审核',
-	            	iconCls: 'icon-ok',
-	            	id: 'ok',
-	            	handler: function () {
-	                	$.messager.confirm('确认提示！','确认提交表单进入反馈审核流程吗？',function(result){
-	                		if(result){
-	                			feedback_form.form('submit',{
-	    	            		 	url: ctx+"/feedback/callApproval",
-	    	            	        onSubmit: function () {
-	    	            		        $.messager.progress({
-	    	            		            title: '提示信息！',
-	    	            		            text: '数据处理中，请稍后....'
-	    	            		        });
-	    	            		        var isValid = $(this).form('validate');
-	    	            		        if (!isValid) {
-	    	            		            $.messager.progress('close');
-	    	            		        } else {
-	    	            		        	$("#save").linkbutton("disable");
-	    	            		        	$("#ok").linkbutton("disable");
-	    	            		        }
-	    	            		        return isValid;
-	    	            		    },
-	    	            		    success: function (data) {
-	    	            	            $.messager.progress('close');
-	    	            	            var json = $.parseJSON(data);
-	    	            	            if (json.status) {
-	    	            	            	feedback_dialog.dialog('destroy');//销毁对话框
-	    	            	            	feedback_datagrid.datagrid('reload');//重新加载列表数据
-	    	            	            } 
-	    	            	            $.messager.show({
-	    	            					title : json.title,
-	    	            					msg : json.message,
-	    	            					timeout : 1000 * 2
-	    	            				});
-	    	            	        }
-	    	            	    });
-	                		}
-	                	});
-	                }
-	            },
-	            {
-	                text: '重置',
-	                iconCls: 'icon-reload',
-	                handler: function () {
-	                	feedback_form.form('clear');
-	                }
-	            },
-	            {
-	                text: '关闭',
-	                iconCls: 'icon-cancel',
-	                handler: function () {
-	                	feedback_dialog.dialog('destroy');
-	                }
-	            }
-	        ],
-	        onClose: function () {
-	        	feedback_dialog.dialog('destroy');
-	        }
-	    });
-    } 
-}
-//查看反馈详情
-function detailsFeedback(){
-    var row = feedback_datagrid.datagrid('getSelected');
-    if (row) {
-    	feedback_dialog = $('<div/>').dialog({
-	    	title : "反馈记录详情",
-			top: 20,
-			width : fixWidth(0.8),
-			height : 'auto',
-	        modal: true,
-	        minimizable: true,
-	        maximizable: true,
-	        href: ctx+"/feedback/toMain?action=detail&id="+row.id,
-	        onLoad: function () {
-	            formInit(row,ctx+"/feedback/detail");
-	        },
-	        buttons: [
-	  	          {
-	  	                text: '关闭',
-	  	                iconCls: 'icon-cancel',
-	  	                handler: function () {
-	  	                	feedback_dialog.dialog('destroy');
-	  	                }
-	  	            }
-	  	        ],
-	        onClose: function () {
-	        	source_dialog.dialog('destroy');
-	        }
-	    });
-    } else {
-        $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
-    }
-}
-
 </script>
 <div class="easyui-layout">
    <table class="table table-bordered table-condensed">

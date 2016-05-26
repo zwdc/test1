@@ -140,7 +140,6 @@
  					    </a>
  					</div>
 				 </c:forEach> 
-				 <div id="Layer1" style="display:none; position: absolute; z-index: 100; background-color:black">sdfsdf</div>
 	   		</td>
 	   	</tr>	   
 	</table>

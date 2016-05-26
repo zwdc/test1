@@ -106,25 +106,25 @@ public class Constants {
 			ProjectStatus tis = null;
 			switch(value) {
 				case "WAIT_FOR_CLAIM":
-					tis = WAIT_FOR_CLAIM;
+					tis = WAIT_FOR_CLAIM;//待签收
 					break;
 				case "CLAIMED":
-					tis = CLAIMED;
+					tis = CLAIMED;//已签收
 					break;
 				case "REFUSE_CLAIM":
-					tis = REFUSE_CLAIM;
+					tis = REFUSE_CLAIM;//拒签收
 					break;
 				case "IN_HANDLING":
-					tis = IN_HANDLING;
+					tis = IN_HANDLING;//办理中
 					break;
 				case "CAN_BE_FINISHED":
-					tis = CAN_BE_FINISHED;
+					tis = CAN_BE_FINISHED;  //可以办结
 					break;
 				case "APPLY_FINISHED":
-					tis = APPLY_FINISHED;
+					tis = APPLY_FINISHED;//申请办结
 					break;
 				case "FINISHED":
-					tis = FINISHED;
+					tis = FINISHED;//已办结
 					break;
 				default:
 					break;
@@ -153,13 +153,13 @@ public class Constants {
 			FeedbackStatus feedback = null;
 			switch(value) {
 				case "FEEDBACKING":
-					feedback = FEEDBACKING;
+					feedback = FEEDBACKING;//反馈中
 					break;
 				case "RETURNED":
-					feedback = RETURNED;
+					feedback = RETURNED;//已退回
 					break;
 				case "ACCEPT":
-					feedback = ACCEPT;
+					feedback = ACCEPT;//已采用
 					break;
 				default:
 					break;
