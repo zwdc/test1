@@ -32,7 +32,7 @@ public class PasswordHelper {
         String newPassword = new SimpleHash(
                 algorithmName,
                 user.getPasswd(),
-                ByteSource.Util.bytes(user.getCredentialsSalt()),	//@see User getCredentialsSalt():name+salt
+                ByteSource.Util.bytes(salt),	//@see User getCredentialsSalt():name+salt -> 不用name+salt了(修改用户名时有问题)，直接使用盐。
                 hashIterations).toHex();
 
         user.setPasswd(newPassword);

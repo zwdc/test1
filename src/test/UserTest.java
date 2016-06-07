@@ -47,6 +47,7 @@ public class UserTest {
 		User user1 = new User();
 		user1.setName("admin");
 		user1.setPasswd("123");
+		this.passwordHelper.encryptPassword(user1);
 		user1.setRole(new Role(6));
 		user1.setRegisterDate(new Date());
 		Serializable id1 = this.userService.doAdd(user1, false);
