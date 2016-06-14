@@ -88,6 +88,7 @@ public class BaseServiceImpl<T> implements IBaseService<T> {
 				for (int i = 0; i < searchColumnNameArray.length; i++) {
 					if (StringUtils.isNotBlank(searchColumnNameArray[i])) {
 						String value=searchValsArray[i].trim().replaceAll("\'", "");
+					
 						if ("like".equals(searchConditionsArray[i].trim())){
 							if(searchColumnNameArray[i].trim().toLowerCase().indexOf("date") >= 0){
 								gradeSearch.append(" " + searchAndsArray[i].trim() + " date_format(a." + searchColumnNameArray[i].trim() + ", '%Y-%m-%d') " + searchConditionsArray[i].trim() + " " +"'%"+ value+"%'");

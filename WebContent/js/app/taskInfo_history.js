@@ -67,7 +67,11 @@ function searchRemove(curr) {
 } 
 //高级查询
 function gradeSearch() {
+<<<<<<< HEAD
 	jqueryUtil.gradeSearch(taskInfo_datagrid, "#taskInfoPastSearch", "/taskInfo/taskInfoPastSearch");
+=======
+	jqueryUtil.gradeSearch(taskInfo_datagrid, "#taskInfoSearch", "/taskInfo/taskInfoSearch");
+>>>>>>> branch 'master' of https://github.com/zwdc/zwdc.git
 }
 
 //修正宽高

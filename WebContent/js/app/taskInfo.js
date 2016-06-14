@@ -90,7 +90,6 @@ $(function(){
 			taskInfo_datagrid.datagrid('reload',obj);
 		}
 	});
-	
 });
 //高级搜索 删除一行
 function searchRemove(curr) {
@@ -99,6 +98,115 @@ function searchRemove(curr) {
 //高级查询
 function gradeSearch() {
 	jqueryUtil.gradeSearch(taskInfo_datagrid, "#taskInfoSearch", "/taskInfo/taskInfoNowSearch");
+}
+
+//当年统计
+function statisticsThisYear(){
+	 //弹出对话窗口
+	taskInfo_dialog = $('<div/>').dialog({
+    	title : "本年度任务统计",
+		top: 20,
+		width : fixWidth(0.8),
+		height : 'auto',
+        modal: true,
+        minimizable: true,
+        maximizable: true,
+        href: ctx+"/taskInfo/toStatisticsThisYear",
+        onLoad: function() {
+        	 $.ajax({
+                 async:false,
+ 		  		 cache:false,
+ 		  	     url:ctx+"/taskInfo/statisticsThisYear", 
+ 		  		 type:'post',
+ 		  		 dataType:'json',
+                 success: function(result){          	  
+                	  var jsonData=result;
+                      var xData=jsonData.xData; //xdata是后台传向前台的参数，代表横轴的数组
+                      var endYData=jsonData.endYData;   //data是后台传向前台的参数，代表显示数据，本实例显示的是年用水量
+                      var unEndYData=jsonData.unEndYData;  
+                      $('#container').highcharts({
+          		        chart: {
+          		        	type: 'column',  //普通柱状图，bar为水平柱状图
+          		        	margin: 75,
+          		        	options3d: {           //这里设置3D图表的样式
+                                  enabled: true,
+                                  alpha: 0,   //垂直方向旋转
+                                  beta: 0,   //水平顺时针旋转
+                                  depth: 40,
+                                  viewDistance: 25
+                             },
+          		            events: {
+          		                load: function () {
+          		                    var label = this.renderer.label('Chart loaded', 100, 120)
+          		                        .attr({
+          		                            fill: Highcharts.getOptions().colors[0],
+          		                            padding: 10,
+          		                            r: 5,
+          		                            zIndex: 8
+          		                        })
+          		                        .css({
+          		                            color: '#FFFFFF'
+          		                        })
+          		                        .add();
+
+          		                    setTimeout(function () {
+          		                        label.fadeOut();
+          		                    }, 1000);
+          		                }
+          		            }
+          		        },
+	          		    title: {
+	                          text: "本年度分类型任务完成情况统计"    //显示柱状图的标题
+	                    },
+	                    credits: {//不显示highchart超链接
+                            enabled: false
+                        },
+                        yAxis:{    //纵坐标
+                            title:{
+                                text:'单位：项'
+                            },
+                            allowDecimals:false //刻度不允许出现整数
+                       },
+                       xAxis: {   //横坐标
+                           categories: xData
+                       },
+          		        plotOptions: {  
+          		            column: {  
+          		              stacking: 'normal',//可以一根柱子显示多个颜色 还有个percent样式
+          		              depth: 40,
+                              value: 0,
+                              width: 5
+          		            }  
+          		        },  
+          		        series: [{
+          	                name: '未完成数',
+          	                data: unEndYData,
+          	                color:'#ebeb1e'
+          	            }, {
+          		            name:'完成数',
+          		            data: endYData,
+          		            color:'#70c24a'
+          		        }]
+          		    });
+                 },
+                 error: function(){
+                     alert('咋整的获取失败!');
+                 }
+             });
+        },
+        buttons: [
+          {
+              text: '关闭',
+              iconCls: 'icon-cancel',
+              handler: function () {
+            	  taskInfo_dialog.dialog('destroy');
+              }
+          }
+        ],
+        onClose: function () {
+        	taskInfo_dialog.dialog('destroy');
+        }
+    });
 }
 
 //修正宽高

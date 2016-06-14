@@ -2,7 +2,9 @@ package com.hdc.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,12 +13,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OrderBy;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -71,6 +75,21 @@ public class TaskSource extends BaseEntity implements Serializable {
 	@JoinColumn(name="type_id")
 	@JsonIgnore
 	private TaskInfoType taskInfoType;	//任务类型
+	
+	@OneToMany(mappedBy = "taskSource",fetch = FetchType.LAZY)
+	@JsonIgnore
+	@OrderBy(clause="id ASC")
+	private Set<TaskInfo> taskInfo;
+	
+	
+
+	public Set<TaskInfo> getTaskInfo() {
+		return taskInfo;
+	}
+
+	public void setTaskInfo(Set<TaskInfo> taskInfo) {
+		this.taskInfo = taskInfo;
+	}
 
 	public Integer getId() {
 		return id;

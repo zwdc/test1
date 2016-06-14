@@ -7,6 +7,7 @@ import java.util.Map;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.TaskInfo;
+import com.hdc.entity.TaskStatics;
 
 public interface ITaskInfoService {
 
@@ -101,4 +102,9 @@ public interface ITaskInfoService {
 	public void doCompleteTask(TaskInfo taskInfo, String taskId) throws Exception;
 
 	List<Map<String, Object>> getApprovalProcess(Integer taskInfo_id) throws Exception;
+	
+	/**
+	 * 统计当年的分类型的完成任务数和未完成任务数
+	 */
+	public List<TaskStatics> statisticsThisYear() throws Exception;
 }

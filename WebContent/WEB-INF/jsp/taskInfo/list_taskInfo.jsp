@@ -13,6 +13,9 @@
 	<script type="text/javascript" src="${ctx}/kindeditor/kindeditor-min.js"></script>
   	<script type="text/javascript" src="${ctx}/js/kindeditor.js"></script>
 	<script type="text/javascript" src="${ctx}/js/app/taskInfo.js?_=${sysInitTime}"></script>
+	<script type="text/javascript" src="${ctx}/js/highcharts.js"></script>
+	<script type="text/javascript" src="${ctx}/js/highcharts-3d.js"></script>
+    <script type="text/javascript" src="${ctx}/js/exporting.js"></script>
   </head>
   <body>
 	<div id="toolbar" style="padding:2px 0">
@@ -32,7 +35,7 @@
 					<input id="searchbox" type="text"/>
 				</td>
 				<td style="padding-left:5px">
-					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-large-chart',plain:true" onclick="invoiceSearch();">本年度完成情况统计</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-large-chart',plain:true" onclick="statisticsThisYear();">本年度完成情况统计</a>
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="gradeSearch();">高级查询</a>
 				</td>
 			</tr>

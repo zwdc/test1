@@ -10,6 +10,8 @@
 		  trData.find('span').remove();
 		  var input="<input  name='searchVals' class='easyui-datebox' required='required' style='width: 150px;'>";
 	      trData=trData.append(input);
+	  }else if(val=='taskSource'){
+		  
 	  }else{
 		  trData.find('input').remove();
 		  trData.find('span').remove();

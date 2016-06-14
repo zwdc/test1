@@ -2,19 +2,25 @@ package com.hdc.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.OrderBy;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 任务类型
@@ -62,6 +68,20 @@ public class TaskInfoType implements Serializable {
 	
 	@Column(name = "isRefuse")
 	private Integer isRefuse;//可否拒签收  1可 0否
+	
+	@OneToMany(mappedBy = "taskInfoType",fetch = FetchType.LAZY)
+	@JsonIgnore
+	@OrderBy(clause="id ASC")
+	private Set<TaskSource> taskSource;
+	
+
+	public Set<TaskSource> getTaskSource() {
+		return taskSource;
+	}
+
+	public void setTaskSource(Set<TaskSource> taskSource) {
+		this.taskSource = taskSource;
+	}
 
 	public Integer getId() {
 		return id;

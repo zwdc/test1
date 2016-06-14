@@ -1,6 +1,7 @@
 package com.hdc.service.impl;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ import com.hdc.entity.Parameter;
 import com.hdc.entity.ProcessTask;
 import com.hdc.entity.TaskInfo;
 import com.hdc.entity.TaskSource;
+import com.hdc.entity.TaskStatics;
 import com.hdc.entity.User;
 import com.hdc.service.IBaseService;
 import com.hdc.service.IProcessService;
@@ -32,6 +34,9 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 
 	@Autowired
 	private IBaseService<TaskInfo> baseService;
+	
+	@Autowired
+	private IBaseService<TaskStatics> baseService1;
 	
 	@Autowired
 	private IJdbcDao jdbcDao;
@@ -100,7 +105,22 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 	public TaskInfo findById(Integer id) throws Exception {
 		return this.baseService.getBean(TaskInfo.class, id);
 	}
-
+	
+	@Override
+	public List<TaskStatics> statisticsThisYear() throws Exception {
+		String hql="select "
+				+ "new com.hdc.entity.TaskStatics("
+				+ "a.name,"
+				+ "count(c.id),"
+				+ "count(d.id)"
+				+ ") from TaskInfoType as a"
+				+ " left join a.taskSource as b "
+				+ " left join b.taskInfo as  c  with  c.status='FINISHED'  and c.createTaskDate like '%"+DateUtil.getYear(new Date())+"%'"
+				+ " left join b.taskInfo as d with  d.status<>'FINISHED'  and d.createTaskDate like '%"+DateUtil.getYear(new Date())+"%'"
+				+ " group by a.id"
+				+ " order by  a.id";
+		return this.baseService1.find(hql);
+	}
 	@Override
 	public void doStartProcess(TaskInfo taskInfo) throws Exception {
 		taskInfo.setStatus(ApprovalStatus.PENDING.toString());

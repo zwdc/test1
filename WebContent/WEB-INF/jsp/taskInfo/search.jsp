@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
 <script type="text/javascript">  
   function showMe(curr){
 	  var val=$(curr).combobox('getValue');
@@ -10,6 +11,21 @@
 		  trData.find('span').remove();
 		  var input="<input  name='searchVals' class='easyui-datebox' required='required' style='width: 150px;'>";
 	      trData=trData.append(input);
+	  }else if(val=='hostGroup'){
+		  trData.find('input').remove();
+		  trData.find('span').remove();		  
+		  var input="<input id=\"hostGroup\" name=\"searchVals\" class=\"easyui-combobox\" data-options=\"valueField:'id', textField:'name', url:'"+ctx+"/group/getAllGroup',method:\'get\'\">";
+		  trData=trData.append(input);
+	  }else if(val=='urgency'){
+		  trData.find('input').remove();
+		  trData.find('span').remove();		  
+		  var input="<input id=\"urgency\" name=\"searchVals\" class=\"easyui-combobox\" data-options=\"valueField:'id', textField:'name', url:'"+ctx+"/js/app/app.json',method:\'get\'\">";
+		  trData=trData.append(input);
+	  }else if(val=='taskSource.taskInfoType'){
+		  trData.find('input').remove();
+		  trData.find('span').remove();		  
+		  var input="<input id=\"taskInfoType\" name=\"searchVals\" class=\"easyui-combobox\" data-options=\"valueField:'id', textField:'name', url:'"+ctx+"/taskType/getAll'\">";
+		  trData=trData.append(input);
 	  }else{
 		  trData.find('input').remove();
 		  trData.find('span').remove();
@@ -40,7 +56,7 @@
 			<td>
 				<select  name="searchColumnNames" class="easyui-combobox" style="width:80px;" data-options="editable:false,panelHeight:'auto',onSelect:function(rec){showMe(this);}">
 					<option value="title">关键词</option>
-					<option value="taskSource">任务来源</option>
+					<option value="taskSource.taskInfoType">任务类型</option>
 					<option value="createTaskDate">立项时间</option>
 					<option value="hostGroup">牵头单位</option>
 					<option value="urgency">急缓程度</option>

@@ -30,6 +30,7 @@ import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
 import com.hdc.entity.Project;
 import com.hdc.entity.TaskInfo;
+import com.hdc.entity.TaskStatics;
 import com.hdc.service.IExcel2TaskInfoService;
 import com.hdc.service.IGroupService;
 import com.hdc.service.ITaskInfoService;
@@ -62,6 +63,47 @@ public class TaskInfoController {
 	
 	@Autowired
 	private IExcel2TaskInfoService excel2TaskInfoService;
+	
+	/**
+	 * 显示本年度统计页面
+	 * @return
+	 */
+	@RequestMapping("/toStatisticsThisYear")
+	public String toStatisticThisYear() {
+		return "taskInfo/statistics_this";
+	}
+	
+	/**
+	 * 获取本年度统计数据
+	 * @return json{Ended完成对的任务数,UnEnded未完成的任务数,XctgX轴分类数据}
+	 */
+	@RequestMapping("/statisticsThisYear")
+	@ResponseBody
+	public String StatisticThisYear() {
+		String jsonStr=null;
+		try {
+			Map<String,Object> map=new HashMap<String,Object>();		
+			List<TaskStatics> list=this.taskInfoService.statisticsThisYear();
+			List<String> xData=new ArrayList<String>();
+			List<Long> endNum=new ArrayList<Long>();
+			List<Long> unEndNum=new ArrayList<Long>();
+			for(int i=0;i<list.size();i++){
+				xData.add(i, list.get(i).getName());
+				endNum.add(i,list.get(i).getEndNum());
+				unEndNum.add(i,list.get(i).getUnendNum());
+			}
+			map.put("xData", xData);
+			map.put("endYData", endNum);
+			map.put("unEndYData", unEndNum);
+			Gson gson=new Gson();
+			jsonStr=gson.toJson(map);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return jsonStr;
+	}
 	
 	/**
 	 * 跳转任务管理页面,显示所有页面
