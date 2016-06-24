@@ -18,8 +18,47 @@ $(function(){
 		nowrap:false,
 		columns:[
 		    [
-		     
-		     	{field:'title',title:'任务内容',width:fixWidth(0.5),align:'left',halign:'center',multiline:true},
+				{field:'urgency',title:'急缓程度',width:fixWidth(0.05),align:'center',sortable:true,
+						formatter:function(value,row){
+						  switch (value) {
+						  	case 0: return "特提";
+						  	case 1: return "特急";
+						  	case 2: return "加急";
+						  	case 3: return "平急";
+						  } 
+					 }
+					},
+					{field: 'status',title: '状态',width:fixWidth(0.1),align:'center', halign:'center',sortable:true,
+		            	  formatter:function(value, row){
+		            		  switch (value) {
+								case "IN_HANDLING":
+									return "<span class='text-success'>办理中</span>";
+								case "REFUSE_CLAIM":
+									return "<span class='text-danger'>拒绝签收</span>";
+								case "WAIT_FOR_CLAIM":
+									return "<span class='text-warning'>待签收</span>";
+								case "APPLY_FINISHED":
+									return "<span class='text-primary'>申请办结</span>";
+								case "FINISHED":
+									return "<span class='text-muted'>已办结</span>";
+								case "APPROVAL_SUCCESS":
+									return "<span class='text-success'>审批通过</span>";
+								case "APPROVAL_FAILED":
+									return "<span class='text-danger'>审批失败</span>";
+								case "WAITING_FOR_APPROVAL":
+									return "<span class='text-warning'>待申请审批</span>";
+								case "PENDING":
+									return "<span class='text-primary'>审批中</span>";
+								case "REAPPROVAL":
+									return "<span class='text-danger'>需要重新审批</span>";
+								default:
+									return "";
+							  }
+		    			  }
+		              },
+		     	{field:'title',title:'任务内容',width:fixWidth(0.5),align:'left',halign:'center',multiline:true},		     	
+		     	{field:'groupName',title:'牵头单位',width:fixWidth(0.1),align:'left',halign:'center',multiline:true},
+		     	{field:'major',title:'主管市长',width:fixWidth(0.1),align:'left',halign:'center',multiline:true},
 		     	{field:'createTaskDate',title:'开始时间',width:fixWidth(0.1),align:'center',sortable:true,
 		     		formatter:function(value,row){
 	            		  return moment(value).format("YYYY-MM-DD HH:mm:ss");
@@ -31,45 +70,7 @@ $(function(){
 		     		}
 		     	},
 		     	{field:'fbFrequencyName',title:'反馈频度',width:fixWidth(0.1),align:'center'},
-		     	{field:'taskSourceName',title:'任务来源',width:fixWidth(0.1),align:'center'},
-		     	{field:'urgency',title:'急缓程度',width:fixWidth(0.05),align:'center',sortable:true,
-		     		formatter:function(value,row){
-	            		  switch (value) {
-	            		  	case 0: return "特提";
-	            		  	case 1: return "特急";
-	            		  	case 2: return "加急";
-	            		  	case 3: return "平急";
-	            		  } 
-					 }
-		     	},
-		     	{field: 'status',title: '状态',width:fixWidth(0.1),align:'center', halign:'center',sortable:true,
-	            	  formatter:function(value, row){
-	            		  switch (value) {
-							case "IN_HANDLING":
-								return "<span class='text-success'>办理中</span>";
-							case "REFUSE_CLAIM":
-								return "<span class='text-danger'>拒绝签收</span>";
-							case "WAIT_FOR_CLAIM":
-								return "<span class='text-warning'>待签收</span>";
-							case "APPLY_FINISHED":
-								return "<span class='text-primary'>申请办结</span>";
-							case "FINISHED":
-								return "<span class='text-muted'>已办结</span>";
-							case "APPROVAL_SUCCESS":
-								return "<span class='text-success'>审批通过</span>";
-							case "APPROVAL_FAILED":
-								return "<span class='text-danger'>审批失败</span>";
-							case "WAITING_FOR_APPROVAL":
-								return "<span class='text-warning'>待申请审批</span>";
-							case "PENDING":
-								return "<span class='text-primary'>审批中</span>";
-							case "REAPPROVAL":
-								return "<span class='text-danger'>需要重新审批</span>";
-							default:
-								return "";
-						  }
-	    			  }
-	              }
+		     	{field:'taskSourceName',title:'任务来源',width:fixWidth(0.1),align:'center'}
 		    ]
 		],
         onDblClickRow: function(index, row) {
@@ -385,6 +386,38 @@ function showDetails(row) {
         	taskInfo_dialog.dialog('destroy');
         }
     });
+}
+
+function approvalPrcess() {
+    //弹出对话窗口
+	 var row = taskInfo_datagrid.datagrid('getSelected');
+	if (row) {
+		taskInfo_dialog = $('<div/>').dialog({
+	    	title : "审批流程详情",
+			top: 20,
+			width : fixWidth(0.8),
+			height : 'auto',
+	        modal: true,
+	        minimizable: true,
+	        maximizable: true,
+	        href: ctx+"/taskInfo/getApprovalProcess/"+row.id,
+	        buttons: [
+	          {
+	              text: '关闭',
+	              iconCls: 'icon-cancel',
+	              handler: function () {
+	            	  taskInfo_dialog.dialog('destroy');
+	              }
+	          }
+	        ],
+	        onClose: function () {
+	        	taskInfo_dialog.dialog('destroy');
+	        }
+	    });
+	}else {
+        $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
+    }
+	
 }
 
 function publishMessage() {

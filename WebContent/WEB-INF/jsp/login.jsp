@@ -17,8 +17,7 @@
 </head>
 <body>
   <div id="main-wrapper htmleaf-container">
-  <div class="cont_principal">
-   
+  <div class="cont_principal">  
     <div class="template-page-wrapper cont_join">
       <div style="background:#FFCC33; filter:alpha(opacity=50);margin-top:2px;padding-top:10px;padding-bottom:10px">
         	<img src='${ctx}/images/solg_login.png'/>
@@ -60,15 +59,13 @@
 	    </div>
 	   
         <div class="cont_btn_join">
-             <button type="submit" class="">登录</button>
-               
+             <button type="submit" class="">登录</button>          
         </div>
-        
-      </form>
-    </div>
-   
-    </div>
-    
+      </form> 
+        <a class="copyright">Copyright©2016&nbsp;邯郸市政府督查室 .版权所有</a>   
+    </div>   
+     
+    </div>    
   </div>
   
 <script>

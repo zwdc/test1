@@ -89,11 +89,13 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 		return this.baseService.add(feedback);
 	}
 	
+	//填写工作计划时的更新
 	@Override
 	public void doUpdate(FeedbackRecord feedback) throws Exception {
 		this.baseService.update(feedback);
 	}
-
+	
+	//反馈时使用的更新
 	@Override
 	public Message doUpdate(FeedbackRecord feedback,MultipartFile[] file,HttpServletRequest request) throws Exception {
 		Message message=new Message();

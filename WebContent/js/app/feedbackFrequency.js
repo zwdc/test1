@@ -20,7 +20,7 @@ $(function() {
         columns : [ 
             [ 
               {field: 'name', title: '频度名称', width: fixWidth(0.3), align: 'left', halign: 'center', sortable: true},
-              {field: 'type', title: '频度类型', width: fixWidth(0.4), align: 'left', halign: 'center',
+              {field: 'type', title: '频度类型', width: fixWidth(0.2), align: 'left', halign: 'center',
             	  formatter:function(value,row){
             		  if(value == 1) {
             			  return "单次或月频度";
@@ -32,11 +32,12 @@ $(function() {
             	  }
             	  
               },
-              {field: 'createDate', title: '创建日期', width: fixWidth(0.1), align: 'center', sortable: true,
+              {field: 'createDate', title: '创建日期', width: fixWidth(0.2), align: 'center', sortable: true,
             	  formatter:function(value,row){
             		  return moment(value).format("YYYY-MM-DD HH:mm:ss");
 				  }
-              }
+              },
+              {field: 'id', title: '反馈频度ID', width: fixWidth(0.2), align: 'center', sortable: true}
     	    ] 
         ],
         toolbar: "#toolbar"

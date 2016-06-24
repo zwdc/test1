@@ -91,6 +91,10 @@ public class ProjectController {
 				message.setTitle("提示");
 				message.setMessage("政府工作报告，不能提出异议！");
 				message.setStatus(false);
+			}else if(taskInfoType==2){
+				message.setTitle("提示");
+				message.setMessage("政府工作报告，不能提出异议！");
+				message.setStatus(false);
 			}else{
 				message.setStatus(true);
 			}
@@ -113,21 +117,23 @@ public class ProjectController {
 			message.setMessage("获取反馈对象失败");
 		} else {
 			Project project=this.projectService.findById(projectId);
-			Set<FeedbackRecord> fbrList=project.getFbrList();
-			Iterator<FeedbackRecord> it=fbrList.iterator();
-			while(it.hasNext()){
-				String status=it.next().getStatus();
-				if(!Constants.FeedbackStatus.ACCEPT.toString().equals(status)){
-					message.setStatus(false);
-					break;
-				}
-			}
-    		if(message.getStatus()==false){
+			if(!Constants.ProjectStatus.CAN_BE_FINISHED.equals(project.getStatus())){//如果不是可办结状态，就反馈false
 				message.setTitle("提示");
+				message.setStatus(false);
 				message.setMessage("存在未采用的反馈信息，不能申请办结");
 			}
 		}		
 		return message;
+//			Set<FeedbackRecord> fbrList=project.getFbrList();
+//			Iterator<FeedbackRecord> it=fbrList.iterator();
+//			while(it.hasNext()){
+//				String status=it.next().getStatus();
+//				if(!Constants.FeedbackStatus.ACCEPT.toString().equals(status)){
+//					message.setStatus(false);
+//					break;
+//				}
+//			}
+    	
     }
     
 	/**
@@ -146,7 +152,7 @@ public class ProjectController {
 				mv.setViewName("project/modify_project");
 			} else if("claim".equals(type)) {
 				mv.setViewName("project/claim_project");
-				this.putFbListToProject(mv, project);
+				//this.putFbListToProject(mv, project);
 			} else if("approval".equals(type)) {
 				mv.setViewName("project/approval_project");
 			} else if("details".equals(type)) {
@@ -189,21 +195,13 @@ public class ProjectController {
 			for(FeedbackRecord fb:project.getFbrList()){
 				Map<String, Object> map=new HashMap<String, Object>();
 				map.put("id", fb.getId());				
-				if(FeedbackStatus.RETURNED.toString().equals(fb.getStatus())){
-					fbWL=3;//反馈被退回
-				}else if(FeedbackStatus.ACCEPT.toString().equals(fb.getStatus())){
-					fbWL=4;//反馈采用fbWL=4,如果反馈采纳，则进入下一个反馈期
-				}else if(FeedbackStatus.FEEDBACKING.toString().equals(fb.getStatus())){
-					fbWL=5;//反馈中
-				}else{
-					if(currentDate.before(fb.getFeedbackStartDate()) && fb.getStatus()==null){
-						fbWL=0;//未到反馈期
-					}else if(currentDate.after(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null&&fb.getStatus()==null){
-						fbWL=2;//红色警告
-					}else if(currentDate.after(fb.getFeedbackStartDate())&&currentDate.before(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
-						fbWL=1;//黄色警告
-					}
-				}		
+				if(currentDate.before(fb.getFeedbackStartDate()) && fb.getStatus()==null){
+					fbWL=0;//未到反馈期
+				}else if(currentDate.after(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null&&fb.getStatus()==null){
+					fbWL=2;//红色警告
+				}else if(currentDate.after(fb.getFeedbackStartDate())&&currentDate.before(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
+					fbWL=1;//黄色警告
+				}
 				map.put("warningLevel", fbWL);
 				map.put("feedbackStartDate", fb.getFeedbackStartDate());
 				map.put("feedbackEndDate", fb.getFeedbackEndDate());
@@ -286,22 +284,15 @@ public class ProjectController {
 						break;
 					}
 				 }	
-				if(FeedbackStatus.RETURNED.toString().equals(fbr.getStatus())){
-					fbWL=3;//反馈被退回
-				}else if(FeedbackStatus.ACCEPT.toString().equals(fbr.getStatus())){
-					fbWL=4;//反馈采用fbWL=4,如果反馈采纳，则进入下一个反馈期
-				}else if(FeedbackStatus.FEEDBACKING.toString().equals(fbr.getStatus())){
-					fbWL=5;//反馈中
-				}else{
-					if(currentDate.before(fbr.getFeedbackStartDate()) && fbr.getStatus()==null){
-						fbWL=0;//未到反馈期
-					}else if(currentDate.after(fbr.getFeedbackEndDate())&&fbr.getFeedbackDate()==null&&fbr.getStatus()==null){
-						fbWL=2;//红色警告
-					}else if(currentDate.after(fbr.getFeedbackStartDate())&&currentDate.before(fbr.getFeedbackEndDate())&&fbr.getFeedbackDate()==null){
-						fbWL=1;//黄色警告
-					}
+				if(currentDate.before(fbr.getFeedbackStartDate()) && fbr.getStatus()==null){
+					fbWL=0;//未到反馈期
+				}else if(currentDate.after(fbr.getFeedbackEndDate())&&fbr.getFeedbackDate()==null&&fbr.getStatus()==null){
+					fbWL=2;//红色警告
+				}else if(currentDate.after(fbr.getFeedbackStartDate())&&currentDate.before(fbr.getFeedbackEndDate())&&fbr.getFeedbackDate()==null){
+					fbWL=1;//黄色警告
 				}
 				map.put("warningLevel", fbWL);
+				map.put("fbStatus", fbr.getStatus());
 				jsonList.add(map);
 			}
 		}else{//显示已办结的项目页面

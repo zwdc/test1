@@ -27,40 +27,17 @@ $(function(){
 					  } 
 				 }
 				},
-				{field: 'warningLevel',title: '反馈预警',width:fixWidth(0.08),align:'center', halign:'center',sortable:true,
+				{field: 'fbstatus',title: '最近反馈',width:fixWidth(0.08),align:'center', halign:'center',sortable:true,
 					formatter:function(value){
-						  if(value=='0'){
-							  return "未到反馈期";
-						  }else if (value=="1") {           			
-	                      	  return "开始反馈";
-	                      }else if(value=="2"){
-	                    	  return "逾期反馈"; 
-	                      }else if(value=='3'){
-	                    	  return "反馈被退回"; 
-	                      }else if(value=='4'){
-	                    	  return "反馈被采纳"; 
-	                      }else if(value=='5'){
-	                    	  return "反馈中";
-	                      }else{
-	                    	  return "获取反馈状态出错";
+	            		  if (value==null) {           			
+	                      	  return "未反馈";
+	                      }else if(value=="FEEDBACKING"){
+	                    	  return "反馈中"; 
+	                      }else if(value=="ACCEPT"){
+	                    	  return "已采用"; 
+	                      }else if(value=="RETURNED"){
+	                    	  return "被退回"; 
 	                      }
-	            	  },
-	            	  styler:function(value){
-	            		    if(value=="0"){
-	            		      return ;	
-	            		    }else if (value=="1") {           			
-	                          return 'background-color:yellow;color:white';
-	                        }else if(value=="2"){
-	                      	  return 'background-color:red;color:white';
-	                        }else if(value=='3'){
-	                      	  return 'background-color:orange;color:white';
-	                        }else if(value=='4'){
-	                      	  return 'background-color:green;color:white';
-	                        }else if(value=='5'){
-	                      	  return 'background-color:blue;color:white';
-	                        }else{
-	                      	  return ;
-	                        }
 	            	  }
 	             },
 		     	{field:'TITLE',title:'任务内容',width:fixWidth(0.3),align:'left',halign:'center'},
@@ -91,6 +68,13 @@ $(function(){
 				}
 		    ]
 		],
+		rowStyler:function(index,row){
+			  if (row.warningLevel=="1") {           			
+	            return 'background-color:yellow;color:white';
+	         }else if(row.warningLevel=="2"){
+	       	    return 'background-color:red;color:white';
+	         }
+		  },
         onDblClickRow: function(index, row) {
         	showDetails(row);
         },
@@ -230,45 +214,51 @@ function showDetails(row) {
 //申请办结
 function applyEnd() {
 	var row = project_datagrid.datagrid('getSelected');
-	 var flag=false;
+	 var flag=false;	 
 	  if(row){
-	  	$.ajax({
-	  		async:false,
-	  		cache:false,
-	  		url:ctx+'/project/checkIfFinished/'+row.ID,
-	  		type:'post',
-	  		dataType:'json',
-	  		success:function(data){
-	  			if(data.status){
-	  				flag=true;
-	  			}else{
-	  				$.messager.alert("提示",data.message);
-	  			}
-	  		}
-	  	});
-	  	 if (flag) {
-	         $.messager.confirm('确认提示！', '您确定要办结此任务?', function (result) {
-	             if (result) {
-	                 $.ajax({
-	             		async: false,
-	             		cache: false,
-	                     url: ctx + '/project/completion/'+row.ID,
-	                     type: 'post',
-	                     dataType: 'json',
-	                     success: function (data) {
-	                         if (data.status) {
-	                         	project_datagrid.datagrid('load');
-	                         }
-	                         $.messager.show({
-	         					title : data.title,
-	         					msg : data.message,
-	         					timeout : 1000 * 2
-	         				});
-	                     }
-	                 });
-	             }
-	         });
-	     } 
+		 if(row.STATUS == 'APPLY_FINISHED'){
+		 	$.messager.alert("提示", "审批中，请稍候操作！");
+		 }else if(row.STATUS == 'APPROVAL_SUCCESS') {
+	    		$.messager.alert("提示", "此任务交办表已经审批通过，请勿重复审批！");
+	    } else{
+	    	$.ajax({
+		  		async:false,
+		  		cache:false,
+		  		url:ctx+'/project/checkIfFinished/'+row.ID,
+		  		type:'post',
+		  		dataType:'json',
+		  		success:function(data){
+		  			if(data.status){
+		  				flag=true;
+		  			}else{
+		  				$.messager.alert("提示",data.message);
+		  			}
+		  		}
+		  	});
+		  	 if (flag) {
+		         $.messager.confirm('确认提示！', '您确定要办结此任务?', function (result) {
+		             if (result) {
+		                 $.ajax({
+		             		async: false,
+		             		cache: false,
+		                     url: ctx + '/project/completion/'+row.ID,
+		                     type: 'post',
+		                     dataType: 'json',
+		                     success: function (data) {
+		                         if (data.status) {
+		                         	project_datagrid.datagrid('load');
+		                         }
+		                         $.messager.show({
+		         					title : data.title,
+		         					msg : data.message,
+		         					timeout : 1000 * 2
+		         				});
+		                     }
+		                 });
+		             }
+		         });
+		     } 
+	    }
 	  }else {
 	      $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
 	  }

@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
+import com.hdc.entity.ApprovalProcess;
 import com.hdc.entity.Datagrid;
 import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Group;
@@ -39,6 +40,7 @@ import com.hdc.service.ITaskInfoService;
 import com.hdc.util.BeanUtilsExt;
 import com.hdc.util.Constants;
 import com.hdc.util.Constants.ApprovalStatus;
+import com.hdc.util.Constants.FeedbackStatus;
 import com.hdc.util.upload.FileUploadUtils;
 import com.hdc.util.upload.exception.InvalidExtensionException;
 import com.uwantsoft.goeasy.client.goeasyclient.GoEasy;
@@ -214,6 +216,23 @@ public class TaskInfoController {
 			map.put("fbFrequencyName", task.getFbFrequency().getName());//反馈频度
 			map.put("urgency", task.getUrgency());	//急缓程度
 			map.put("status", task.getStatus());
+			String[] hostStr=task.getHostGroup().split(",");
+			StringBuffer major=new StringBuffer();
+			StringBuffer groupName=new StringBuffer();
+			for(int i=0;i<hostStr.length;i++){
+				Group group=this.groupService.getGroupById(Integer.valueOf(hostStr[i].trim()));
+				if(i==0){
+					major.append(group.getMajorName());
+					groupName.append(group.getName());
+				}else{
+					major.append(",");
+					major.append(group.getMajorName());
+					groupName.append(",");
+					groupName.append(group.getName());
+				}			
+			}
+			map.put("major", major);
+			map.put("groupName",groupName);
 			jsonList.add(map);
 		}
 		return new Datagrid<Object>(page.getTotal(), jsonList);
@@ -377,24 +396,36 @@ public class TaskInfoController {
    		TaskInfo taskInfo = this.taskInfoService.findById(id);
    		//以下获取任务下的反馈的列表
 		List<Map> jsonList=new ArrayList<Map>();
-		int fbWL=0;
+		int fbWL=-1;
 		Date currentDate=new Date();
 		for(Project project:taskInfo.getProjectList()){
 			for(FeedbackRecord fb:project.getFbrList()){
 				Map<String, Object> map=new HashMap<String, Object>();
 				map.put("id", fb.getId());				
-				if(currentDate.before(fb.getFeedbackStartDate())){
-					fbWL=0;//未到反馈期
-				}else if(currentDate.after(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
-					fbWL=2;//红色警告
-				}else if(currentDate.after(fb.getFeedbackStartDate())&&currentDate.before(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
-					fbWL=1;//黄色警告
-				}
+				if(FeedbackStatus.RETURNED.toString().equals(fb.getStatus())){
+					fbWL=3;//反馈被退回
+				}else if(FeedbackStatus.ACCEPT.toString().equals(fb.getStatus())){
+					fbWL=4;//反馈采用fbWL=4,如果反馈采纳，则进入下一个反馈期
+				}else if(FeedbackStatus.FEEDBACKING.toString().equals(fb.getStatus())){
+					fbWL=5;//反馈中
+				}else{
+					if(currentDate.before(fb.getFeedbackStartDate()) && fb.getStatus()==null){
+						fbWL=0;//未到反馈期
+					}else if(currentDate.after(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null&&fb.getStatus()==null){
+						fbWL=2;//红色警告
+					}else if(currentDate.after(fb.getFeedbackStartDate())&&currentDate.before(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
+						fbWL=1;//黄色警告
+					}
+				}		
 				map.put("warningLevel", fbWL);
 				map.put("feedbackStartDate", fb.getFeedbackStartDate());
 				map.put("feedbackEndDate", fb.getFeedbackEndDate());
 				map.put("groupName", fb.getProject().getGroup().getName());
-				map.put("createUser", fb.getCreateUser().getName());
+				if(fb.getFeedbackUser()!=null){
+					map.put("feedbackUser", fb.getFeedbackUser().getName());
+				}else{
+					map.put("feedbackUser", "--");
+				}	
 				map.put("feedbackDate", fb.getFeedbackDate());
 				map.put("status", fb.getStatus());
 				map.put("refuseCount", fb.getRefuseCount());
@@ -405,12 +436,34 @@ public class TaskInfoController {
 		Datagrid fbList=new Datagrid(jsonList.size(),jsonList);
 		Gson gson=new Gson();
 		//在gson转换ArrayList的时候，不能有懒加载的对象		
-		System.out.println(gson.toJson(fbList));
 		mv.addObject("feedback",gson.toJson(fbList));
    		mv.addObject("taskInfo", taskInfo);
    		return mv;
    	}
-       
+   	/**
+	 * 获取审批流程列表分页数据
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 */
+   	@RequestMapping(value = "/getApprovalProcess/{id}")
+	public ModelAndView getApprovalProcess(@PathVariable("id") Integer id) throws Exception{
+   		ModelAndView mv = new ModelAndView("taskInfo/ap_taskInfo");
+		List<Map<String,Object>> list = this.taskInfoService.getApprovalProcess(id);
+		System.out.println(list.get(0));;
+		Datagrid fbList=new Datagrid(list.size(),list);
+		Gson gson=new Gson();
+		//在gson转换ArrayList的时候，不能有懒加载的对象		
+		mv.addObject("approvalProcess",gson.toJson(fbList));
+		return mv;
+	}
+	   
+   	
+   	
+   	
+   	
+   	
+   	
     public static void main(String[] args) throws Exception {
  	    //测试推送
  	    GoEasy goEasy = new GoEasy("0cf326d6-621b-495a-991e-a7681bcccf6a");

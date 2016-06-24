@@ -24,38 +24,17 @@ $(function() {
 		nowrap:false,
         columns : [
              [
-              {field: 'warningLevel', title: '反馈状态', width: fixWidth(0.08), align: 'center', halign: 'center', sortable: true,
+              {field: 'status', title: '反馈状态', width: fixWidth(0.08), align: 'center', halign: 'center', sortable: true,
             	  formatter:function(value){
-            		  if (value=="0") {           			
-                      	  return "未到反馈期";
-                      }else if (value=="1") {           			
-                      	  return "开始反馈";
-                      }else if(value=="2"){
-                    	  return "逾期反馈"; 
-                      }else if(value=='3'){
-                    	  return "反馈被退回"; 
-                      }else if(value=='4'){
-                    	  return "反馈被采纳"; 
-                      }else if(value=='5'){
-                    	  return "反馈中";
-                      }else{
-                    	  return "获取反馈状态出错";
+            		  if (value==null) {           			
+                      	  return "未反馈";
+                      }else if(value=="FEEDBACKING"){
+                    	  return "反馈中"; 
+                      }else if(value=="ACCEPT"){
+                    	  return "已采用"; 
+                      }else if(value=="RETURNED"){
+                    	  return "被退回"; 
                       }
-            	  },
-            	  styler:function(index,row){
-            		  if (row.warningLevel=="1") {           			
-                         return 'background-color:yellow;color:white';
-                       }else if(row.warningLevel=="2"){
-                     	  return 'background-color:red;color:white';
-                       }else if(row.warningLevel=='3'){
-                     	  return 'background-color:orange;color:white';
-                       }else if(row.warningLevel=='4'){
-                     	  return 'background-color:green;color:white';
-                       }else if(row.warningLevel=='5'){
-                     	  return 'background-color:blue;color:white';
-                       }else{
-                     	  return ;
-                       }
             	  }
 			},
 			  {field: 'feedbackStartDate', title: '反馈期间', width: fixWidth(0.2), align: 'center', halign: 'center', sortable: true,
@@ -79,6 +58,13 @@ $(function() {
               {field: 'refuseCount', title: '退回次数', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true}  
         ]
      ],
+	  rowStyler:function(index,row){
+		  if (row.warningLevel=="1") {           			
+           return 'background-color:yellow;color:white';
+        }else if(row.warningLevel=="2"){
+      	    return 'background-color:red;color:white';
+        }
+	  },
     toolbar: "#feedbacktoolbar"
     });
 	   $("#assistantGroup").kindeditor({readonlyMode: true});
@@ -120,103 +106,111 @@ $(function() {
 	  var row = feedback_datagrid.datagrid('getSelected');
 	  var flag=false;
 	  if(row){
-	  	$.ajax({
-	  		async:false,
-	  		cache:false,
-	  		url:ctx+'/feedback/checkFeedbackDate/'+row.id,
-	  		type:'post',
-	  		dataType:'json',
-	  		success:function(data){
-	  			if(data.status){
-	  				flag=true;
-	  			}else{
-	  				$.messager.alert("提示",data.message);
-	  			}
-	  		}
-	  	});
-	    if (flag) {
-		  	feedback_dialog = $('<div/>').dialog({
-			    	title : "进行反馈",
-					top: 20,
-					width : fixWidth(0.9),
-					height : 'auto',
-			        modal: true,
-			        minimizable: true,
-			        maximizable: true,
-			        href: ctx+"/feedback/toMain?action=feedback&id="+row.id,
-			        onLoad: function () {
-			            formInit(row,ctx+"/feedback/saveFeedback");
-			        },
-			        buttons: [
-			            {
-			                text: '暂存',
-			                iconCls: 'icon-save',
-			                handler: function () {
-			                	saveTemporary();
-			                }
-			            },
-			            {
-			            	text: '申请审核',
-			            	iconCls: 'icon-ok',
-			            	id: 'ok',
-			            	handler: function () {
-			                	$.messager.confirm('确认提示！','确认提交表单进入反馈审核流程吗？',function(result){
-			                		if(result){
-			                			feedback_form.form('submit',{
-			    	            		 	url: ctx+"/feedback/callApproval",
-			    	            	        onSubmit: function () {
-			    	            		        $.messager.progress({
-			    	            		            title: '提示信息！',
-			    	            		            text: '数据处理中，请稍后....'
-			    	            		        });
-			    	            		        var isValid = $(this).form('validate');
-			    	            		        if (!isValid) {
-			    	            		            $.messager.progress('close');
-			    	            		        } else {
-			    	            		        	$("#save").linkbutton("disable");
-			    	            		        	$("#ok").linkbutton("disable");
-			    	            		        }
-			    	            		        return isValid;
-			    	            		    },
-			    	            		    success: function (data) {
-			    	            	            $.messager.progress('close');
-			    	            	            var json = $.parseJSON(data);
-			    	            	            if (json.status) {
-			    	            	            	feedback_dialog.dialog('destroy');//销毁对话框
-			    	            	            	feedback_datagrid.datagrid('reload');//重新加载列表数据
-			    	            	            } 
-			    	            	            $.messager.show({
-			    	            					title : json.title,
-			    	            					msg : json.message,
-			    	            					timeout : 1000 * 2
-			    	            				});
-			    	            	        }
-			    	            	    });
-			                		}
-			                	});
-			                }
-			            },
-			            {
-			                text: '重置',
-			                iconCls: 'icon-reload',
-			                handler: function () {
-			                	feedback_form.form('clear');
-			                }
-			            },
-			            {
-			                text: '关闭',
-			                iconCls: 'icon-cancel',
-			                handler: function () {
-			                	feedback_dialog.dialog('destroy');
-			                }
-			            }
-			        ],
-			        onClose: function () {
-			        	feedback_dialog.dialog('destroy');
-			        }
-			    });
-			
-		  } 
+		  if(row.warningLevel==4){
+			  $.messager.alert("提示", "本次反馈已被采用，不可重复反馈！");
+		  }else if(row.warningLevel==5){
+			  $.messager.alert("提示", "本反馈已提交审核，不可重复提交");
+		  }else{
+				$.ajax({
+			  		async:false,
+			  		cache:false,
+			  		url:ctx+'/feedback/checkFeedbackDate/'+row.id,
+			  		type:'post',
+			  		dataType:'json',
+			  		success:function(data){
+			  			if(data.status){
+			  				flag=true;
+			  			}else{
+			  				$.messager.alert("提示",data.message);
+			  			}
+			  		}
+			  	});
+			    if (flag) {
+				  	feedback_dialog = $('<div/>').dialog({
+					    	title : "进行反馈",
+							top: 20,
+							width : fixWidth(0.9),
+							height : 'auto',
+					        modal: true,
+					        minimizable: true,
+					        maximizable: true,
+					        href: ctx+"/feedback/toMain?action=feedback&id="+row.id,
+					        onLoad: function () {
+					            formInit(row,ctx+"/feedback/saveFeedback");
+					        },
+					        buttons: [
+					            {
+					                text: '暂存',
+					                iconCls: 'icon-save',
+					                handler: function () {
+					                	saveTemporary();
+					                }
+					            },
+					            {
+					            	text: '申请审核',
+					            	iconCls: 'icon-ok',
+					            	id: 'ok',
+					            	handler: function () {
+					                	$.messager.confirm('确认提示！','确认提交表单进入反馈审核流程吗？',function(result){
+					                		if(result){
+					                			feedback_form.form('submit',{
+					    	            		 	url: ctx+"/feedback/callApproval",
+					    	            	        onSubmit: function () {
+					    	            		        $.messager.progress({
+					    	            		            title: '提示信息！',
+					    	            		            text: '数据处理中，请稍后....'
+					    	            		        });
+					    	            		        var isValid = $(this).form('validate');
+					    	            		        if (!isValid) {
+					    	            		            $.messager.progress('close');
+					    	            		        } else {
+					    	            		        	$("#save").linkbutton("disable");
+					    	            		        	$("#ok").linkbutton("disable");
+					    	            		        }
+					    	            		        return isValid;
+					    	            		    },
+					    	            		    success: function (data) {
+					    	            	            $.messager.progress('close');
+					    	            	            var json = $.parseJSON(data);
+					    	            	            if (json.status) {
+					    	            	            	feedback_dialog.dialog('destroy');//销毁对话框
+					    	            	            	feedback_datagrid.datagrid('reload');//重新加载列表数据
+					    	            	            } 
+					    	            	            $.messager.show({
+					    	            					title : json.title,
+					    	            					msg : json.message,
+					    	            					timeout : 1000 * 2
+					    	            				});
+					    	            	        }
+					    	            	    });
+					                		}
+					                	});
+					                }
+					            },
+					            {
+					                text: '重置',
+					                iconCls: 'icon-reload',
+					                handler: function () {
+					                	feedback_form.form('clear');
+					                }
+					            },
+					            {
+					                text: '关闭',
+					                iconCls: 'icon-cancel',
+					                handler: function () {
+					                	feedback_dialog.dialog('destroy');
+					                }
+					            }
+					        ],
+					        onClose: function () {
+					        	feedback_dialog.dialog('destroy');
+					        }
+					    });
+					
+				  } 
+		  }
+
+	  
 	  }else {
 	      $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
 	  }

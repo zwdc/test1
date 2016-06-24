@@ -22,20 +22,16 @@ $(function() {
 		striped:true,
         columns : [
              [
-              {field: 'warningLevel', title: '反馈状态', width: fixWidth(0.08), align: 'center', halign: 'center', sortable: true,
+              {field: 'status', title: '反馈状态', width: fixWidth(0.08), align: 'center', halign: 'center', sortable: true,
             	  formatter:function(value){
-            		  if (value=="1") {           			
-                      	  return "开始反馈";
-                      }else if(value=="2"){
-                    	  return "逾期反馈"; 
-                      }else if(value=='3'){
-                    	  return "反馈被退回"; 
-                      }else if(value=='4'){
-                    	  return "反馈被采纳"; 
-                      }else if(value=='5'){
-                    	  return "反馈中";
-                      }else{
-                    	  return "未到反馈期";
+            		  if (value==null) {           			
+                      	  return "未反馈";
+                      }else if(value=="FEEDBACKING"){
+                    	  return "反馈中"; 
+                      }else if(value=="ACCEPT"){
+                    	  return "已采用"; 
+                      }else if(value=="RETURNED"){
+                    	  return "被退回"; 
                       }
             	  }
 			},
@@ -44,9 +40,9 @@ $(function() {
 						  return moment(value).format("MM月DD日")+"-"+moment(row.feedbackEndDate).format("MM月DD日");
 					  }
 				},
-              {field: 'groupName', title: '牵头单位', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
-              {field: 'feedbackUser', title: '填报人', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
-              {field: 'feedbackDate', title: '反馈时间', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true,
+              {field: 'groupName', title: '牵头单位', width: fixWidth(0.08), align: 'center', halign: 'center', sortable: true},
+              {field: 'feedbackUser', title: '填报人', width: fixWidth(0.08), align: 'center', halign: 'center', sortable: true},
+              {field: 'feedbackDate', title: '反馈时间', width: fixWidth(0.15), align: 'center', halign: 'center', sortable: true,
             	  formatter:function(value,row){
             		  if(value==null){
             			  return "--"
@@ -56,24 +52,16 @@ $(function() {
             		 
 				  }
               },
-              {field: 'delayCount', title: '延期次数', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true},
-              {field: 'refuseCount', title: '退回次数', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true}  
+              {field: 'delayCount', title: '延期次数', width: fixWidth(0.07), align: 'center', halign: 'center', sortable: true},
+              {field: 'refuseCount', title: '退回次数', width: fixWidth(0.07), align: 'center', halign: 'center', sortable: true}  
         ]
      ]
 	,
 	  rowStyler:function(index,row){
 		  if (row.warningLevel=="1") {           			
-           return 'background-color:yellow;color:white';
+            return 'background-color:yellow;color:white';
          }else if(row.warningLevel=="2"){
-       	  return 'background-color:red;color:white';
-         }else if(row.warningLevel=='3'){
-       	  return 'background-color:red;color:white';
-         }else if(row.warningLevel=='4'){
-       	  return 'background-color:green;color:white';
-         }else if(row.warningLevel=='5'){
-       	  return 'background-color:blue;color:white';
-         }else{
-       	  return ;
+       	    return 'background-color:red;color:white';
          }
 	  },
     toolbar: "#toolbar1"

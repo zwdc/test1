@@ -63,6 +63,8 @@ public class Comments implements Serializable {
 	@Column(name="business_form", length = 20)
 	private String businessForm; 		//业务表单
 	
+	
+	
 	public Comments() {
 		
 	}

@@ -81,22 +81,13 @@ public class FeedbackController {
 		Date currentDate=new Date();
 		for(FeedbackRecord fb:fbList){
 			Map<String, Object> map=new HashMap<String, Object>();
-			map.put("id", fb.getId());
-			
-			if(FeedbackStatus.RETURNED.toString().equals(fb.getStatus())){
-				fbWL=3;//反馈被退回
-			}else if(FeedbackStatus.ACCEPT.toString().equals(fb.getStatus())){
-				fbWL=4;//反馈采用fbWL=4,如果反馈采纳，则进入下一个反馈期
-			}else if(FeedbackStatus.FEEDBACKING.toString().equals(fb.getStatus())){
-				fbWL=5;//反馈中
-			}else{
-				if(currentDate.before(fb.getFeedbackStartDate()) && fb.getStatus()==null){
-					fbWL=0;//未到反馈期
-				}else if(currentDate.after(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null&&fb.getStatus()==null){
-					fbWL=2;//红色警告
-				}else if(currentDate.after(fb.getFeedbackStartDate())&&currentDate.before(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
-					fbWL=1;//黄色警告
-				}
+			map.put("id", fb.getId());		
+			if(currentDate.before(fb.getFeedbackStartDate()) && fb.getFeedbackDate()==null){
+				fbWL=0;//未到反馈期
+			}else if(currentDate.after(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
+				fbWL=2;//红色警告
+			}else if(currentDate.after(fb.getFeedbackStartDate())&&currentDate.before(fb.getFeedbackEndDate())&&fb.getFeedbackDate()==null){
+				fbWL=1;//黄色警告
 			}		
 			map.put("warningLevel", fbWL);
 			map.put("feedbackStartDate", fb.getFeedbackStartDate());
@@ -368,7 +359,7 @@ public class FeedbackController {
 			if(workPlan != null) {
 				FeedbackRecord feedback = this.feedbackService.findById(feedbackId);
 				feedback.setWorkPlan(workPlan);
-				this.feedbackService.doUpdate(feedback,null,null);
+				this.feedbackService.doUpdate(feedback);
 				message.setMessage("修改成功！");
 			} else {
 				message.setData(0);

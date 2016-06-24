@@ -4,7 +4,6 @@
 <%@ taglib prefix="zwdc" uri="http://zwdc.com/zwdc/tags/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <script type="text/javascript" src="${ctx}/js/kindeditor.js"></script>
-<script type="text/javascript" src="${ctx}/js/app/feedback.js"></script>
 <script type="text/javascript">
 var feedback_datagrid;
 var feedback_form;
@@ -24,20 +23,16 @@ $(function() {
 		nowrap:false,
         columns : [
              [
-              {field: 'warningLevel', title: '反馈状态', width: fixWidth(0.08), align: 'center', halign: 'center', sortable: true,
+              {field: 'status', title: '反馈状态', width: fixWidth(0.08), align: 'center', halign: 'center', sortable: true,
             	  formatter:function(value){
-            		  if (value=="1") {           			
-                      	  return "开始反馈";
-                      }else if(value=="2"){
-                    	  return "逾期反馈"; 
-                      }else if(value=='3'){
-                    	  return "反馈被退回"; 
-                      }else if(value=='4'){
-                    	  return "反馈被采纳"; 
-                      }else if(value=='5'){
-                    	  return "反馈中";
-                      }else{
-                    	  return "未到反馈期";
+            		  if (value==null) {           			
+                      	  return "未反馈";
+                      }else if(value=="FEEDBACKING"){
+                    	  return "反馈中"; 
+                      }else if(value=="ACCEPT"){
+                    	  return "已采用"; 
+                      }else if(value=="RETURNED"){
+                    	  return "被退回"; 
                       }
             	  }
 			},
@@ -63,27 +58,54 @@ $(function() {
               {field: 'refuseCount', title: '退回次数', width: fixWidth(0.1), align: 'center', halign: 'center', sortable: true}  
         ]
      ],
-	  rowStyler:function(index,row){
-		  if (row.warningLevel=="1") {           			
-             return 'background-color:yellow;color:white';
-           }else if(row.warningLevel=="2"){
-         	  return 'background-color:red;color:white';
-           }else if(row.warningLevel=='3'){
-         	  return 'background-color:red;color:white';
-           }else if(row.warningLevel=='4'){
-         	  return 'background-color:green;color:white';
-           }else if(row.warningLevel=='5'){
-         	  return 'background-color:blue;color:white';
-           }else{
-         	  return ;
-           }
-	  },
+		  rowStyler:function(index,row){
+			if (row.warningLevel=="1") {           			
+	           return 'background-color:yellow;color:white';
+	        }else if(row.warningLevel=="2"){
+	      	    return 'background-color:red;color:white';
+	        }else if(row.status=="ACCEPT"){
+	        	return 'background-color:green;color:white';
+	        }
+		  },
     });
 	
 	$("#assistantGroup").kindeditor({readonlyMode: true});
 	$("#remark").kindeditor({readonlyMode: true});
 	$("#suggestion").kindeditor({readonlyMode: true});
 });
+//查看反馈详情
+function detailsFeedback(){
+    var row = feedback_datagrid.datagrid('getSelected');
+    if (row) {
+    	feedback_dialog = $('<div/>').dialog({
+	    	title : "反馈记录详情",
+			top: 20,
+			width : fixWidth(0.8),
+			height : 'auto',
+	        modal: true,
+	        minimizable: true,
+	        maximizable: true,
+	        href: ctx+"/feedback/toMain?action=detail&id="+row.id,
+	        onLoad: function () {
+	            formInit(row,ctx+"/feedback/detail");
+	        },
+	        buttons: [
+	  	          {
+	  	                text: '关闭',
+	  	                iconCls: 'icon-cancel',
+	  	                handler: function () {
+	  	                	feedback_dialog.dialog('destroy');
+	  	                }
+	  	            }
+	  	        ],
+	        onClose: function () {
+	        	source_dialog.dialog('destroy');
+	        }
+	    });
+    } else {
+        $.messager.alert("提示", "您未选择任何操作对象，请选择一行数据！");
+    }
+}
 </script>
 <div class="easyui-layout">
 <form id="form" action="${ctx }/project/approvalComplete" method="post">
@@ -158,22 +180,31 @@ $(function() {
 				<textarea name="assistantGroup" rows="1" cols="80" style="width: 100%">${taskInfo.assistantGroup }</textarea>
 			</td>
 		</tr>
-		<tr>
+  		<tr class="bg-primary">
+			<td colspan="4" align="center">反馈列表</td>
+		</tr>
+		<tr><td colspan="4">
+		  <div id="feedbacktoolbar" style="padding:2px 0">
+			<table>   
+				<tr>
+					<td style="padding-left:2px">
+						<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="detailsFeedback();">详情</a>
+					</td>
+				</tr>
+			</table>
+		   </div>
+	    </td></tr>
+  		<tr>
+  			<td colspan="4">
+				<table id="feedback_datagrid"></table>
+  			</td>
+  		</tr>
+  		<tr>
 	  		<td colspan="4">
 	  			<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>&nbsp;审批意见:
 	  			<textarea class="easyui-kindeditor" name="comment" rows="3"></textarea>
 	  		</td>
 	  	</tr>
-  	</table>
-	<table class="table table-bordered table-condensed">
-  		<tr class="bg-primary">
-			<td colspan="4" align="center">反馈列表</td>
-		</tr>
-  		<tr>
-  			<td>
-				<table id="feedback_datagrid"></table>
-  			</td>
-  		</tr>
   	</table>
 </form>
 <hr style="margin-top: -5px ">

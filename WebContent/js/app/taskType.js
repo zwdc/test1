@@ -20,6 +20,7 @@ $(function() {
         columns : [ 
             [ 
               {field : 'name',title : '类型名称',width : fixWidth(0.4),align : 'left',sortable: true},
+              {field : 'id',title : '类型ID',width : fixWidth(0.4),align : 'left',sortable: true},
     	    ] 
         ],
         toolbar: "#toolbar"

@@ -25,9 +25,10 @@
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="del();">删除</a>
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="multiInsert();">批量创建任务</a>
 					</shiro:hasRole>
-					<shiro:hasRole name="SUPERVISE,SUPERVISOR">
-						<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="details();">详情</a>
-					</shiro:hasRole>
+
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="details();">详情</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="approvalPrcess();">查看审批流程</a>
+
 					<!-- <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="publishMessage();">发送</a> -->
 				</td>
 				<td style="padding-left:5px;">

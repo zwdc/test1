@@ -138,11 +138,13 @@
 				<table id="hostGroupDatagrid" class="easyui-datagrid" data-options="url:'${ctx }/group/getHostGroupList?groupIds=${taskInfo.hostGroup }',fitColumns:true,rownumbers:true,border:true,singleSelect:true">
 				    <thead>
 						<tr>
-							<th data-options="field:'groupName'" width="25%">牵头单位名称</th>
-							<th data-options="field:'userNames0'" width="15%">联系人A</th>
-							<th data-options="field:'linkway0'" width="20%">联系方式</th>
-							<th data-options="field:'userNames1'" width="15%">联系人B</th>
-							<th data-options="field:'linkway1'" width="20%">联系方式</th>
+							<th data-options="field:'groupName'" width="20%">牵头单位名称</th>
+							<th data-options="field:'userNames0'" width="10%">联系人A</th>
+							<th data-options="field:'linkway0'" width="15%">联系方式</th>
+							<th data-options="field:'userNames1'" width="10%">联系人B</th>
+							<th data-options="field:'linkway1'" width="15%">联系方式</th>
+							<th data-options="field:'leader'" width="10%">办公室主任</th>
+							<th data-options="field:'leader_phone'" width="15%">联系方式</th>
 						</tr>
 				    </thead>
 				</table>

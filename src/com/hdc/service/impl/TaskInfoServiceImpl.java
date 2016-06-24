@@ -8,6 +8,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hdc.dao.IJdbcDao;
+import com.hdc.entity.ApprovalProcess;
 import com.hdc.entity.Comments;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
@@ -29,6 +31,9 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 
 	@Autowired
 	private IBaseService<TaskInfo> baseService;
+	
+	@Autowired
+	private IJdbcDao jdbcDao;
 	
 	@Autowired
 	private IProcessService processService;
@@ -138,7 +143,7 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 		comments.setUserName(user.getName()); 
 		comments.setContent(comment);
 		comments.setBusinessKey(taskInfoId);
-		comments.setBusinessForm(BusinessForm.TASK_FORM.toString());		
+		comments.setBusinessForm(BusinessForm.TASK_FORM.toString());	
 		variables.put("isPass", isPass);
 		this.processService.complete(taskId, comments, variables);
 	}
@@ -147,6 +152,21 @@ public class TaskInfoServiceImpl implements ITaskInfoService {
 	public Integer doUpdateStatus(String id, String status) throws Exception {
 		String hql = "update TaskInfo set status = '" + status + "' where id = " + id;
 		return this.baseService.executeHql(hql);
+	}
+	@Override
+	public List<Map<String,Object>> getApprovalProcess(Integer taskInfo_id) throws Exception {
+		String sql = "SELECT process_task.create_date as createDate,"
+				+ "process_task.apply_user_name as applyUser,"
+				+ "act_hi_comment.MESSAGE_ as approvalContent,"
+				+ "users.USER_NAME as approvalUser,"
+				+ "process_task.title as applyContent"
+				+ " FROM "
+				+ "process_task "
+				+ "Left Join act_hi_comment ON act_hi_comment.PROC_INST_ID_ = process_task.pro_inst_id "
+				+ "Inner Join users ON users.USER_ID = process_task.assign "
+				+ " WHERE "
+				+ "task_info_id="+taskInfo_id+" order by project_id";
+		return this.jdbcDao.findAll(sql,null);
 	}
 
 }

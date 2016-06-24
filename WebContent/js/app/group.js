@@ -20,8 +20,12 @@ $(function() {
 		striped:true,
         columns : [ 
             [ 
-              {field : 'name',title : '部门名称',width : fixWidth(0.4),align : 'left',sortable: true},
-              {field : 'type',title : '部门类型',width : fixWidth(0.4),align : 'center',sortable: true}
+              {field : 'name',title : '部门名称',width : fixWidth(0.15),align : 'center',sortable: true},
+              {field : 'major_name',title : '主管市长',width : fixWidth(0.15),align : 'center',sortable: true},
+              {field : 'major_phone',title : '联系方式',width : fixWidth(0.15),align : 'center',sortable: true},
+              {field : 'leader_name',title : '办公室主任',width : fixWidth(0.15),align : 'center',sortable: true},
+              {field : 'leader_phone',title : '联系方式',width : fixWidth(0.15),align : 'center',sortable: true},
+              {field : 'type',title : '部门类型',width : fixWidth(0.15),align : 'center',sortable: true}
     	    ] 
         ],
         toolbar: "#toolbar"

@@ -166,11 +166,14 @@ public class GroupController {
 				int i=0;
 				for(User user : group.getUser()) {
 					map.put("userNames"+i, user.getName());
-					map.put("linkway"+i, user.getPasswd());
+					map.put("linkway"+i, user.getLinkType());
 					i++;
 				}
 				map.put("groupId", group.getId());
-				map.put("groupName", group.getName());				
+				map.put("groupName", group.getName());	
+				map.put("leader", group.getLeaderName());
+				map.put("leader_phone", group.getLeaderPhone());
+				
 				jsonList.add(map);
 			}
 		}

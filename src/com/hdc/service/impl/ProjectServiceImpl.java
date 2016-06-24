@@ -252,6 +252,7 @@ public class ProjectServiceImpl implements IProjectService {
 			processTask.setTaskTitle(taskInfo.getTitle());
 			processTask.setApplyUserId(user.getId());
 			processTask.setApplyUserName(user.getName());
+			processTask.setProjectId(project.getId());
 			processTask.setTaskInfoId(taskInfo.getId());
 			processTask.setTaskInfoType(taskInfo.getTaskSource().getTaskInfoType().getName());
 			processTask.setTitle("任务交办表审批不通过，请修改后重新审批！");

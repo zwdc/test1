@@ -95,9 +95,9 @@
 		</tr>
 		
 		<tr>
-			<td class="text-right">记录状态:</td>
+			<td class="text-right">反馈状态:</td>
 			<td><input type="text" class="easyui-textbox"
-				value="${(feedback.status eq 'FEEDBACKING' ) ? '反馈中' : ((feedback.status eq 'RETURNED') ? '已退回' : '已采用') }" data-option="prompt:'来源名称'"
+				value="${(feedback.status eq 'FEEDBACKING' ) ? '反馈中' : ((feedback.status eq 'RETURNED') ? '已退回' : ((feedback.status eq 'ACCEPT') ? '已采用' : '未反馈')) }" data-option="prompt:'反馈状态'"
 				 disabled="disabled"></td>
 			<td class="text-right">是否延期:</td>
 			<td><input type="text" class="easyui-textbox"
