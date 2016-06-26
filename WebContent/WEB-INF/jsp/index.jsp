@@ -16,8 +16,6 @@
 	<script type="text/javascript" src="${ctx}/js/tree_user.js"></script>
     <script type="text/javascript" src="${ctx}/js/messenger.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/messenger-theme-flat.js"></script>
-     <script type="text/javascript" src="${ctx}/js/goeasy.js"></script> 
-    <%--<script type="text/javascript" src="https://cdn.goeasy.io/goeasy.js"></script>--%>
 	<style type="text/css">
 		.ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
 	</style>
@@ -57,117 +55,33 @@
 			}
 			
 			Messenger.options = {
-   			    extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
+   			    extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-right',
    			    theme: 'flat'
    			}
 			
-		/* 	var goEasy = new GoEasy({
-		         appkey: '2cd54c54-b215-4a5f-8d83-50542809b207'
-		     });
-			 goEasy.subscribe({
-		         channel: 'demo',
-		         onMessage: function(message){  //自动接收推送信息                           
-		        	 $.messager.alert('Meessage received:'+message.content);
-		         }
-		    }); */
-			
-			/*  var goEasy = new GoEasy({
-		         appkey: '0cf326d6-621b-495a-991e-a7681bcccf6a',
-		         onConnected: function() {
-		        	//alert("成功连接 GoEasy。");
-	        	 },
-	        	 onDisconnected: function() {
-	        	 	//alert("与 GoEasy 连接断开。");
-	        	 },
-	        	 onConnectFailed: function(error) {
-	        	 	//alert("与 GoEasy 连接失败，错误编码："+error.code+"错误信息："+error.content);
-	        	 }
-		     });
-			//获取消息
-			 goEasy.subscribe({
-	             channel: "zwdc_user_${user.id}",
-	             onMessage: function(message){  //1.获取消息
-	            	 alert(message.content);
-	            	 $.ajax({	//2.去任务表拿提示的任务
-	                     url: ctx + '/processTask/getProcessTask/'+message.content,		
-	                     type: 'post',
-	                     dataType: 'json',
-	                     success: function (data) {
-	                         if(data != null) {
-	                        	 var msg = Messenger().post({	//3.右上角显示消息弹窗
-		       	                	  message: data.title,
-		       	                	  hideAfter: 15,
-		       	         		 	  showCloseButton: true,
-		       	                	  actions: {
-		       	                	    retry: {
-		       	                	       label: '查看',
-		       	                	       phrase: 'Retrying TIME',
-		       	                	       auto: false,
-		       	                	       delay: 15,
-		       	                	       action: function() {
-		       	                	    	 showMessage(data);	//4.点击查看后，显示要办理的任务
-		       	                	       }
-		       	                	    },
-		       	                	    cancel: {
-		       	                	       label: '取消',
-		       	                	       action: function() {
-		       	                	         return msg.cancel();
-		       	                	       }
-		       	                	    }
-		       	                	  }
-		                       	 });
-	                         } else {
-	                        	 Messenger().post({
-	                   			  message: "未找到相关数据！",
-	                   		 	  hideAfter: 3,
-	                   		 	  showCloseButton: true,
-	                   		 	});
-	                         }
-	                     }
-	                 });
-	             },
-	             onSuccess: function () {
-            	 	//alert("Channel 订阅成功。");
-            	 },
-            	 onFailed: function (error) {
-            	 	//alert("Channel 订阅失败, 错误编码：" + error.code + " 错误信息：" + error.content)
-            	 }
-	         });
-		}); */
+			//待签收任务数量
+			$.ajax({
+				async: false,
+        		cache: false,
+				type: 'post',
+				dataType : "json",
+				url: ctx+"/project/getProjectCount?type=1",
+				error: function () {
+					Messenger().post({
+           			  message: "获取待签收任务数量失败！",
+           		 	  hideAfter: 5,
+           		 	  showCloseButton: true,
+           		 	});
+				},
+				success:function(data){ 
+					Messenger().post({
+          			  message: "您当前有 " + data + " 条待签收交办事项！",
+          		 	  hideAfter: 5,
+          		 	  showCloseButton: true,
+          		 	});
+				}
+			});
 	});
-		var message_dialog;
-		function showMessage(data) {	//5.弹窗显示任务页面
-			message_dialog = $('<div/>').dialog({
-		    	title : "任务详情",
-				top: 20,
-				width : ($(this).width() - 50) * 0.7,
-				height : 'auto',
-		        modal: true,
-		        minimizable: true,
-		        maximizable: true,
-		        href: ctx + data.url,
-		        buttons: [
-					{
-					    text: '提交',
-					    iconCls: 'icon-save',
-					    id: 'save',
-					    handler: function () {
-					    	submitForm(message_dialog, data.taskId);
-					    }
-					},
-		            {
-		                text: '关闭',
-		                iconCls: 'icon-cancel',
-		                handler: function () {
-		                	message_dialog.dialog('destroy');
-		                }
-		            }
-		        ],
-		        onClose: function () {
-		        	message_dialog.dialog('destroy');
-		        }
-		    });
-		}
 	</script>
  </head>
  <body class="easyui-layout">

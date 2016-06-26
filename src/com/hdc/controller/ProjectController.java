@@ -2,7 +2,6 @@ package com.hdc.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.gson.Gson;
 import com.hdc.entity.Comments;
 import com.hdc.entity.Datagrid;
 import com.hdc.entity.FeedbackRecord;
@@ -32,7 +30,6 @@ import com.hdc.service.IFeedbackRecordService;
 import com.hdc.service.IProjectService;
 import com.hdc.util.Constants;
 import com.hdc.util.Constants.BusinessForm;
-import com.hdc.util.Constants.FeedbackStatus;
 
 /**
  * 任务交办管理器
@@ -306,6 +303,19 @@ public class ProjectController {
 		}
 		
 		return new Datagrid<Map<String, Object>>(page.getTotal(), jsonList);
+	}
+	
+	/**
+	 * 获取不同类型的project数量
+	 * @param type 1 未签收     2办理中    3已办结
+	 * @return
+	 */
+	@RequestMapping("/getProjectCount")
+	@ResponseBody
+	public Integer getProjectCount(Parameter param, @RequestParam("type") Integer type) throws Exception {
+		Page<Map<String, Object>> page = new Page<Map<String, Object>>(param.getPage(), param.getRows());
+		this.projectService.getProjectList(param, type, page);
+		return page.getTotal();
 	}
 	
 	/**
