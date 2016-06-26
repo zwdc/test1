@@ -90,6 +90,7 @@ $(function(){
 			taskInfo_datagrid.datagrid('reload',obj);
 		}
 	});
+	
 });
 //高级搜索 删除一行
 function searchRemove(curr) {
