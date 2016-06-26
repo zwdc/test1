@@ -302,7 +302,7 @@
 	<div data-options="name:'name'">来源名称</div>
 	<div data-options="name:'code'">来源时间</div>
 </div>
-<div class="easyui-layout">
+<div class="easyui-layout form-group">
 <form id="taskInfo_form" method="post">
 	<input type="hidden" id="taskInfoId" name="id" value="${taskInfo.id }">
 	<input type="hidden" name="createUser.id" value="${taskInfo.createUser.id }">
@@ -315,8 +315,9 @@
 		</tr>
 		<tr>
 			<td class="text-right">任务内容:</td>
-			<td colspan="3"><textarea class="easyui-kindeditor" 
-					data-options="readonlyMode:false" name="title" rows="2" required="required">${taskInfo.title }</textarea></td>
+			<td colspan="3">
+			<input class="easyui-textbox" style="width:100%;height:100px" data-options="multiline:true"  name="title" value="${taskInfo.title }" required="required"/>   
+		    </td>
 		</tr>
 		<tr>
 			<td class="text-right">任务来源:</td>
@@ -357,7 +358,7 @@
 		<tr>
 			<td class="text-right">责任单位:</td>
 			<td colspan="3">
-				<textarea name="assistantGroup" rows="1" cols="80" style="width: 100%">${taskInfo.assistantGroup }</textarea>
+				<input  class="easyui-textbox"  name="assistantGroup"  style="width: 100%" value="${taskInfo.assistantGroup }">
 			</td>
 		</tr>
 	</table>

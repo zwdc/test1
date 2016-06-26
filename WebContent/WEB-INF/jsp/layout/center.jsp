@@ -48,7 +48,7 @@
 
 		centerTabs = $('#centerTabs').tabs({
 			tools : [ {
-					iconCls : 'icon-reload',
+					iconCls : 'fa fa-refresh',
 					handler : function() {
 						var href = $('#centerTabs').tabs('getSelected').panel('options').href;
 						if (href) {/*说明tab是以href方式引入的目标页面*/
@@ -73,7 +73,7 @@
 						}
 					}
 				}, {
-					iconCls : 'icon-cancel',
+					iconCls : 'fa fa-close fa-large',
 					handler : function() {
 						var index = $('#centerTabs').tabs('getTabIndex', $('#centerTabs').tabs('getSelected'));
 						var tab = $('#centerTabs').tabs('getTab', index);
@@ -84,7 +84,7 @@
 						}
                   			}
                  		},{
-                   iconCls:'icon-color',
+                   iconCls:'fa fa-globe',
                    handler:function(){
 	                   $('#theme').menu({   
 							onClick:function(item){   
@@ -129,7 +129,7 @@
 				//href : 'error/error.jsp',
 				content : "<iframe src="+url+" frameborder=\"0\" style=\"border:0;width:100%;height:99.4%;\"></iframe>",
 				tools : [ {
-					iconCls : 'icon-mini-refresh',
+					iconCls : 'fa fa-refresh',
 					handler : function() {
 						refreshTab(title);
 					}

@@ -23,19 +23,19 @@
 			<tr>
 				<td style="padding-left:2px">
 				    <shiro:hasRole name="SUPERVISE">
-					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="showTaskInfo();">创建任务</a>
-                    <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="edit();">编辑</a>
-					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="del();">删除</a>
-					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="multiInsert();">批量创建任务</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" onclick="showTaskInfo();"><i class="fa fa-plus-square"></i> 创建任务</a>
+                    <a href="javascript:void(0);" class="easyui-linkbutton" onclick="edit();"><i class="fa fa-edit"></i> 编辑</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" onclick="del();"><i class="fa fa-trash"></i> 删除</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" onclick="multiInsert();"><i class="icon-plus"></i> 批量创建任务</a>
 					</shiro:hasRole>
-					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="details();">详情</a>
-					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="approvalPrcess();">查看审批流程</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" onclick="details();"><i class="icon-search"></i> 详情</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" onclick="approvalPrcess();"><i class="icon-search"></i> 查看审批流程</a>
 				</td>
 				<td style="padding-left:5px;">
 					<input id="searchbox" type="text"/>
 				</td>
 				<td style="padding-left:5px">
-					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-large-chart',plain:true" onclick="statisticsThisYear();">本年度完成情况统计</a>					
+					<a href="javascript:void(0);" class="easyui-linkbutton" onclick="statisticsThisYear();"><i class="fa fa-line-chart"></i> 本年度完成情况统计</a>					
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="gradeSearch();">高级查询</a>
 				</td>
 			</tr>

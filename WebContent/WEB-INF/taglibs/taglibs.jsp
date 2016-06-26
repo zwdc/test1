@@ -24,6 +24,10 @@
 <script type="text/javascript" src="${ctx}/js/jquery-migrate-1.2.1.min.js"></script>
 
 <link rel="stylesheet" href="${ctx}/css/login/bootstrap.min.css" type="text/css" />
+<link rel="stylesheet" href="${ctx}/css/font-awesome/font-awesome.min.css">
+<!--[if IE 7]>
+<link rel="stylesheet" href="${ctx}/css/font-awesome/font-awesome-ie7.min.css">
+<![endif]-->
 <link rel="stylesheet" href="${ctx}/css/login/main.css" type="text/css" />
 
 <link rel="stylesheet" href="${ctx}/css/zTreeStyle/zTreeStyle.css" type="text/css" />

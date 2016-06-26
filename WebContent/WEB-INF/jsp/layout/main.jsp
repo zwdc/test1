@@ -10,7 +10,7 @@
 <body>
 	<div data-options="region:'north',border:false" title="" style="overflow: hidden; padding: 5px;">
 		<div class="well well-small">
-			<span class="badge" iconCls="icon-save" plain="true" >使用说明</span>
+			<span class="badge" plain="true" >使用说明</span>
 			<p>
 				<shiro:hasRole name="admin">
 					<br/><br/>

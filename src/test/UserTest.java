@@ -46,7 +46,7 @@ public class UserTest {
     	
 //    	Role role = this.roleService.getRoleById("1");
 		User user1 = new User();
-		user1.setName("admin1");
+		user1.setName("admin");
 		user1.setPasswd("123");
 		//this.passwordHelper.encryptPassword(user1);
 		user1.setRole(new Role(1));

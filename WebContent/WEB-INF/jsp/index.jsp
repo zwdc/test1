@@ -55,7 +55,7 @@
 			}
 			
 			Messenger.options = {
-   			    extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-right',
+   			    extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
    			    theme: 'flat'
    			}
 			
@@ -85,23 +85,23 @@
 	</script>
  </head>
  <body class="easyui-layout">
-	<div data-options="region:'north',border:false" style="height:50px;background-color:#E5EFFF;padding:0px;overflow: hidden;" href="${ctx }/north"></div>
-	<div data-options="region:'west',split:true,title:'主要菜单'" style="width:200px;background:#EEE;">
+	<div data-options="region:'north',border:false" style="height:50px;padding:0px;overflow: hidden;" href="${ctx }/north"></div>
+	<div data-options="region:'west',split:true,title:'主要菜单'" style="width:200px;">
 		<div class="well well-small">
 			<shiro:lacksRole name="admin">
-				<span>用户功能</span>
+				<span></span>
 				<input value="user" id="role" type="hidden">
 				<ul id="tree_user" class="ztree"></ul>
 			</shiro:lacksRole>
 			<shiro:hasRole name="admin">
-				<span>管理员功能</span>
+				<span></span>
 				<input value="admin" id="role" type="hidden">
 				<ul id="tree_admin" class="ztree"></ul>
 			</shiro:hasRole>
 		</div>
 		<div id="divSortContent"></div> <!-- 调试输出用，暂时先留着 -->
 	</div> 
-	<div data-options="region:'south',border:false" style="height:25px;background:#E6F0FF;padding:3px;" href="${ctx }/south"></div>
+	<div data-options="region:'south',border:false" style="height:25px;padding:3px;" href="${ctx }/south"></div>
 	<div data-options="region:'center',plain:false" style="overflow: hidden;"  href="${ctx }/center"></div>
 </body>
 </html>
