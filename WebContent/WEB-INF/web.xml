@@ -3,7 +3,7 @@
 	xmlns="http://java.sun.com/xml/ns/j2ee" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
-	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" metadata-complete="true">
 	
 	<!-- 设置由Spring载入的Log4j配置文件位置 -->
 	<context-param> 

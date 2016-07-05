@@ -46,11 +46,12 @@ public class UserTest {
     	
 //    	Role role = this.roleService.getRoleById("1");
 		User user1 = new User();
-		user1.setName("admin");
+		user1.setName("admin1");
 		user1.setPasswd("123");
 		//this.passwordHelper.encryptPassword(user1);
 		user1.setRole(new Role(1));
 		user1.setGroup(new Group(1));
+		user1.setDataPermission(5);
 		user1.setIsDelete(0);
 		user1.setRegisterDate(new Date());
 		System.out.println(user1.getPasswd());

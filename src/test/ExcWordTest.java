@@ -1,5 +1,17 @@
 package test;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.hdc.util.TempltUtil;
+
 public class ExcWordTest {
 	
 	   public void excWord(HttpServletResponse response,HttpServletRequest request) throws IOException{  
