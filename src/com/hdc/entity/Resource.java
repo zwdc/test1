@@ -136,4 +136,16 @@ public class Resource implements Serializable {
         return parentId == 0;
     }
 
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) {
+			return true;
+		}
+		if(obj != null && obj instanceof Resource) {
+			Resource resource = (Resource) obj;
+			return this.id == resource.getId() && this.name.equals(resource.name);
+		} else {
+			return false;
+		}
+	}
 }

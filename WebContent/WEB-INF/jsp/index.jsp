@@ -15,18 +15,18 @@
     <script type="text/javascript" src="${ctx}/js/messenger.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/messenger-theme-flat.js"></script>
 	<style type="text/css">
-		#menuList a.l-btn span span.l-btn-text {
+ 		#menuList a.l-btn span.l-btn-text {
 		    display: inline-block;
-		    height: 14px;
-		    line-height: 14px;
-		    margin: 0px 0px 0px 10px;
-		    padding: 0px 0px 0px 10px;
+		    height: 24px;
+		    line-height: 24px;
+		    margin: 0px 4px 0px 10px;
+		    padding: 0px 0px 0px 0px;
 		    vertical-align: baseline;
-		    width: 128px;
+		    /* width: 128px; */
 		}
-		#menuList 	a.l-btn span span.l-btn-icon-left {
+		#menuList a.l-btn span.l-btn-icon-left {
 		    background-position: left center;
-		    padding: 0px 0px 0px 20px;
+		    padding: 0px 4px 0px 24px;
 		}
 		#menuList .panel-body {
 			padding:5px;
@@ -37,11 +37,11 @@
 	</style>
 	<script type="text/javascript">
 		$(function(){
+			initMenu();
+			
 			if (jqueryUtil.isLessThanIe8()) {
 				$.messager.alert('警告','<br/>您使用的浏览器版本太低！<br/><br/>建议您使用【谷歌浏览器】或【火狐浏览器】或【360极速浏览器】来获得更好的页面体验效果！','warning');
 			}
-			
-			initMenu();
 			
 			Messenger.options = {
    			    extraClasses: 'messenger-fixed messenger-on-top messenger-on-right',
@@ -73,17 +73,15 @@
 	});
 		
 	function initMenu(){
-		debugger;
 		var $ml=$("#menuList");
 		$ml.accordion({animate:true,fit:true,border:false});
 		$.post(ctx+"/menu", function(rsp) {
 			$.each(rsp,function(i,e){
 				var menulist ="<div class=\"well well-small\">";
-				if(e.child && e.child.length>0){
-					$.each(e.child,function(ci,ce){
+				if(e.children && e.children.length>0){
+					$.each(e.children,function(ci,ce){
 						//var effort=ce.name+"||"+ce.iconCls+"||"+ce.url;
-						console.dir(ce.name+"--"+ce.url);
-						menulist+="<a href=\"javascript:void(0);\" class=\"easyui-linkbutton\" data-options=\"plain:true\" onclick=\"addTab('"+ce.name+"','"+ce.url+"');\">"+ce.name+"</a><br/>";
+						menulist+="<a href=\"javascript:void(0);\" class=\"easyui-linkbutton\" data-options=\"plain:true,iconCls:'icon-add'\" onclick=\"addTab('"+ce.name+"','"+ce.url+"');\">"+ce.name+"</a><br/>";
 					});
 				}
 				menulist+="</div>";
@@ -93,6 +91,7 @@
 					border:false,
 		            selected: false
 		        });
+				//$.parser.parse(menulist);
 			});
 		}, "JSON").error(function() {
 			$.messager.alert("提示", "获取菜单出错,请重新登陆!");
