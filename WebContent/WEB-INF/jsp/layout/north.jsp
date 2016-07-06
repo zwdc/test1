@@ -2,6 +2,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
+<style type="text/css"> 
+<!-- 
+.fa-center {text-align:center ; vertical-align:middle;} 
+.test{list-style:none;} 
+.test li{float:left;} 
+--> 
+</style> 
 <script type="text/javascript" charset="utf-8">
 	function logout() {
 		$.messager.confirm("提示", "确认退出吗?",function(r){
@@ -78,25 +85,25 @@
 	<img src='${ctx }/images/solg_login.png'/ height=40>
 	 
 	<div style="position: absolute; right: 10px; bottom: 5px; ">
-	    <ul>
+	    <ul class="test">
 	    	<li>
-	    	<shiro:principal/>&nbsp;&nbsp;你好，欢迎登录！&nbsp;&nbsp;
+	    	<div class="easyui-menubutton"><shiro:principal/>&nbsp;&nbsp;，欢迎登录！&nbsp;&nbsp;</div>
 	    	</li>
 	        <li>
-	    	 <div id="time" class="easyui-linkbutton"></div>
+	    	 <div class="easyui-menubutton"><div id="time"></div></div>
 	    	</li>
 	    	 <li>
-	    	 <a href="javascript:void(0);" class="easyui-linkbutton" ><i class="fa fa-comments fa-large"></i>消息</a>
+	    	<div class="easyui-menubutton"><i class="fa fa-comments fa-large"></i>消息</div>
 	    	</li>
 	    	 <li>
-	    	<a href="javascript:void(0);" class="easyui-menubutton" menu="#layout_north_kzmbMenu"><i class="fa fa-cogs fa-large"/> 控制面板</a> 
+	    	<div class="easyui-menubutton" menu="#layout_north_kzmbMenu" data-options="iconCls:'fa fa-cogs fa-2x'">控制面板</div> 
 	    	</li>
 	    </ul>	
 	</div>
 	<div id="layout_north_kzmbMenu" style="width: 100px; display: none;">
-	    <div onclick="showUserInfo();"><i class="fa fa-lock fa-large"/> 修改密码</div>
-		<div onclick="showUserInfo();"><i class="fa fa-user fa-large"/> 个人信息</div>
+	    <div onclick="showUserInfo();" data-options="iconCls:'fa fa-lock fa-center'">修改密码</div>
+		<div onclick="showUserInfo();" data-options="iconCls:'fa fa-user fa-2X'">个人信息</div>
 		<div class="menu-sep"></div>
-		<div onclick="logout();"><i class="fa fa-sign-out fa-large"/> 退出系统</div>
+		<div onclick="logout();" data-options="iconCls:'fa fa-sign-out fa-2X'">退出系统</div>
 	</div>
 </div>
