@@ -46,6 +46,24 @@ public class MainController {
     	return "layout/south";
     }
     
+    /**
+     * admin角色的菜单
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/menuAdmin")
+    @ResponseBody
+    public List<Resource> getMenuAdmin() throws Exception {
+    	User u = UserUtil.getUserFromSession();
+    	List<Resource> menuList = this.resourceService.getTree(u.getRole().getId());
+    	return menuList;
+    }
+    
+    /**
+     * 其他角色的菜单
+     * @return
+     * @throws Exception
+     */
     @RequestMapping("/menu")
     @ResponseBody
     public List<Menus> getMenu() throws Exception{
@@ -79,7 +97,6 @@ public class MainController {
 			menusList.add(menus);
     	}
     	return menusList;
-    	// return menuList;
     }
     
     @RequestMapping("/")

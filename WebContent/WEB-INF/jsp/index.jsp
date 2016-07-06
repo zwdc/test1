@@ -12,10 +12,12 @@
 	<meta http-equiv="description" content="This is my page">
     <link rel="stylesheet" href="${ctx}/css/messenger.css" type="text/css" />
     <link rel="stylesheet" href="${ctx}/css/messenger-theme-flat.css" type="text/css" />
+    <script type="text/javascript" src="${ctx}/js/tree_admin.js"></script>
     <script type="text/javascript" src="${ctx}/js/messenger.min.js"></script>
     <script type="text/javascript" src="${ctx}/js/messenger-theme-flat.js"></script>
 	<style type="text/css">
- 		#menuList a.l-btn span.l-btn-text {
+		.ztree li span.button.add {margin-left:2px; margin-right: -1px; background-position:-144px 0; vertical-align:top; *vertical-align:middle}
+ 		#tree_user a.l-btn span.l-btn-text {
 		    display: inline-block;
 		    height: 24px;
 		    line-height: 24px;
@@ -24,14 +26,14 @@
 		    vertical-align: baseline;
 		    /* width: 128px; */
 		}
-		#menuList a.l-btn span.l-btn-icon-left {
+		#tree_user a.l-btn span.l-btn-icon-left {
 		    background-position: left center;
 		    padding: 0px 4px 0px 24px;
 		}
-		#menuList .panel-body {
+		#tree_user .panel-body {
 			padding:5px;
 		}
-		#menuList span:focus{
+		#tree_user span:focus{
 			outline: none;
 		}
 	</style>
@@ -50,7 +52,6 @@
 			
 			//待签收任务数量
 			$.ajax({
-				async: false,
         		cache: false,
 				type: 'post',
 				dataType : "json",
@@ -71,50 +72,60 @@
 				}
 			});
 	});
-		
+	
+	var zTree;
 	function initMenu(){
-		var $ml=$("#menuList");
-		$ml.accordion({animate:true,fit:true,border:false});
-		$.post(ctx+"/menu", function(rsp) {
-			$.each(rsp,function(i,e){
-				var menulist ="<div class=\"well well-small\">";
-				if(e.children && e.children.length>0){
-					$.each(e.children,function(ci,ce){
-						//var effort=ce.name+"||"+ce.iconCls+"||"+ce.url;
-						menulist+="<a href=\"javascript:void(0);\" class=\"easyui-linkbutton\" data-options=\"plain:true,iconCls:'icon-add'\" onclick=\"addTab('"+ce.name+"','"+ce.url+"');\">"+ce.name+"</a><br/>";
-					});
+		var role = $("#role").val();
+		if(role == 'admin'){
+			$.post(ctx+"/menuAdmin", function(treeNodes) {
+				zTree = $.fn.zTree.init($("#tree_admin"), setting_admin, treeNodes);
+				var nodes = zTree.getNodes();
+				for (var i=0, l=nodes.length; i<l; i++) {
+					zTree.expandNode(nodes[i], true, false, false, false);
 				}
-				menulist+="</div>";
-				$ml.accordion('add', {
-		            title: e.name,
-		            content: menulist,
-					border:false,
-		            selected: false
-		        });
-				//$.parser.parse(menulist);
+			}, "JSON").error(function() {
+				$.messager.alert("提示", "获取菜单出错,请重新登陆!");
 			});
-		}, "JSON").error(function() {
-			$.messager.alert("提示", "获取菜单出错,请重新登陆!");
-		});
+			
+		} else {
+			var $ml=$("#tree_user");
+			$ml.accordion({animate:true,fit:true,border:false});
+			$.post(ctx+"/menu", function(rsp) {
+				$.each(rsp,function(i,e) {
+					var menulist = "<div class=\"well well-small\">";
+					if(e.children && e.children.length>0){
+						$.each(e.children,function(ci,ce){
+							menulist += "<a href=\"javascript:void(0);\" class=\"easyui-linkbutton\" data-options=\"plain:true,iconCls:'icon-add'\" onclick=\"addTab('"+ce.name+"','"+ce.url+"');\">"+ce.name+"</a><br/>";
+						});
+					}
+					menulist += "</div>";
+					$ml.accordion('add', {
+			            title: e.name,
+			            content: menulist,
+						border:false,
+			            selected: false
+			        });
+				});
+			}, "JSON").error(function() {
+				$.messager.alert("提示", "获取菜单出错,请重新登陆!");
+			});
+		}
 	}
 	</script>
  </head>
  <body class="easyui-layout">
 	<div data-options="region:'north',border:false" style="height:50px;padding:0px;overflow: hidden;" href="${ctx }/north"></div>
 	<div data-options="region:'west',split:true,title:'主要菜单'" style="width:200px;">
-<%-- 		<div class="well well-small">
-			<shiro:lacksRole name="admin">
-				<span></span>
-				<input value="user" id="role" type="hidden">
-				<ul id="tree_user" class="ztree"></ul>
-			</shiro:lacksRole>
+ 		<!-- <div class="well well-small"> -->
 			<shiro:hasRole name="admin">
 				<span></span>
 				<input value="admin" id="role" type="hidden">
 				<ul id="tree_admin" class="ztree"></ul>
 			</shiro:hasRole>
-		</div> --%>
-		<div id="menuList"></div>
+			<shiro:lacksRole name="admin">
+				<div id="tree_user"></div>
+			</shiro:lacksRole>
+		<!-- </div> -->
 	</div> 
 	<div data-options="region:'south',border:false" style="height:25px;padding:3px;" href="${ctx }/south"></div>
 	<div data-options="region:'center',plain:false" style="overflow: hidden;"  href="${ctx }/center"></div>
