@@ -56,15 +56,6 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 	@JsonIgnore
 	private User feedbackUser;//反馈执行人
 	
-	
-	public User getFeedbackUser() {
-		return feedbackUser;
-	}
-
-	public void setFeedbackUser(User feedbackUser) {
-		this.feedbackUser = feedbackUser;
-	}
-
 	@OneToMany(mappedBy = "fdRecord",fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
 	@JsonIgnore
 	private Set<FeedbackAtt> fdaList=new HashSet<FeedbackAtt>();
@@ -269,6 +260,14 @@ public class FeedbackRecord extends BaseEntity implements Serializable {
 
 	public void setIsDelay(Integer isDelay) {
 		this.isDelay = isDelay;
+	}
+
+	public User getFeedbackUser() {
+		return feedbackUser;
+	}
+
+	public void setFeedbackUser(User feedbackUser) {
+		this.feedbackUser = feedbackUser;
 	}
 
 }
