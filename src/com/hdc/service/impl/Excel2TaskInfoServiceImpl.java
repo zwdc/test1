@@ -1,10 +1,7 @@
 package com.hdc.service.impl;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,6 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+
+import jxl.CellType;
+import jxl.DateCell;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,13 +26,6 @@ import com.hdc.entity.TaskSource;
 import com.hdc.service.IBaseService;
 import com.hdc.service.IExcel2TaskInfoService;
 import com.hdc.service.IGroupService;
-
-import jxl.CellType;
-import jxl.DateCell;
-import jxl.Sheet;
-import jxl.Workbook;
-import jxl.format.CellFormat;
-import jxl.read.biff.BiffException;
 
 /**
  * 将excel导入到TaskInfo表  Service
