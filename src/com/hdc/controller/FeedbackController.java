@@ -1,19 +1,14 @@
 package com.hdc.controller;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.activiti.engine.ActivitiException;
-import org.apache.commons.fileupload.FileUploadBase.FileSizeLimitExceededException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,26 +18,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.gson.Gson;
 import com.hdc.entity.Comments;
 import com.hdc.entity.Datagrid;
-import com.hdc.entity.FeedbackAtt;
 import com.hdc.entity.FeedbackRecord;
 import com.hdc.entity.Message;
 import com.hdc.entity.Page;
 import com.hdc.entity.Parameter;
-import com.hdc.entity.Project;
 import com.hdc.entity.TaskInfoType;
 import com.hdc.service.ICommentsService;
 import com.hdc.service.IFeedbackRecordService;
-import com.hdc.service.IProjectScoreService;
 import com.hdc.util.Constants;
-import com.hdc.util.UserUtil;
 import com.hdc.util.Constants.BusinessForm;
-import com.hdc.util.Constants.BusinessType;
 import com.hdc.util.Constants.FeedbackStatus;
-import com.hdc.util.upload.FileUploadUtils;
-import com.hdc.util.upload.exception.InvalidExtensionException;
 /**
  * 反馈控制器
  * @author zhao
