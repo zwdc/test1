@@ -19,8 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.uwantsoft.goeasy.client.goeasyclient.GoEasy;
-
 @Controller
 public class LoginController {
 	
