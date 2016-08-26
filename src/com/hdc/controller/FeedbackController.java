@@ -427,7 +427,7 @@ public class FeedbackController {
     }
     
     /**
-     * 跳转到反馈页面
+     * 跳转到审批页面
      * @param taskInfoId
      * @return
      * @throws Exception
@@ -466,9 +466,6 @@ public class FeedbackController {
 //		return message;
 //	}
 	
-    
-   
-    
     /**
      * 完成任务
      * @param taskInfo
@@ -490,4 +487,5 @@ public class FeedbackController {
 		}
     	return message;
     }
+    
 }

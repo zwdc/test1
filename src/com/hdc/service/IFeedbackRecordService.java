@@ -117,22 +117,22 @@ public interface IFeedbackRecordService {
 			@RequestParam("file") MultipartFile file,
 			HttpServletRequest request) throws Exception;
 	/**
-	 * 启动任务分配流程 
-	 * @param taskInfo
+	 * 启动反馈审批流程 
+	 * @param feedback
 	 * @throws Exception
 	 */
 	public void doStartProcess(FeedbackRecord feedback) throws Exception;
 	
 	/**
 	 * 审批
-	 * @param salesId
+	 * @param feedbackId
 	 * @param isPass
 	 * @param taskId
 	 * @param processInstanceId
 	 * @param comment
 	 * @throws Exception
 	 */
-	public void doApproval(Integer salesId, boolean isPass, String taskId, String comment) throws Exception;
+	public void doApproval(Integer feedbackId, boolean isPass, String taskId, String comment) throws Exception;
 	
 	/**
 	 * 完成任务

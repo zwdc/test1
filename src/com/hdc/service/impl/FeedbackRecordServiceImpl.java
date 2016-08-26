@@ -39,9 +39,9 @@ import com.hdc.util.BeanUtilsExt;
 import com.hdc.util.Constants;
 import com.hdc.util.Constants.BusinessForm;
 import com.hdc.util.Constants.FeedbackStatus;
+import com.hdc.util.UserUtil;
 import com.hdc.util.upload.FileUploadUtils;
 import com.hdc.util.upload.exception.InvalidExtensionException;
-import com.hdc.util.UserUtil;
 
 @Service
 public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
@@ -277,7 +277,7 @@ public class FeedbackRecordServiceImpl implements IFeedbackRecordService {
 		this.processService.startApproval("ApprovalFeedback", taskInfo.getId().toString(), vars);	
 				
 	}
-
+	
 	@Override
 	public void doApproval(Integer feedbackId, boolean isPass, String taskId, String comment) throws Exception {
 		User user = UserUtil.getUserFromSession();
