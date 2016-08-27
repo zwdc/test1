@@ -4,15 +4,19 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,6 +26,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * @author zhao
  *
  */
+@Entity
+@Table(name = "FEEDBACK_DELAY")
+@DynamicUpdate(true)
+@DynamicInsert(true)
 public class FeedbackDelay implements Serializable {
 
 	/**
@@ -44,7 +52,7 @@ public class FeedbackDelay implements Serializable {
 	@Column(name = "delay_date")
 	private Date delayDate;					// 延期结束时间
 	
-	@Column(name = "solutiona", length = 4000)
+	@Column(name = "delay_reason", length = 4000)
 	private String delayReason;				// 申请延期的原因                    
 	
 	@Column(name = "status", length = 30)
