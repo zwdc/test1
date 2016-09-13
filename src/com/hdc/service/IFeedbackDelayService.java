@@ -26,13 +26,13 @@ public interface IFeedbackDelayService {
 	
 	/**
 	 * 审批
-	 * @param feedbackId
+	 * @param delayId
 	 * @param isPass
 	 * @param taskId
 	 * @param processInstanceId
 	 * @param comment
 	 * @throws Exception
 	 */
-	public void doApproval(Integer feedbackId, boolean isPass, String taskId, String comment) throws Exception;
+	public void doApproval(Integer delayId, boolean isPass, String taskId, String comment) throws Exception;
 	
 }

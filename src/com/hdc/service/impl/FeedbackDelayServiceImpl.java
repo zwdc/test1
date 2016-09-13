@@ -72,10 +72,10 @@ public class FeedbackDelayServiceImpl implements IFeedbackDelayService {
 	}
 
 	@Override
-	public void doApproval(Integer feedbackId, boolean isPass, String taskId, String comment) throws Exception {
+	public void doApproval(Integer delayId, boolean isPass, String taskId, String comment) throws Exception {
 		User user = UserUtil.getUserFromSession();
 		Map<String, Object> variables = new HashMap<String, Object>();
-		FeedbackDelay feedbackDelay = this.findById(feedbackId);
+		FeedbackDelay feedbackDelay = this.findById(delayId);
 		if(isPass) {
 			feedbackDelay.setStatus(ApprovalStatus.APPROVAL_SUCCESS.toString());
 		} else {
@@ -88,8 +88,8 @@ public class FeedbackDelayServiceImpl implements IFeedbackDelayService {
 		comments.setUserId(user.getId().toString());
 		comments.setUserName(user.getName()); 
 		comments.setContent(comment);
-		comments.setBusinessKey(feedbackId);
-		comments.setBusinessForm(BusinessForm.FEEDBACK_FORM.toString());
+		comments.setBusinessKey(delayId);
+		comments.setBusinessForm(BusinessForm.FEEDBACK_DELAY_FORM.toString());
 		variables.put("isPass", isPass);
 		this.processService.complete(taskId, comments, variables);
 	}

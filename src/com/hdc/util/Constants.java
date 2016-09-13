@@ -211,7 +211,7 @@ public class Constants {
 	 * 用途：审批评论时，来标记此评论所属类型
 	 */
 	public enum  BusinessForm {
-		TASK_FORM("TASK_FORM"), PROJECT_FORM("PROJECT_FORM"), PROJECT_COMPLETE("PROJECT_COMPLETE"), FEEDBACK_FORM("FEEDBACK_FORM");
+		TASK_FORM("TASK_FORM"), PROJECT_FORM("PROJECT_FORM"), PROJECT_COMPLETE("PROJECT_COMPLETE"), FEEDBACK_FORM("FEEDBACK_FORM"), FEEDBACK_DELAY_FORM("FEEDBACK_DELAY_FORM");
 		private final String value;
 		
 		private BusinessForm(String value) {
@@ -237,6 +237,9 @@ public class Constants {
 				break;
 			case "PROJECT_COMPLETE":
 				bf = PROJECT_COMPLETE;
+				break;
+			case "FEEDBACK_DELAY_FORM":
+				bf = FEEDBACK_DELAY_FORM;
 				break;
 			default:
 				break;
