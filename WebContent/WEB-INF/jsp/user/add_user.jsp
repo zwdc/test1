@@ -142,6 +142,10 @@ $(function(){
                    invalidMessage="两次输入密码不匹配.">
         </div>
         <div class="fitem">
+            <label>编号:</label>
+            <input id="staffid" name="staffId" class="easyui-textbox" required="required">
+        </div>
+        <div class="fitem">
             <label>部门:</label>
 			<input id="group" name="group.id" class="easyui-combobox" required="required" />
         </div>

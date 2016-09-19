@@ -164,7 +164,11 @@ $(function(){
                    invalidMessage="两次输入密码不匹配.">
             <small><abbr id="rePassword" title="不需要修改原密码时，此项留空!" ><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></abbr></small>
         </div>
-      <div class="fitem">
+        <div class="fitem">
+            <label>编号:</label>
+            <input id="staffId" name="staffId" class="easyui-textbox easyui-validatebox" required="required">
+        </div>
+        <div class="fitem">
             <label>部门:</label>
 			<input id="group" name="group.id" class="easyui-combobox" required="required" />
 			<input name="group_name" id="group_name" type="hidden" />

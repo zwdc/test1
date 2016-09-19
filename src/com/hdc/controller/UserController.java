@@ -87,6 +87,7 @@ public class UserController {
 			map.put("name", user.getName());
 			map.put("registerDate", user.getRegisterDate());
 			map.put("locked", user.getIsDelete());
+			map.put("staffId", user.getStaffId());
 			map.put("groupId", user.getGroup().getId());
 			map.put("group_name", user.getGroup().getName());
 			map.put("roleId", user.getRole().getId());
@@ -119,11 +120,26 @@ public class UserController {
 	@ResponseBody
 	public Message doAdd(@ModelAttribute("user") User user,
 						@Value("#{APP_PROPERTIES['account.user.add.syntoactiviti']}") Boolean synToActiviti) throws Exception{
+		Message message = new Message();
 		user.setRegisterDate(new Date());
 		user.setCreateDate(new Date());
 		user.setIsDelete(0);
-		this.userService.doAdd(user, synToActiviti);
-		return new Message(Boolean.TRUE, "添加成功！");
+		String staffId = user.getStaffId();
+		if(StringUtils.isNoneBlank(staffId)) {
+			User u = this.userService.getUserByStaffId(staffId);
+			if(u == null) {
+				this.userService.doAdd(user, synToActiviti);
+				message.setStatus(Boolean.TRUE);
+				message.setMessage("添加成功！");
+			} else {
+				message.setStatus(Boolean.FALSE);
+				message.setMessage("添加失败，此编制号已存在！");
+			}
+		} else {
+			message.setStatus(Boolean.FALSE);
+			message.setMessage("添加失败！");
+		}
+		return message;
 		
 	}
 	
@@ -155,23 +171,31 @@ public class UserController {
 		Message message = new Message();
 		Integer id = user.getId();
 		if(!BeanUtilsExt.isBlank(id)){
-			if(StringUtils.isBlank(rePasswd)) {
-				user.setPasswd(password);
-				user.setSalt(salt);
-				user.setUpdateDate(new Date());
-				this.userService.doUpdate(user, false);
+			String staffId = user.getStaffId();
+			if(StringUtils.isNoneBlank(staffId)) {
+				User u = this.userService.getUserByStaffId(staffId);
+				if(u == null) {
+					if(StringUtils.isBlank(rePasswd)) {
+						user.setPasswd(password);
+						user.setSalt(salt);
+						user.setUpdateDate(new Date());
+						this.userService.doUpdate(user, false);
+					} else {
+						this.userService.doUpdate(user, true);
+					}
+					//清空认证缓存
+					Subject currentUser = SecurityUtils.getSubject();
+					UserRealm ur = new UserRealm();
+					ur.clearCachedAuthenticationInfo(currentUser.getPrincipals());
+					
+					message.setStatus(Boolean.TRUE);
+					message.setMessage("修改成功！");
+				}
 			} else {
-				this.userService.doUpdate(user, true);
+				message.setStatus(Boolean.FALSE);
+				message.setMessage("修改失败，此编制号已存在！");
 			}
-			//清空认证缓存
-			Subject currentUser = SecurityUtils.getSubject();
-			UserRealm ur = new UserRealm();
-			ur.clearCachedAuthenticationInfo(currentUser.getPrincipals());
-			
-			message.setStatus(Boolean.TRUE);
-			message.setMessage("修改成功！");
-			
-		}else{
+		} else {
 			message.setStatus(Boolean.FALSE);
 			message.setMessage("修改失败，用户不存在！");
 		}
