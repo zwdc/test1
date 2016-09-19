@@ -19,7 +19,7 @@ import com.hdc.util.Constants;
 import com.hdc.util.UserUtil;
 
 /**
- * 验证验证码的拦截器
+ * Shiro默认的基于Form表单的身份验证过滤器
  * @author zml
  *
  */
@@ -29,7 +29,6 @@ public class CustomFormAuthenticationFilter extends FormAuthenticationFilter {
 	@Autowired
 	private IUserService userService;
 	
-	//在访问被拒绝
 	/**
 	 * onAccessDenied 表示访问拒绝时是否自己处理
 	 * return true:   访问拒绝也不自己处理，继续拦截器链的执行
@@ -38,7 +37,7 @@ public class CustomFormAuthenticationFilter extends FormAuthenticationFilter {
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
         if(request.getAttribute(getFailureKeyAttribute()) != null) {
-        	//当验证码验证失败时不再走身份认证拦截器
+        	//当验证码验证失败时不再走身份认证拦截器(不再校验账号和密码  )
             return true;
         }
         
@@ -82,7 +81,7 @@ public class CustomFormAuthenticationFilter extends FormAuthenticationFilter {
     		//会话过期 attribute 为空，重新设置。
     		User user = (User) session.getAttribute(Constants.CURRENT_USER);
     		if(BeanUtilsExt.isBlank(user)){
-    			user = this.userService.getUserByName(subject.getPrincipal().toString());
+    			user = this.userService.getUserByStaffId(subject.getPrincipal().toString());
     			UserUtil.saveUserToSession(session, user);
     		}
     	}

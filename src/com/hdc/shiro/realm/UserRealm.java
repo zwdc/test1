@@ -48,15 +48,15 @@ public class UserRealm extends AuthorizingRealm{
     private IResourceService resourceService;
 
     /**
-     * 授权
+     * 授权回调
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        String username = (String)principals.getPrimaryPrincipal();
+        String staffid = (String)principals.getPrimaryPrincipal();
         //Authorization 授权，即权限验证，验证某个已认证的用户是否拥有某个权限
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
 		try {
-			User user = this.userService.getUserByName(username);
+			User user = this.userService.getUserByStaffId(staffid);
 	        Set<String> roles = new HashSet<String>();
 	        roles.add(user.getRole().getType());
 	        
@@ -81,7 +81,7 @@ public class UserRealm extends AuthorizingRealm{
     }
 
     /**
-     * 认证
+     * 认证回调函数
      * 该方法主要执行以下操作:
      * 1、检查提交的进行认证的令牌信息(token)
      * 2、根据令牌信息从数据源(通常为数据库)中获取用户信息
@@ -91,10 +91,10 @@ public class UserRealm extends AuthorizingRealm{
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        String username = (String)token.getPrincipal();
+        String staffId = (String)token.getPrincipal();
         User user = null;
 		try {
-			user = this.userService.getUserByName(username);
+			user = this.userService.getUserByStaffId(staffId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -110,10 +110,10 @@ public class UserRealm extends AuthorizingRealm{
         //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配
         //CredentialsMatcher使用盐加密传入的明文密码和此处的密文密码进行匹配。
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-                user.getName(), //用户名
-                user.getPasswd(), //密码
-                ByteSource.Util.bytes(user.getSalt()),	//原来实用(salt+name) 修改用户名时salt就不对了，所以不用 name+salt了。
-                getName()  //realm name
+                user.getStaffId(), 	//用户编号
+                user.getPasswd(), 	//密码
+                ByteSource.Util.bytes(user.getSalt()),	//原来使用(salt+name) 修改用户名时salt就不对了，所以只用salt了。
+                getName()  			//realm name
         );
         Session currentSession = SecurityUtils.getSubject().getSession();
         UserUtil.saveUserToSession(currentSession, user);

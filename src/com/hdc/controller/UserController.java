@@ -85,7 +85,6 @@ public class UserController {
 			Map<String, Object> map=new HashMap<String, Object>();
 			map.put("id", user.getId());
 			map.put("name", user.getName());
-			map.put("passwd", user.getPasswd());
 			map.put("registerDate", user.getRegisterDate());
 			map.put("locked", user.getIsDelete());
 			map.put("groupId", user.getGroup().getId());
@@ -93,7 +92,6 @@ public class UserController {
 			map.put("roleId", user.getRole().getId());
 			map.put("role_name", user.getRole().getName());
 			map.put("dataPermission", user.getDataPermission());
-			map.put("salt", user.getSalt());
 			map.put("isDelete", user.getIsDelete());
 			jsonList.add(map);
 		}

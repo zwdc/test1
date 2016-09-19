@@ -42,7 +42,7 @@ public class User implements Serializable{
 	@Column(name = "USER_ID", length = 5, nullable = false, unique = true)
 	private Integer id;
 	
-	@Column(name = "USER_NAME", length = 50, nullable = false, unique = true)
+	@Column(name = "USER_NAME", length = 50, nullable = false)
 	private String name;
 	
 	@Column(name = "USER_PWD", length = 50, nullable = false)
@@ -50,6 +50,9 @@ public class User implements Serializable{
 	
 	@Column(name = "USER_SALT", length = 100)
 	private String salt; 			//加密密码的盐
+	
+	@Column(name = "STAFF_ID", length = 50, unique = true)
+	private String staffId;			//编号(编制)
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -213,6 +216,13 @@ public class User implements Serializable{
 	public void setLinkType(String linkType) {
 		this.linkType = linkType;
 	}
-	
+
+	public String getStaffId() {
+		return staffId;
+	}
+
+	public void setStaffId(String staffId) {
+		this.staffId = staffId;
+	}
 	
 }

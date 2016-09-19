@@ -30,12 +30,12 @@ public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher
 
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
-        String username = (String)token.getPrincipal();
+        String staffId = (String)token.getPrincipal();
         //retry count + 1
-        AtomicInteger retryCount = passwordRetryCache.get(username);
+        AtomicInteger retryCount = passwordRetryCache.get(staffId);
         if(retryCount == null) {
             retryCount = new AtomicInteger(0);
-            passwordRetryCache.put(username, retryCount);
+            passwordRetryCache.put(staffId, retryCount);
         }
         //密码输错3次，显示验证码
         if(retryCount.incrementAndGet() == Constants.PASSWORD_SHOW_JCAPTCHA ) {
@@ -55,7 +55,7 @@ public class RetryLimitHashedCredentialsMatcher extends HashedCredentialsMatcher
         boolean matches = super.doCredentialsMatch(token, info);
         if(matches) {
             //clear retry count
-            passwordRetryCache.remove(username);
+            passwordRetryCache.remove(staffId);
             jcaptchaCache.remove("jcaptchaEnabled");
         }
         return matches;

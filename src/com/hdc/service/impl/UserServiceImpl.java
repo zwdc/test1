@@ -100,7 +100,7 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public Serializable doAdd(User user, boolean synToActiviti) throws Exception {
 		//加密密码
-        this.passwordHelper.encryptPassword(user);  //为啥又同步一次？
+        this.passwordHelper.encryptPassword(user);
         //添加用户
         Serializable userId = this.baseService.add(user);
         
@@ -292,6 +292,18 @@ public class UserServiceImpl implements IUserService {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<User> list = this.baseService.findListPage("User", param, map, page, false);
 		return list;
+	}
+
+	@Override
+	public User getUserByStaffId(String staffId) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("staffId", staffId);
+		User user = this.baseService.findUnique("User", map);
+		if(BeanUtilsExt.isBlank(user)){
+			return null;
+		}else{
+			return user;
+		}
 	}
 
 }

@@ -99,7 +99,7 @@ public class MainController {
     	return menusList;
     }
     
-    @RequestMapping("/")
+    @RequestMapping("/index")
     public String index() throws Exception {
         return "index";
     }

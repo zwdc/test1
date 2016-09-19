@@ -14,6 +14,8 @@ public interface IUserService {
 	public List<User> getUserList(Parameter param, Page<User> page) throws Exception;
 	
 	public User getUserByName(String user_name) throws Exception;
+	
+	public User getUserByStaffId(String staffId) throws Exception;
 
 	public User getUserById(Integer id) throws Exception;
 	

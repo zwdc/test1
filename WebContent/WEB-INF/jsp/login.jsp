@@ -129,7 +129,7 @@ function choose_bg() {
                 <input type="hidden" name="jfinal_token" value="${jfinal_token }">
     			<div class="form-group">
     				<label for="j_username" class="t">用户名：</label> 
-    				<input id="j_username"  placeholder="必填项" value="发改委1"  required name="name" type="text" class="form-control x319 in" autocomplete="off">
+    				<input id="j_username"  placeholder="必填项" value="发改委1"  required name="staffid" type="text" class="form-control x319 in" autocomplete="off">
     			</div>
     			<div class="form-group">
     				<label for="j_password" class="t">密　码：</label>
