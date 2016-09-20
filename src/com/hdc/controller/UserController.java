@@ -177,7 +177,7 @@ public class UserController {
 			String staffId = user.getStaffId();
 			if(StringUtils.isNoneBlank(staffId)) {
 				User u = this.userService.getUserByStaffId(staffId);
-				if(u == null) {
+				if(u != null && u.getId() == id) {
 					if(StringUtils.isBlank(rePasswd)) {
 						user.setPasswd(password);
 						user.setSalt(salt);
