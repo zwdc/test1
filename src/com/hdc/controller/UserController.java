@@ -193,10 +193,10 @@ public class UserController {
 					
 					message.setStatus(Boolean.TRUE);
 					message.setMessage("修改成功！");
+				} else {
+					message.setStatus(Boolean.FALSE);
+					message.setMessage("修改失败，此编制号已存在！");
 				}
-			} else {
-				message.setStatus(Boolean.FALSE);
-				message.setMessage("修改失败，此编制号已存在！");
 			}
 		} else {
 			message.setStatus(Boolean.FALSE);
