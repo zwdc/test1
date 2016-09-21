@@ -1,6 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+<%@ taglib prefix="zwdc" uri="http://zwdc.com/zwdc/tags/functions" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <style type="text/css"> 
 <!-- 
@@ -87,7 +88,7 @@
 	<div style="position: absolute; right: 10px; bottom: 5px; ">
 	    <ul class="test">
 	    	<li>
-	    	<div class="easyui-menubutton"><shiro:principal/>&nbsp;&nbsp;，欢迎登录！&nbsp;&nbsp;</div>
+	    	<div class="easyui-menubutton">${zwdc:getUserName() } -- <shiro:principal/> &nbsp;&nbsp;，欢迎登录！&nbsp;&nbsp;</div>
 	    	</li>
 	        <li>
 	    	 <div class="easyui-menubutton"><div id="time"></div></div>

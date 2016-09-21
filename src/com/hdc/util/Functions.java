@@ -2,6 +2,7 @@ package com.hdc.util;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.hdc.entity.User;
 import com.hdc.util.Constants.ApprovalStatus;
 import com.hdc.util.Constants.BusinessForm;
 
@@ -113,5 +114,10 @@ public class Functions {
 				break;
 		}
 		return value;
+	}
+	
+	public static String getUserName() {
+		User user = UserUtil.getUserFromSession();
+		return user.getName();
 	}
 }

@@ -43,4 +43,11 @@
         <function-signature>java.lang.String getUrgencyType(java.lang.Integer)</function-signature>
     </function>
     
+    <function>
+        <description>获取用户名</description>
+        <name>getUserName</name>
+        <function-class>com.hdc.util.Functions</function-class>
+        <function-signature>java.lang.String getUserName()</function-signature>
+    </function>
+    
 </taglib>
