@@ -50,4 +50,11 @@
         <function-signature>java.lang.String getUserName()</function-signature>
     </function>
     
+    <function>
+        <description>根据字符串获取月份</description>
+        <name>monthlyContains</name>
+        <function-class>com.hdc.util.Functions</function-class>
+        <function-signature>java.lang.Boolean monthlyContains(java.lang.String, java.lang.String)</function-signature>
+    </function>
+    
 </taglib>

@@ -120,4 +120,13 @@ public class Functions {
 		User user = UserUtil.getUserFromSession();
 		return user.getName();
 	}
+	
+	public static Boolean monthlyContains(String monthly, String currMonth) {
+		for(String month : monthly.split(",")) {
+			if(currMonth.equals(month)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

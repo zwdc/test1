@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="zwdc" uri="http://zwdc.com/zwdc/tags/functions" %>
 <script type="text/javascript">
 	$(function() {
 		//$("#monthlyStartDay, #monthlyEndDay").val('');
@@ -191,22 +192,22 @@
 	  					<td>
 	  						<div id="monthly" class="checkbox">
 		  						<label class="checkbox-inline">
-		  							<input type="checkbox" name="monthlyTask" ${fn:contains(feedback.monthlyTask, '1,')?'checked':''} value="1">一月
+		  							<input type="checkbox" name="monthlyTask" ${zwdc:monthlyContains(feedback.monthlyTask, '1')?'checked':'' } value="1">一月
 		  						</label>
 		  						<label class="checkbox-inline">
-		  							<input type="checkbox" name="monthlyTask" ${fn:contains(feedback.monthlyTask, '2,')?'checked':''} value="2">二月
+		  							<input type="checkbox" name="monthlyTask" ${zwdc:monthlyContains(feedback.monthlyTask, '2')?'checked':'' } value="2">二月
 		  						</label>
 		  						<label class="checkbox-inline">
-		  							<input type="checkbox" name="monthlyTask" ${fn:contains(feedback.monthlyTask, '3')?'checked':''} value="3">三月
+		  							<input type="checkbox" name="monthlyTask" ${zwdc:monthlyContains(feedback.monthlyTask, '3')?'checked':'' } value="3">三月
 		  						</label>
 		  						<label class="checkbox-inline">
-		  							<input type="checkbox" name="monthlyTask" ${fn:contains(feedback.monthlyTask, '4')?'checked':''} value="4">四月
+		  							<input type="checkbox" name="monthlyTask" ${zwdc:monthlyContains(feedback.monthlyTask, '4')?'checked':'' } value="4">四月
 		  						</label>
 		  						<label class="checkbox-inline">
-		  							<input type="checkbox" name="monthlyTask" ${fn:contains(feedback.monthlyTask, '5')?'checked':''} value="5">五月
+		  							<input type="checkbox" name="monthlyTask" ${zwdc:monthlyContains(feedback.monthlyTask, '5')?'checked':'' } value="5">五月
 		  						</label>
 		  						<label class="checkbox-inline">
-		  							<input type="checkbox" name="monthlyTask" ${fn:contains(feedback.monthlyTask, '6')?'checked':''} value="6">六月
+		  							<input type="checkbox" name="monthlyTask" ${zwdc:monthlyContains(feedback.monthlyTask, '6')?'checked':'' } value="6">六月
 		  						</label>
 	  						</div>
 	  					</td>
@@ -215,22 +216,22 @@
 	  					<td>
 	  						<div class="checkbox">
 		  						<label class="checkbox-inline">
-		  							<input type="checkbox" name="monthlyTask" ${fn:contains(feedback.monthlyTask, '7')?'checked':''} value="7">七月
+		  							<input type="checkbox" name="monthlyTask" ${zwdc:monthlyContains(feedback.monthlyTask, '7')?'checked':'' } value="7">七月
 		  						</label>
 		  						<label class="checkbox-inline">
-		  							<input type="checkbox" name="monthlyTask" ${fn:contains(feedback.monthlyTask, '8')?'checked':''} value="8">八月
+		  							<input type="checkbox" name="monthlyTask" ${zwdc:monthlyContains(feedback.monthlyTask, '8')?'checked':'' } value="8">八月
 		  						</label>
 		  						<label class="checkbox-inline">
-		  							<input type="checkbox" name="monthlyTask" ${fn:contains(feedback.monthlyTask, '9')?'checked':''} value="9">九月
+		  							<input type="checkbox" name="monthlyTask" ${zwdc:monthlyContains(feedback.monthlyTask, '9')?'checked':'' } value="9">九月
 		  						</label>
 		  						<label class="checkbox-inline">
-		  							<input type="checkbox" name="monthlyTask" ${fn:contains(feedback.monthlyTask, '10')?'checked':''} value="10">十月
+		  							<input type="checkbox" name="monthlyTask" ${zwdc:monthlyContains(feedback.monthlyTask, '10')?'checked':'' } value="10">十月
 		  						</label>
 		  						<label class="checkbox-inline">
-		  							<input type="checkbox" name="monthlyTask" ${fn:contains(feedback.monthlyTask, '11')?'checked':''} value="11">十一月
+		  							<input type="checkbox" name="monthlyTask" ${zwdc:monthlyContains(feedback.monthlyTask, '11')?'checked':'' } value="11">十一月
 		  						</label>
 		  						<label class="checkbox-inline">
-		  							<input type="checkbox" name="monthlyTask" ${fn:contains(feedback.monthlyTask, '12')?'checked':''} value="12">十二月
+		  							<input type="checkbox" name="monthlyTask" ${zwdc:monthlyContains(feedback.monthlyTask, '12')?'checked':'' } value="12">十二月
 	  							</label>
 	  						</div>
 	  					</td>
