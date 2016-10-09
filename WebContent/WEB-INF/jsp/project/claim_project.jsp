@@ -32,7 +32,6 @@
 	
 	var editIndex = undefined;
 	function endEditing(){
-		debugger;
 		if (editIndex == undefined){return true}
 		if ($('#workPlanDatagrid').datagrid('validateRow', editIndex)){
 			$('#workPlanDatagrid').datagrid('endEdit', editIndex);
@@ -44,7 +43,6 @@
 	}
 	
 	function onClickCell(index, field){
-		debugger;
 		if (endEditing()){
 			$('#workPlanDatagrid').datagrid('selectRow', index)
 					.datagrid('editCell', {index:index,field:field});
@@ -54,7 +52,6 @@
 	
 	//结束编辑后保存
 	function onAfterEdit(index, field, changes){
-		debugger;
         $.ajax({
     		async: false,
     		cache: false,
@@ -75,7 +72,6 @@
 	}
 	
 	function endEdit(){
-		debugger;
 		if ($('#workPlanDatagrid').datagrid('validateRow', editIndex)){
 			$('#workPlanDatagrid').datagrid('endEdit', editIndex);
 			editIndex = undefined;

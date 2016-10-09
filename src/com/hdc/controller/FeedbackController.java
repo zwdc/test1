@@ -115,6 +115,7 @@ public class FeedbackController {
 				fbWL=1;//黄色警告
 			}		
 			map.put("warningLevel", fbWL);
+			map.put("workPlan", fb.getWorkPlan());
 			map.put("feedbackStartDate", fb.getFeedbackStartDate());
 			map.put("feedbackEndDate", fb.getFeedbackEndDate());
 			map.put("groupName", fb.getProject().getGroup().getName());

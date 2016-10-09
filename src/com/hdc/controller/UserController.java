@@ -430,7 +430,9 @@ public class UserController {
 	@ResponseBody
 	public Message initPassword(@RequestParam("userId") Integer userId) throws Exception {
 		User user = this.userService.getUserById(userId);
+		user.setSalt("");
 		user.setPasswd(Constants.DEFAULT_PASSWORD);
+		// 更新密码
 		this.userService.doUpdate(user, true);
 		return new Message(Boolean.TRUE, "初始化成功！");
 	}

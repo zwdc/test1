@@ -168,7 +168,6 @@ $(function() {
 					    	            		    success: function (data) {
 					    	            	            $.messager.progress('close');
 					    	            	            var json = $.parseJSON(data);
-					    	            	            debugger;
 					    	            	            if (json.status) {
 					    	            	            	feedback_dialog.dialog('destroy');//销毁对话框
 					    	            	            	feedback_datagrid.datagrid('load');//重新加载列表数据

@@ -143,6 +143,10 @@
 	function closeDialog() {
 		task_dialog.dialog('destroy');
 	}
+	
+	function formatFeedback(value,row){
+		 return moment(value).format("MM月DD日")+"-"+moment(row.feedbackEndDate).format("MM月DD日");
+	}
 </script>
 <div class="easyui-layout">
 <form id="project_form" method="post">
@@ -227,7 +231,7 @@
 				    <thead>
 						<tr>
 							<th data-options="field:'id',hidden:true">ID</th>
-							<th data-options="field:'workPlanDate'" width="40%">阶段日期</th>
+							<th data-options="field:'feedbackStartDate'" formatter='formatFeedback' width="40%">阶段日期</th>
 							<th data-options="field:'workPlan',editor:'text'" width="50%">阶段计划</th>
 						</tr>
 				    </thead>
