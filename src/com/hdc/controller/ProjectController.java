@@ -518,17 +518,21 @@ public class ProjectController {
     
     /**
      * 查看驳回的办结申请 完成任务重新申请
+     * @param projectId
+     * @param taskId
+     * @return
+     * @throws Exception
      */
     public Message completeCompletionTask(
     		@RequestParam("projectId") Integer projectId, 
 			@RequestParam("taskId") String taskId) throws Exception {
     	Message message = new Message();
     	try {
-    		
-    		message.setMessage("已确认");
+    		this.projectService.doCompleteCompletionTask(projectId, taskId);
+    		message.setMessage("申请成功！");
 		} catch (Exception e) {
 			message.setStatus(Boolean.FALSE);
-			message.setMessage("确认失败!");
+			message.setMessage("申请失败！");
 			throw e;
 		}
     	return message;
