@@ -523,6 +523,8 @@ public class ProjectController {
      * @return
      * @throws Exception
      */
+    @RequestMapping("/completeCompletionTask")
+    @ResponseBody
     public Message completeCompletionTask(
     		@RequestParam("projectId") Integer projectId, 
 			@RequestParam("taskId") String taskId) throws Exception {

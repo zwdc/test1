@@ -81,7 +81,7 @@ $(function() {
 
 </script>
 <div class="easyui-layout">
-<form id="form" action="${ctx }/project/completeApprovalFailed" method="post">
+<form id="form" action="${ctx }/project/completeCompletionTask" method="post">
     <input id="taskId" name="taskId" type="hidden">
     <table id="sales" class="table table-bordered table-condensed">
   		<tr class="bg-primary">
