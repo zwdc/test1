@@ -231,6 +231,8 @@ public class ProjectServiceImpl implements IProjectService {
 		
 		//初始化流程参数
 		Map<String, Object> vars = new HashMap<String, Object>();
+		// 此处业务修改为：谁创建的任务谁去审批，原来是秘书长审批拟办意见和阶段计划
+		vars.put("createTaskUser", taskInfo.getCreateUser().getId().toString());
 		vars.put("taskInfoId", taskInfo.getId().toString());	//根据taskInfoId查询所有project,判断项目状态
 		vars.put("projectId", projectId.toString());			//根据projectId查询审批流程
 		vars.put("processTaskId", processTaskId.toString());
