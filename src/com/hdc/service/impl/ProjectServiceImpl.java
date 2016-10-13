@@ -302,6 +302,33 @@ public class ProjectServiceImpl implements IProjectService {
 		this.processService.complete(taskId, null, variables);
 		
 	}
+	
+	@Override
+	public void doCompleteCompletionTask(Integer projectId, String taskId)
+			throws Exception {
+		//给秘书长提示代办任务
+		Project  project = this.findById(projectId);
+		project.setStatus(ApprovalStatus.PENDING.toString());
+		this.doUpdate(project);
+		TaskInfo taskInfo = project.getTaskInfo();
+		Map<String, Object> variables = new HashMap<String, Object>();
+		
+		User user = UserUtil.getUserFromSession();
+		ProcessTask processTask = new ProcessTask();
+		processTask.setTaskTitle(taskInfo.getTitle());
+		processTask.setApplyUserId(user.getId());
+		processTask.setApplyUserName(user.getName());
+		processTask.setTaskInfoId(taskInfo.getId());
+		TaskSource taskSource = this.taskResourceService.findById(taskInfo.getTaskSource().getId());
+		processTask.setTaskInfoType(taskSource.getTaskInfoType().getName());
+		processTask.setTitle("办结申请修改完成！需要重新审批!");
+		processTask.setUrl("/project/toProject/modifyComplete?projectId="+projectId.toString());
+		Serializable processTaskId = this.processTaskService.doAdd(processTask);
+		//初始化任务参数
+		variables.put("processTaskId", processTaskId.toString());
+		this.processService.complete(taskId, null, variables);
+		
+	}
 
 	@Override
 	public Integer doUpdateStatus(String taskInfoId, String status) throws Exception {
