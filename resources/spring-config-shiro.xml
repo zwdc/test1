@@ -73,7 +73,7 @@
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
         <property name="globalSessionTimeout" value="3600000"/> 	<!-- 设置全局会话超时时间 1小时 -->
         <property name="deleteInvalidSessions" value="true"/> 		<!-- 删除过期的会话 -->
-        <property name="sessionValidationSchedulerEnabled" value="true"/> 				<!-- 是否开启会话验证器 默认开启 -->
+        <property name="sessionValidationSchedulerEnabled" value="true"/> 				<!-- 是否开启会话验证器 默认开启 如果用redis实现session共享则不需要开启，借助redis自身的过期策略来完成 -->
         <property name="sessionValidationScheduler" ref="sessionValidationScheduler"/> 	<!-- 设置会话调度器 -->
         <property name="sessionDAO" ref="sessionDAO"/>
         <!-- 是否启用Session Id Cookie,默认是启动；如果是禁用则默认使用servlet容器的 JSESSIONID -->
