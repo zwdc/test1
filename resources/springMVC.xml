@@ -91,7 +91,7 @@
 		<!-- <property name="uploadTempDir" value="/tmp/"/> --> <!-- 设置上传文件时的临时目录，默认是Servlet容器的临时目录 -->
 	</bean>
 	
-	<!-- 添加 Shiro Spring AOP 权限注解的支持 -->
+	<!-- 添加 Shiro Spring AOP 权限注解的支持，走CGLIB类代理。 -->
     <aop:config proxy-target-class="true"></aop:config>
     <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
         <property name="securityManager" ref="securityManager"/>
