@@ -33,6 +33,7 @@
 				</td>
 				<td style="padding-left:5px">
 					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-large-chart',plain:true" onclick="invoiceSearch();">本年度完成情况统计</a>
+					<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="gradeSearch();">高级查询</a>
 				</td>
 			</tr>
 		</table>

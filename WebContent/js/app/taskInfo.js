@@ -78,6 +78,7 @@ $(function(){
         },
 		toolbar:"#toolbar"
 	});
+	
 	//搜索框
 	$("#searchbox").searchbox({
 		menu:"#searchMenu",			//搜索类型的菜单
@@ -89,6 +90,7 @@ $(function(){
 			taskInfo_datagrid.datagrid('reload',obj);
 		}
 	});
+	
 });
 //高级搜索 删除一行
 function searchRemove(curr) {
@@ -96,7 +98,7 @@ function searchRemove(curr) {
 } 
 //高级查询
 function gradeSearch() {
-	jqueryUtil.gradeSearch(taskInfo_datagrid, "#taskInfoSearch", "/taskInfo/taskInfoSearch");
+	jqueryUtil.gradeSearch(taskInfo_datagrid, "#taskInfoSearch", "/taskInfo/taskInfoNowSearch");
 }
 
 //修正宽高

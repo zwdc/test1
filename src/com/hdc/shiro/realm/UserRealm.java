@@ -112,7 +112,7 @@ public class UserRealm extends AuthorizingRealm{
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 user.getName(), //用户名
                 user.getPasswd(), //密码
-                ByteSource.Util.bytes(user.getCredentialsSalt()),//salt=username+salt
+                ByteSource.Util.bytes(user.getSalt()),	//原来实用(salt+name) 修改用户名时salt就不对了，所以不用 name+salt了。
                 getName()  //realm name
         );
         Session currentSession = SecurityUtils.getSubject().getSession();

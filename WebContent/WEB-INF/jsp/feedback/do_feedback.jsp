@@ -22,7 +22,7 @@
 			var button = $("<input type='button' class='easyui-linkbutton' value='移除 '></div>");  
 			var pre=$("<div>").append(button).append(input);		
 			$("#fileZone").append(pre);
-			$.parser.parse(pre);
+			$.parser.parse(pre);  //为了刷新页面
 			button.click(function() {  
 				pre.remove();
 			});

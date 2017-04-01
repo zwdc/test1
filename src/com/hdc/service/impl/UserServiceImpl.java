@@ -100,7 +100,7 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public Serializable doAdd(User user, boolean synToActiviti) throws Exception {
 		//加密密码
-        this.passwordHelper.encryptPassword(user);
+        this.passwordHelper.encryptPassword(user);  //为啥又同步一次？
         //添加用户
         Serializable userId = this.baseService.add(user);
         

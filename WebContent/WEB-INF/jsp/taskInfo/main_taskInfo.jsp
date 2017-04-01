@@ -123,7 +123,7 @@
 	var group_datagrid, group_dialog;
 	function chooseHostGroup() {
 		group_dialog = $('<div/>').dialog({
-	    	title : "选择承办单位",
+	    	title : "选择牵头单位",
 			top: 20,
 			width : 1000,
 			height : 400,
@@ -146,52 +146,92 @@
 	                      {field : 'name',title : '单位名称',width : ($(this).width() - 50) * 0.45,align : 'center'} */
 	                      {field : 'col0',width :0.08,align : 'left',
 	                    	  formatter: function (value,row) {
-	                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                    		  if(typeof(value) != "undefined") {
+		                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                    		  } else {
+	                    			  return "";
+	                    		  }
 	                          }
 	                      },
 	                      {field : 'col1',width :0.08,align : 'left',
 	                    	  formatter: function (value,row) {
-	                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                    		  if(typeof(value) != "undefined") {
+		                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                    		  } else {
+	                    			  return "";
+	                    		  }
 	                          }
 	                      },
 	                      {field : 'col2',width :0.08,align : 'left',
 	                    	  formatter: function (value,row) {
-	                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                    		  if(typeof(value) != "undefined") {
+		                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                    		  } else {
+	                    			  return "";
+	                    		  }
 	                          }
 	                      },
 	                      {field : 'col3',width :0.08,align : 'left',
 	                    	  formatter: function (value,row) {
-	                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                    		  if(typeof(value) != "undefined") {
+		                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                    		  } else {
+	                    			  return "";
+	                    		  }
 	                          }
 	                      },
 	                      {field : 'col4',width :0.08,align : 'left',
 	                    	  formatter: function (value,row) {
-	                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                    		  if(typeof(value) != "undefined") {
+		                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                    		  } else {
+	                    			  return "";
+	                    		  }
 	                          }
 	                      },
 	                      {field : 'col5',width :0.08,align : 'left',
 	                    	  formatter: function (value,row) {
-	                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                    		  if(typeof(value) != "undefined") {
+		                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                    		  } else {
+	                    			  return "";
+	                    		  }
 	                          }
 	                      },
 	                      {field : 'col6',width :0.08,align : 'left',
 	                    	  formatter: function (value,row) {
-	                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                    		  if(typeof(value) != "undefined") {
+		                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                    		  } else {
+	                    			  return "";
+	                    		  }
 	                          }
 	                      },
 	                      {field : 'col7',width :0.08,align : 'left',
 	                    	  formatter: function (value,row) {
-	                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                    		  if(typeof(value) != "undefined") {
+		                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                    		  } else {
+	                    			  return "";
+	                    		  }
 	                          }
 	                      },
 	                      {field : 'col8',width :0.08,align : 'left',
 	                    	  formatter: function (value,row) {
-	                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                    		  if(typeof(value) != "undefined") {
+		                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                    		  } else {
+	                    			  return "";
+	                    		  }
 	                          }
 	                      },
 	                      {field : 'col9',width :0.08,align : 'left',
 	                    	  formatter: function (value,row) {
-	                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                    		  if(typeof(value) != "undefined") {
+		                              return "<input type=\"checkbox\"  name=\"PD\" value=\"" + value.id + "\" >"+value.name;
+	                    		  } else {
+	                    			  return "";
+	                    		  }
 	                          }
 	                      }
 	                     

@@ -72,6 +72,14 @@ public class TaskInfoController {
 		return "taskInfo/list_taskInfo";
 	}
 	/**
+	 * 跳转到本年查询页面
+	 * @return
+	 */
+	@RequestMapping(value = "/taskInfoNowSearch")
+	public String taskInfoSearch(){
+		return "taskInfo/search";
+	}
+	/**
 	 * 跳转历年统计页面
 	 * @return
 	 */
@@ -79,7 +87,14 @@ public class TaskInfoController {
 	public String toHistoryList() {
 		return "taskInfo/list_taskInfo_history";
 	}
-	
+	/**
+	 * 跳转到历年查询页面
+	 * @return
+	 */
+	@RequestMapping(value = "/taskInfoPastSearch")
+	public String taskInfoPastSearch(){
+		return "taskInfo/search_past";
+	}
 	/**
 	 * 跳转添加修改页面
 	 * @param id
@@ -473,19 +488,6 @@ public class TaskInfoController {
 		return mv;
 	}
 	   
-   	/**
-	 * 跳转到查询页面
-	 * @return
-	 */
-	@RequestMapping(value = "/taskInfoSearch")
-	public String taskInfoSearch(){
-		return "taskInfo/search";
-	}
-   	
-   	
-   	
-   	
-   	
     public static void main(String[] args) throws Exception {
  	    //测试推送
  	    GoEasy goEasy = new GoEasy("0cf326d6-621b-495a-991e-a7681bcccf6a");
